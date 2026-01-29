@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
-import { useRouter, Href } from 'expo-router';
+import { Href, useRouter } from 'expo-router';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function ServicesHomeScreen() {
   const router = useRouter();
@@ -22,30 +22,21 @@ export default function ServicesHomeScreen() {
 
         <Text style={styles.sectionLabel}>Transport</Text>
 
-        <TouchableOpacity
-          style={styles.card}
-          onPress={() => go('/(tabs)/services/taxi')}
-        >
+        <TouchableOpacity style={styles.card} onPress={() => go('/services/taxi')}>
           <Text style={styles.cardTitle}>Book Taxi / Ride</Text>
           <Text style={styles.cardText}>
             Live map, pickup & destination, request nearby trusted drivers.
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.card}
-          onPress={() => go('/(tabs)/services/hire')}
-        >
+        <TouchableOpacity style={styles.card} onPress={() => go('/services/hire')}>
           <Text style={styles.cardTitle}>Hire Car & Boats</Text>
           <Text style={styles.cardText}>
             Long-term vehicles and private boats for business, NGOs, groups.
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.card}
-          onPress={() => go('/(tabs)/services/boats')}
-        >
+        <TouchableOpacity style={styles.card} onPress={() => go('/services/boats')}>
           <Text style={styles.cardTitle}>Boat & Ship Rides</Text>
           <Text style={styles.cardText}>
             PMV dinghies, ferries and island routes (MVP info & booking flow).
@@ -54,20 +45,14 @@ export default function ServicesHomeScreen() {
 
         <Text style={styles.sectionLabel}>Places & Events</Text>
 
-        <TouchableOpacity
-          style={styles.card}
-          onPress={() => go('/(tabs)/services/venues')}
-        >
+        <TouchableOpacity style={styles.card} onPress={() => go('/services/venues')}>
           <Text style={styles.cardTitle}>Venue Booking</Text>
           <Text style={styles.cardText}>
             Halls, conference rooms, fields and other spaces.
           </Text>
         </TouchableOpacity>
 
-        <TouchableOpacity
-          style={styles.card}
-          onPress={() => go('/(tabs)/services/events')}
-        >
+        <TouchableOpacity style={styles.card} onPress={() => go('/services/events')}>
           <Text style={styles.cardTitle}>Upcoming Events</Text>
           <Text style={styles.cardText}>
             Curated local events with links to transport and venue options.
@@ -78,7 +63,7 @@ export default function ServicesHomeScreen() {
 
         <TouchableOpacity
           style={styles.card}
-          onPress={() => go('/(tabs)/services/specialists')}
+          onPress={() => go('/services/specialists')}
         >
           <Text style={styles.cardTitle}>Specialist Services</Text>
           <Text style={styles.cardText}>

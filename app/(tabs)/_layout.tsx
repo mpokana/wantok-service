@@ -1,11 +1,11 @@
 // app/(tabs)/_layout.tsx
+import { Redirect, Tabs } from 'expo-router';
 import React from 'react';
-import { Tabs } from 'expo-router';
 import { ActivityIndicator, View } from 'react-native';
 import { useAuthProfile } from '../../hooks/useAuthProfile';
 
 export default function TabsLayout() {
-  const { profile, loading } = useAuthProfile();
+  const { session, profile, loading } = useAuthProfile();
 
   if (loading) {
     return (
@@ -20,6 +20,10 @@ export default function TabsLayout() {
         <ActivityIndicator size="large" color="#FFD700" />
       </View>
     );
+  }
+
+  if (!session) {
+    return <Redirect href="/" />;
   }
 
   return (
