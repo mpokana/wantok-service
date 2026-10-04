@@ -1,0 +1,69 @@
+name: wantok-service
+
+services:
+  wantok-web:
+    build:
+      context: ../..
+      dockerfile: deploy/vps/Dockerfile.flutter-web
+      args:
+        APP_PATH: apps/wantok_app
+        APP_ENV: production
+        SUPABASE_URL: https://api.${WANTOK_DOMAIN}
+        SUPABASE_PUBLISHABLE_KEY: ${SUPABASE_PUBLISHABLE_KEY}
+        PUBLIC_WEB_URL: https://${WANTOK_DOMAIN}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  wantok-admin:
+    build:
+      context: ../..
+      dockerfile: deploy/vps/Dockerfile.flutter-web
+      args:
+        APP_PATH: apps/wantok_admin
+        APP_ENV: production
+        SUPABASE_URL: https://api.${WANTOK_DOMAIN}
+        SUPABASE_PUBLISHABLE_KEY: ${SUPABASE_PUBLISHABLE_KEY}
+        PUBLIC_WEB_URL: https://admin.${WANTOK_DOMAIN}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  caddy:
+    image: caddy:2.10-alpine
+    restart: unless-stopped
+    depends_on:
+      wantok-web:
+        condition: service_healthy
+      wantok-admin:
+        condition: service_healthy
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      WANTOK_DOMAIN: ${WANTOK_DOMAIN}
+      ACME_EMAIL: ${ACME_EMAIL}
+      SUPABASE_API_UPSTREAM: ${SUPABASE_API_UPSTREAM:-api-gw:8000}
+    networks:
+      - default
+      - supabase
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+networks:
+  supabase:
+    external: true
+    name: ${SUPABASE_DOCKER_NETWORK:-supabase_default}
+
+volumes:
+  caddy_data:
+  caddy_config:

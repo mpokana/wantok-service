@@ -1,201 +1,340 @@
 # Wantok Service
 
-Wantok Service is a Papua New Guinea-focused multi-service marketplace and super-app platform. It uses one Expo application for Android, iOS and web, with a version-controlled Supabase backend for authentication, PostgreSQL, row-level security, realtime, storage and trusted server-side functions.
+Wantok Service is a Papua New Guinea multi-service super app platform.
 
-The product is broader than ride-hailing. Taxi is one specialised vertical inside a shared platform for transport, delivery, people/services, hire, venues, events, food, shopping and later travel services.
+The primary application stack is now **Flutter + Supabase**.
 
-See `docs/SUPER_APP_ARCHITECTURE.md` for the product and domain architecture.
+## Deployable applications
 
-## Current enterprise development baseline
+### Wantok
 
-- Email/password authentication with persistent mobile sessions.
-- One account can act as customer and, after approval, one or more provider types.
-- Customer Services hub for taxi, vehicle/boat hire, venues/events, specialists, general labour, delivery/errands and food/shopping.
-- Native taxi map on Android/iOS and MapLibre/OpenStreetMap on web.
-- Secure server-side nearest-driver assignment and ride lifecycle foundation.
-- Generic marketplace catalogue, provider services/resources, bookings, quotes and reviews.
-- Live quote-based marketplace workflow for Specialist Services and People / General Labour: customer request → qualified provider quote → customer acceptance → confirmed booking.
-- Resource availability and database-enforced overlap protection for vehicles, boats, venues and other reservable assets.
-- Enterprise RBAC roles for customer, provider, driver, admin, operations, support, finance and moderation.
-- RLS enabled on every application table.
-- Operational audit events and status-change auditing.
-- In-app notification records plus a delivery outbox for push/email/SMS workers.
-- Payment-intent, payment-event and provider-settlement boundaries with no direct client payment mutation.
-- Push-device registration model.
-- Private provider-document storage policies.
-- Reproducible Supabase migrations and pgTAP database tests.
-- GitHub CI validates frontend, database migrations/tests and all platform bundles.
-- Android package and iOS bundle identifier: `io.wantok.service`.
+Flutter application targeting:
 
-## Architecture
+- Android
+- iOS
+- Web
+
+One Wantok account can operate in two modes:
+
+- **Client mode** — use services.
+- **Vendor mode** — provide approved services.
+
+A user does not need a separate identity to become a vendor. Provider capabilities are granted through verification and RBAC.
+
+### Wantok Admin
+
+Separate Flutter Web console for authorised administrators.
+
+Target production URL:
 
 ```text
-Android / iOS / Web
-        |
-     Expo Router
-        |
-  Supabase client
-        |
-+-----------------------------------+
-| Wantok Service Backend            |
-|                                   |
-| Supabase Auth                     |
-| PostgreSQL + RLS                  |
-| Realtime                          |
-| Private Storage                   |
-| Trusted RPC / Edge Functions      |
-| Notification Outbox              |
-| Payment Integration Boundary      |
-+-----------------------------------+
-        |
-+-----------------------------------+
-| Shared Marketplace Core           |
-| Identity / RBAC                   |
-| Providers / Verification          |
-| Catalogue / Listings / Resources  |
-| Bookings / Quotes / Reviews        |
-| Availability / Reservations       |
-| Audit / Notifications / Payments  |
-+-----------------------------------+
-        |
-+-----------------------------------+
-| Specialised Verticals             |
-| Rides / Taxi                      |
-| Delivery / Errands                |
-| Food / Shopping                   |
-| Events / Ticketing                |
-| Travel integrations               |
-+-----------------------------------+
+https://admin.wantok-service.com
 ```
 
-Taxi remains specialised because dispatch, live driver location, routing and trip state have different concurrency and safety requirements from general marketplace bookings.
+System administration is intentionally excluded from the public Wantok application.
 
-## Requirements
+## Production domains
 
-- Node.js and npm
-- Docker Desktop with Linux containers/WSL2
-- Supabase CLI (included as a development dependency)
-- Android Studio for Android emulator/native development
-- EAS or macOS/Xcode for native iOS release builds
+Planned public surfaces:
 
-## Environment
-
-Copy `.env.example` to `.env` and use only a Supabase publishable key in the Expo application:
-
-```env
-EXPO_PUBLIC_SUPABASE_URL=http://YOUR-DEVELOPMENT-HOST:54321
-EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=YOUR_PUBLISHABLE_KEY
+```text
+https://wantok-service.com
+https://www.wantok-service.com
+https://admin.wantok-service.com
+https://api.wantok-service.com
 ```
 
-Never place a Supabase secret/service-role key in any `EXPO_PUBLIC_*` variable.
+Studio, PostgreSQL and internal infrastructure are private administration surfaces and must not be exposed directly to the public internet.
 
-For a physical Android/iOS device, use EAGLT02's current reachable LAN/VPN address rather than `127.0.0.1`. The local Supabase API listens on port `54321`.
+## Repository layout
 
-## Install and frontend validation
+```text
+apps/
+  wantok_app/       Flutter Android/iOS/Web client + vendor app
+  wantok_admin/     Flutter Web administration console
+
+packages/
+  wantok_core/      Shared domain models and primitives
+  wantok_api/       Supabase configuration and repositories
+  wantok_auth/      Authentication and RBAC helpers
+  wantok_ui/        Shared Wantok design system
+
+supabase/
+  migrations/       Authoritative database/schema/security history
+  tests/            pgTAP enterprise/workflow tests
+
+config/
+  *.example.json    Safe build configuration examples
+
+scripts/flutter/
+  bootstrap.*       Resolve all Flutter packages
+  check.*           Analyze and test all Flutter modules
+  create-local-config.ps1
+
+deploy/vps/
+  docker-compose.yml
+  Dockerfile.flutter-web
+  Caddyfile
+  install.sh
+  upgrade.sh
+  backup.sh
+
+docs/
+  FLUTTER_PLATFORM_ARCHITECTURE.md
+  SUPER_APP_ARCHITECTURE.md
+```
+
+The earlier Expo/React Native implementation is retained in this recovery repository as a reference during Flutter migration. It is no longer the target application architecture. It should only be removed after equivalent Flutter workflows have been verified.
+
+## Current product scope
+
+The shared marketplace supports:
+
+- Taxi / rides
+- Vehicle hire
+- Private boat hire
+- Boat / ship passenger rides
+- Specialist and trade services
+- General labour / people
+- Venue booking
+- Events
+- Delivery
+- Errands
+- Food
+- Groceries / shops
+- Future bus/coach, accommodation and flights
+
+Shared platform services include identity, RBAC, provider verification, listings, resources, bookings, quotes, availability, audit, notifications, payments/settlements boundaries and reviews.
+
+## Local development on EAGLT02
+
+### Flutter
+
+Current development baseline:
+
+```text
+Flutter 3.47.6
+Dart 3.13.5
+Android SDK 36.1
+Java 21
+```
+
+EAGLT02 keeps `PUB_CACHE` on `D:\\Development\\PubCache`, the same drive as the repository. This avoids a Windows/Kotlin incremental-compiler path issue that occurs when Flutter plugins are cached on `C:` while the Android project is on `D:`. This is a workstation setting only and does not change Linux/CI deployment behaviour.
+
+Bootstrap all Flutter modules:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\flutter\bootstrap.ps1
+```
+
+Run analysis/tests:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\flutter\check.ps1
+```
+
+Linux equivalent:
 
 ```bash
-npm ci
-npm run check
-npx expo install --check
+bash scripts/flutter/bootstrap.sh
+bash scripts/flutter/check.sh
 ```
 
-Run the app with:
+### Local Supabase
 
-```bash
-npm run web
-npm run android
-npm run ios
-```
+The repository Supabase project is the authoritative development backend.
 
-## Local Supabase backend
-
-The Git repository is the authoritative backend definition.
-
-```bash
+```powershell
 npm run db:start
 npm run db:status
 npm run db:migrate
 npm run db:test
+npm run db:reset
 npm run db:stop
 ```
 
-To prove the backend can be recreated from migrations:
+Development ports:
 
-```bash
-npm run db:reset
-npm run db:test
+```text
+API       http://127.0.0.1:54321
+Postgres  127.0.0.1:54322
+Studio    http://127.0.0.1:54323
+Mailpit   http://127.0.0.1:54324
 ```
 
-On Windows, `scripts/supabase-local.js` automatically targets the Docker Desktop Linux engine.
+The CLI development stack is not a production deployment and must never be published directly to an untrusted network.
 
-Local development endpoints use the standard Supabase ports:
+## Flutter backend configuration
 
-- API: `54321`
-- PostgreSQL: `54322`
-- Studio: `54323`
-- Mailpit: `54324`
+Flutter receives environment-specific settings using Dart defines.
 
-Studio and PostgreSQL are development/admin surfaces. Do not expose them to the public internet. Future external testing should publish only the intended application/API endpoints through a controlled reverse proxy/tunnel with appropriate access controls.
+Generate EAGLT02 local Flutter configuration from the ignored root `.env`:
 
-## Backend migrations
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\flutter\create-local-config.ps1
+```
+
+This creates the ignored file:
+
+```text
+config/local.json
+```
+
+Example run:
+
+```powershell
+cd apps\wantok_app
+flutter run -d chrome --dart-define-from-file=..\..\config\local.json
+```
+
+Admin:
+
+```powershell
+cd apps\wantok_admin
+flutter run -d chrome --dart-define-from-file=..\..\config\local.json
+```
+
+Never commit production secrets or database/service-role credentials.
+
+The Supabase publishable key is a public-client credential; privileged service-role/database/JWT signing credentials remain server-only.
+
+## Flutter application identifiers
+
+Public Wantok mobile identity:
+
+```text
+Android applicationId: io.wantok.service
+iOS bundle identifier: io.wantok.service
+```
+
+Final native iOS compilation/signing requires macOS with Xcode. Shared Dart/Flutter development remains cross-platform.
+
+## Database migrations
 
 Current migration sequence:
 
-1. `20261004143000_initial_wantok_service.sql` — profiles, provider applications, drivers and rides.
-2. `20261005002000_marketplace_core.sql` — multi-service catalogue, provider listings/resources, bookings, quotes and reviews.
-3. `20261005010000_enterprise_platform.sql` — RBAC, audit, notifications, payment boundaries, settlements and devices.
-4. `20261005011000_availability_and_reservations.sql` — provider availability and resource double-booking protection.
-5. `20261005012000_rbac_authority.sql` — authoritative RBAC enforcement and bidirectional trusted flag-to-role synchronisation.
+1. `20261004143000_initial_wantok_service.sql`
+2. `20261005002000_marketplace_core.sql`
+3. `20261005010000_enterprise_platform.sql`
+4. `20261005011000_availability_and_reservations.sql`
+5. `20261005012000_rbac_authority.sql`
 
-Every backend schema/security change must be made through a migration. Do not make production-only dashboard schema changes that are absent from Git.
+All production schema/security changes must be migrations committed to Git.
 
-## Security model
+## Current backend validation
 
-- `user_roles` is the authoritative authorization source; legacy profile role flags are compatibility/business-state fields and do not independently grant admin authority.
-- Ordinary clients cannot grant themselves provider/admin/finance roles.
-- Provider approval is performed by trusted database functions.
-- Sensitive role changes generate audit events.
-- RLS is enabled across all application-owned tables.
-- Riders receive a limited approved-driver listing.
-- Ride assignment occurs server-side with concurrency protection.
-- Provider documents are private and user-scoped.
-- Authenticated clients cannot directly create payment intents, processor events, settlements, audit events or outbound notification jobs.
-- Resource double-booking is blocked by a PostgreSQL exclusion constraint, not merely by UI checks.
-- Payment capture/refund/payout logic will be implemented only on trusted server infrastructure when payment providers are selected.
+The pgTAP suite currently verifies:
 
-## Database tests
+- enterprise table/function contracts;
+- RLS on application tables;
+- catalogue and RBAC seeds;
+- customer service-request creation;
+- qualified-provider visibility;
+- quote submission;
+- customer quote acceptance;
+- confirmed booking/provider assignment;
+- provider-role synchronisation;
+- administrative role grant/revoke;
+- legacy admin flags cannot independently grant server-side admin authority;
+- resource overlap protection;
+- restricted direct payment/audit/outbox mutation.
 
-Run:
+## Linux VPS deployment
 
-```bash
-npm run db:test
+Production is designed for a standard Linux VPS with Docker Engine and Docker Compose.
+
+### Supabase
+
+Production backend uses Supabase's **official self-hosted Docker distribution**, not the CLI development containers.
+
+Keep the vendor runtime separate, for example:
+
+```text
+/opt/wantok-service/runtime/supabase
 ```
 
-The current pgTAP contract suite verifies core tables/functions, seeded service and role catalogues, RLS coverage, protected financial/audit write boundaries and reservation overlap protection.
+On a fresh VPS, `deploy/vps/install.sh` calls `provision-supabase.sh`, which installs the pinned official self-host release when the runtime is absent, generates its keys, applies Wantok's private-network hardening override, starts Supabase and synchronises the public client configuration. Re-running the installer is intended to be idempotent.
 
-## Product scope
+This preserves Supabase's supported `.supabase-version` and `update.sh` upgrade model while Wantok keeps its own schema changes under `supabase/migrations/`.
 
-Active foundation categories include:
+### Wantok edge/web
 
-- Taxi / Ride
-- Vehicle Hire
-- Boat Hire
-- Boat / Ship Rides
-- Specialist Services
-- People / General Labour
-- Venue Booking
-- Events
-- Delivery / Courier
-- Errands / Pabili
-- Food
-- Groceries / Shops
+Copy:
 
-Later reserved modules include buses/coaches, accommodation and flights.
+```text
+deploy/vps/.env.example
+```
 
-## Remaining major work
+to:
 
-The enterprise backend foundation is now reproducible, but launch still requires real provider document upload UI, complete driver accept/decline/trip controls, background driver location, route-based distance/ETA, generic marketplace search/booking screens, merchant catalogues/carts/orders, notifications worker/Edge Functions, payment-provider integrations, settlement operations, chat, safety/SOS, disputes/refunds, monitoring, backups, production hosting, automated end-to-end tests and store signing/release workflows.
+```text
+deploy/vps/.env
+```
 
-## Version-control rule
+and configure it.
 
-Git is the source of truth. Use committed branches/tags as checkpoints. Never overwrite a working source tree with an unverified folder snapshot.
+Install/rebuild:
+
+```bash
+sh deploy/vps/install.sh
+```
+
+Normal Wantok upgrade:
+
+```bash
+sh deploy/vps/upgrade.sh
+```
+
+Supabase vendor upgrade is explicit and separate:
+
+```bash
+WANTOK_UPGRADE_SUPABASE=1 sh deploy/vps/upgrade.sh
+```
+
+The upgrade script performs a backup first and runs the official Supabase self-host dry-run/update sequence before recreating services.
+
+Manual backup:
+
+```bash
+sh deploy/vps/backup.sh
+```
+
+See `deploy/vps/README.md` for production commissioning details.
+
+## Design direction
+
+Wantok uses an original PNG-focused design system informed by successful Southeast Asian super-app interaction patterns:
+
+- strong service discovery from the home screen;
+- location/search first;
+- simple everyday action cards;
+- visible activity/history;
+- fast Client/Vendor switching;
+- safety and payments treated as platform capabilities rather than isolated screens.
+
+The visual system does not copy Grab branding or pixel-level UI.
+
+Current Wantok palette begins with tropical green, deep green, gold and coral accents and will evolve into a dedicated PNG brand system.
+
+## Release version
+
+Current platform version:
+
+```text
+0.1.0-alpha.1
+```
+
+The `VERSION` file is the application release source of truth.
+
+## Security principles
+
+- `user_roles` is the authoritative authorization source.
+- Admin controls exist only in Wantok Admin.
+- Ordinary clients cannot grant themselves privileged roles.
+- Provider/service approval occurs through trusted backend functions.
+- RLS is mandatory on application-owned tables.
+- Payment capture/refund/payout mutation remains server-side.
+- Audit records and outbound notification jobs are not directly client-writable.
+- Provider documents remain private.
+- VPS database/Studio/internal service ports are not public.
+- Production upgrades are preceded by tested migrations and backups.

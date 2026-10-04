@@ -1,0 +1,20 @@
+name: wantok_api
+description: Supabase API and repository layer for Wantok Service.
+publish_to: none
+version: 0.0.1
+
+environment:
+  sdk: ^3.13.5
+  flutter: ">=3.47.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  supabase_flutter: ^2.18.0
+  wantok_core:
+    path: ../wantok_core
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0

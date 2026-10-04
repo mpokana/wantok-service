@@ -1,4 +1,4 @@
-name: CI
+name: Backend CI
 
 on:
   push:
@@ -6,11 +6,8 @@ on:
   pull_request:
 
 jobs:
-  validate:
+  database:
     runs-on: ubuntu-latest
-    env:
-      EXPO_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
-      EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ci-public-placeholder
 
     steps:
       - name: Checkout
@@ -22,29 +19,17 @@ jobs:
           node-version: 20
           cache: npm
 
-      - name: Install dependencies
+      - name: Install backend tooling
         run: npm ci
 
-      - name: TypeScript and lint
-        run: npm run check
-
-      - name: Expo dependency compatibility
-        run: npx expo install --check
-
-      - name: Start local Supabase and replay migrations
+      - name: Start local Supabase
         run: npm run db:start
 
-      - name: Database contract tests
+      - name: Replay migrations from zero
+        run: npm run db:reset
+
+      - name: Database contract and workflow tests
         run: npm run db:test
-
-      - name: Web export
-        run: npx expo export --platform web --output-dir dist-ci-web
-
-      - name: Android bundle export
-        run: npx expo export --platform android --output-dir dist-ci-android
-
-      - name: iOS bundle export
-        run: npx expo export --platform ios --output-dir dist-ci-ios
 
       - name: Stop local Supabase
         if: always()

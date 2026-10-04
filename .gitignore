@@ -45,3 +45,14 @@ app-example
 /ios
 /android
 .wantok/
+
+# Flutter runtime configuration (machine/deployment specific)
+/config/local.json
+/config/production.json
+/deploy/vps/.env
+
+# Flutter/Dart generated output
+**/.dart_tool/
+**/build/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies

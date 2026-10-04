@@ -1,0 +1,79 @@
+name: Flutter Platform CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+      - 'feature/**'
+      - 'recovery/**'
+  pull_request:
+
+jobs:
+  flutter:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Flutter 3.47.6
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.6'
+          channel: stable
+          cache: true
+
+      - name: Bootstrap Flutter modules
+        run: bash scripts/flutter/bootstrap.sh
+
+      - name: Analyze and test
+        run: bash scripts/flutter/check.sh
+
+      - name: Validate VPS shell scripts
+        run: bash -n deploy/vps/*.sh
+
+      - name: Validate Wantok Docker Compose
+        run: docker compose --env-file deploy/vps/.env.example -f deploy/vps/docker-compose.yml config --quiet
+
+      - name: Validate Caddy edge configuration
+        run: |
+          docker run --rm \
+            -e WANTOK_DOMAIN=wantok-service.com \
+            -e ACME_EMAIL=admin@wantok-service.com \
+            -e SUPABASE_API_UPSTREAM=api-gw:8000 \
+            -v "$PWD/deploy/vps/Caddyfile:/etc/caddy/Caddyfile:ro" \
+            caddy:2.10-alpine caddy validate --config /etc/caddy/Caddyfile
+
+      - name: Build Wantok Web
+        working-directory: apps/wantok_app
+        run: flutter build web --release
+
+      - name: Build Wantok Admin Web
+        working-directory: apps/wantok_admin
+        run: flutter build web --release
+
+      - name: Build Wantok Android debug APK
+        working-directory: apps/wantok_app
+        run: flutter build apk --debug
+
+  ios:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Flutter 3.47.6
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.6'
+          channel: stable
+          cache: true
+
+      - name: Bootstrap Flutter modules
+        run: bash scripts/flutter/bootstrap.sh
+
+      - name: Build Wantok iOS without signing
+        working-directory: apps/wantok_app
+        run: flutter build ios --release --no-codesign

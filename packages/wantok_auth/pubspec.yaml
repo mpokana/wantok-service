@@ -1,0 +1,20 @@
+name: wantok_auth
+description: Shared authentication and RBAC helpers for Wantok Service.
+publish_to: none
+version: 0.0.1
+
+environment:
+  sdk: ^3.13.5
+  flutter: ">=3.47.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  supabase_flutter: ^2.18.0
+  wantok_api:
+    path: ../wantok_api
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0

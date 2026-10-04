@@ -1,0 +1,10 @@
+services:
+  api-gw:
+    ports: !override []
+
+  supavisor:
+    ports: !override []
+
+  db:
+    ports:
+      - "127.0.0.1:${WANTOK_DB_PORT:-54322}:5432/tcp"

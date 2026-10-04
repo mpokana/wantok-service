@@ -1,0 +1,31 @@
+{
+  email {$ACME_EMAIL}
+}
+
+{$WANTOK_DOMAIN} {
+  encode zstd gzip
+  reverse_proxy wantok-web:80
+}
+
+www.{$WANTOK_DOMAIN} {
+  redir https://{$WANTOK_DOMAIN}{uri} permanent
+}
+
+admin.{$WANTOK_DOMAIN} {
+  encode zstd gzip
+  reverse_proxy wantok-admin:80
+}
+
+api.{$WANTOK_DOMAIN} {
+  @supabase_api {
+    path /.well-known/oauth-authorization-server /auth/v1* /rest/v1* /realtime/v1* /storage/v1* /functions/v1* /graphql/v1*
+  }
+
+  handle @supabase_api {
+    reverse_proxy {$SUPABASE_API_UPSTREAM}
+  }
+
+  handle {
+    respond 404
+  }
+}
