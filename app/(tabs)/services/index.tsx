@@ -29,6 +29,13 @@ export default function ServicesHomeScreen() {
           </Text>
         </TouchableOpacity>
 
+        <TouchableOpacity style={styles.card} onPress={() => go('/services/my-rides')}>
+          <Text style={styles.cardTitle}>My Rides</Text>
+          <Text style={styles.cardText}>
+            View current and previous rides, status, distance and fare estimates.
+          </Text>
+        </TouchableOpacity>
+
         <TouchableOpacity style={styles.card} onPress={() => go('/services/hire')}>
           <Text style={styles.cardTitle}>Hire Car & Boats</Text>
           <Text style={styles.cardText}>

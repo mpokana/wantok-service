@@ -21,7 +21,9 @@ expo-env.d.ts
 # Metro
 .metro-health-check*
 
-# debug
+# debug / local audit outputs
+*.log
+/.audit-*
 npm-debug.*
 yarn-debug.*
 yarn-error.*

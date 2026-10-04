@@ -132,7 +132,7 @@ export default function MyRidesScreen() {
       }
       // Optimistic UI: update local list
       setRides(prev => prev.map(r => (r.id === ride.id ? { ...r, status: 'cancelled' } : r)));
-    } catch (e) {
+    } catch {
       Alert.alert('Error', 'Something went wrong.');
     }
   };

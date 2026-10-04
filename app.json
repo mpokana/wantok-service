@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "wantok-service",
+    "name": "Wantok Service",
     "slug": "wantok-service",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -9,9 +9,13 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
+      "bundleIdentifier": "io.wantok.service",
+      "buildNumber": "1",
       "supportsTablet": true
     },
     "android": {
+      "package": "io.wantok.service",
+      "versionCode": 1,
       "adaptiveIcon": {
         "backgroundColor": "#E6F4FE",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
@@ -37,6 +41,14 @@
           "dark": {
             "backgroundColor": "#000000"
           }
+        }
+      ],
+      "expo-font",
+      "expo-web-browser",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Wantok Service uses your location to set pickup points and, for approved drivers, share live location while online."
         }
       ]
     ],

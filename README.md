@@ -1,50 +1,138 @@
-# Welcome to your Expo app 👋
+# Wantok Service
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Wantok Service is a Papua New Guinea-focused service marketplace built as one Expo application for Android, iOS and web, with Supabase providing authentication, PostgreSQL, realtime, storage and server-side business functions.
 
-## Get started
+## Current baseline
 
-1. Install dependencies
+The recovered baseline includes:
 
-   ```bash
-   npm install
-   ```
+- Email/password authentication and persistent mobile sessions.
+- Customer service catalogue.
+- Taxi map with native `react-native-maps` and a MapLibre/OpenStreetMap web implementation.
+- Secure server-side nearest-driver ride assignment.
+- Ride history and passenger cancellation.
+- Provider applications and secured admin approval.
+- Approved-driver online location updates and realtime map updates.
+- Version-controlled Supabase schema, RLS policies, realtime publication and private provider-document storage.
+- Android package and iOS bundle identifier: `io.wantok.service`.
 
-2. Start the app
+## Architecture
 
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```text
+Android / iOS / Web
+        |
+   Expo Router
+        |
+ Supabase client
+        |
++--------------------------+
+| Supabase                 |
+| Auth                     |
+| PostgreSQL + RLS         |
+| Realtime                 |
+| Storage                  |
+| Database RPC functions   |
++--------------------------+
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+The application uses one shared business/UI codebase. Platform-specific map rendering lives in `components/TaxiMap.tsx` for Android/iOS and `components/TaxiMap.web.tsx` for web.
 
-## Learn more
+## Requirements
 
-To learn more about developing your project with Expo, look at the following resources:
+- Node.js and npm
+- Docker Desktop
+- Supabase CLI (installed as a development dependency)
+- Android Studio for local Android builds/emulation
+- EAS or a macOS/Xcode environment for native iOS builds
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Environment
 
-## Join the community
+Copy `.env.example` to `.env` and supply a development Supabase URL and public/publishable key:
 
-Join our community of developers creating universal apps.
+```env
+EXPO_PUBLIC_SUPABASE_URL=http://YOUR-DEVELOPMENT-HOST:54321
+EXPO_PUBLIC_SUPABASE_ANON_KEY=YOUR_PUBLIC_OR_PUBLISHABLE_KEY
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Never place a Supabase secret/service-role key in an `EXPO_PUBLIC_*` variable.
+
+For a physical Android/iOS device, the Supabase URL must be reachable from that device. `127.0.0.1` points to the phone itself, not the development computer.
+
+## Install and validate
+
+```bash
+npm ci
+npm run check
+npx expo-doctor
+```
+
+Start Expo:
+
+```bash
+npm start
+```
+
+Or target one platform:
+
+```bash
+npm run web
+npm run android
+npm run ios
+```
+
+## Local backend
+
+Start the repository's local Supabase stack:
+
+```bash
+npm run db:start
+npm run db:status
+```
+
+Apply pending migrations to a running local stack:
+
+```bash
+npm run db:migrate
+```
+
+Stop it with:
+
+```bash
+npm run db:stop
+```
+
+The authoritative backend definition is under `supabase/`. Do not make production schema changes only through a dashboard; create a migration so the backend remains reproducible.
+
+## Security model
+
+- Role flags such as `is_admin`, `is_driver` and `is_driver_approved` cannot be changed by ordinary users.
+- Provider approval is performed by the secured `review_provider_application` database function.
+- Riders receive a limited available-driver listing that does not expose driver phone numbers.
+- `request_ride` selects and locks the nearest available approved driver server-side and returns contact information only for the assigned ride.
+- Direct arbitrary ride insertion by authenticated clients is not granted.
+- Provider documents use a private storage bucket with per-user access policies.
+- Realtime access remains subject to RLS.
+
+## Important backend objects
+
+Tables:
+
+- `profiles`
+- `provider_applications`
+- `driver_profiles`
+- `driver_locations`
+- `rides`
+
+RPCs:
+
+- `list_available_drivers()`
+- `request_ride(...)`
+- `review_provider_application(...)`
+
+## Remaining product work
+
+This baseline is suitable for continued development, but a production launch still needs product-level work including real document upload UI, driver trip accept/progress controls, background driver location, route-based distance/ETA, payments and settlement, notifications, food/delivery/vendor ordering, stronger admin operations, automated application tests, store signing/release workflows, monitoring and production Supabase/hosting deployment.
+
+## Version-control rule
+
+Git is the source of truth. Use committed branches/tags for checkpoints and keep the project reversible. Do not overwrite a working copy with an unverified folder snapshot.

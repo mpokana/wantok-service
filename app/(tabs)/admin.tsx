@@ -55,45 +55,16 @@ export default function AdminScreen() {
     setLoading(false);
   };
 
-  const applyProviderFlags = async (application: ProviderApplication) => {
-    // Decide flags based on service_type
-    const service = (application.service_type || '').toLowerCase();
-    const isDriverType =
-      service.includes('taxi') ||
-      service.includes('driver') ||
-      service.includes('ride');
-
-    const updates: any = { is_provider: true };
-
-    if (isDriverType) {
-      updates.is_driver = true;
-      updates.is_driver_approved = true;
-    }
-
-    const { error } = await supabase
-      .from('profiles')
-      .update(updates)
-      .eq('id', application.user_id);
-
-    if (error) {
-      throw error;
-    }
-  };
-
   const handleApprove = async (application: ProviderApplication) => {
     try {
       setBusyId(application.id);
 
-      // 1) mark application approved
-      const { error: appErr } = await supabase
-        .from('provider_applications')
-        .update({ status: 'approved' })
-        .eq('id', application.id);
+      const { error } = await supabase.rpc('review_provider_application', {
+        p_application_id: application.id,
+        p_decision: 'approved',
+      });
 
-      if (appErr) throw appErr;
-
-      // 2) update profile flags
-      await applyProviderFlags(application);
+      if (error) throw error;
 
       Alert.alert('Approved', 'Application has been approved.');
       setItems(prev => prev.filter(a => a.id !== application.id));
@@ -109,10 +80,10 @@ export default function AdminScreen() {
     try {
       setBusyId(application.id);
 
-      const { error } = await supabase
-        .from('provider_applications')
-        .update({ status: 'rejected' })
-        .eq('id', application.id);
+      const { error } = await supabase.rpc('review_provider_application', {
+        p_application_id: application.id,
+        p_decision: 'rejected',
+      });
 
       if (error) throw error;
 

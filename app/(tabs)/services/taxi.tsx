@@ -9,22 +9,19 @@ import {
   Linking,
 } from 'react-native';
 import * as Location from 'expo-location';
-import MapView, {
-  Marker,
-  UrlTile,
-  MapPressEvent,
-  Region,
-} from 'react-native-maps';
-import { supabase } from '../../../lib/supabase';
-import { useAuthProfile } from '../../../hooks/useAuthProfile';
+import TaxiMap from '../../../components/TaxiMap';
 import DriverCard from '../../../components/DriverCard';
+import type {
+  LatLng,
+  TaxiMapDriver,
+  TaxiMapRegion,
+} from '../../../components/TaxiMap.types';
+import { useAuthProfile } from '../../../hooks/useAuthProfile';
+import { supabase } from '../../../lib/supabase';
 
-type LatLng = {
-  latitude: number;
-  longitude: number;
-};
+type DriverOnMap = TaxiMapDriver;
 
-type DriverOnMap = {
+type AssignedDriver = {
   driver_id: string;
   name?: string | null;
   phone?: string | null;
@@ -32,8 +29,20 @@ type DriverOnMap = {
   vehicle_model?: string | null;
   vehicle_colour?: string | null;
   vehicle_image_url?: string | null;
-  lat: number;
-  lng: number;
+};
+
+type RideRequestResult = {
+  ride_id: string;
+  driver_id: string;
+  driver_name: string | null;
+  driver_phone: string | null;
+  vehicle_rego: string | null;
+  vehicle_model: string | null;
+  vehicle_colour: string | null;
+  vehicle_image_url: string | null;
+  driver_distance_km: number;
+  trip_distance_km: number;
+  fare_estimate: number | string;
 };
 
 type SelectionMode = 'pickup' | 'destination' | null;
@@ -62,8 +71,7 @@ function calculateFare(distanceKm: number): number {
 
 export default function TaxiScreen() {
   const { session } = useAuthProfile();
-  const [region, setRegion] = useState<Region | null>(null);
-  const [userLocation, setUserLocation] = useState<LatLng | null>(null);
+  const [region, setRegion] = useState<TaxiMapRegion | null>(null);
   const [pickup, setPickup] = useState<LatLng | null>(null);
   const [destination, setDestination] = useState<LatLng | null>(null);
   const [selectionMode, setSelectionMode] = useState<SelectionMode>('pickup');
@@ -72,7 +80,7 @@ export default function TaxiScreen() {
   const [loadingMap, setLoadingMap] = useState(true);
   const [requesting, setRequesting] = useState(false);
   const [fareEstimate, setFareEstimate] = useState<number | null>(null);
-  const [selectedDriver, setSelectedDriver] = useState<DriverOnMap | null>(null);
+  const [selectedDriver, setSelectedDriver] = useState<AssignedDriver | null>(null);
   const [selectedDriverDistance, setSelectedDriverDistance] = useState<number | null>(null);
   const [rideId, setRideId] = useState<string | null>(null);
 
@@ -84,7 +92,7 @@ export default function TaxiScreen() {
 
         if (status !== 'granted') {
           Alert.alert('Location permission', 'Please enable location to book a ride.');
-          const fallback: Region = {
+          const fallback: TaxiMapRegion = {
             latitude: -6.0,
             longitude: 147.0,
             latitudeDelta: 5,
@@ -101,7 +109,6 @@ export default function TaxiScreen() {
           longitude: loc.coords.longitude,
         };
 
-        setUserLocation(coords);
         setPickup(coords);
         setRegion({
           ...coords,
@@ -110,7 +117,7 @@ export default function TaxiScreen() {
         });
       } catch (error) {
         console.log('Location error', error);
-        const fallback: Region = {
+        const fallback: TaxiMapRegion = {
           latitude: -6.0,
           longitude: 147.0,
           latitudeDelta: 5,
@@ -126,60 +133,24 @@ export default function TaxiScreen() {
   // Load existing online drivers + subscribe realtime
   useEffect(() => {
     const loadDrivers = async () => {
-      const { data, error } = await supabase
-        .from('driver_locations')
-        .select(`
-          driver_id,
-          lat,
-          lng,
-          is_online,
-          profiles:driver_id (
-            full_name,
-            phone,
-            is_driver,
-            is_driver_approved
-          ),
-          driver_profiles:driver_id (
-            vehicle_rego,
-            vehicle_model,
-            vehicle_colour,
-            vehicle_image_url
-          )
-        `)
-        .eq('is_online', true);
+      const { data, error } = await supabase.rpc('list_available_drivers');
 
       if (error) {
         console.log('Error loading drivers', error);
         return;
       }
 
-      if (!data) return;
-
       setDrivers(
-        data
-          .filter(
-            (d: any) =>
-              d.profiles?.is_driver &&
-              d.profiles?.is_driver_approved &&
-              d.is_online
-          )
-          .map((d: any) => ({
-            driver_id: d.driver_id,
-            name: d.profiles?.full_name,
-            phone: d.profiles?.phone,
-            lat: d.lat,
-            lng: d.lng,
-            vehicle_rego: d.driver_profiles?.vehicle_rego,
-            vehicle_model: d.driver_profiles?.vehicle_model,
-            vehicle_colour: d.driver_profiles?.vehicle_colour,
-            vehicle_image_url: d.driver_profiles?.vehicle_image_url,
-          }))
+        ((data || []) as DriverOnMap[]).map((driver) => ({
+          ...driver,
+          phone: null,
+        }))
       );
     };
 
     loadDrivers();
 
-    const channel = supabase
+    const locationChannel = supabase
       .channel('driver_locations_realtime')
       .on(
         'postgres_changes',
@@ -227,17 +198,26 @@ export default function TaxiScreen() {
       )
       .subscribe();
 
+    const ridesChannel = supabase
+      .channel('rides_availability_realtime')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'rides' },
+        () => {
+          loadDrivers();
+        }
+      )
+      .subscribe();
+
     return () => {
-      supabase.removeChannel(channel);
+      supabase.removeChannel(locationChannel);
+      supabase.removeChannel(ridesChannel);
     };
   }, []);
 
-  // ① Auto-advance + live estimate on map taps
-  const handleMapPress = (e: MapPressEvent) => {
+  // Auto-advance + live estimate on map taps
+  const handleMapPress = (coord: LatLng) => {
     if (!selectionMode) return;
-
-    const coord = e.nativeEvent.coordinate;
-    if (!coord) return;
 
     if (selectionMode === 'pickup') {
       setPickup(coord);
@@ -262,7 +242,6 @@ export default function TaxiScreen() {
         latitude: loc.coords.latitude,
         longitude: loc.coords.longitude,
       };
-      setUserLocation(coords);
       setRegion({
         ...coords,
         latitudeDelta: 0.05,
@@ -297,56 +276,45 @@ export default function TaxiScreen() {
       return;
     }
 
-    if (!drivers.length) {
-      Alert.alert('No drivers', 'No approved drivers are online nearby at the moment.');
-      return;
-    }
-
     setRequesting(true);
 
     try {
-      // Find nearest online driver
-      const candidates = drivers.map(d => ({
-        ...d,
-        distanceKm: haversineKm(pickup, {
-          latitude: d.lat,
-          longitude: d.lng,
-        }),
-      }));
+      const { data, error } = await supabase.rpc('request_ride', {
+        p_pickup_lat: pickup.latitude,
+        p_pickup_lng: pickup.longitude,
+        p_dropoff_lat: destination.latitude,
+        p_dropoff_lng: destination.longitude,
+      });
 
-      candidates.sort((a, b) => a.distanceKm - b.distanceKm);
-      const nearest = candidates[0];
+      const assignment = ((data || []) as RideRequestResult[])[0];
 
-      const tripDistanceKm = haversineKm(pickup, destination);
-      const estimate = calculateFare(tripDistanceKm);
-
-      const { data, error } = await supabase
-        .from('rides')
-        .insert({
-          passenger_id: session.user.id,
-          driver_id: nearest.driver_id,
-          pickup_lat: pickup.latitude,
-          pickup_lng: pickup.longitude,
-          dropoff_lat: destination.latitude,
-          dropoff_lng: destination.longitude,
-          status: 'driver_assigned',
-          fare_estimate: estimate,
-          distance_km: tripDistanceKm,
-        })
-        .select()
-        .single();
-
-      if (error || !data) {
+      if (error || !assignment) {
         console.log('Ride create error', error);
-        Alert.alert('Error', 'Could not create ride. Please try again.');
-        setRequesting(false);
+        const message = error?.message || 'Could not create ride. Please try again.';
+        Alert.alert(
+          message.includes('No approved drivers') ? 'No drivers' : 'Ride request failed',
+          message
+        );
         return;
       }
 
-      setRideId(data.id);
-      setFareEstimate(estimate);
-      setSelectedDriver(nearest);
-      setSelectedDriverDistance(nearest.distanceKm ?? null);
+      const estimate = Number(assignment.fare_estimate);
+
+      setRideId(assignment.ride_id);
+      setFareEstimate(Number.isFinite(estimate) ? estimate : null);
+      setSelectedDriver({
+        driver_id: assignment.driver_id,
+        name: assignment.driver_name,
+        phone: assignment.driver_phone,
+        vehicle_rego: assignment.vehicle_rego,
+        vehicle_model: assignment.vehicle_model,
+        vehicle_colour: assignment.vehicle_colour,
+        vehicle_image_url: assignment.vehicle_image_url,
+      });
+      setSelectedDriverDistance(assignment.driver_distance_km);
+      setDrivers((previous) =>
+        previous.filter((driver) => driver.driver_id !== assignment.driver_id)
+      );
 
       Alert.alert('Ride requested', 'We have assigned the nearest available driver.');
     } catch (err) {
@@ -360,15 +328,21 @@ export default function TaxiScreen() {
   const handleCancelRide = async () => {
     try {
       if (rideId) {
-        await supabase.from('rides').update({ status: 'cancelled' }).eq('id', rideId);
+        const { error } = await supabase
+          .from('rides')
+          .update({ status: 'cancelled' })
+          .eq('id', rideId);
+
+        if (error) throw error;
       }
-    } catch (err) {
-      console.log('Cancel ride error', err);
-    } finally {
+
       setRideId(null);
       setFareEstimate(null);
       setSelectedDriver(null);
       setSelectedDriverDistance(null);
+    } catch (err) {
+      console.log('Cancel ride error', err);
+      Alert.alert('Cancellation failed', 'Could not cancel this ride. Please try again.');
     }
   };
 
@@ -383,42 +357,14 @@ export default function TaxiScreen() {
 
   return (
     <View style={styles.container}>
-      <MapView
-        style={styles.map}
+      <TaxiMap
         region={region}
+        pickup={pickup}
+        destination={destination}
+        drivers={drivers}
         onRegionChangeComplete={setRegion}
         onPress={handleMapPress}
-        showsUserLocation
-      >
-        <UrlTile
-          urlTemplate="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-          maximumZ={19}
-          flipY={false}
-        />
-
-        {pickup && <Marker coordinate={pickup} title="Pickup" pinColor="green" />}
-
-        {destination && (
-          <Marker
-            coordinate={destination}
-            title="Destination"
-            pinColor="red"
-          />
-        )}
-
-        {drivers.map(driver => (
-          <Marker
-            key={driver.driver_id}
-            coordinate={{
-              latitude: driver.lat,
-              longitude: driver.lng,
-            }}
-            title={driver.name || 'Driver'}
-            description={driver.vehicle_model || 'Online driver'}
-            pinColor="gold"
-          />
-        ))}
-      </MapView>
+      />
 
       {/* recenter button */}
       <View style={styles.recenterContainer}>
