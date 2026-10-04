@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
+import MarketplaceServiceReviewPanel from '../../components/admin/MarketplaceServiceReviewPanel';
 import { supabase } from '../../lib/supabase';
 import { useAuthProfile } from '../../hooks/useAuthProfile';
 
@@ -28,15 +29,16 @@ type ProviderApplication = {
 };
 
 export default function AdminScreen() {
-  const { profile, loading: profileLoading } = useAuthProfile();
+  const { profile, hasRole, loading: profileLoading } = useAuthProfile();
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState<ProviderApplication[]>([]);
   const [busyId, setBusyId] = useState<string | null>(null);
+  const isAdmin = Boolean(profile?.is_admin || hasRole('admin'));
 
   useEffect(() => {
-    if (!profile?.is_admin) return;
+    if (!isAdmin) return;
     loadPending();
-  }, [profile?.is_admin]);
+  }, [isAdmin]);
 
   const loadPending = async () => {
     setLoading(true);
@@ -105,7 +107,7 @@ export default function AdminScreen() {
     );
   }
 
-  if (!profile?.is_admin) {
+  if (!isAdmin) {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Admin</Text>
@@ -118,7 +120,9 @@ export default function AdminScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Admin – Provider Applications</Text>
+      <Text style={styles.title}>Admin</Text>
+      <MarketplaceServiceReviewPanel enabled={isAdmin} />
+      <Text style={styles.sectionTitle}>Provider applications</Text>
 
       {loading ? (
         <View style={styles.center}>
@@ -207,6 +211,12 @@ const styles = StyleSheet.create({
     color: '#FACC15',
     fontWeight: '700',
     marginBottom: 10,
+  },
+  sectionTitle: {
+    color: '#FACC15',
+    fontSize: 14,
+    fontWeight: '700',
+    marginBottom: 8,
   },
   text: {
     color: '#E5E7EB',

@@ -5,7 +5,7 @@ import { ActivityIndicator, View } from 'react-native';
 import { useAuthProfile } from '../../hooks/useAuthProfile';
 
 export default function TabsLayout() {
-  const { session, profile, loading } = useAuthProfile();
+  const { session, profile, hasRole, loading } = useAuthProfile();
 
   if (loading) {
     return (
@@ -60,16 +60,16 @@ export default function TabsLayout() {
         options={{ title: 'explore' }}
       />
 
-      {/* Provider tab only when profile.is_provider */}
-      {profile?.is_provider && (
+      {/* Provider tab for approved provider RBAC or legacy provider flag */}
+      {(profile?.is_provider || hasRole('provider')) && (
         <Tabs.Screen
           name="provider"
           options={{ title: 'provider' }}
         />
       )}
 
-      {/* Admin tab only for admins */}
-      {profile?.is_admin && (
+      {/* Admin tab for RBAC administrators or legacy admin flag */}
+      {(profile?.is_admin || hasRole('admin')) && (
         <Tabs.Screen
           name="admin"
           options={{ title: 'admin' }}

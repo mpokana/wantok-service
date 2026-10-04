@@ -36,6 +36,13 @@ export default function ServicesHomeScreen() {
           </Text>
         </TouchableOpacity>
 
+        <TouchableOpacity style={styles.card} onPress={() => go('/services/my-requests')}>
+          <Text style={styles.cardTitle}>My Service Requests</Text>
+          <Text style={styles.cardText}>
+            Review non-taxi requests, provider quotes and confirmed services.
+          </Text>
+        </TouchableOpacity>
+
         <TouchableOpacity style={styles.card} onPress={() => go('/services/hire')}>
           <Text style={styles.cardTitle}>Hire Car & Boats</Text>
           <Text style={styles.cardText}>

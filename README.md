@@ -14,6 +14,7 @@ See `docs/SUPER_APP_ARCHITECTURE.md` for the product and domain architecture.
 - Native taxi map on Android/iOS and MapLibre/OpenStreetMap on web.
 - Secure server-side nearest-driver assignment and ride lifecycle foundation.
 - Generic marketplace catalogue, provider services/resources, bookings, quotes and reviews.
+- Live quote-based marketplace workflow for Specialist Services and People / General Labour: customer request → qualified provider quote → customer acceptance → confirmed booking.
 - Resource availability and database-enforced overlap protection for vehicles, boats, venues and other reservable assets.
 - Enterprise RBAC roles for customer, provider, driver, admin, operations, support, finance and moderation.
 - RLS enabled on every application table.

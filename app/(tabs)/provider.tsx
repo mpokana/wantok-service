@@ -6,13 +6,15 @@ import {
   Switch,
   Alert,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import * as Location from 'expo-location';
+import MarketplaceProviderPanel from '../../components/provider/MarketplaceProviderPanel';
 import { supabase } from '../../lib/supabase';
 import { useAuthProfile } from '../../hooks/useAuthProfile';
 
 export default function ProviderScreen() {
-  const { profile, session, loading } = useAuthProfile();
+  const { profile, session, hasRole, loading } = useAuthProfile();
   const [isOnline, setIsOnline] = useState(false);
   const [updating, setUpdating] = useState(false);
 
@@ -86,7 +88,9 @@ export default function ProviderScreen() {
     );
   }
 
-  if (!profile?.is_provider) {
+  const isProvider = Boolean(profile?.is_provider || hasRole('provider'));
+
+  if (!isProvider) {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Provider</Text>
@@ -99,7 +103,7 @@ export default function ProviderScreen() {
     );
   }
 
-  if (profile.is_driver && !profile.is_driver_approved) {
+  if (profile?.is_driver && !profile.is_driver_approved) {
     return (
       <View style={styles.container}>
         <Text style={styles.title}>Driver</Text>
@@ -109,10 +113,14 @@ export default function ProviderScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.content}
+      showsVerticalScrollIndicator={false}
+    >
       <Text style={styles.title}>Provider Dashboard</Text>
 
-      {profile.is_driver && profile.is_driver_approved && (
+      {profile?.is_driver && profile.is_driver_approved && (
         <>
           <Text style={styles.sectionLabel}>Driver status</Text>
           <View style={styles.row}>
@@ -131,7 +139,9 @@ export default function ProviderScreen() {
           )}
         </>
       )}
-    </View>
+
+      {session?.user && <MarketplaceProviderPanel providerId={session.user.id} />}
+    </ScrollView>
   );
 }
 
@@ -145,8 +155,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#000',
+  },
+  content: {
     padding: 20,
     paddingTop: 50,
+    paddingBottom: 40,
   },
   title: {
     fontSize: 22,
