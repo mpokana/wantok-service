@@ -88,7 +88,7 @@ export default function ProviderScreen() {
     );
   }
 
-  const isProvider = Boolean(profile?.is_provider || hasRole('provider'));
+  const isProvider = hasRole('provider');
 
   if (!isProvider) {
     return (
@@ -103,15 +103,6 @@ export default function ProviderScreen() {
     );
   }
 
-  if (profile?.is_driver && !profile.is_driver_approved) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Driver</Text>
-        <Text style={styles.text}>Your driver application is pending approval.</Text>
-      </View>
-    );
-  }
-
   return (
     <ScrollView
       style={styles.container}
@@ -119,6 +110,15 @@ export default function ProviderScreen() {
       showsVerticalScrollIndicator={false}
     >
       <Text style={styles.title}>Provider Dashboard</Text>
+
+      {profile?.is_driver && !profile.is_driver_approved && (
+        <View style={styles.noticeBox}>
+          <Text style={styles.noticeTitle}>Driver approval pending</Text>
+          <Text style={styles.textSmall}>
+            Taxi driver tools stay disabled until approval, but your other approved marketplace services remain available.
+          </Text>
+        </View>
+      )}
 
       {profile?.is_driver && profile.is_driver_approved && (
         <>
@@ -172,6 +172,19 @@ const styles = StyleSheet.create({
     color: '#9CA3AF',
     marginTop: 16,
     marginBottom: 6,
+  },
+  noticeBox: {
+    borderWidth: 1,
+    borderColor: '#92400E',
+    backgroundColor: '#1C1408',
+    borderRadius: 10,
+    padding: 11,
+    marginBottom: 8,
+  },
+  noticeTitle: {
+    color: '#FACC15',
+    fontSize: 12,
+    fontWeight: '700',
   },
   row: {
     flexDirection: 'row',

@@ -145,11 +145,13 @@ Current migration sequence:
 2. `20261005002000_marketplace_core.sql` — multi-service catalogue, provider listings/resources, bookings, quotes and reviews.
 3. `20261005010000_enterprise_platform.sql` — RBAC, audit, notifications, payment boundaries, settlements and devices.
 4. `20261005011000_availability_and_reservations.sql` — provider availability and resource double-booking protection.
+5. `20261005012000_rbac_authority.sql` — authoritative RBAC enforcement and bidirectional trusted flag-to-role synchronisation.
 
 Every backend schema/security change must be made through a migration. Do not make production-only dashboard schema changes that are absent from Git.
 
 ## Security model
 
+- `user_roles` is the authoritative authorization source; legacy profile role flags are compatibility/business-state fields and do not independently grant admin authority.
 - Ordinary clients cannot grant themselves provider/admin/finance roles.
 - Provider approval is performed by trusted database functions.
 - Sensitive role changes generate audit events.

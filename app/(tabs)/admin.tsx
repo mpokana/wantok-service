@@ -29,11 +29,11 @@ type ProviderApplication = {
 };
 
 export default function AdminScreen() {
-  const { profile, hasRole, loading: profileLoading } = useAuthProfile();
+  const { hasRole, loading: profileLoading } = useAuthProfile();
   const [loading, setLoading] = useState(true);
   const [items, setItems] = useState<ProviderApplication[]>([]);
   const [busyId, setBusyId] = useState<string | null>(null);
-  const isAdmin = Boolean(profile?.is_admin || hasRole('admin'));
+  const isAdmin = hasRole('admin');
 
   useEffect(() => {
     if (!isAdmin) return;
