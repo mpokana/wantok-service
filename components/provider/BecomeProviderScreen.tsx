@@ -22,9 +22,16 @@ type Application = {
 
 const SERVICE_TYPES = [
   { value: 'driver', label: 'Taxi / Private Driver' },
-  { value: 'delivery', label: 'Delivery Rider' },
+  { value: 'delivery', label: 'Delivery / Courier' },
+  { value: 'specialist', label: 'Specialist / Trade Service' },
+  { value: 'general_labour', label: 'General Labour / People for Hire' },
+  { value: 'vehicle_hire', label: 'Vehicle Hire' },
+  { value: 'boat_hire', label: 'Private Boat Hire' },
+  { value: 'boat_operator', label: 'Boat / Ship Passenger Service' },
+  { value: 'venue', label: 'Venue / Space Provider' },
+  { value: 'events', label: 'Event Organiser' },
   { value: 'food_vendor', label: 'Food Vendor / Restaurant' },
-  { value: 'shop', label: 'Shop / Service Provider' },
+  { value: 'shop', label: 'Shop / Grocery Merchant' },
 ];
 
 export default function BecomeProviderScreen() {
@@ -154,8 +161,9 @@ export default function BecomeProviderScreen() {
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Become a Wantok Service Provider</Text>
       <Text style={styles.subtitle}>
-        Apply to offer rides, deliveries or services through Wantok Service.
-        All applications are manually reviewed for safety and quality.
+        Apply to offer transport, delivery, skilled work, labour, hire,
+        venues, events, food or retail services through Wantok Service. All
+        applications are manually reviewed for safety and quality.
       </Text>
 
       {existingApp && (

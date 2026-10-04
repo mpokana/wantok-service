@@ -78,8 +78,31 @@ export default function ServicesHomeScreen() {
           </Text>
         </TouchableOpacity>
 
+        <TouchableOpacity style={styles.card} onPress={() => go('/services/people')}>
+          <Text style={styles.cardTitle}>People & General Labour</Text>
+          <Text style={styles.cardText}>
+            Hire verified workers and helpers by job, hour, day or quote.
+          </Text>
+        </TouchableOpacity>
+
+        <Text style={styles.sectionLabel}>Delivery & Shopping</Text>
+
+        <TouchableOpacity style={styles.card} onPress={() => go('/services/delivery')}>
+          <Text style={styles.cardTitle}>Delivery & Errands</Text>
+          <Text style={styles.cardText}>
+            Send parcels, arrange collections, or request buy-and-deliver errands.
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.card} onPress={() => go('/services/food')}>
+          <Text style={styles.cardTitle}>Food, Groceries & Shops</Text>
+          <Text style={styles.cardText}>
+            Discover approved merchants for food, groceries and everyday goods.
+          </Text>
+        </TouchableOpacity>
+
         <Text style={styles.footer}>
-          More categories (food, errands, delivery) will be added here later.
+          Later modules include buses, accommodation, flights, payments, rewards and other PNG services.
         </Text>
       </ScrollView>
     </View>

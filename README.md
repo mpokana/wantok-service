@@ -1,19 +1,29 @@
 # Wantok Service
 
-Wantok Service is a Papua New Guinea-focused service marketplace built as one Expo application for Android, iOS and web, with Supabase providing authentication, PostgreSQL, realtime, storage and server-side business functions.
+Wantok Service is a Papua New Guinea-focused multi-service marketplace and super-app platform. It uses one Expo application for Android, iOS and web, with a version-controlled Supabase backend for authentication, PostgreSQL, row-level security, realtime, storage and trusted server-side functions.
 
-## Current baseline
+The product is broader than ride-hailing. Taxi is one specialised vertical inside a shared platform for transport, delivery, people/services, hire, venues, events, food, shopping and later travel services.
 
-The recovered baseline includes:
+See `docs/SUPER_APP_ARCHITECTURE.md` for the product and domain architecture.
 
-- Email/password authentication and persistent mobile sessions.
-- Customer service catalogue.
-- Taxi map with native `react-native-maps` and a MapLibre/OpenStreetMap web implementation.
-- Secure server-side nearest-driver ride assignment.
-- Ride history and passenger cancellation.
-- Provider applications and secured admin approval.
-- Approved-driver online location updates and realtime map updates.
-- Version-controlled Supabase schema, RLS policies, realtime publication and private provider-document storage.
+## Current enterprise development baseline
+
+- Email/password authentication with persistent mobile sessions.
+- One account can act as customer and, after approval, one or more provider types.
+- Customer Services hub for taxi, vehicle/boat hire, venues/events, specialists, general labour, delivery/errands and food/shopping.
+- Native taxi map on Android/iOS and MapLibre/OpenStreetMap on web.
+- Secure server-side nearest-driver assignment and ride lifecycle foundation.
+- Generic marketplace catalogue, provider services/resources, bookings, quotes and reviews.
+- Resource availability and database-enforced overlap protection for vehicles, boats, venues and other reservable assets.
+- Enterprise RBAC roles for customer, provider, driver, admin, operations, support, finance and moderation.
+- RLS enabled on every application table.
+- Operational audit events and status-change auditing.
+- In-app notification records plus a delivery outbox for push/email/SMS workers.
+- Payment-intent, payment-event and provider-settlement boundaries with no direct client payment mutation.
+- Push-device registration model.
+- Private provider-document storage policies.
+- Reproducible Supabase migrations and pgTAP database tests.
+- GitHub CI validates frontend, database migrations/tests and all platform bundles.
 - Android package and iOS bundle identifier: `io.wantok.service`.
 
 ## Architecture
@@ -21,58 +31,74 @@ The recovered baseline includes:
 ```text
 Android / iOS / Web
         |
-   Expo Router
+     Expo Router
         |
- Supabase client
+  Supabase client
         |
-+--------------------------+
-| Supabase                 |
-| Auth                     |
-| PostgreSQL + RLS         |
-| Realtime                 |
-| Storage                  |
-| Database RPC functions   |
-+--------------------------+
++-----------------------------------+
+| Wantok Service Backend            |
+|                                   |
+| Supabase Auth                     |
+| PostgreSQL + RLS                  |
+| Realtime                          |
+| Private Storage                   |
+| Trusted RPC / Edge Functions      |
+| Notification Outbox              |
+| Payment Integration Boundary      |
++-----------------------------------+
+        |
++-----------------------------------+
+| Shared Marketplace Core           |
+| Identity / RBAC                   |
+| Providers / Verification          |
+| Catalogue / Listings / Resources  |
+| Bookings / Quotes / Reviews        |
+| Availability / Reservations       |
+| Audit / Notifications / Payments  |
++-----------------------------------+
+        |
++-----------------------------------+
+| Specialised Verticals             |
+| Rides / Taxi                      |
+| Delivery / Errands                |
+| Food / Shopping                   |
+| Events / Ticketing                |
+| Travel integrations               |
++-----------------------------------+
 ```
 
-The application uses one shared business/UI codebase. Platform-specific map rendering lives in `components/TaxiMap.tsx` for Android/iOS and `components/TaxiMap.web.tsx` for web.
+Taxi remains specialised because dispatch, live driver location, routing and trip state have different concurrency and safety requirements from general marketplace bookings.
 
 ## Requirements
 
 - Node.js and npm
-- Docker Desktop
-- Supabase CLI (installed as a development dependency)
-- Android Studio for local Android builds/emulation
-- EAS or a macOS/Xcode environment for native iOS builds
+- Docker Desktop with Linux containers/WSL2
+- Supabase CLI (included as a development dependency)
+- Android Studio for Android emulator/native development
+- EAS or macOS/Xcode for native iOS release builds
 
 ## Environment
 
-Copy `.env.example` to `.env` and supply a development Supabase URL and public/publishable key:
+Copy `.env.example` to `.env` and use only a Supabase publishable key in the Expo application:
 
 ```env
 EXPO_PUBLIC_SUPABASE_URL=http://YOUR-DEVELOPMENT-HOST:54321
-EXPO_PUBLIC_SUPABASE_ANON_KEY=YOUR_PUBLIC_OR_PUBLISHABLE_KEY
+EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY=YOUR_PUBLISHABLE_KEY
 ```
 
-Never place a Supabase secret/service-role key in an `EXPO_PUBLIC_*` variable.
+Never place a Supabase secret/service-role key in any `EXPO_PUBLIC_*` variable.
 
-For a physical Android/iOS device, the Supabase URL must be reachable from that device. `127.0.0.1` points to the phone itself, not the development computer.
+For a physical Android/iOS device, use EAGLT02's current reachable LAN/VPN address rather than `127.0.0.1`. The local Supabase API listens on port `54321`.
 
-## Install and validate
+## Install and frontend validation
 
 ```bash
 npm ci
 npm run check
-npx expo-doctor
+npx expo install --check
 ```
 
-Start Expo:
-
-```bash
-npm start
-```
-
-Or target one platform:
+Run the app with:
 
 ```bash
 npm run web
@@ -80,59 +106,93 @@ npm run android
 npm run ios
 ```
 
-## Local backend
+## Local Supabase backend
 
-Start the repository's local Supabase stack:
+The Git repository is the authoritative backend definition.
 
 ```bash
 npm run db:start
 npm run db:status
-```
-
-Apply pending migrations to a running local stack:
-
-```bash
 npm run db:migrate
-```
-
-Stop it with:
-
-```bash
+npm run db:test
 npm run db:stop
 ```
 
-The authoritative backend definition is under `supabase/`. Do not make production schema changes only through a dashboard; create a migration so the backend remains reproducible.
+To prove the backend can be recreated from migrations:
+
+```bash
+npm run db:reset
+npm run db:test
+```
+
+On Windows, `scripts/supabase-local.js` automatically targets the Docker Desktop Linux engine.
+
+Local development endpoints use the standard Supabase ports:
+
+- API: `54321`
+- PostgreSQL: `54322`
+- Studio: `54323`
+- Mailpit: `54324`
+
+Studio and PostgreSQL are development/admin surfaces. Do not expose them to the public internet. Future external testing should publish only the intended application/API endpoints through a controlled reverse proxy/tunnel with appropriate access controls.
+
+## Backend migrations
+
+Current migration sequence:
+
+1. `20261004143000_initial_wantok_service.sql` — profiles, provider applications, drivers and rides.
+2. `20261005002000_marketplace_core.sql` — multi-service catalogue, provider listings/resources, bookings, quotes and reviews.
+3. `20261005010000_enterprise_platform.sql` — RBAC, audit, notifications, payment boundaries, settlements and devices.
+4. `20261005011000_availability_and_reservations.sql` — provider availability and resource double-booking protection.
+
+Every backend schema/security change must be made through a migration. Do not make production-only dashboard schema changes that are absent from Git.
 
 ## Security model
 
-- Role flags such as `is_admin`, `is_driver` and `is_driver_approved` cannot be changed by ordinary users.
-- Provider approval is performed by the secured `review_provider_application` database function.
-- Riders receive a limited available-driver listing that does not expose driver phone numbers.
-- `request_ride` selects and locks the nearest available approved driver server-side and returns contact information only for the assigned ride.
-- Direct arbitrary ride insertion by authenticated clients is not granted.
-- Provider documents use a private storage bucket with per-user access policies.
-- Realtime access remains subject to RLS.
+- Ordinary clients cannot grant themselves provider/admin/finance roles.
+- Provider approval is performed by trusted database functions.
+- Sensitive role changes generate audit events.
+- RLS is enabled across all application-owned tables.
+- Riders receive a limited approved-driver listing.
+- Ride assignment occurs server-side with concurrency protection.
+- Provider documents are private and user-scoped.
+- Authenticated clients cannot directly create payment intents, processor events, settlements, audit events or outbound notification jobs.
+- Resource double-booking is blocked by a PostgreSQL exclusion constraint, not merely by UI checks.
+- Payment capture/refund/payout logic will be implemented only on trusted server infrastructure when payment providers are selected.
 
-## Important backend objects
+## Database tests
 
-Tables:
+Run:
 
-- `profiles`
-- `provider_applications`
-- `driver_profiles`
-- `driver_locations`
-- `rides`
+```bash
+npm run db:test
+```
 
-RPCs:
+The current pgTAP contract suite verifies core tables/functions, seeded service and role catalogues, RLS coverage, protected financial/audit write boundaries and reservation overlap protection.
 
-- `list_available_drivers()`
-- `request_ride(...)`
-- `review_provider_application(...)`
+## Product scope
 
-## Remaining product work
+Active foundation categories include:
 
-This baseline is suitable for continued development, but a production launch still needs product-level work including real document upload UI, driver trip accept/progress controls, background driver location, route-based distance/ETA, payments and settlement, notifications, food/delivery/vendor ordering, stronger admin operations, automated application tests, store signing/release workflows, monitoring and production Supabase/hosting deployment.
+- Taxi / Ride
+- Vehicle Hire
+- Boat Hire
+- Boat / Ship Rides
+- Specialist Services
+- People / General Labour
+- Venue Booking
+- Events
+- Delivery / Courier
+- Errands / Pabili
+- Food
+- Groceries / Shops
+
+Later reserved modules include buses/coaches, accommodation and flights.
+
+## Remaining major work
+
+The enterprise backend foundation is now reproducible, but launch still requires real provider document upload UI, complete driver accept/decline/trip controls, background driver location, route-based distance/ETA, generic marketplace search/booking screens, merchant catalogues/carts/orders, notifications worker/Edge Functions, payment-provider integrations, settlement operations, chat, safety/SOS, disputes/refunds, monitoring, backups, production hosting, automated end-to-end tests and store signing/release workflows.
 
 ## Version-control rule
 
-Git is the source of truth. Use committed branches/tags for checkpoints and keep the project reversible. Do not overwrite a working copy with an unverified folder snapshot.
+Git is the source of truth. Use committed branches/tags as checkpoints. Never overwrite a working source tree with an unverified folder snapshot.

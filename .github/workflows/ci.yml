@@ -9,8 +9,9 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     env:
-      EXPO_PUBLIC_SUPABASE_URL: https://example.supabase.co
-      EXPO_PUBLIC_SUPABASE_ANON_KEY: ci-public-placeholder
+      EXPO_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
+      EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ci-public-placeholder
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -27,8 +28,14 @@ jobs:
       - name: TypeScript and lint
         run: npm run check
 
-      - name: Expo diagnostics
-        run: npx --yes expo-doctor
+      - name: Expo dependency compatibility
+        run: npx expo install --check
+
+      - name: Start local Supabase and replay migrations
+        run: npm run db:start
+
+      - name: Database contract tests
+        run: npm run db:test
 
       - name: Web export
         run: npx expo export --platform web --output-dir dist-ci-web
@@ -38,3 +45,7 @@ jobs:
 
       - name: iOS bundle export
         run: npx expo export --platform ios --output-dir dist-ci-ios
+
+      - name: Stop local Supabase
+        if: always()
+        run: npm run db:stop || true

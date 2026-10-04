@@ -11,10 +11,12 @@
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
     "check": "npm run typecheck && npm run lint",
-    "db:start": "supabase start",
-    "db:status": "supabase status",
-    "db:migrate": "supabase migration up --local",
-    "db:stop": "supabase stop"
+    "db:start": "node ./scripts/supabase-local.js start",
+    "db:status": "node ./scripts/supabase-local.js status",
+    "db:migrate": "node ./scripts/supabase-local.js migration up --local",
+    "db:reset": "node ./scripts/supabase-local.js db reset --local",
+    "db:test": "node ./scripts/supabase-local.js test db --local supabase/tests",
+    "db:stop": "node ./scripts/supabase-local.js stop"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
