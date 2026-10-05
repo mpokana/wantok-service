@@ -20,14 +20,49 @@ class HomeShell extends StatefulWidget {
   State<HomeShell> createState() => _HomeShellState();
 }
 
-class _HomeShellState extends State<HomeShell> {
+class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
   static const _auth = WantokAuthService();
 
   AppMode _mode = AppMode.client;
   int _tabIndex = 0;
+  late Set<String> _roles;
+  bool _refreshingRoles = false;
 
   bool get _hasVendorAccess =>
-      widget.roles.contains('provider') || widget.roles.contains('driver');
+      _roles.contains('provider') || _roles.contains('driver');
+
+  @override
+  void initState() {
+    super.initState();
+    _roles = Set<String>.from(widget.roles);
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _refreshRoles();
+    }
+  }
+
+  Future<void> _refreshRoles() async {
+    if (_refreshingRoles) return;
+    _refreshingRoles = true;
+    try {
+      final roles = await _auth.loadRoles();
+      if (mounted) {
+        setState(() => _roles = roles);
+      }
+    } finally {
+      _refreshingRoles = false;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +138,9 @@ class _HomeShellState extends State<HomeShell> {
                   _mode = value;
                   _tabIndex = 0;
                 });
+                if (value == AppMode.vendor) {
+                  _refreshRoles();
+                }
               },
             ),
           ),
@@ -135,7 +173,7 @@ class _HomeShellState extends State<HomeShell> {
               : const VendorListingsPage(),
           _AccountPage(
             email: widget.email,
-            roles: widget.roles,
+            roles: _roles,
             onSignOut: _auth.signOut,
           ),
         ],
