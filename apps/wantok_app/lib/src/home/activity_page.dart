@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import 'messages_page.dart';
+
 class ActivityPage extends StatefulWidget {
   const ActivityPage({super.key});
 
@@ -11,6 +13,7 @@ class ActivityPage extends StatefulWidget {
 
 class _ActivityPageState extends State<ActivityPage> {
   static const _repository = ReservationRepository();
+  static const _messaging = MessagingRepository();
   late Future<List<Map<String, dynamic>>> _future;
   String? _busyId;
 
@@ -32,6 +35,34 @@ class _ActivityPageState extends State<ActivityPage> {
     try {
       await action();
       await _refresh();
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(_friendlyError(error))));
+      }
+    } finally {
+      if (mounted) setState(() => _busyId = null);
+    }
+  }
+
+  Future<void> _openConversation({
+    required String bookingId,
+    required String providerName,
+    required String categoryName,
+  }) async {
+    setState(() => _busyId = bookingId);
+    try {
+      final threadId = await _messaging.ensureForBooking(bookingId);
+      if (!mounted) return;
+      await Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (context) => ConversationPage(
+            threadId: threadId,
+            title: providerName,
+            subtitle: categoryName,
+          ),
+        ),
+      );
     } catch (error) {
       if (mounted) {
         ScaffoldMessenger.of(context)
@@ -207,6 +238,27 @@ class _ActivityPageState extends State<ActivityPage> {
                                 child: const Text('Accept'),
                               ),
                             ],
+                          ),
+                        ),
+                      ],
+                      if (provider.isNotEmpty) ...[
+                        const SizedBox(height: 12),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: OutlinedButton.icon(
+                            onPressed: busy
+                                ? null
+                                : () => _openConversation(
+                                    bookingId: id,
+                                    providerName:
+                                        provider['display_name'] as String? ??
+                                        'Wantok Provider',
+                                    categoryName:
+                                        category['name'] as String? ??
+                                        'Wantok Service',
+                                  ),
+                            icon: const Icon(Icons.chat_bubble_outline),
+                            label: const Text('Message provider'),
                           ),
                         ),
                       ],

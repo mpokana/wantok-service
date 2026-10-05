@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import '../home/messages_page.dart';
+
 class VendorJobsPage extends StatefulWidget {
   const VendorJobsPage({super.key});
 
@@ -11,6 +13,7 @@ class VendorJobsPage extends StatefulWidget {
 
 class _VendorJobsPageState extends State<VendorJobsPage> {
   static const _repository = ReservationRepository();
+  static const _messaging = MessagingRepository();
   late Future<List<Map<String, dynamic>>> _future;
   String? _busyId;
 
@@ -57,6 +60,33 @@ class _VendorJobsPageState extends State<VendorJobsPage> {
         message: draft.message,
       ),
     );
+  }
+
+  Future<void> _openConversation({
+    required String bookingId,
+    required String categoryName,
+  }) async {
+    setState(() => _busyId = bookingId);
+    try {
+      final threadId = await _messaging.ensureForBooking(bookingId);
+      if (!mounted) return;
+      await Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (context) => ConversationPage(
+            threadId: threadId,
+            title: 'Customer',
+            subtitle: categoryName,
+          ),
+        ),
+      );
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(_friendlyError(error))));
+      }
+    } finally {
+      if (mounted) setState(() => _busyId = null);
+    }
   }
 
   @override
@@ -192,6 +222,8 @@ class _VendorJobsPageState extends State<VendorJobsPage> {
                         runSpacing: 8,
                         children: _actionsFor(
                           bookingId: id,
+                          categoryName:
+                              category['name'] as String? ?? 'Wantok Service',
                           status: status,
                           requestedAmount: requestedAmount,
                           isOpenRequest: isOpenRequest,
@@ -211,23 +243,42 @@ class _VendorJobsPageState extends State<VendorJobsPage> {
 
   List<Widget> _actionsFor({
     required String bookingId,
+    required String categoryName,
     required String status,
     required double? requestedAmount,
     required bool isOpenRequest,
     required bool busy,
   }) {
+    final actions = <Widget>[];
+
+    if (!isOpenRequest) {
+      actions.add(
+        OutlinedButton.icon(
+          onPressed: busy
+              ? null
+              : () => _openConversation(
+                  bookingId: bookingId,
+                  categoryName: categoryName,
+                ),
+          icon: const Icon(Icons.chat_bubble_outline),
+          label: const Text('Message customer'),
+        ),
+      );
+    }
+
     if (status == 'requested') {
       if (isOpenRequest) {
-        return [
+        actions.add(
           FilledButton.icon(
             onPressed: busy ? null : () => _quote(bookingId),
             icon: const Icon(Icons.request_quote_outlined),
             label: const Text('Send quote'),
           ),
-        ];
+        );
+        return actions;
       }
 
-      return [
+      actions.add(
         OutlinedButton(
           onPressed: busy
               ? null
@@ -237,37 +288,40 @@ class _VendorJobsPageState extends State<VendorJobsPage> {
                 ),
           child: const Text('Reject'),
         ),
-        if (requestedAmount == null)
-          FilledButton.icon(
-            onPressed: busy ? null : () => _quote(bookingId),
-            icon: const Icon(Icons.request_quote_outlined),
-            label: const Text('Send quote'),
-          )
-        else
-          FilledButton.icon(
-            onPressed: busy
-                ? null
-                : () => _run(
-                    bookingId,
-                    () => _repository.respondToBooking(bookingId, true),
-                  ),
-            icon: const Icon(Icons.check_circle_outline),
-            label: Text(busy ? 'Working...' : 'Confirm'),
-          ),
-      ];
+      );
+      actions.add(
+        requestedAmount == null
+            ? FilledButton.icon(
+                onPressed: busy ? null : () => _quote(bookingId),
+                icon: const Icon(Icons.request_quote_outlined),
+                label: const Text('Send quote'),
+              )
+            : FilledButton.icon(
+                onPressed: busy
+                    ? null
+                    : () => _run(
+                        bookingId,
+                        () => _repository.respondToBooking(bookingId, true),
+                      ),
+                icon: const Icon(Icons.check_circle_outline),
+                label: Text(busy ? 'Working...' : 'Confirm'),
+              ),
+      );
+      return actions;
     }
 
     if (status == 'quoted') {
-      return const [
-        Chip(
+      actions.add(
+        const Chip(
           avatar: Icon(Icons.hourglass_top, size: 17),
           label: Text('Waiting for client'),
         ),
-      ];
+      );
+      return actions;
     }
 
     if (status == 'confirmed') {
-      return [
+      actions.add(
         FilledButton.icon(
           onPressed: busy
               ? null
@@ -278,11 +332,12 @@ class _VendorJobsPageState extends State<VendorJobsPage> {
           icon: const Icon(Icons.play_arrow),
           label: const Text('Start job'),
         ),
-      ];
+      );
+      return actions;
     }
 
     if (status == 'in_progress') {
-      return [
+      actions.add(
         FilledButton.icon(
           onPressed: busy
               ? null
@@ -293,10 +348,10 @@ class _VendorJobsPageState extends State<VendorJobsPage> {
           icon: const Icon(Icons.task_alt),
           label: const Text('Complete'),
         ),
-      ];
+      );
     }
 
-    return const <Widget>[];
+    return actions;
   }
 }
 

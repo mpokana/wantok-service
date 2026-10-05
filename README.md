@@ -104,7 +104,7 @@ The shared marketplace supports:
 - Groceries / shops
 - Future bus/coach, accommodation and flights
 
-Shared platform services include identity, RBAC, provider verification, listings, resources, bookings, quotes, availability, audit, notifications, payments/settlements boundaries and reviews.
+Shared platform services include identity, RBAC, provider verification, listings, resources, bookings, quotes, availability, booking-scoped messaging, audit, notifications, payments/settlements boundaries and reviews.
 
 ## Local development on EAGLT02
 
@@ -225,6 +225,7 @@ Current migration sequence:
 10. `20261005024000_commerce_core.sql`
 11. `20261005025000_events_core.sql`
 12. `20261005026000_water_passenger_transport.sql`
+13. `20261006070000_messages_core.sql`
 
 All production schema/security changes must be migrations committed to Git.
 
@@ -251,6 +252,7 @@ The pgTAP suite currently verifies:
 - Food/Groceries server-priced commerce orders, catalogue ownership and fulfilment transitions;
 - Events discovery, ticket capacities, registration, cancellation and organiser check-in;
 - scheduled water passenger routes, vessels, departures, fare capacity, manifests, boarding and lifecycle enforcement;
+- booking-scoped customer/provider conversations, participant-only RLS, controlled message writes and read receipts;
 - restricted direct payment/audit/outbox mutation.
 
 ## Linux VPS deployment

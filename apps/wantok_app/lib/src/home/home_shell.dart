@@ -12,6 +12,7 @@ import '../vendor/vendor_listings_page.dart';
 import '../vendor/vendor_water_transport_page.dart';
 import 'activity_page.dart';
 import 'client_home.dart';
+import 'messages_page.dart';
 import 'vendor_home.dart';
 
 class HomeShell extends StatefulWidget {
@@ -106,8 +107,65 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
               label: 'Listings',
             ),
             NavigationDestination(
+              icon: Icon(Icons.chat_bubble_outline),
+              label: 'Messages',
+            ),
+            NavigationDestination(
               icon: Icon(Icons.person_outline),
               label: 'Account',
+            ),
+          ];
+
+    final pages = _mode == AppMode.client
+        ? <Widget>[
+            const ClientHome(),
+            const ActivityPage(),
+            const MessagesPage(),
+            _AccountPage(
+              email: widget.email,
+              roles: _roles,
+              onSignOut: _auth.signOut,
+            ),
+          ]
+        : <Widget>[
+            VendorHome(
+              hasVendorAccess: _hasVendorAccess,
+              hasDriverAccess: _hasDriverAccess,
+              onOpenTaxiDriver: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (context) => const TaxiDriverPage(),
+                ),
+              ),
+              onOpenCommerce: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (context) => const VendorCommercePage(),
+                ),
+              ),
+              onOpenEvents: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (context) => const VendorEventsPage(),
+                ),
+              ),
+              onOpenWaterTransport: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (context) => const VendorWaterTransportPage(),
+                ),
+              ),
+              onApply: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (context) => const ProviderApplicationPage(),
+                ),
+              ),
+              onOpenJobs: () => setState(() => _tabIndex = 1),
+              onOpenListings: () => setState(() => _tabIndex = 2),
+            ),
+            const VendorJobsPage(),
+            const VendorListingsPage(),
+            const MessagesPage(),
+            _AccountPage(
+              email: widget.email,
+              roles: _roles,
+              onSignOut: _auth.signOut,
             ),
           ];
 
@@ -151,97 +209,11 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
           ),
         ],
       ),
-      body: IndexedStack(
-        index: _tabIndex,
-        children: [
-          _mode == AppMode.client
-              ? const ClientHome()
-              : VendorHome(
-                  hasVendorAccess: _hasVendorAccess,
-                  hasDriverAccess: _hasDriverAccess,
-                  onOpenTaxiDriver: () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (context) => const TaxiDriverPage(),
-                    ),
-                  ),
-                  onOpenCommerce: () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (context) => const VendorCommercePage(),
-                    ),
-                  ),
-                  onOpenEvents: () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (context) => const VendorEventsPage(),
-                    ),
-                  ),
-                  onOpenWaterTransport: () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (context) => const VendorWaterTransportPage(),
-                    ),
-                  ),
-                  onApply: () => Navigator.of(context).push(
-                    MaterialPageRoute<void>(
-                      builder: (context) => const ProviderApplicationPage(),
-                    ),
-                  ),
-                  onOpenJobs: () => setState(() => _tabIndex = 1),
-                  onOpenListings: () => setState(() => _tabIndex = 2),
-                ),
-          _mode == AppMode.client
-              ? const ActivityPage()
-              : const VendorJobsPage(),
-          _mode == AppMode.client
-              ? const _PlaceholderPage(
-                  icon: Icons.chat_bubble_outline,
-                  title: 'Messages',
-                  message: 'Client-to-provider conversations will live here.',
-                )
-              : const VendorListingsPage(),
-          _AccountPage(
-            email: widget.email,
-            roles: _roles,
-            onSignOut: _auth.signOut,
-          ),
-        ],
-      ),
+      body: IndexedStack(index: _tabIndex, children: pages),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _tabIndex,
         destinations: destinations,
         onDestinationSelected: (index) => setState(() => _tabIndex = index),
-      ),
-    );
-  }
-}
-
-class _PlaceholderPage extends StatelessWidget {
-  const _PlaceholderPage({
-    required this.icon,
-    required this.title,
-    required this.message,
-  });
-
-  final IconData icon;
-  final String title;
-  final String message;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 520),
-        child: Padding(
-          padding: const EdgeInsets.all(28),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(icon, size: 52, color: WantokColors.primary),
-              const SizedBox(height: 16),
-              Text(title, style: Theme.of(context).textTheme.headlineSmall),
-              const SizedBox(height: 8),
-              Text(message, textAlign: TextAlign.center),
-            ],
-          ),
-        ),
       ),
     );
   }
