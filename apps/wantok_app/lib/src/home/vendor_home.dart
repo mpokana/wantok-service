@@ -6,6 +6,7 @@ class VendorHome extends StatelessWidget {
     required this.hasVendorAccess,
     required this.hasDriverAccess,
     required this.onOpenTaxiDriver,
+    required this.onOpenCommerce,
     required this.onApply,
     required this.onOpenJobs,
     required this.onOpenListings,
@@ -15,6 +16,7 @@ class VendorHome extends StatelessWidget {
   final bool hasVendorAccess;
   final bool hasDriverAccess;
   final VoidCallback onOpenTaxiDriver;
+  final VoidCallback onOpenCommerce;
   final VoidCallback onApply;
   final VoidCallback onOpenJobs;
   final VoidCallback onOpenListings;
@@ -133,6 +135,13 @@ class VendorHome extends StatelessWidget {
           ),
           const SizedBox(height: 10),
         ],
+        _ActionCard(
+          icon: Icons.store_mall_directory_outlined,
+          title: 'Food & Shop Console',
+          body: 'Manage menus, products and customer orders for Food and Groceries.',
+          onTap: onOpenCommerce,
+        ),
+        const SizedBox(height: 10),
         _ActionCard(
           icon: Icons.request_quote_outlined,
           title: 'Requests & jobs',

@@ -3,6 +3,7 @@ import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_core/wantok_core.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import '../services/commerce_browse_page.dart';
 import '../services/open_request_page.dart';
 import '../services/reservation_browse_page.dart';
 import '../services/taxi_ride_page.dart';
@@ -130,6 +131,15 @@ class _ClientHomeState extends State<ClientHome> {
       Navigator.of(context).push(
         MaterialPageRoute<void>(
           builder: (context) => ReservationBrowsePage(category: service),
+        ),
+      );
+      return;
+    }
+
+    if (const {'food', 'groceries'}.contains(service.slug)) {
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (context) => CommerceBrowsePage(category: service),
         ),
       );
       return;

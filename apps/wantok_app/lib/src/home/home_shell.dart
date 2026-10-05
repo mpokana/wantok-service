@@ -5,6 +5,7 @@ import 'package:wantok_ui/wantok_ui.dart';
 
 import '../vendor/provider_application_page.dart';
 import '../vendor/taxi_driver_page.dart';
+import '../vendor/vendor_commerce_page.dart';
 import '../vendor/vendor_jobs_page.dart';
 import '../vendor/vendor_listings_page.dart';
 import 'activity_page.dart';
@@ -159,6 +160,11 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
                   onOpenTaxiDriver: () => Navigator.of(context).push(
                     MaterialPageRoute<void>(
                       builder: (context) => const TaxiDriverPage(),
+                    ),
+                  ),
+                  onOpenCommerce: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (context) => const VendorCommercePage(),
                     ),
                   ),
                   onApply: () => Navigator.of(context).push(

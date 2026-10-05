@@ -1,4 +1,5 @@
 export 'src/catalog_repository.dart';
+export 'src/commerce_repository.dart';
 export 'src/open_request_repository.dart';
 export 'src/provider_application_repository.dart';
 export 'src/reservation_repository.dart';
