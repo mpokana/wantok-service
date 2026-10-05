@@ -6,10 +6,10 @@ This folder is the production deployment boundary for the Wantok web application
 
 Create these records when the VPS is commissioned:
 
-- `wantokservice.com` -> VPS public IP
-- `www.wantokservice.com` -> VPS public IP
-- `admin.wantokservice.com` -> VPS public IP
-- `api.wantokservice.com` -> VPS public IP
+- `wantokservices.com` -> VPS public IP
+- `www.wantokservices.com` -> VPS public IP
+- `admin.wantokservices.com` -> VPS public IP
+- `api.wantokservices.com` -> VPS public IP
 
 Only ports 80/443 should be publicly exposed for the Wantok edge layer.
 
@@ -79,7 +79,7 @@ PostgreSQL is bound to loopback only for controlled migration/backup access.
 Caddy joins the private Supabase Docker network and publishes only supported application API paths through:
 
 ```text
-https://api.wantokservice.com
+https://api.wantokservices.com
 ```
 
 Public routes include Auth, REST, Realtime, Storage, Functions and GraphQL. Other gateway paths return 404. Supabase Studio and PostgreSQL are not public web services.

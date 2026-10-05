@@ -94,9 +94,9 @@ Production uses the official Supabase self-hosted Docker distribution. Its vendo
 
 Production target:
 
-- `https://wantokservice.com` — Wantok Web
-- `https://admin.wantokservice.com` — Wantok Admin
-- `https://api.wantokservice.com` — Supabase API/Auth/Storage gateway
+- `https://wantokservices.com` — Wantok Web
+- `https://admin.wantokservices.com` — Wantok Admin
+- `https://api.wantokservices.com` — Supabase API/Auth/Storage gateway
 
 Studio, PostgreSQL and internal container services must not be publicly exposed.
 

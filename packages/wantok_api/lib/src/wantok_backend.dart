@@ -22,7 +22,7 @@ class WantokBackendConfig {
     publishableKey: String.fromEnvironment('SUPABASE_PUBLISHABLE_KEY'),
     publicWebUrl: String.fromEnvironment(
       'PUBLIC_WEB_URL',
-      defaultValue: 'https://wantokservice.com',
+      defaultValue: 'https://wantokservices.com',
     ),
   );
 }

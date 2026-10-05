@@ -39,8 +39,8 @@ jobs:
       - name: Validate Caddy edge configuration
         run: |
           docker run --rm \
-            -e WANTOK_DOMAIN=wantokservice.com \
-            -e ACME_EMAIL=admin@wantokservice.com \
+            -e WANTOK_DOMAIN=wantokservices.com \
+            -e ACME_EMAIL=admin@wantokservices.com \
             -e SUPABASE_API_UPSTREAM=api-gw:8000 \
             -v "$PWD/deploy/vps/Caddyfile:/etc/caddy/Caddyfile:ro" \
             caddy:2.10-alpine caddy validate --config /etc/caddy/Caddyfile

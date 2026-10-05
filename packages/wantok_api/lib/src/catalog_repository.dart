@@ -12,8 +12,8 @@ class CatalogRepository {
           'id, slug, name, description, vertical, booking_mode, icon_key, is_active, sort_order',
         )
         .eq('is_active', true)
-        .order('sort_order')
-        .order('name');
+        .order('sort_order', ascending: true)
+        .order('name', ascending: true);
 
     return (response as List<dynamic>)
         .cast<Map<String, dynamic>>()

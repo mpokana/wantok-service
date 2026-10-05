@@ -1,6 +1,6 @@
 {
   "APP_ENV": "production",
-  "SUPABASE_URL": "https://api.wantokservice.com",
+  "SUPABASE_URL": "https://api.wantokservices.com",
   "SUPABASE_PUBLISHABLE_KEY": "replace-with-production-publishable-key",
-  "PUBLIC_WEB_URL": "https://wantokservice.com"
+  "PUBLIC_WEB_URL": "https://wantokservices.com"
 }

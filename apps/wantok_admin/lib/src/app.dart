@@ -3,6 +3,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wantok_auth/wantok_auth.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import 'auth/admin_password_reset_page.dart';
 import 'auth/admin_sign_in_page.dart';
 import 'dashboard/admin_shell.dart';
 
@@ -34,9 +35,18 @@ class _AdminAuthGate extends StatelessWidget {
     return StreamBuilder<AuthState>(
       stream: _auth.authChanges,
       builder: (context, snapshot) {
-        final session = snapshot.data?.session ?? _auth.currentSession;
+        final authState = snapshot.data;
+        final session = authState?.session ?? _auth.currentSession;
+        final isRecovery =
+            authState?.event == AuthChangeEvent.passwordRecovery ||
+            Uri.base.fragment.contains('type=recovery');
+
         if (session == null) {
           return const AdminSignInPage();
+        }
+
+        if (isRecovery) {
+          return const AdminPasswordResetPage();
         }
 
         return FutureBuilder<Set<String>>(

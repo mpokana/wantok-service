@@ -92,7 +92,7 @@ class _ClientHomeState extends State<ClientHome> {
                 physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
                   maxCrossAxisExtent: 112,
-                  childAspectRatio: 0.86,
+                  mainAxisExtent: 116,
                   crossAxisSpacing: 8,
                   mainAxisSpacing: 6,
                 ),

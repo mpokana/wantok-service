@@ -28,7 +28,7 @@ Separate Flutter Web console for authorised administrators.
 Target production URL:
 
 ```text
-https://admin.wantokservice.com
+https://admin.wantokservices.com
 ```
 
 System administration is intentionally excluded from the public Wantok application.
@@ -38,10 +38,10 @@ System administration is intentionally excluded from the public Wantok applicati
 Planned public surfaces:
 
 ```text
-https://wantokservice.com
-https://www.wantokservice.com
-https://admin.wantokservice.com
-https://api.wantokservice.com
+https://wantokservices.com
+https://www.wantokservices.com
+https://admin.wantokservices.com
+https://api.wantokservices.com
 ```
 
 Studio, PostgreSQL and internal infrastructure are private administration surfaces and must not be exposed directly to the public internet.

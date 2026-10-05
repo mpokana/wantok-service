@@ -27,6 +27,9 @@ expo-env.d.ts
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+/apps/wantok_admin_resettemp*/
+/apps/wantok_app_previewtemp/
+/apps/wantok_app/bugreport-*.zip
 
 # macOS
 .DS_Store
