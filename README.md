@@ -219,6 +219,7 @@ Current migration sequence:
 4. `20261005011000_availability_and_reservations.sql`
 5. `20261005012000_rbac_authority.sql`
 6. `20261005020000_resource_reservation_workflow.sql`
+7. `20261005021000_provider_onboarding.sql`
 
 All production schema/security changes must be migrations committed to Git.
 
@@ -239,6 +240,7 @@ The pgTAP suite currently verifies:
 - legacy admin flags cannot independently grant server-side admin authority;
 - resource overlap protection;
 - secure vehicle/boat/venue reservation creation with availability-rule and time-off enforcement;
+- trusted multi-category vendor onboarding with duplicate/unsupported application protection;
 - restricted direct payment/audit/outbox mutation.
 
 ## Linux VPS deployment
@@ -323,7 +325,7 @@ Current Wantok palette begins with tropical green, deep green, gold and coral ac
 Current platform version:
 
 ```text
-0.1.0-alpha.2
+0.1.0-alpha.3
 ```
 
 The `VERSION` file is the application release source of truth.

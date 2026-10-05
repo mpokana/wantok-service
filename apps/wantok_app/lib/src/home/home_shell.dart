@@ -3,6 +3,7 @@ import 'package:wantok_auth/wantok_auth.dart';
 import 'package:wantok_core/wantok_core.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import '../vendor/provider_application_page.dart';
 import '../vendor/vendor_jobs_page.dart';
 import '../vendor/vendor_listings_page.dart';
 import 'activity_page.dart';
@@ -114,6 +115,11 @@ class _HomeShellState extends State<HomeShell> {
               ? const ClientHome()
               : VendorHome(
                   hasVendorAccess: _hasVendorAccess,
+                  onApply: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (context) => const ProviderApplicationPage(),
+                    ),
+                  ),
                   onOpenJobs: () => setState(() => _tabIndex = 1),
                   onOpenListings: () => setState(() => _tabIndex = 2),
                 ),

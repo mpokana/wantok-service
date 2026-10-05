@@ -4,12 +4,14 @@ import 'package:wantok_ui/wantok_ui.dart';
 class VendorHome extends StatelessWidget {
   const VendorHome({
     required this.hasVendorAccess,
+    required this.onApply,
     required this.onOpenJobs,
     required this.onOpenListings,
     super.key,
   });
 
   final bool hasVendorAccess;
+  final VoidCallback onApply;
   final VoidCallback onOpenJobs;
   final VoidCallback onOpenListings;
 
@@ -49,7 +51,7 @@ class VendorHome extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           FilledButton.icon(
-            onPressed: () {},
+            onPressed: onApply,
             icon: const Icon(Icons.how_to_reg_outlined),
             label: const Padding(
               padding: EdgeInsets.symmetric(vertical: 13),
@@ -137,6 +139,14 @@ class VendorHome extends StatelessWidget {
           title: 'Availability',
           body: 'Block unavailable resource time. Recurring schedules are enforced by the backend.',
           onTap: onOpenListings,
+        ),
+        const SizedBox(height: 10),
+        _ActionCard(
+          icon: Icons.add_business_outlined,
+          title: 'Add another service',
+          body:
+              'Apply to provide another Wantok service using the same account.',
+          onTap: onApply,
         ),
         const SizedBox(height: 10),
         const _ActionCard(
