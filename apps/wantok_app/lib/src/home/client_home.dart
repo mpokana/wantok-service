@@ -113,8 +113,11 @@ class _ClientHomeState extends State<ClientHome> {
   }
 
   void _openService(WantokServiceCategory service) {
-    if (const {'vehicle-hire', 'boat-hire', 'venue-booking'}
-        .contains(service.slug)) {
+    if (const {
+      'vehicle-hire',
+      'boat-hire',
+      'venue-booking',
+    }.contains(service.slug)) {
       Navigator.of(context).push(
         MaterialPageRoute<void>(
           builder: (context) => ReservationBrowsePage(category: service),

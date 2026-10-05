@@ -124,8 +124,7 @@ class _HomeShellState extends State<HomeShell> {
               ? const _PlaceholderPage(
                   icon: Icons.chat_bubble_outline,
                   title: 'Messages',
-                  message:
-                      'Client-to-provider conversations will live here.',
+                  message: 'Client-to-provider conversations will live here.',
                 )
               : const VendorListingsPage(),
           _AccountPage(

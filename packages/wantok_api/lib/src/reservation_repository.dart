@@ -26,27 +26,29 @@ class ReservationRepository {
     final categoryId = category['id'] as String;
     final categoryName = category['name'] as String;
 
-    final services = (await client
-            .from('provider_services')
-            .select(
-              'id, provider_id, category_id, title, description, pricing_model, base_price, currency, unit_label, service_address, provider_profiles(display_name, rating_average, rating_count)',
-            )
-            .eq('category_id', categoryId)
-            .eq('status', 'active')
-            .order('title')
-        as List<dynamic>)
-        .cast<Map<String, dynamic>>();
+    final services =
+        (await client
+                    .from('provider_services')
+                    .select(
+                      'id, provider_id, category_id, title, description, pricing_model, base_price, currency, unit_label, service_address, provider_profiles(display_name, rating_average, rating_count)',
+                    )
+                    .eq('category_id', categoryId)
+                    .eq('status', 'active')
+                    .order('title')
+                as List<dynamic>)
+            .cast<Map<String, dynamic>>();
 
-    final resources = (await client
-            .from('provider_resources')
-            .select(
-              'id, provider_id, category_id, resource_type, name, description, capacity, address_text, metadata',
-            )
-            .eq('category_id', categoryId)
-            .eq('status', 'active')
-            .order('name')
-        as List<dynamic>)
-        .cast<Map<String, dynamic>>();
+    final resources =
+        (await client
+                    .from('provider_resources')
+                    .select(
+                      'id, provider_id, category_id, resource_type, name, description, capacity, address_text, metadata',
+                    )
+                    .eq('category_id', categoryId)
+                    .eq('status', 'active')
+                    .order('name')
+                as List<dynamic>)
+            .cast<Map<String, dynamic>>();
 
     final resourcesByProvider = <String, List<Map<String, dynamic>>>{};
     for (final resource in resources) {

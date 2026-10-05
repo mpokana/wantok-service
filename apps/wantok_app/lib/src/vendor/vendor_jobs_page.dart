@@ -34,9 +34,8 @@ class _VendorJobsPageState extends State<VendorJobsPage> {
       await _refresh();
     } catch (error) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(_friendlyError(error))),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(_friendlyError(error))));
       }
     } finally {
       if (mounted) setState(() => _busyId = null);
@@ -99,11 +98,7 @@ class _VendorJobsPageState extends State<VendorJobsPage> {
               padding: const EdgeInsets.all(28),
               children: const [
                 SizedBox(height: 90),
-                Icon(
-                  Icons.work_outline,
-                  size: 58,
-                  color: WantokColors.primary,
-                ),
+                Icon(Icons.work_outline, size: 58, color: WantokColors.primary),
                 SizedBox(height: 14),
                 Text(
                   'No active jobs',
@@ -220,9 +215,9 @@ class _VendorJobsPageState extends State<VendorJobsPage> {
           onPressed: busy
               ? null
               : () => _run(
-                    bookingId,
-                    () => _repository.respondToBooking(bookingId, false),
-                  ),
+                  bookingId,
+                  () => _repository.respondToBooking(bookingId, false),
+                ),
           child: const Text('Reject'),
         ),
         if (requestedAmount == null)
@@ -236,9 +231,9 @@ class _VendorJobsPageState extends State<VendorJobsPage> {
             onPressed: busy
                 ? null
                 : () => _run(
-                      bookingId,
-                      () => _repository.respondToBooking(bookingId, true),
-                    ),
+                    bookingId,
+                    () => _repository.respondToBooking(bookingId, true),
+                  ),
             icon: const Icon(Icons.check_circle_outline),
             label: Text(busy ? 'Working...' : 'Confirm'),
           ),
@@ -260,9 +255,9 @@ class _VendorJobsPageState extends State<VendorJobsPage> {
           onPressed: busy
               ? null
               : () => _run(
-                    bookingId,
-                    () => _repository.advanceBooking(bookingId, 'in_progress'),
-                  ),
+                  bookingId,
+                  () => _repository.advanceBooking(bookingId, 'in_progress'),
+                ),
           icon: const Icon(Icons.play_arrow),
           label: const Text('Start job'),
         ),
@@ -275,9 +270,9 @@ class _VendorJobsPageState extends State<VendorJobsPage> {
           onPressed: busy
               ? null
               : () => _run(
-                    bookingId,
-                    () => _repository.advanceBooking(bookingId, 'completed'),
-                  ),
+                  bookingId,
+                  () => _repository.advanceBooking(bookingId, 'completed'),
+                ),
           icon: const Icon(Icons.task_alt),
           label: const Text('Complete'),
         ),
@@ -314,12 +309,9 @@ class _QuoteDialogState extends State<_QuoteDialog> {
       return;
     }
 
-    Navigator.of(context).pop(
-      _QuoteDraft(
-        amount: amount,
-        message: _messageController.text.trim(),
-      ),
-    );
+    Navigator.of(
+      context,
+    ).pop(_QuoteDraft(amount: amount, message: _messageController.text.trim()));
   }
 
   @override
@@ -333,7 +325,9 @@ class _QuoteDialogState extends State<_QuoteDialog> {
           children: [
             TextField(
               controller: _amountController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: true,
+              ),
               decoration: const InputDecoration(
                 labelText: 'Amount (PGK)',
                 prefixIcon: Icon(Icons.payments_outlined),

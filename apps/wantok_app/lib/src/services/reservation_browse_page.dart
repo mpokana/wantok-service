@@ -101,9 +101,8 @@ class _ReservationBrowsePageState extends State<ReservationBrowsePage> {
                 const SizedBox(height: 18),
                 Text(
                   'Available options',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.w900,
-                  ),
+                  style: Theme.of(context).textTheme.titleLarge
+                      ?.copyWith(fontWeight: FontWeight.w900),
                 ),
                 const SizedBox(height: 5),
                 const Text(
@@ -153,11 +152,7 @@ class _CategoryHero extends StatelessWidget {
               color: Colors.white.withValues(alpha: 0.16),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: Icon(
-              _iconFor(category.slug),
-              color: Colors.white,
-              size: 34,
-            ),
+            child: Icon(_iconFor(category.slug), color: Colors.white, size: 34),
           ),
           const SizedBox(width: 16),
           Expanded(
@@ -317,10 +312,7 @@ class _Meta extends StatelessWidget {
           child: Text(
             text,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              color: WantokColors.muted,
-              fontSize: 12,
-            ),
+            style: const TextStyle(color: WantokColors.muted, fontSize: 12),
           ),
         ),
       ],
@@ -460,9 +452,8 @@ class _ReservationSheetState extends State<_ReservationSheet> {
         children: [
           Text(
             widget.offer.resourceName,
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.w900,
-            ),
+            style: Theme.of(context).textTheme.headlineSmall
+                ?.copyWith(fontWeight: FontWeight.w900),
           ),
           const SizedBox(height: 3),
           Text(
@@ -501,7 +492,8 @@ class _ReservationSheetState extends State<_ReservationSheet> {
             maxLines: 4,
             decoration: const InputDecoration(
               labelText: 'Notes for the vendor',
-              hintText: 'Purpose, pickup details, setup needs, or special requests',
+              hintText:
+                  'Purpose, pickup details, setup needs, or special requests',
               prefixIcon: Icon(Icons.notes_outlined),
             ),
           ),
@@ -518,7 +510,9 @@ class _ReservationSheetState extends State<_ReservationSheet> {
             icon: const Icon(Icons.event_available_outlined),
             label: Padding(
               padding: const EdgeInsets.symmetric(vertical: 13),
-              child: Text(_busy ? 'Checking availability...' : 'Request booking'),
+              child: Text(
+                _busy ? 'Checking availability...' : 'Request booking',
+              ),
             ),
           ),
           const SizedBox(height: 9),

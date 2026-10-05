@@ -34,9 +34,8 @@ class _ActivityPageState extends State<ActivityPage> {
       await _refresh();
     } catch (error) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(_friendlyError(error))),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(_friendlyError(error))));
       }
     } finally {
       if (mounted) setState(() => _busyId = null);
@@ -115,13 +114,17 @@ class _ActivityPageState extends State<ActivityPage> {
               final provider = _asMap(row['provider_profiles']);
               final resource = _asMap(row['provider_resources']);
               final quotes = _asList(row['service_quotes']);
-              final pendingQuote = quotes.cast<Map<String, dynamic>?>().firstWhere(
-                (quote) => quote?['status'] == 'pending',
-                orElse: () => null,
-              );
+              final pendingQuote = quotes
+                  .cast<Map<String, dynamic>?>()
+                  .firstWhere(
+                    (quote) => quote?['status'] == 'pending',
+                    orElse: () => null,
+                  );
               final busy = _busyId == id;
               final amount =
-                  row['final_amount'] ?? row['quoted_amount'] ?? row['requested_amount'];
+                  row['final_amount'] ??
+                  row['quoted_amount'] ??
+                  row['requested_amount'];
 
               return Card(
                 child: Padding(
@@ -192,11 +195,11 @@ class _ActivityPageState extends State<ActivityPage> {
                                 onPressed: busy
                                     ? null
                                     : () => _run(
-                                          id,
-                                          () => _repository.acceptQuote(
-                                            pendingQuote['id'] as String,
-                                          ),
+                                        id,
+                                        () => _repository.acceptQuote(
+                                          pendingQuote['id'] as String,
                                         ),
+                                      ),
                                 child: const Text('Accept'),
                               ),
                             ],
@@ -211,9 +214,9 @@ class _ActivityPageState extends State<ActivityPage> {
                             onPressed: busy
                                 ? null
                                 : () => _run(
-                                      id,
-                                      () => _repository.cancelBooking(id),
-                                    ),
+                                    id,
+                                    () => _repository.cancelBooking(id),
+                                  ),
                             icon: const Icon(Icons.cancel_outlined),
                             label: Text(busy ? 'Working...' : 'Cancel request'),
                           ),
@@ -253,10 +256,7 @@ class _StatusChip extends StatelessWidget {
       ),
       child: Text(
         status.replaceAll('_', ' ').toUpperCase(),
-        style: const TextStyle(
-          fontSize: 10,
-          fontWeight: FontWeight.w900,
-        ),
+        style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w900),
       ),
     );
   }

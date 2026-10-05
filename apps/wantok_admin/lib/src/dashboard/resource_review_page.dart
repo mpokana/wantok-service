@@ -69,9 +69,8 @@ class _ResourceReviewPageState extends State<ResourceReviewPage> {
                   children: [
                     Text(
                       'Resource review',
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.w900),
                     ),
                     const SizedBox(height: 4),
                     const Text(
@@ -119,9 +118,7 @@ class _ResourceReviewPageState extends State<ResourceReviewPage> {
                             Text(
                               snapshot.error.toString(),
                               textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                color: WantokColors.muted,
-                              ),
+                              style: const TextStyle(color: WantokColors.muted),
                             ),
                           ],
                         ),
@@ -130,8 +127,7 @@ class _ResourceReviewPageState extends State<ResourceReviewPage> {
                   );
                 }
 
-                final rows =
-                    snapshot.data ?? const <Map<String, dynamic>>[];
+                final rows = snapshot.data ?? const <Map<String, dynamic>>[];
                 if (rows.isEmpty) {
                   return const Center(
                     child: Column(
@@ -191,9 +187,7 @@ class _ResourceReviewPageState extends State<ResourceReviewPage> {
                                   if (row['capacity'] != null)
                                     Text('Capacity: ${row['capacity']}'),
                                   if (row['address_text'] != null)
-                                    Text(
-                                      'Location: ${row['address_text']}',
-                                    ),
+                                    Text('Location: ${row['address_text']}'),
                                   if (row['description'] != null) ...[
                                     const SizedBox(height: 5),
                                     Text(
@@ -220,9 +214,7 @@ class _ResourceReviewPageState extends State<ResourceReviewPage> {
                                   onPressed: busy
                                       ? null
                                       : () => _review(id, 'active'),
-                                  child: Text(
-                                    busy ? 'Working...' : 'Approve',
-                                  ),
+                                  child: Text(busy ? 'Working...' : 'Approve'),
                                 ),
                               ],
                             ),

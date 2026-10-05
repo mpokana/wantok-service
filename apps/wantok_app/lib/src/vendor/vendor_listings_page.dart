@@ -40,9 +40,8 @@ class _VendorListingsPageState extends State<VendorListingsPage> {
       await _refresh();
     } catch (error) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(error.toString())),
-        );
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(error.toString())));
       }
     } finally {
       if (mounted) setState(() => _busyId = null);
@@ -74,8 +73,11 @@ class _VendorListingsPageState extends State<VendorListingsPage> {
   Future<void> _addResource(List<Map<String, dynamic>> services) async {
     final eligible = services.where((service) {
       final category = _asMap(service['service_categories']);
-      return const {'vehicle-hire', 'boat-hire', 'venue-booking'}
-          .contains(category['slug']);
+      return const {
+        'vehicle-hire',
+        'boat-hire',
+        'venue-booking',
+      }.contains(category['slug']);
     }).toList();
 
     if (eligible.isEmpty) {
@@ -114,10 +116,8 @@ class _VendorListingsPageState extends State<VendorListingsPage> {
   ) async {
     final draft = await showDialog<_ResourceDraft>(
       context: context,
-      builder: (context) => _ResourceEditorDialog(
-        services: services,
-        resource: resource,
-      ),
+      builder: (context) =>
+          _ResourceEditorDialog(services: services, resource: resource),
     );
     if (draft == null) return;
 
@@ -138,8 +138,9 @@ class _VendorListingsPageState extends State<VendorListingsPage> {
   Future<void> _blockTime(Map<String, dynamic> resource) async {
     final draft = await showDialog<_BlockTimeDraft>(
       context: context,
-      builder: (context) =>
-          _BlockTimeDialog(resourceName: resource['name'] as String? ?? 'Resource'),
+      builder: (context) => _BlockTimeDialog(
+        resourceName: resource['name'] as String? ?? 'Resource',
+      ),
     );
     if (draft == null) return;
 
@@ -197,9 +198,8 @@ class _VendorListingsPageState extends State<VendorListingsPage> {
                   Expanded(
                     child: Text(
                       'My services',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: Theme.of(context).textTheme.titleLarge
+                          ?.copyWith(fontWeight: FontWeight.w900),
                     ),
                   ),
                 ],
@@ -239,9 +239,8 @@ class _VendorListingsPageState extends State<VendorListingsPage> {
                   Expanded(
                     child: Text(
                       'Vehicles, boats & venues',
-                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                        fontWeight: FontWeight.w900,
-                      ),
+                      style: Theme.of(context).textTheme.titleLarge
+                          ?.copyWith(fontWeight: FontWeight.w900),
                     ),
                   ),
                   FilledButton.tonalIcon(
@@ -482,12 +481,18 @@ class _ServiceEditorDialogState extends State<_ServiceEditorDialog> {
     super.initState();
     final service = widget.service;
     _title = TextEditingController(text: service['title']?.toString() ?? '');
-    _description =
-        TextEditingController(text: service['description']?.toString() ?? '');
-    _price = TextEditingController(text: service['base_price']?.toString() ?? '');
-    _unit = TextEditingController(text: service['unit_label']?.toString() ?? '');
-    _address =
-        TextEditingController(text: service['service_address']?.toString() ?? '');
+    _description = TextEditingController(
+      text: service['description']?.toString() ?? '',
+    );
+    _price = TextEditingController(
+      text: service['base_price']?.toString() ?? '',
+    );
+    _unit = TextEditingController(
+      text: service['unit_label']?.toString() ?? '',
+    );
+    _address = TextEditingController(
+      text: service['service_address']?.toString() ?? '',
+    );
     _pricingModel = service['pricing_model']?.toString() ?? 'quote';
   }
 
@@ -503,8 +508,9 @@ class _ServiceEditorDialogState extends State<_ServiceEditorDialog> {
 
   void _submit() {
     if (_title.text.trim().isEmpty) return;
-    final basePrice =
-        _price.text.trim().isEmpty ? null : double.tryParse(_price.text.trim());
+    final basePrice = _price.text.trim().isEmpty
+        ? null
+        : double.tryParse(_price.text.trim());
     Navigator.of(context).pop(
       _ServiceDraft(
         title: _title.text.trim(),
@@ -556,9 +562,12 @@ class _ServiceEditorDialogState extends State<_ServiceEditorDialog> {
               const SizedBox(height: 10),
               TextField(
                 controller: _price,
-                keyboardType:
-                    const TextInputType.numberWithOptions(decimal: true),
-                decoration: const InputDecoration(labelText: 'Base price (PGK)'),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                decoration: const InputDecoration(
+                  labelText: 'Base price (PGK)',
+                ),
               ),
               const SizedBox(height: 10),
               TextField(
@@ -589,10 +598,7 @@ class _ServiceEditorDialogState extends State<_ServiceEditorDialog> {
 }
 
 class _ResourceEditorDialog extends StatefulWidget {
-  const _ResourceEditorDialog({
-    required this.services,
-    this.resource,
-  });
+  const _ResourceEditorDialog({required this.services, this.resource});
 
   final List<Map<String, dynamic>> services;
   final Map<String, dynamic>? resource;
@@ -613,18 +619,22 @@ class _ResourceEditorDialogState extends State<_ResourceEditorDialog> {
   void initState() {
     super.initState();
     final resource = widget.resource;
-    _categoryId = resource?['category_id'] as String? ??
+    _categoryId =
+        resource?['category_id'] as String? ??
         widget.services.first['category_id'] as String;
     _type = TextEditingController(
       text: resource?['resource_type']?.toString() ?? '',
     );
     _name = TextEditingController(text: resource?['name']?.toString() ?? '');
-    _description =
-        TextEditingController(text: resource?['description']?.toString() ?? '');
-    _capacity =
-        TextEditingController(text: resource?['capacity']?.toString() ?? '');
-    _address =
-        TextEditingController(text: resource?['address_text']?.toString() ?? '');
+    _description = TextEditingController(
+      text: resource?['description']?.toString() ?? '',
+    );
+    _capacity = TextEditingController(
+      text: resource?['capacity']?.toString() ?? '',
+    );
+    _address = TextEditingController(
+      text: resource?['address_text']?.toString() ?? '',
+    );
   }
 
   @override
@@ -816,12 +826,12 @@ class _BlockTimeDialogState extends State<_BlockTimeDialog> {
           onPressed: !_end.isAfter(_start)
               ? null
               : () => Navigator.of(context).pop(
-                    _BlockTimeDraft(
-                      startsAt: _start,
-                      endsAt: _end,
-                      reason: _reason.text.trim(),
-                    ),
+                  _BlockTimeDraft(
+                    startsAt: _start,
+                    endsAt: _end,
+                    reason: _reason.text.trim(),
                   ),
+                ),
           child: const Text('Block time'),
         ),
       ],

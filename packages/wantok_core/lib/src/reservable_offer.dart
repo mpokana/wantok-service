@@ -59,9 +59,10 @@ class ReservableOffer {
       'per_person' => '/ person',
       'per_km' => '/ km',
       'per_job' => '/ job',
-      _ => unitLabel == null || unitLabel!.trim().isEmpty
-          ? ''
-          : '/ ${unitLabel!.trim()}',
+      _ =>
+        unitLabel == null || unitLabel!.trim().isEmpty
+            ? ''
+            : '/ ${unitLabel!.trim()}',
     };
 
     return '$currency $amount${suffix.isEmpty ? '' : ' $suffix'}';
