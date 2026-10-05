@@ -21,9 +21,11 @@ One Wantok account can operate in two modes:
 
 A user does not need a separate identity to become a vendor. Provider capabilities are granted through verification and RBAC.
 
-### Wantok Admin
+### Wantok Operations Admin
 
-Separate Flutter Web console for authorised administrators.
+The existing `apps/wantok_admin` Flutter Web application is the **Operations Administration Console** for authorised business/marketplace administrators.
+
+It covers provider approvals, listings/resources, bookings, marketplace governance and operational audit.
 
 Target production URL:
 
@@ -31,7 +33,9 @@ Target production URL:
 https://admin.wantokservices.com
 ```
 
-System administration is intentionally excluded from the public Wantok application.
+Technical platform administration is deliberately separate. The planned **Wantok Technical Control Panel** will provide module-scoped configuration, diagnostics, health and technical permissions for IT staff. See `docs/ADMIN_CONTROL_PLANE_ARCHITECTURE.md`.
+
+System and technical administration are intentionally excluded from the public Wantok application.
 
 ## Production domains
 
@@ -80,6 +84,7 @@ deploy/vps/
   backup.sh
 
 docs/
+  ADMIN_CONTROL_PLANE_ARCHITECTURE.md
   FLUTTER_PLATFORM_ARCHITECTURE.md
   SUPER_APP_ARCHITECTURE.md
 ```
@@ -226,6 +231,7 @@ Current migration sequence:
 11. `20261005025000_events_core.sql`
 12. `20261005026000_water_passenger_transport.sql`
 13. `20261006070000_messages_core.sql`
+14. `20261006080000_account_profile_management.sql`
 
 All production schema/security changes must be migrations committed to Git.
 
@@ -253,6 +259,7 @@ The pgTAP suite currently verifies:
 - Events discovery, ticket capacities, registration, cancellation and organiser check-in;
 - scheduled water passenger routes, vessels, departures, fare capacity, manifests, boarding and lifecycle enforcement;
 - booking-scoped customer/provider conversations, participant-only RLS, controlled message writes and read receipts;
+- owner-scoped account/profile preferences, protected provider-profile editing and privilege-escalation resistance;
 - restricted direct payment/audit/outbox mutation.
 
 ## Linux VPS deployment

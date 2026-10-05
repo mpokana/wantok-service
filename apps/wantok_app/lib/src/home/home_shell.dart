@@ -10,6 +10,7 @@ import '../vendor/vendor_events_page.dart';
 import '../vendor/vendor_jobs_page.dart';
 import '../vendor/vendor_listings_page.dart';
 import '../vendor/vendor_water_transport_page.dart';
+import 'account_page.dart';
 import 'activity_page.dart';
 import 'client_home.dart';
 import 'messages_page.dart';
@@ -121,11 +122,7 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
             const ClientHome(),
             const ActivityPage(),
             const MessagesPage(),
-            _AccountPage(
-              email: widget.email,
-              roles: _roles,
-              onSignOut: _auth.signOut,
-            ),
+            AccountPage(roles: _roles, onSignOut: _auth.signOut),
           ]
         : <Widget>[
             VendorHome(
@@ -162,11 +159,7 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
             const VendorJobsPage(),
             const VendorListingsPage(),
             const MessagesPage(),
-            _AccountPage(
-              email: widget.email,
-              roles: _roles,
-              onSignOut: _auth.signOut,
-            ),
+            AccountPage(roles: _roles, onSignOut: _auth.signOut),
           ];
 
     return Scaffold(
@@ -215,46 +208,6 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
         destinations: destinations,
         onDestinationSelected: (index) => setState(() => _tabIndex = index),
       ),
-    );
-  }
-}
-
-class _AccountPage extends StatelessWidget {
-  const _AccountPage({
-    required this.email,
-    required this.roles,
-    required this.onSignOut,
-  });
-
-  final String? email;
-  final Set<String> roles;
-  final Future<void> Function() onSignOut;
-
-  @override
-  Widget build(BuildContext context) {
-    final sortedRoles = roles.toList()..sort();
-
-    return ListView(
-      padding: const EdgeInsets.all(20),
-      children: [
-        Text('Account', style: Theme.of(context).textTheme.headlineSmall),
-        const SizedBox(height: 14),
-        Card(
-          child: ListTile(
-            leading: const CircleAvatar(child: Icon(Icons.person_outline)),
-            title: Text(email ?? 'Wantok user'),
-            subtitle: Text(
-              sortedRoles.isEmpty ? 'customer' : sortedRoles.join(', '),
-            ),
-          ),
-        ),
-        const SizedBox(height: 12),
-        OutlinedButton.icon(
-          onPressed: onSignOut,
-          icon: const Icon(Icons.logout),
-          label: const Text('Sign out'),
-        ),
-      ],
     );
   }
 }
