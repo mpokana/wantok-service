@@ -140,7 +140,7 @@ class ReservationRepository {
     final rows = await WantokBackend.client
         .from('service_bookings')
         .select(
-          'id, status, scheduled_start, scheduled_end, requested_amount, quoted_amount, final_amount, currency, service_address, notes, created_at, service_categories(name, slug), provider_profiles(display_name), provider_resources(name, resource_type, address_text), service_quotes(id, amount, currency, message, status, expires_at)',
+          'id, status, scheduled_start, scheduled_end, requested_amount, quoted_amount, final_amount, currency, service_address, origin_address, destination_address, notes, created_at, service_categories(name, slug), provider_profiles(display_name), provider_resources(name, resource_type, address_text), service_quotes(id, amount, currency, message, status, expires_at)',
         )
         .eq('customer_id', _userId)
         .order('created_at', ascending: false)
@@ -288,9 +288,8 @@ class ReservationRepository {
     final rows = await WantokBackend.client
         .from('service_bookings')
         .select(
-          'id, status, scheduled_start, scheduled_end, requested_amount, quoted_amount, final_amount, currency, service_address, notes, created_at, service_categories(name, slug), provider_services(title, pricing_model), provider_resources(name, resource_type, address_text)',
+          'id, provider_id, status, scheduled_start, scheduled_end, requested_amount, quoted_amount, final_amount, currency, service_address, origin_address, destination_address, notes, created_at, service_categories(name, slug), provider_services(title, pricing_model), provider_resources(name, resource_type, address_text)',
         )
-        .eq('provider_id', _userId)
         .inFilter('status', [
           'requested',
           'quoted',

@@ -163,6 +163,10 @@ class _ActivityPageState extends State<ActivityPage> {
                         ),
                       if (row['service_address'] != null)
                         Text('Location: ${row['service_address']}'),
+                      if (row['origin_address'] != null)
+                        Text('Pickup: ${row['origin_address']}'),
+                      if (row['destination_address'] != null)
+                        Text('Destination: ${row['destination_address']}'),
                       if (amount != null)
                         Text(
                           'Amount: ${row['currency'] ?? 'PGK'} $amount',

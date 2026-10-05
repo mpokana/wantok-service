@@ -3,6 +3,7 @@ import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_core/wantok_core.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import '../services/open_request_page.dart';
 import '../services/reservation_browse_page.dart';
 
 class ClientHome extends StatefulWidget {
@@ -121,6 +122,20 @@ class _ClientHomeState extends State<ClientHome> {
       Navigator.of(context).push(
         MaterialPageRoute<void>(
           builder: (context) => ReservationBrowsePage(category: service),
+        ),
+      );
+      return;
+    }
+
+    if (const {
+      'delivery',
+      'errands',
+      'specialist-services',
+      'general-labour',
+    }.contains(service.slug)) {
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (context) => OpenRequestPage(category: service),
         ),
       );
       return;

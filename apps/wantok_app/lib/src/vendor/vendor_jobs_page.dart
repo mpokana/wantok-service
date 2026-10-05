@@ -127,6 +127,7 @@ class _VendorJobsPageState extends State<VendorJobsPage> {
               final service = _asMap(row['provider_services']);
               final resource = _asMap(row['provider_resources']);
               final requestedAmount = _toDouble(row['requested_amount']);
+              final isOpenRequest = row['provider_id'] == null;
               final busy = _busyId == id;
 
               return Card(
@@ -165,6 +166,10 @@ class _VendorJobsPageState extends State<VendorJobsPage> {
                         ),
                       if (row['service_address'] != null)
                         Text('Location: ${row['service_address']}'),
+                      if (row['origin_address'] != null)
+                        Text('Pickup: ${row['origin_address']}'),
+                      if (row['destination_address'] != null)
+                        Text('Destination: ${row['destination_address']}'),
                       if (row['notes'] != null &&
                           row['notes'].toString().trim().isNotEmpty) ...[
                         const SizedBox(height: 6),
@@ -189,6 +194,7 @@ class _VendorJobsPageState extends State<VendorJobsPage> {
                           bookingId: id,
                           status: status,
                           requestedAmount: requestedAmount,
+                          isOpenRequest: isOpenRequest,
                           busy: busy,
                         ),
                       ),
@@ -207,9 +213,20 @@ class _VendorJobsPageState extends State<VendorJobsPage> {
     required String bookingId,
     required String status,
     required double? requestedAmount,
+    required bool isOpenRequest,
     required bool busy,
   }) {
     if (status == 'requested') {
+      if (isOpenRequest) {
+        return [
+          FilledButton.icon(
+            onPressed: busy ? null : () => _quote(bookingId),
+            icon: const Icon(Icons.request_quote_outlined),
+            label: const Text('Send quote'),
+          ),
+        ];
+      }
+
       return [
         OutlinedButton(
           onPressed: busy
