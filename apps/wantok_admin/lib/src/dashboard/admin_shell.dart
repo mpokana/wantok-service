@@ -3,6 +3,8 @@ import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_auth/wantok_auth.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import 'resource_review_page.dart';
+
 class AdminShell extends StatefulWidget {
   const AdminShell({required this.roles, required this.email, super.key});
 
@@ -33,6 +35,10 @@ class _AdminShellState extends State<AdminShell> {
       label: Text('Listings'),
     ),
     NavigationRailDestination(
+      icon: Icon(Icons.inventory_2_outlined),
+      label: Text('Resources'),
+    ),
+    NavigationRailDestination(
       icon: Icon(Icons.receipt_long_outlined),
       label: Text('Bookings'),
     ),
@@ -56,6 +62,10 @@ class _AdminShellState extends State<AdminShell> {
       label: 'Listings',
     ),
     NavigationDestination(
+      icon: Icon(Icons.inventory_2_outlined),
+      label: 'Resources',
+    ),
+    NavigationDestination(
       icon: Icon(Icons.receipt_long_outlined),
       label: 'Bookings',
     ),
@@ -68,6 +78,7 @@ class _AdminShellState extends State<AdminShell> {
       const _OverviewPage(),
       const _ProviderApplicationsPage(),
       const _ServiceReviewPage(),
+      const ResourceReviewPage(),
       const _BookingsPage(),
       const _AuditPage(),
     ];

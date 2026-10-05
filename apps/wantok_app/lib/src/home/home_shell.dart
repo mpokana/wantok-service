@@ -3,6 +3,9 @@ import 'package:wantok_auth/wantok_auth.dart';
 import 'package:wantok_core/wantok_core.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import '../vendor/vendor_jobs_page.dart';
+import '../vendor/vendor_listings_page.dart';
+import 'activity_page.dart';
 import 'client_home.dart';
 import 'vendor_home.dart';
 
@@ -109,25 +112,22 @@ class _HomeShellState extends State<HomeShell> {
         children: [
           _mode == AppMode.client
               ? const ClientHome()
-              : VendorHome(hasVendorAccess: _hasVendorAccess),
-          _PlaceholderPage(
-            icon: _mode == AppMode.client
-                ? Icons.receipt_long_outlined
-                : Icons.work_outline,
-            title: _mode == AppMode.client ? 'Activity' : 'Jobs',
-            message: _mode == AppMode.client
-                ? 'Your rides, bookings, orders and service requests will appear here.'
-                : 'Open jobs, quotes and active work will appear here.',
-          ),
-          _PlaceholderPage(
-            icon: _mode == AppMode.client
-                ? Icons.chat_bubble_outline
-                : Icons.storefront_outlined,
-            title: _mode == AppMode.client ? 'Messages' : 'Listings',
-            message: _mode == AppMode.client
-                ? 'Client-to-provider conversations will live here.'
-                : 'Manage approved services, resources, pricing and availability here.',
-          ),
+              : VendorHome(
+                  hasVendorAccess: _hasVendorAccess,
+                  onOpenJobs: () => setState(() => _tabIndex = 1),
+                  onOpenListings: () => setState(() => _tabIndex = 2),
+                ),
+          _mode == AppMode.client
+              ? const ActivityPage()
+              : const VendorJobsPage(),
+          _mode == AppMode.client
+              ? const _PlaceholderPage(
+                  icon: Icons.chat_bubble_outline,
+                  title: 'Messages',
+                  message:
+                      'Client-to-provider conversations will live here.',
+                )
+              : const VendorListingsPage(),
           _AccountPage(
             email: widget.email,
             roles: widget.roles,

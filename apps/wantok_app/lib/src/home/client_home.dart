@@ -3,6 +3,8 @@ import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_core/wantok_core.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import '../services/reservation_browse_page.dart';
+
 class ClientHome extends StatefulWidget {
   const ClientHome({super.key});
 
@@ -95,15 +97,7 @@ class _ClientHomeState extends State<ClientHome> {
                     label: service.name,
                     icon: _iconFor(service.slug),
                     badge: _badgeFor(service.slug),
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            '${service.name} module is being connected.',
-                          ),
-                        ),
-                      );
-                    },
+                    onTap: () => _openService(service),
                   );
                 },
               );
@@ -115,6 +109,22 @@ class _ClientHomeState extends State<ClientHome> {
           const _SafetyCard(),
         ],
       ),
+    );
+  }
+
+  void _openService(WantokServiceCategory service) {
+    if (const {'vehicle-hire', 'boat-hire', 'venue-booking'}
+        .contains(service.slug)) {
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (context) => ReservationBrowsePage(category: service),
+        ),
+      );
+      return;
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('${service.name} module is being connected.')),
     );
   }
 

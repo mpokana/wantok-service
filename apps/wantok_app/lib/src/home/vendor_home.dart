@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
 class VendorHome extends StatelessWidget {
-  const VendorHome({required this.hasVendorAccess, super.key});
+  const VendorHome({
+    required this.hasVendorAccess,
+    required this.onOpenJobs,
+    required this.onOpenListings,
+    super.key,
+  });
 
   final bool hasVendorAccess;
+  final VoidCallback onOpenJobs;
+  final VoidCallback onOpenListings;
 
   @override
   Widget build(BuildContext context) {
@@ -14,8 +21,9 @@ class VendorHome extends StatelessWidget {
         children: [
           Text(
             'Become a Wantok Vendor',
-            style: Theme.of(context).textTheme.headlineSmall
-                ?.copyWith(fontWeight: FontWeight.w900),
+            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.w900,
+            ),
           ),
           const SizedBox(height: 8),
           const Text(
@@ -26,19 +34,22 @@ class VendorHome extends StatelessWidget {
           const _VendorBenefit(
             icon: Icons.verified_user_outlined,
             title: 'One verified provider profile',
-            body: 'Identity and business verification are shared across your approved services.',
+            body:
+                'Identity and business verification are shared across your approved services.',
           ),
           const SizedBox(height: 10),
           const _VendorBenefit(
             icon: Icons.category_outlined,
             title: 'Multiple service capabilities',
-            body: 'A single vendor can operate several approved services without creating new accounts.',
+            body:
+                'A single vendor can operate several approved services without creating new accounts.',
           ),
           const SizedBox(height: 10),
           const _VendorBenefit(
             icon: Icons.payments_outlined,
             title: 'Jobs, earnings and settlements',
-            body: 'Quotes, bookings, work history and future payouts stay in one vendor workspace.',
+            body:
+                'Quotes, bookings, work history and future payouts stay in one vendor workspace.',
           ),
           const SizedBox(height: 20),
           FilledButton.icon(
@@ -61,14 +72,14 @@ class VendorHome extends StatelessWidget {
             Expanded(
               child: Text(
                 'Vendor dashboard',
-                style: Theme.of(context).textTheme.headlineSmall
-                    ?.copyWith(fontWeight: FontWeight.w900),
+                style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  fontWeight: FontWeight.w900,
+                ),
               ),
             ),
-            FilledButton.tonalIcon(
-              onPressed: () {},
-              icon: const Icon(Icons.toggle_on_outlined),
-              label: const Text('Available'),
+            const Chip(
+              avatar: Icon(Icons.verified_outlined, size: 17),
+              label: Text('Provider'),
             ),
           ],
         ),
@@ -83,24 +94,24 @@ class VendorHome extends StatelessWidget {
             Expanded(
               child: _MetricCard(
                 label: 'Open requests',
-                value: '—',
+                value: 'Jobs',
                 icon: Icons.work_outline,
               ),
             ),
             SizedBox(width: 10),
             Expanded(
               child: _MetricCard(
-                label: 'Active jobs',
-                value: '—',
-                icon: Icons.pending_actions_outlined,
+                label: 'Resources',
+                value: 'Manage',
+                icon: Icons.inventory_2_outlined,
               ),
             ),
             SizedBox(width: 10),
             Expanded(
               child: _MetricCard(
-                label: 'Rating',
-                value: '—',
-                icon: Icons.star_outline,
+                label: 'Availability',
+                value: 'Control',
+                icon: Icons.event_available_outlined,
               ),
             ),
           ],
@@ -108,32 +119,40 @@ class VendorHome extends StatelessWidget {
         const SizedBox(height: 18),
         Text(
           'Quick actions',
-          style: Theme.of(context).textTheme.titleMedium
-              ?.copyWith(fontWeight: FontWeight.w800),
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w800,
+          ),
         ),
         const SizedBox(height: 10),
-        const _ActionCard(
+        _ActionCard(
           icon: Icons.request_quote_outlined,
-          title: 'Requests & quotes',
-          body: 'Review matching customer requests and submit secure quotes.',
+          title: 'Requests & jobs',
+          body:
+              'Confirm reservation requests, send quotes and progress active work.',
+          onTap: onOpenJobs,
         ),
         const SizedBox(height: 10),
-        const _ActionCard(
+        _ActionCard(
           icon: Icons.storefront_outlined,
-          title: 'My services',
-          body: 'Manage listings, pricing, service areas and approval status.',
+          title: 'Services & resources',
+          body:
+              'Manage listings, prices, vehicles, boats, venues and approval status.',
+          onTap: onOpenListings,
         ),
         const SizedBox(height: 10),
-        const _ActionCard(
+        _ActionCard(
           icon: Icons.calendar_month_outlined,
           title: 'Availability',
-          body: 'Control schedules and resource availability without double bookings.',
+          body:
+              'Block unavailable resource time. Recurring schedules are enforced by the backend.',
+          onTap: onOpenListings,
         ),
         const SizedBox(height: 10),
         const _ActionCard(
           icon: Icons.account_balance_wallet_outlined,
           title: 'Earnings & settlements',
-          body: 'Future payment and settlement records will be managed here.',
+          body:
+              'Payment and settlement records will be connected in a later platform phase.',
         ),
       ],
     );
@@ -189,12 +208,18 @@ class _MetricCard extends StatelessWidget {
             const SizedBox(height: 12),
             Text(
               value,
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
+              style: const TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.w900,
+              ),
             ),
             const SizedBox(height: 2),
             Text(
               label,
-              style: const TextStyle(color: WantokColors.muted, fontSize: 12),
+              style: const TextStyle(
+                color: WantokColors.muted,
+                fontSize: 12,
+              ),
             ),
           ],
         ),
@@ -208,20 +233,23 @@ class _ActionCard extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.body,
+    this.onTap,
   });
 
   final IconData icon;
   final String title;
   final String body;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
+        onTap: onTap,
         leading: Icon(icon, color: WantokColors.primary),
         title: Text(title, style: const TextStyle(fontWeight: FontWeight.w800)),
         subtitle: Text(body),
-        trailing: const Icon(Icons.chevron_right),
+        trailing: onTap == null ? null : const Icon(Icons.chevron_right),
       ),
     );
   }
