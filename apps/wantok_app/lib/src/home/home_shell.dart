@@ -4,6 +4,7 @@ import 'package:wantok_core/wantok_core.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
 import '../vendor/provider_application_page.dart';
+import '../vendor/taxi_driver_page.dart';
 import '../vendor/vendor_jobs_page.dart';
 import '../vendor/vendor_listings_page.dart';
 import 'activity_page.dart';
@@ -30,6 +31,7 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
 
   bool get _hasVendorAccess =>
       _roles.contains('provider') || _roles.contains('driver');
+  bool get _hasDriverAccess => _roles.contains('driver');
 
   @override
   void initState() {
@@ -153,6 +155,12 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
               ? const ClientHome()
               : VendorHome(
                   hasVendorAccess: _hasVendorAccess,
+                  hasDriverAccess: _hasDriverAccess,
+                  onOpenTaxiDriver: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (context) => const TaxiDriverPage(),
+                    ),
+                  ),
                   onApply: () => Navigator.of(context).push(
                     MaterialPageRoute<void>(
                       builder: (context) => const ProviderApplicationPage(),

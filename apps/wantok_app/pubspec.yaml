@@ -45,6 +45,9 @@ dependencies:
     path: ../../packages/wantok_ui
   wantok_auth:
     path: ../../packages/wantok_auth
+  flutter_map: ^8.3.2
+  latlong2: ^0.10.1
+  geolocator: ^14.1.1
 
 dev_dependencies:
   flutter_test:

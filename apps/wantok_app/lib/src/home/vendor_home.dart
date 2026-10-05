@@ -4,6 +4,8 @@ import 'package:wantok_ui/wantok_ui.dart';
 class VendorHome extends StatelessWidget {
   const VendorHome({
     required this.hasVendorAccess,
+    required this.hasDriverAccess,
+    required this.onOpenTaxiDriver,
     required this.onApply,
     required this.onOpenJobs,
     required this.onOpenListings,
@@ -11,6 +13,8 @@ class VendorHome extends StatelessWidget {
   });
 
   final bool hasVendorAccess;
+  final bool hasDriverAccess;
+  final VoidCallback onOpenTaxiDriver;
   final VoidCallback onApply;
   final VoidCallback onOpenJobs;
   final VoidCallback onOpenListings;
@@ -120,6 +124,15 @@ class VendorHome extends StatelessWidget {
               ?.copyWith(fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 10),
+        if (hasDriverAccess) ...[
+          _ActionCard(
+            icon: Icons.local_taxi_outlined,
+            title: 'Taxi Driver Console',
+            body: 'Go online, receive nearby ride offers and progress active trips.',
+            onTap: onOpenTaxiDriver,
+          ),
+          const SizedBox(height: 10),
+        ],
         _ActionCard(
           icon: Icons.request_quote_outlined,
           title: 'Requests & jobs',

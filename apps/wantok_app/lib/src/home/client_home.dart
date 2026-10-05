@@ -5,6 +5,7 @@ import 'package:wantok_ui/wantok_ui.dart';
 
 import '../services/open_request_page.dart';
 import '../services/reservation_browse_page.dart';
+import '../services/taxi_ride_page.dart';
 
 class ClientHome extends StatefulWidget {
   const ClientHome({super.key});
@@ -114,6 +115,13 @@ class _ClientHomeState extends State<ClientHome> {
   }
 
   void _openService(WantokServiceCategory service) {
+    if (service.slug == 'taxi-ride') {
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(builder: (context) => const TaxiRidePage()),
+      );
+      return;
+    }
+
     if (const {
       'vehicle-hire',
       'boat-hire',
