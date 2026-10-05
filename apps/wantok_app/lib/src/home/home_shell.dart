@@ -9,6 +9,7 @@ import '../vendor/vendor_commerce_page.dart';
 import '../vendor/vendor_events_page.dart';
 import '../vendor/vendor_jobs_page.dart';
 import '../vendor/vendor_listings_page.dart';
+import '../vendor/vendor_water_transport_page.dart';
 import 'activity_page.dart';
 import 'client_home.dart';
 import 'vendor_home.dart';
@@ -171,6 +172,11 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
                   onOpenEvents: () => Navigator.of(context).push(
                     MaterialPageRoute<void>(
                       builder: (context) => const VendorEventsPage(),
+                    ),
+                  ),
+                  onOpenWaterTransport: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (context) => const VendorWaterTransportPage(),
                     ),
                   ),
                   onApply: () => Navigator.of(context).push(

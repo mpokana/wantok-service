@@ -8,6 +8,7 @@ import '../services/event_browse_page.dart';
 import '../services/open_request_page.dart';
 import '../services/reservation_browse_page.dart';
 import '../services/taxi_ride_page.dart';
+import '../services/water_transport_page.dart';
 
 class ClientHome extends StatefulWidget {
   const ClientHome({super.key});
@@ -132,6 +133,15 @@ class _ClientHomeState extends State<ClientHome> {
       Navigator.of(context).push(
         MaterialPageRoute<void>(
           builder: (context) => ReservationBrowsePage(category: service),
+        ),
+      );
+      return;
+    }
+
+    if (service.slug == 'boat-ship-rides') {
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(
+          builder: (context) => const WaterTransportPage(),
         ),
       );
       return;

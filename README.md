@@ -224,6 +224,7 @@ Current migration sequence:
 9. `20261005023000_taxi_dispatch_lifecycle.sql`
 10. `20261005024000_commerce_core.sql`
 11. `20261005025000_events_core.sql`
+12. `20261005026000_water_passenger_transport.sql`
 
 All production schema/security changes must be migrations committed to Git.
 
@@ -249,6 +250,7 @@ The pgTAP suite currently verifies:
 - taxi nearest-driver offers, decline redispatch, acceptance and enforced ride-state transitions;
 - Food/Groceries server-priced commerce orders, catalogue ownership and fulfilment transitions;
 - Events discovery, ticket capacities, registration, cancellation and organiser check-in;
+- scheduled water passenger routes, vessels, departures, fare capacity, manifests, boarding and lifecycle enforcement;
 - restricted direct payment/audit/outbox mutation.
 
 ## Linux VPS deployment

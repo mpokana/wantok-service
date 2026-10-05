@@ -8,6 +8,7 @@ class VendorHome extends StatelessWidget {
     required this.onOpenTaxiDriver,
     required this.onOpenCommerce,
     required this.onOpenEvents,
+    required this.onOpenWaterTransport,
     required this.onApply,
     required this.onOpenJobs,
     required this.onOpenListings,
@@ -19,6 +20,7 @@ class VendorHome extends StatelessWidget {
   final VoidCallback onOpenTaxiDriver;
   final VoidCallback onOpenCommerce;
   final VoidCallback onOpenEvents;
+  final VoidCallback onOpenWaterTransport;
   final VoidCallback onApply;
   final VoidCallback onOpenJobs;
   final VoidCallback onOpenListings;
@@ -137,6 +139,13 @@ class VendorHome extends StatelessWidget {
           ),
           const SizedBox(height: 10),
         ],
+        _ActionCard(
+          icon: Icons.sailing_outlined,
+          title: 'Water Transport Console',
+          body: 'Manage routes, vessels, departures, fares and passenger manifests.',
+          onTap: onOpenWaterTransport,
+        ),
+        const SizedBox(height: 10),
         _ActionCard(
           icon: Icons.event_note_outlined,
           title: 'Events Organiser Console',
