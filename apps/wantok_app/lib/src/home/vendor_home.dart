@@ -7,6 +7,7 @@ class VendorHome extends StatelessWidget {
     required this.hasDriverAccess,
     required this.onOpenTaxiDriver,
     required this.onOpenCommerce,
+    required this.onOpenEvents,
     required this.onApply,
     required this.onOpenJobs,
     required this.onOpenListings,
@@ -17,6 +18,7 @@ class VendorHome extends StatelessWidget {
   final bool hasDriverAccess;
   final VoidCallback onOpenTaxiDriver;
   final VoidCallback onOpenCommerce;
+  final VoidCallback onOpenEvents;
   final VoidCallback onApply;
   final VoidCallback onOpenJobs;
   final VoidCallback onOpenListings;
@@ -135,6 +137,13 @@ class VendorHome extends StatelessWidget {
           ),
           const SizedBox(height: 10),
         ],
+        _ActionCard(
+          icon: Icons.event_note_outlined,
+          title: 'Events Organiser Console',
+          body: 'Create events, publish ticket types and manage attendee check-in.',
+          onTap: onOpenEvents,
+        ),
+        const SizedBox(height: 10),
         _ActionCard(
           icon: Icons.store_mall_directory_outlined,
           title: 'Food & Shop Console',

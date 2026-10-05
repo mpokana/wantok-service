@@ -5,7 +5,7 @@ ARG APP_PATH
 ARG APP_ENV=production
 ARG SUPABASE_URL
 ARG SUPABASE_PUBLISHABLE_KEY
-ARG PUBLIC_WEB_URL=https://wantok-service.com
+ARG PUBLIC_WEB_URL=https://wantokservice.com
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends     ca-certificates     curl     git     unzip     xz-utils     zip     libglu1-mesa     && rm -rf /var/lib/apt/lists/*

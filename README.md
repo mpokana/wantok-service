@@ -28,7 +28,7 @@ Separate Flutter Web console for authorised administrators.
 Target production URL:
 
 ```text
-https://admin.wantok-service.com
+https://admin.wantokservice.com
 ```
 
 System administration is intentionally excluded from the public Wantok application.
@@ -38,10 +38,10 @@ System administration is intentionally excluded from the public Wantok applicati
 Planned public surfaces:
 
 ```text
-https://wantok-service.com
-https://www.wantok-service.com
-https://admin.wantok-service.com
-https://api.wantok-service.com
+https://wantokservice.com
+https://www.wantokservice.com
+https://admin.wantokservice.com
+https://api.wantokservice.com
 ```
 
 Studio, PostgreSQL and internal infrastructure are private administration surfaces and must not be exposed directly to the public internet.
@@ -220,6 +220,10 @@ Current migration sequence:
 5. `20261005012000_rbac_authority.sql`
 6. `20261005020000_resource_reservation_workflow.sql`
 7. `20261005021000_provider_onboarding.sql`
+8. `20261005022000_open_request_workflow.sql`
+9. `20261005023000_taxi_dispatch_lifecycle.sql`
+10. `20261005024000_commerce_core.sql`
+11. `20261005025000_events_core.sql`
 
 All production schema/security changes must be migrations committed to Git.
 
@@ -241,6 +245,10 @@ The pgTAP suite currently verifies:
 - resource overlap protection;
 - secure vehicle/boat/venue reservation creation with availability-rule and time-off enforcement;
 - trusted multi-category vendor onboarding with duplicate/unsupported application protection;
+- open marketplace request creation, provider visibility and quote assignment;
+- taxi nearest-driver offers, decline redispatch, acceptance and enforced ride-state transitions;
+- Food/Groceries server-priced commerce orders, catalogue ownership and fulfilment transitions;
+- Events discovery, ticket capacities, registration, cancellation and organiser check-in;
 - restricted direct payment/audit/outbox mutation.
 
 ## Linux VPS deployment
