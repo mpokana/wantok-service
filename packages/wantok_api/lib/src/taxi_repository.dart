@@ -18,6 +18,7 @@ class TaxiRepository {
     required double dropoffLng,
     String? pickupLabel,
     String? dropoffLabel,
+    String? trustedPersonId,
   }) async {
     final response = await WantokBackend.client.rpc(
       'request_taxi_ride',
@@ -28,6 +29,7 @@ class TaxiRepository {
         'p_dropoff_lng': dropoffLng,
         'p_pickup_label': _emptyToNull(pickupLabel),
         'p_dropoff_label': _emptyToNull(dropoffLabel),
+        'p_trusted_person_id': trustedPersonId,
       },
     );
     return _asMap(response);
@@ -57,7 +59,7 @@ class TaxiRepository {
     final rows = await WantokBackend.client
         .from('rides')
         .select(
-          'id, status, pickup_label, dropoff_label, fare_estimate, final_fare, distance_km, created_at, completed_at, cancelled_at',
+          'id, status, pickup_label, dropoff_label, fare_estimate, final_fare, distance_km, created_at, completed_at, cancelled_at, beneficiary_name, beneficiary_relationship',
         )
         .eq('passenger_id', _userId)
         .inFilter('status', ['completed', 'cancelled'])

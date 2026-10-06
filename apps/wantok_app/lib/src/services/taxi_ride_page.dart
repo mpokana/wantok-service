@@ -7,6 +7,8 @@ import 'package:latlong2/latlong.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import 'booking_for_selector.dart';
+
 enum _TaxiPointMode { pickup, destination }
 
 class TaxiRidePage extends StatefulWidget {
@@ -27,6 +29,7 @@ class _TaxiRidePageState extends State<TaxiRidePage> {
   LatLng _pickup = _laeCenter;
   LatLng? _dropoff;
   _TaxiPointMode _pointMode = _TaxiPointMode.destination;
+  String? _trustedPersonId;
   Map<String, dynamic>? _ride;
   List<Map<String, dynamic>> _history = const [];
   Timer? _pollTimer;
@@ -138,6 +141,7 @@ class _TaxiRidePageState extends State<TaxiRidePage> {
         dropoffLng: destination.longitude,
         pickupLabel: _pickupLabelController.text,
         dropoffLabel: _dropoffLabelController.text,
+        trustedPersonId: _trustedPersonId,
       );
       final rideId = created['id'] as String;
       final details = await _repository.loadRideDetails(rideId);
@@ -243,6 +247,7 @@ class _TaxiRidePageState extends State<TaxiRidePage> {
       _ride = null;
       _dropoff = null;
       _dropoffLabelController.clear();
+      _trustedPersonId = null;
       _pointMode = _TaxiPointMode.destination;
       _error = null;
     });
@@ -400,6 +405,17 @@ class _TaxiRidePageState extends State<TaxiRidePage> {
                 prefixIcon: Icon(Icons.flag_outlined),
               ),
             ),
+            const SizedBox(height: 12),
+            BookingForSelector(
+              selectedTrustedPersonId: _trustedPersonId,
+              enabled: !_busy,
+              onChanged: (value) {
+                setState(() {
+                  _trustedPersonId = value;
+                  _error = null;
+                });
+              },
+            ),
             const SizedBox(height: 10),
             const Text(
               'Tap Pickup or Destination above, then tap the map to position that point.',
@@ -452,6 +468,40 @@ class _TaxiRidePageState extends State<TaxiRidePage> {
               style: const TextStyle(color: WantokColors.muted),
             ),
             const SizedBox(height: 14),
+            if (ride['beneficiary_name'] != null) ...[
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF1F6F3),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.family_restroom_outlined,
+                      color: WantokColors.primaryDark,
+                    ),
+                    const SizedBox(width: 9),
+                    Expanded(
+                      child: Text(
+                        ride['beneficiary_relationship'] != null &&
+                                ride['beneficiary_relationship']
+                                    .toString()
+                                    .trim()
+                                    .isNotEmpty
+                            ? 'Ride for ${ride['beneficiary_name']} (${ride['beneficiary_relationship']})'
+                            : 'Ride for ${ride['beneficiary_name']}',
+                        style: const TextStyle(
+                          color: WantokColors.primaryDark,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 12),
+            ],
             _RouteRow(
               pickup: ride['pickup_label']?.toString() ?? 'Pickup',
               destination: ride['dropoff_label']?.toString() ?? 'Destination',
@@ -462,9 +512,7 @@ class _TaxiRidePageState extends State<TaxiRidePage> {
                 Expanded(
                   child: _InfoBox(
                     label: finalFare == null ? 'Estimated fare' : 'Final fare',
-                    value: fare == null
-                        ? 'K —'
-                        : 'K${fare.toStringAsFixed(2)}',
+                    value: fare == null ? 'K —' : 'K${fare.toStringAsFixed(2)}',
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -666,7 +714,11 @@ class _HistoryCard extends StatelessWidget {
             '${ride['pickup_label']?.toString() ?? 'Pickup'} → ${ride['dropoff_label']?.toString() ?? 'Destination'}',
           ),
           subtitle: Text(
-            (ride['status']?.toString() ?? '').replaceAll('_', ' '),
+            [
+              (ride['status']?.toString() ?? '').replaceAll('_', ' '),
+              if (ride['beneficiary_name'] != null)
+                'for ${ride['beneficiary_name']}',
+            ].where((value) => value.isNotEmpty).join(' • '),
           ),
           trailing: fare == null
               ? null

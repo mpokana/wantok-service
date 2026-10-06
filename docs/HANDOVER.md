@@ -6,7 +6,7 @@
 
 ## Resume here
 
-The current working phase is **CX1B delegated-booking foundation**, following the clean CX1A checkpoint **`0e6dfcd`**; the **CX1 gate remains open before T2.4**. T2.3 is checkpointed at **`46d6208`** and the prior CX1 reliability/discovery checkpoint is **`0c33a37`**. Validate and checkpoint the current CX1B changes before moving on. Run:
+The current working phase is **CX1B delegated-booking expansion**, following clean checkpoints **`0e6dfcd`** (CX1A) and **`7e92458`** (generic delegated booking); the **CX1 gate remains open before T2.4**. The latest delegated expansion includes Taxi/Ride. Run:
 
 `git log -1 --oneline`
 
@@ -124,7 +124,7 @@ Checkpointed platform includes:
 - Account/Profile now includes bio/avatar URL foundation, privacy/share controls, linked-account management, Saved, Trusted people, My reviews and separate Business/Vendor profile presentation under one login.
 - Supabase identity linking is used for Google/Facebook; no parallel customer account is created by UI design.
 - owner-scoped `client_saved_items` and secured bookmark RPC validate that only discoverable entities can be saved.
-- owner-scoped `trusted_people` now feeds the shared delegated-booking contract. Vehicle/Boat/Venue reservations and Delivery/Errands/Specialist/Labour requests support **Who is this for?**. The signed-in customer remains booking owner/payer; beneficiary details are snapshotted for history and do not grant account access.
+- owner-scoped `trusted_people` feeds the delegated-booking contract. Vehicle/Boat/Venue reservations, Delivery/Errands/Specialist/Labour requests, and Taxi/Ride support **Who is this for?**. Taxi keeps the signed-in account as `passenger_id`/payer while driver-facing RPCs resolve the selected Trusted person as the actual rider and retain a separate `booked_by_name`. Beneficiary snapshots preserve history and do not grant account access.
 - existing `service_reviews` is extended with title/photo URL/visibility fields; review writes use a secured RPC limited to completed customer bookings; provider rating aggregation remains the existing trigger.
 - Track offers Review/Edit review for eligible completed generic service bookings and retains specialised ride/order/event/water shortcuts.
 - Wallet remains preview-only but now frames Top up/Scan/Send/Receive, verification, PNG-oriented planned services and future transaction history. No money movement exists.
@@ -142,7 +142,7 @@ At this checkpoint:
 - required `scripts/flutter/check.ps1`: PASS after clearing read-only attributes on generated test assets only
 - Wantok Operations Admin: analysis + smoke test PASS
 - Wantok Technical Control: analysis + smoke test PASS
-- database: **18 files / 419 pgTAP tests PASS** (all fixtures roll back)
+- database: **19 files / 444 pgTAP tests PASS** (all fixtures roll back)
 - Android visual QA was last recorded for the earlier client shell; CX1A Account/Services bookmarks/Track reviews/Wallet changes require fresh signed-in client evidence
 - production Docker Compose parse PASS was recorded at T2.2; deployment files unchanged
 - `git diff --check`: PASS
@@ -188,11 +188,11 @@ Technical Control development server may be run on:
 
 T2.3 checkpoint: **`46d6208`**; prior CX1 reliability/discovery checkpoint: **`0c33a37`**. Required sequence: **finish CX1A/CX1 evidence → T2.4 diagnostics/logs/jobs**.
 
-CX1 now covers reliability, richer client account/profile features and the first delegated-booking slice. The navigation remains **Home · Services · Track · Wallet · Inbox**. Shared reservations/open requests now support Trusted-person beneficiaries; remaining delegated work is Taxi, Events, Food/Groceries and scheduled water passenger transport. Other remaining CX1 work includes Save controls on providers/resources/events, managed image upload, recommendation/destination work, and live QA of the new Account/Services/Track/Wallet surfaces. Achievements and social follows remain later within CX1 after the core workflows are stable. See `docs/ROADMAP.md` and `docs/CX1_CLIENT_EXPERIENCE_GATE.md`.
+CX1 now covers reliability, richer client account/profile features and delegated booking across shared reservations/open requests plus Taxi/Ride. The navigation remains **Home · Services · Track · Wallet · Inbox**. Remaining delegated work is Events/ticketing, Food/Groceries commerce and scheduled water passenger transport. Other remaining CX1 work includes Save controls on providers/resources/events, managed image upload, recommendation/destination work, and live QA of the new Account/Services/Track/Wallet surfaces. Achievements and social follows remain later within CX1 after the core workflows are stable. See `docs/ROADMAP.md` and `docs/CX1_CLIENT_EXPERIENCE_GATE.md`.
 
 Preserve the local development accounts, roles and data. Do not reset/reseed Supabase or replace working modules/configuration. At resume there are two local auth users/profiles and one local `tech_platform_admin` grant.
 
-T2.4 remains deferred until CX1 passes. CX1 migrations `20261006130000_cx1_client_experience_foundations.sql` and `20261006140000_delegated_booking_foundation.sql` are already applied locally; do not reset/reseed Supabase to replay them. Integrations and high-risk approvals follow later.
+T2.4 remains deferred until CX1 passes. CX1 migrations `20261006130000_cx1_client_experience_foundations.sql`, `20261006140000_delegated_booking_foundation.sql`, and `20261006141000_taxi_delegated_booking.sql` are already applied locally; do not reset/reseed Supabase to replay them. Integrations and high-risk approvals follow later.
 
 Do not begin Wantok Pay transaction movement until payment-rail and settlement decisions are made.
 

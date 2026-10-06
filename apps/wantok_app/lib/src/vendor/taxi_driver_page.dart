@@ -383,6 +383,11 @@ class _TaxiDriverPageState extends State<TaxiDriverPage> {
               offer['passenger_name']?.toString() ?? 'Wantok passenger',
               style: const TextStyle(fontWeight: FontWeight.w800),
             ),
+            if (offer['is_delegated'] == true)
+              Text(
+                'Booked by: ${offer['booked_by_name'] ?? 'Wantok account'}',
+                style: const TextStyle(color: WantokColors.muted, fontSize: 12),
+              ),
             const SizedBox(height: 12),
             _DriverRouteRow(
               pickup: offer['pickup_label']?.toString() ?? 'Pickup',
@@ -412,9 +417,7 @@ class _TaxiDriverPageState extends State<TaxiDriverPage> {
                 Expanded(
                   child: _DriverMetric(
                     label: 'Est. fare',
-                    value: fare == null
-                        ? 'K —'
-                        : 'K${fare.toStringAsFixed(2)}',
+                    value: fare == null ? 'K —' : 'K${fare.toStringAsFixed(2)}',
                   ),
                 ),
               ],
@@ -478,6 +481,11 @@ class _TaxiDriverPageState extends State<TaxiDriverPage> {
             ),
             if (ride['passenger_phone'] != null)
               Text(ride['passenger_phone'].toString()),
+            if (ride['is_delegated'] == true)
+              Text(
+                'Booked by: ${ride['booked_by_name'] ?? 'Wantok account'}',
+                style: const TextStyle(color: WantokColors.muted, fontSize: 12),
+              ),
             const SizedBox(height: 12),
             _DriverRouteRow(
               pickup: ride['pickup_label']?.toString() ?? 'Pickup',
