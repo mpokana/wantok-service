@@ -132,8 +132,8 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 - [x] privacy controls for profile visibility, review visibility, saved-items privacy, recommendations and profile sharing
 - [x] owner-scoped Trusted people model and Account CRUD for family/relative/staff beneficiaries
 - [x] richer Wantok Pay preview including planned actions, verification, PNG services and recent-activity framing
-- [x] database coverage: 23 pgTAP files / 539 tests PASS
-- [x] client analysis PASS and 32 Flutter app tests PASS
+- [x] database coverage: 24 pgTAP files / 551 tests PASS
+- [x] client analysis PASS and 33 Flutter app tests PASS
 
 ### CX1B — Delegated Booking Foundation — COMPLETE FOR CURRENT SERVICE CATALOGUE
 
@@ -153,7 +153,7 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 
 - [x] extend Save controls from service categories to providers, resources/venues and events
 - [x] add managed private Supabase Storage uploads for profile avatars and review photos, with stable storage references, signed reads and owner-bound media constraints
-- [ ] recommendations from real location/history/saved data, with opt-out respected
+- [x] privacy-aware **For you** recommendations from saved/history and optional already-authorised cached location data, with server-side opt-out enforcement
 - [ ] PNG province/town/destination discovery driven by service coverage rather than hard-coded destinations
 - [ ] optional achievements/rewards after core consumer workflows are stable
 - [ ] social follow/follower metrics only after privacy/moderation design is approved

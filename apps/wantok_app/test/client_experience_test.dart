@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_core/wantok_core.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 import 'package:wantok_app/src/home/client_home.dart';
@@ -37,6 +38,17 @@ const services = [
     name: 'Specialists',
     vertical: 'marketplace',
     bookingMode: 'quote',
+  ),
+];
+
+const recommendations = [
+  ClientServiceRecommendation(
+    categoryId: '1',
+    categorySlug: 'food',
+    categoryName: 'Food',
+    reason: 'Saved by you',
+    score: 60,
+    distanceKm: 1.2,
   ),
 ];
 
@@ -109,6 +121,32 @@ void main() {
     );
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets(
+    'recommendations use injected real-signal results and hide while filtering',
+    (tester) async {
+      await showPage(
+        tester,
+        ServicesHubPage(
+          loadServices: () async => services,
+          loadRecommendations: () async => recommendations,
+        ),
+      );
+
+      expect(find.text('For you'), findsOneWidget);
+      expect(find.text('Saved by you'), findsOneWidget);
+      expect(find.text('1.2 km away'), findsOneWidget);
+
+      await tester.enterText(find.byType(TextField), 'taxi');
+      await tester.pumpAndSettle();
+      expect(find.text('For you'), findsNothing);
+
+      await tester.tap(find.byTooltip('Clear search'));
+      await tester.pumpAndSettle();
+      expect(find.text('For you'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('catalogue failure has a safe error and working retry', (
     tester,

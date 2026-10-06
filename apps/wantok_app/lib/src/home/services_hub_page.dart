@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_core/wantok_core.dart';
 import 'package:wantok_ui/wantok_ui.dart';
@@ -13,9 +14,15 @@ import 'client_account_tools.dart';
 import 'png_visuals.dart';
 
 class ServicesHubPage extends StatefulWidget {
-  const ServicesHubPage({this.loadServices, super.key});
+  const ServicesHubPage({
+    this.loadServices,
+    this.loadRecommendations,
+    super.key,
+  });
 
   final Future<List<WantokServiceCategory>> Function()? loadServices;
+  final Future<List<ClientServiceRecommendation>> Function()?
+  loadRecommendations;
 
   @override
   State<ServicesHubPage> createState() => _ServicesHubPageState();
@@ -29,6 +36,9 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
   final _search = TextEditingController();
   final Set<String> _savedCategoryIds = <String>{};
   final Set<String> _savingSavedIds = <String>{};
+  List<ClientServiceRecommendation> _recommendations =
+      const <ClientServiceRecommendation>[];
+  bool _recommendationsLoading = false;
   String _query = '';
   _ServiceFamily _family = _ServiceFamily.all;
 
@@ -55,7 +65,56 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
     _future = _loadServices();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadSavedItems();
+      _loadRecommendations();
     });
+  }
+
+  Future<List<ClientServiceRecommendation>> _loadRecommendationData() async {
+    final injected = widget.loadRecommendations;
+    if (injected != null) return injected();
+
+    // An injected catalogue is used by offline/widget tests. Do not reach the
+    // backend from those deterministic test surfaces unless recommendations
+    // are injected as well.
+    if (widget.loadServices != null) {
+      return const <ClientServiceRecommendation>[];
+    }
+
+    double? lat;
+    double? lng;
+    try {
+      final permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.always ||
+          permission == LocationPermission.whileInUse) {
+        final position = await Geolocator.getLastKnownPosition();
+        lat = position?.latitude;
+        lng = position?.longitude;
+      }
+    } catch (_) {
+      // Recommendations remain useful from saved/history signals when device
+      // location is unavailable, disabled or unsupported on this platform.
+    }
+
+    return _experience.loadServiceRecommendations(lat: lat, lng: lng);
+  }
+
+  Future<void> _loadRecommendations() async {
+    if (_recommendationsLoading) return;
+    if (mounted) setState(() => _recommendationsLoading = true);
+    try {
+      final recommendations = await _loadRecommendationData();
+      if (mounted) {
+        setState(() => _recommendations = recommendations);
+      }
+    } catch (_) {
+      if (mounted) {
+        setState(
+          () => _recommendations = const <ClientServiceRecommendation>[],
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _recommendationsLoading = false);
+    }
   }
 
   Future<void> _loadSavedItems() async {
@@ -119,9 +178,9 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
     });
     try {
       await next;
-      await _loadSavedItems();
+      await Future.wait([_loadSavedItems(), _loadRecommendations()]);
     } catch (_) {
-      // The FutureBuilder presents the retryable error state.
+      // The FutureBuilder presents the retryable catalogue error state.
     }
   }
 
@@ -232,6 +291,44 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
                     ),
                 ],
               ),
+              if (query.isEmpty &&
+                  _family == _ServiceFamily.all &&
+                  _recommendations.isNotEmpty) ...[
+                const SizedBox(height: 20),
+                const PngSectionTitle(
+                  title: 'For you',
+                  subtitle: 'From saved items, recent activity and services available around you.',
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  height: 148 + ((textScale - 1).clamp(0, 1) * 24),
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _recommendations.length,
+                    separatorBuilder: (_, _) => const SizedBox(width: 10),
+                    itemBuilder: (context, index) {
+                      final recommendation = _recommendations[index];
+                      final visual = _visualFor(recommendation.categorySlug);
+                      return _RecommendationCard(
+                        title: recommendation.categoryName,
+                        reason: recommendation.reason,
+                        distanceKm: recommendation.distanceKm,
+                        icon: visual.icon,
+                        accent: visual.accent,
+                        surface: visual.surface,
+                        onTap: () {
+                          for (final service in services) {
+                            if (service.id == recommendation.categoryId) {
+                              _openService(service);
+                              return;
+                            }
+                          }
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ],
               const SizedBox(height: 20),
               PngSectionTitle(
                 title: 'Services',
@@ -517,6 +614,95 @@ enum _ServiceFamily {
     book => const {'venue-booking', 'events'}.contains(slug),
     people => const {'specialist-services', 'general-labour'}.contains(slug),
   };
+}
+
+class _RecommendationCard extends StatelessWidget {
+  const _RecommendationCard({
+    required this.title,
+    required this.reason,
+    required this.distanceKm,
+    required this.icon,
+    required this.accent,
+    required this.surface,
+    required this.onTap,
+  });
+
+  final String title;
+  final String reason;
+  final double? distanceKm;
+  final IconData icon;
+  final Color accent;
+  final Color surface;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final distance = distanceKm;
+    final distanceLabel = distance == null
+        ? null
+        : distance < 1
+        ? '${(distance * 1000).round()} m away'
+        : '${distance.toStringAsFixed(distance < 10 ? 1 : 0)} km away';
+
+    return SizedBox(
+      width: 176,
+      child: Material(
+        color: surface,
+        borderRadius: BorderRadius.circular(20),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  radius: 20,
+                  backgroundColor: Colors.white.withValues(alpha: 0.82),
+                  child: Icon(icon, color: accent),
+                ),
+                const Spacer(),
+                Text(
+                  title,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w900,
+                    height: 1.05,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  reason,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: accent,
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                if (distanceLabel != null) ...[
+                  const SizedBox(height: 3),
+                  Text(
+                    distanceLabel,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: WantokColors.muted,
+                      fontSize: 10.5,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _ServicePromiseCard extends StatelessWidget {

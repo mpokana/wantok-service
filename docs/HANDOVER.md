@@ -6,7 +6,7 @@
 
 ## Resume here
 
-The current working phase is **CX1 client-experience completion**; the **CX1 gate remains open before T2.4**. Delegated booking is checkpointed across every currently implemented client service family, including scheduled Boat/Ship passenger transport. The current checkpoint extends Saved controls from service categories to providers, reservable resources/venues and events, and adds managed private client-media uploads for profile avatars and review photos. Run:
+The current working phase is **CX1 client-experience completion**; the **CX1 gate remains open before T2.4**. Delegated booking is checkpointed across every currently implemented client service family, including scheduled Boat/Ship passenger transport. The current checkpoint includes Saved controls across discoverable entities, managed private client media, and privacy-aware **For you** service recommendations derived from the signed-in customer’s saved items, service history and optional already-authorised cached location. Run:
 
 `git log -1 --oneline`
 
@@ -120,7 +120,7 @@ Checkpointed platform includes:
 
 - **Client navigation is locked as Home · Services · Track · Wallet · Inbox.** Do not rename it to Grab-style Discover/Activity/Payment/Messages.
 - Home search selects Services; profile route has an app bar/back button.
-- Services owns rich discovery: family filters/search/clear, safe loading/error/empty states, Saved shortcut and per-category bookmark controls.
+- Services owns rich discovery: family filters/search/clear, safe loading/error/empty states, Saved shortcut and per-category bookmark controls, plus a compact **For you** strip scored from saved items, recent service history and optional cached location. Recommendation opt-out is enforced server-side; the app does not request location permission or trigger live GPS solely for recommendations.
 - Account/Profile now includes bio/avatar URL foundation, privacy/share controls, linked-account management, Saved, Trusted people, My reviews and separate Business/Vendor profile presentation under one login.
 - Supabase identity linking is used for Google/Facebook; no parallel customer account is created by UI design.
 - owner-scoped `client_saved_items` and secured bookmark RPC validate that only discoverable entities can be saved.
@@ -129,7 +129,7 @@ Checkpointed platform includes:
 - Track offers Review/Edit review for eligible completed generic service bookings and retains specialised ride/order/event/water shortcuts.
 - Wallet remains preview-only but now frames Top up/Scan/Send/Receive, verification, PNG-oriented planned services and future transaction history. No money movement exists.
 - retry failures stay in the view rather than escaping callbacks; Events/departures/order/registration/water-trip failures do not masquerade as empty records.
-- 31 focused client regressions plus the configuration smoke total 32 app tests; they use in-memory/unconfigured backends and do not replace local account data.
+- 32 focused client regressions plus the configuration smoke total 33 app tests; they use in-memory/unconfigured backends and do not replace local account data.
 - entry/back navigation coverage includes 11 categories; Taxi map/location/runtime behaviour and the new CX1A surfaces still require live QA.
 - do not call CX1 complete from widget/database tests alone; see its evidence document.
 
@@ -138,11 +138,11 @@ Checkpointed platform includes:
 At this checkpoint:
 
 - all shared Flutter packages: analysis PASS
-- Wantok app: analysis + **32 tests PASS** (31 client regressions + configuration smoke)
+- Wantok app: analysis + **33 tests PASS** (32 client regressions + configuration smoke)
 - required `scripts/flutter/check.ps1`: PASS after clearing read-only attributes on generated test assets only
 - Wantok Operations Admin: analysis + smoke test PASS
 - Wantok Technical Control: analysis + smoke test PASS
-- database: **23 files / 539 pgTAP tests PASS** (all fixtures roll back)
+- database: **24 files / 551 pgTAP tests PASS** (all fixtures roll back)
 - Android visual QA was last recorded for the earlier client shell; CX1A Account/Services bookmarks/Track reviews/Wallet changes require fresh signed-in client evidence
 - production Docker Compose parse PASS was recorded at T2.2; deployment files unchanged
 - `git diff --check`: PASS
@@ -188,11 +188,11 @@ Technical Control development server may be run on:
 
 T2.3 checkpoint: **`46d6208`**; prior CX1 reliability/discovery checkpoint: **`0c33a37`**. Required sequence: **finish CX1A/CX1 evidence → T2.4 diagnostics/logs/jobs**.
 
-CX1 now covers reliability, richer client account/profile features, delegated booking across every currently implemented client service family, Saved controls for service categories/providers/resources/events, and managed private avatar/review-photo uploads. The navigation remains **Home · Services · Track · Wallet · Inbox**. Remaining CX1 work includes recommendation/destination work and live QA of the new Account/Services/Track/Wallet/media surfaces. Achievements and social follows remain later within CX1 after the core workflows are stable. See `docs/ROADMAP.md` and `docs/CX1_CLIENT_EXPERIENCE_GATE.md`.
+CX1 now covers reliability, richer client account/profile features, delegated booking across every currently implemented client service family, Saved controls for service categories/providers/resources/events, managed private avatar/review-photo uploads, and privacy-aware service recommendations from real customer signals. The navigation remains **Home · Services · Track · Wallet · Inbox**. Remaining core CX1 work includes service-backed PNG place/destination discovery and live QA of the new Account/Services/Track/Wallet/media/recommendation surfaces. Achievements and social follows remain later within CX1 after the core workflows are stable. See `docs/ROADMAP.md` and `docs/CX1_CLIENT_EXPERIENCE_GATE.md`.
 
 Preserve the local development accounts, roles and data. Do not reset/reseed Supabase or replace working modules/configuration. At resume there are two local auth users/profiles and one local `tech_platform_admin` grant.
 
-T2.4 remains deferred until CX1 passes. CX1 migrations `20261006130000_cx1_client_experience_foundations.sql`, `20261006140000_delegated_booking_foundation.sql`, `20261006141000_taxi_delegated_booking.sql`, `20261006142000_event_delegated_booking.sql`, `20261006143000_commerce_delegated_booking.sql`, `20261006144000_water_delegated_booking.sql`, `20261006145000_client_media_storage.sql`, and `20261007015000_client_media_ownership_hardening.sql` are already applied locally; do not reset/reseed Supabase to replay them. Integrations and high-risk approvals follow later.
+T2.4 remains deferred until CX1 passes. CX1 migrations `20261006130000_cx1_client_experience_foundations.sql`, `20261006140000_delegated_booking_foundation.sql`, `20261006141000_taxi_delegated_booking.sql`, `20261006142000_event_delegated_booking.sql`, `20261006143000_commerce_delegated_booking.sql`, `20261006144000_water_delegated_booking.sql`, `20261006145000_client_media_storage.sql`, `20261007015000_client_media_ownership_hardening.sql`, `20261007062000_client_service_recommendations.sql`, and `20261007063000_client_recommendation_acl_hardening.sql` are already applied locally; do not reset/reseed Supabase to replay them. Integrations and high-risk approvals follow later.
 
 Do not begin Wantok Pay transaction movement until payment-rail and settlement decisions are made.
 

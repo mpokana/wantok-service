@@ -33,6 +33,41 @@ class SavedClientItem {
   }
 }
 
+class ClientServiceRecommendation {
+  const ClientServiceRecommendation({
+    required this.categoryId,
+    required this.categorySlug,
+    required this.categoryName,
+    required this.reason,
+    required this.score,
+    required this.distanceKm,
+  });
+
+  final String categoryId;
+  final String categorySlug;
+  final String categoryName;
+  final String reason;
+  final int score;
+  final double? distanceKm;
+
+  factory ClientServiceRecommendation.fromMap(Map<String, dynamic> row) {
+    final distance = row['distance_km'];
+    final score = row['score'];
+    return ClientServiceRecommendation(
+      categoryId: row['category_id'] as String,
+      categorySlug: row['category_slug'] as String? ?? '',
+      categoryName: row['category_name'] as String? ?? 'Wantok service',
+      reason: row['reason'] as String? ?? 'Recommended for you',
+      score: score is num
+          ? score.toInt()
+          : int.tryParse(score?.toString() ?? '') ?? 0,
+      distanceKm: distance is num
+          ? distance.toDouble()
+          : double.tryParse(distance?.toString() ?? ''),
+    );
+  }
+}
+
 class TrustedPerson {
   const TrustedPerson({
     required this.id,
@@ -320,6 +355,22 @@ class ClientExperienceRepository {
         'p_saved': saved,
       },
     );
+  }
+
+  Future<List<ClientServiceRecommendation>> loadServiceRecommendations({
+    double? lat,
+    double? lng,
+    int limit = 8,
+  }) async {
+    final result = await _client.rpc(
+      'list_client_service_recommendations',
+      params: {'p_lat': lat, 'p_lng': lng, 'p_limit': limit.clamp(1, 20)},
+    );
+
+    return (result as List<dynamic>)
+        .cast<Map<String, dynamic>>()
+        .map(ClientServiceRecommendation.fromMap)
+        .toList(growable: false);
   }
 
   Future<List<TrustedPerson>> loadTrustedPeople({
