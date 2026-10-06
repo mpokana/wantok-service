@@ -6,7 +6,7 @@
 
 ## Resume here
 
-The current safe checkpoint is **T2.2 Five-tab Client Navigation Polish**. This file is committed with that checkpoint; run:
+The current safe checkpoint is **T2.3 Module Health and Dependency Reporting**. This file is committed with that checkpoint; run:
 
 `git log -1 --oneline`
 
@@ -43,6 +43,7 @@ Checkpointed platform includes:
 - T2.1 Technical Staff & Module Access Management
 - T2.2 versioned typed module configuration and Technical Control editor
 - T2.2 PNG-rich client experience polish across Home, Food/Groceries, Track, Inbox and Wantok Pay preview
+- T2.3 module health/dependency reporting, scoped probe execution and impact previews
 
 ### Technical Control T1
 
@@ -89,7 +90,7 @@ Checkpointed platform includes:
 - product-facing name standardised as **Wantok Services** while native package IDs remain unchanged
 - PNG scenic visual language implemented with lightweight custom Flutter painters: mountain forms, tropical accents and abstract bird-of-paradise treatment
 - bilum-inspired custom bottom navigation replaces Material/Grab-like navigation
-- client navigation is **Home · Track · Inbox · Me**
+- original four-tab layout was superseded by **Home · Services · Track · Wallet · Inbox**
 - richer Home hierarchy with scenic hero, service discovery, Wantok Pay preview strip, service spotlights and PNG purpose banner
 - Food/Groceries now use scenic commerce heroes, search/filter surfaces and richer local-vendor discovery cards
 - Track and Inbox have dedicated scenic headers and polished empty states
@@ -102,6 +103,18 @@ Checkpointed platform includes:
 - Account/Profile moved out of primary navigation and remains accessible from the Home hero profile button
 - live Android emulator QA completed for Home, Services, Wallet and Account/Profile with no visible bottom-navigation overflow
 
+### T2.3 health and dependencies
+
+- explicit acyclic dependency graph with required/optional failure effects
+- reported health from registered probes; effective health includes module state and transitive dependencies
+- current report/state stores and status transition history
+- built-in `control.state` probe reports control-plane state only, not end-to-end runtime availability
+- external reporter contract exists; runtime/integration adapters remain later work
+- `module.view` reads, separate `module.health_run` execution; auditors cannot run probes
+- dependency identities/descriptions outside visible scope are redacted
+- Technical Control Health & dependencies page and pre-action impact confirmations
+- four migrations `20261006120000` through `20261006123000` already applied locally; do not replay/reset
+
 ## Validation baseline
 
 At this checkpoint:
@@ -110,9 +123,9 @@ At this checkpoint:
 - Wantok app: analysis + smoke test PASS
 - Wantok Operations Admin: analysis + smoke test PASS
 - Wantok Technical Control: analysis + smoke test PASS
-- database: **15 files / 316 pgTAP tests PASS**
-- Android emulator rebuilt; Home, Food, Track and Inbox PNG-rich surfaces visually verified
-- Docker Compose production configuration parse: PASS
+- database: **16 files / 364 pgTAP tests PASS** (all fixtures roll back)
+- Android visual QA was last recorded at T2.2; CX1 requires fresh client evidence
+- production Docker Compose parse PASS was recorded at T2.2; deployment files unchanged
 - `git diff --check`: PASS
 
 ## Development environment
@@ -152,17 +165,15 @@ Technical Control development server may be run on:
 
 ## Next phase
 
-**T2.3 — Module Health and Dependency Reporting**
+**CX1 — Client Experience Completion Gate**, before **T2.4**.
 
-Recommended next work:
+Required sequence: **checkpoint T2.3 → complete CX1 → T2.4 diagnostics/logs/jobs**.
 
-1. define explicit module dependencies;
-2. add module health probes/reporters;
-3. record health history and degraded/down transitions;
-4. show dependency impact before maintenance/disable actions;
-5. build Technical Control health and dependency views.
+CX1 verifies the five client tabs, Home profile access, service search/entry/back journeys, loading/error/retry/empty states, narrow screens/enlarged text, accessible controls, Kina formatting and the Wallet preview boundary. Resolve misleading or inactive controls and record focused regression/QA evidence before calling the gate complete. See `docs/ROADMAP.md` for the checklist and `docs/CX1_CLIENT_EXPERIENCE_GATE.md` for acceptance evidence and initial findings.
 
-After T2.3 continue with diagnostics/log adapters, jobs/queues, integrations and high-risk approvals.
+Preserve the local development accounts, roles and data. Do not reset/reseed Supabase or replace working modules/configuration. At resume there are two local auth users/profiles and one local `tech_platform_admin` grant.
+
+T2.4 remains deferred until CX1 passes. Integrations and high-risk approvals follow later.
 
 Do not begin Wantok Pay transaction movement until payment-rail and settlement decisions are made.
 

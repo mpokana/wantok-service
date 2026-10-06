@@ -60,7 +60,7 @@ select is(
 
 select is(
   (select count(*)::integer from public.technical_permissions),
-  14,
+  15,
   'technical permission catalogue contains module and platform capabilities'
 );
 

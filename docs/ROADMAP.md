@@ -85,15 +85,35 @@
 - [x] move Account/Profile access to Home hero profile button
 - [x] emulator QA for five-tab layout, Services, Wallet and Account/Profile
 
-## T2.3 — Module health and dependency reporting — NEXT
+## T2.3 — Module health and dependency reporting — COMPLETE
 
-- [ ] module dependency registry
-- [ ] health reporters/probes
-- [ ] health history
-- [ ] dependency-impact views
-- [ ] maintenance/degraded-state presentation
+- [x] acyclic module dependency registry and transitive health evaluation
+- [x] registered health reporters/probes and secured control-state probe execution
+- [x] reported/effective health state and transition history
+- [x] dependency-impact views before disable/maintenance actions
+- [x] maintenance/degraded-state presentation in Technical Control
+- [x] separate `module.health_run` permission; auditors remain read-only
+- [x] restricted dependency identity/description privacy and pgTAP coverage
 
-## T2.4 — Diagnostics, logs and jobs
+## CX1 — Client Experience Completion Gate — NEXT
+
+Required sequence: **T2.3 checkpoint → CX1 → T2.4**. T2.4 must wait until the client gate is completed with recorded evidence.
+
+- [ ] verify Home / Services / Track / Wallet / Inbox and Home profile access
+- [ ] verify service discovery/search and supported service entry/back journeys
+- [ ] resolve misleading or inactive controls; label future features clearly
+- [ ] verify loading, error/retry, empty and no-search-match states
+- [ ] verify narrow-screen layouts, enlarged text and accessible navigation
+- [ ] preserve Kina (K) amounts and Wantok Pay preview-only boundary
+- [ ] verify Client/Vendor authority boundaries without exposing administration
+- [ ] add focused client regression coverage and record QA evidence/remaining limits
+- [ ] full checkpoint validation, living documents and clean Git checkpoint
+
+Acceptance evidence and initial findings: `docs/CX1_CLIENT_EXPERIENCE_GATE.md`.
+
+Use existing local development accounts/data. No Supabase reset, reseed, account replacement or payment movement is part of CX1.
+
+## T2.4 — Diagnostics, logs and jobs — AFTER CX1
 
 - [ ] diagnostics adapters
 - [ ] central/module log adapters

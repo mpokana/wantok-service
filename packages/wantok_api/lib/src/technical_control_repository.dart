@@ -223,6 +223,230 @@ class TechnicalConfigField {
   }
 }
 
+class TechnicalModuleHealth {
+  const TechnicalModuleHealth({
+    required this.moduleKey,
+    required this.reportedStatus,
+    required this.effectiveStatus,
+    required this.lastReportAt,
+    required this.lastEvaluatedAt,
+    required this.summary,
+  });
+
+  final String moduleKey;
+  final String reportedStatus;
+  final String effectiveStatus;
+  final DateTime? lastReportAt;
+  final DateTime? lastEvaluatedAt;
+  final String? summary;
+
+  factory TechnicalModuleHealth.fromMap(Map<String, dynamic> row) {
+    return TechnicalModuleHealth(
+      moduleKey: row['module_key'] as String,
+      reportedStatus: row['reported_status'] as String? ?? 'unknown',
+      effectiveStatus: row['effective_status'] as String? ?? 'unknown',
+      lastReportAt: _dateTime(row['last_report_at']),
+      lastEvaluatedAt: _dateTime(row['last_evaluated_at']),
+      summary: row['summary'] as String?,
+    );
+  }
+}
+
+class TechnicalHealthProbe {
+  const TechnicalHealthProbe({
+    required this.probeKey,
+    required this.name,
+    required this.description,
+    required this.probeKind,
+    required this.staleAfterSeconds,
+    required this.isRequired,
+    required this.isEnabled,
+    required this.currentStatus,
+    required this.currentSummary,
+    required this.observedAt,
+    required this.isStale,
+    required this.canRun,
+  });
+
+  final String probeKey;
+  final String name;
+  final String? description;
+  final String probeKind;
+  final int? staleAfterSeconds;
+  final bool isRequired;
+  final bool isEnabled;
+  final String currentStatus;
+  final String? currentSummary;
+  final DateTime? observedAt;
+  final bool isStale;
+  final bool canRun;
+
+  bool get isBuiltInRunnable => probeKind == 'control_state';
+
+  factory TechnicalHealthProbe.fromMap(Map<String, dynamic> row) {
+    return TechnicalHealthProbe(
+      probeKey: row['probe_key'] as String,
+      name: row['name'] as String,
+      description: row['description'] as String?,
+      probeKind: row['probe_kind'] as String,
+      staleAfterSeconds: row['stale_after_seconds'] as int?,
+      isRequired: row['is_required'] as bool? ?? false,
+      isEnabled: row['is_enabled'] as bool? ?? false,
+      currentStatus: row['current_status'] as String? ?? 'unknown',
+      currentSummary: row['current_summary'] as String?,
+      observedAt: _dateTime(row['observed_at']),
+      isStale: row['is_stale'] as bool? ?? true,
+      canRun: row['can_run'] as bool? ?? false,
+    );
+  }
+}
+
+class TechnicalModuleDependency {
+  const TechnicalModuleDependency({
+    required this.moduleKey,
+    required this.name,
+    required this.isVisible,
+    required this.dependencyType,
+    required this.failureEffect,
+    required this.description,
+    required this.isEnabled,
+    required this.maintenanceMode,
+    required this.reportedStatus,
+    required this.effectiveStatus,
+    required this.lastReportAt,
+  });
+
+  final String? moduleKey;
+  final String? name;
+  final bool isVisible;
+  final String dependencyType;
+  final String failureEffect;
+  final String? description;
+  final bool? isEnabled;
+  final bool? maintenanceMode;
+  final String? reportedStatus;
+  final String? effectiveStatus;
+  final DateTime? lastReportAt;
+
+  factory TechnicalModuleDependency.fromMap(Map<String, dynamic> row) {
+    return TechnicalModuleDependency(
+      moduleKey: row['dependency_module_key'] as String?,
+      name: row['dependency_name'] as String?,
+      isVisible: row['is_visible'] as bool? ?? false,
+      dependencyType: row['dependency_type'] as String? ?? 'required',
+      failureEffect: row['failure_effect'] as String? ?? 'degraded',
+      description: row['description'] as String?,
+      isEnabled: row['is_enabled'] as bool?,
+      maintenanceMode: row['maintenance_mode'] as bool?,
+      reportedStatus: row['reported_status'] as String?,
+      effectiveStatus: row['effective_status'] as String?,
+      lastReportAt: _dateTime(row['last_report_at']),
+    );
+  }
+}
+
+class TechnicalHealthHistoryEntry {
+  const TechnicalHealthHistoryEntry({
+    required this.id,
+    required this.previousReportedStatus,
+    required this.reportedStatus,
+    required this.previousEffectiveStatus,
+    required this.effectiveStatus,
+    required this.transitionReason,
+    required this.sourceProbeKey,
+    required this.summary,
+    required this.observedAt,
+    required this.recordedAt,
+  });
+
+  final int id;
+  final String? previousReportedStatus;
+  final String reportedStatus;
+  final String? previousEffectiveStatus;
+  final String effectiveStatus;
+  final String transitionReason;
+  final String? sourceProbeKey;
+  final String? summary;
+  final DateTime? observedAt;
+  final DateTime recordedAt;
+
+  factory TechnicalHealthHistoryEntry.fromMap(Map<String, dynamic> row) {
+    return TechnicalHealthHistoryEntry(
+      id: row['id'] as int? ?? 0,
+      previousReportedStatus: row['previous_reported_status'] as String?,
+      reportedStatus: row['reported_status'] as String? ?? 'unknown',
+      previousEffectiveStatus: row['previous_effective_status'] as String?,
+      effectiveStatus: row['effective_status'] as String? ?? 'unknown',
+      transitionReason: row['transition_reason'] as String? ?? 'unknown',
+      sourceProbeKey: row['source_probe_key'] as String?,
+      summary: row['summary'] as String?,
+      observedAt: _dateTime(row['observed_at']),
+      recordedAt:
+          _dateTime(row['recorded_at']) ??
+          DateTime.fromMillisecondsSinceEpoch(0),
+    );
+  }
+}
+
+class TechnicalImpactedModule {
+  const TechnicalImpactedModule({
+    required this.moduleKey,
+    required this.name,
+    required this.depth,
+    required this.failureEffect,
+    required this.path,
+  });
+
+  final String moduleKey;
+  final String name;
+  final int depth;
+  final String failureEffect;
+  final List<String> path;
+
+  factory TechnicalImpactedModule.fromMap(Map<String, dynamic> row) {
+    return TechnicalImpactedModule(
+      moduleKey: row['module_key'] as String,
+      name: row['name'] as String,
+      depth: row['depth'] as int? ?? 1,
+      failureEffect: row['failure_effect'] as String? ?? 'degraded',
+      path: ((row['path'] as List<dynamic>?) ?? const <dynamic>[])
+          .map((value) => value.toString())
+          .toList(growable: false),
+    );
+  }
+}
+
+class TechnicalModuleImpact {
+  const TechnicalModuleImpact({
+    required this.moduleKey,
+    required this.impactedCount,
+    required this.visibleImpacted,
+    required this.hiddenImpactedCount,
+  });
+
+  final String moduleKey;
+  final int impactedCount;
+  final List<TechnicalImpactedModule> visibleImpacted;
+  final int hiddenImpactedCount;
+
+  factory TechnicalModuleImpact.fromMap(Map<String, dynamic> row) {
+    final raw =
+        (row['visible_impacted'] as List<dynamic>?) ?? const <dynamic>[];
+    return TechnicalModuleImpact(
+      moduleKey: row['module_key'] as String? ?? '',
+      impactedCount: row['impacted_count'] as int? ?? 0,
+      visibleImpacted: raw
+          .map(
+            (value) => TechnicalImpactedModule.fromMap(
+              Map<String, dynamic>.from(value as Map),
+            ),
+          )
+          .toList(growable: false),
+      hiddenImpactedCount: row['hidden_impacted_count'] as int? ?? 0,
+    );
+  }
+}
+
 class TechnicalControlRepository {
   const TechnicalControlRepository();
 
@@ -336,6 +560,70 @@ class TechnicalControlRepository {
     return _maps(result)
         .map(TechnicalConfigField.fromMap)
         .toList(growable: false);
+  }
+
+  Future<TechnicalModuleHealth> loadModuleHealth(String moduleKey) async {
+    final result = await WantokBackend.client.rpc(
+      'get_technical_module_health',
+      params: {'p_module_key': moduleKey},
+    );
+    return TechnicalModuleHealth.fromMap(_singleMap(result));
+  }
+
+  Future<List<TechnicalHealthProbe>> loadModuleHealthProbes(
+    String moduleKey,
+  ) async {
+    final result = await WantokBackend.client.rpc(
+      'list_technical_module_health_probes',
+      params: {'p_module_key': moduleKey},
+    );
+    return _maps(result)
+        .map(TechnicalHealthProbe.fromMap)
+        .toList(growable: false);
+  }
+
+  Future<TechnicalModuleHealth> runModuleHealthProbe({
+    required String moduleKey,
+    required String probeKey,
+  }) async {
+    final result = await WantokBackend.client.rpc(
+      'run_technical_module_health_probe',
+      params: {'p_module_key': moduleKey, 'p_probe_key': probeKey},
+    );
+    return TechnicalModuleHealth.fromMap(_singleMap(result));
+  }
+
+  Future<List<TechnicalModuleDependency>> loadModuleDependencies(
+    String moduleKey,
+  ) async {
+    final result = await WantokBackend.client.rpc(
+      'list_technical_module_dependencies',
+      params: {'p_module_key': moduleKey},
+    );
+    return _maps(result)
+        .map(TechnicalModuleDependency.fromMap)
+        .toList(growable: false);
+  }
+
+  Future<List<TechnicalHealthHistoryEntry>> loadModuleHealthHistory(
+    String moduleKey, {
+    int limit = 50,
+  }) async {
+    final result = await WantokBackend.client.rpc(
+      'list_technical_module_health_history',
+      params: {'p_module_key': moduleKey, 'p_limit': limit},
+    );
+    return _maps(result)
+        .map(TechnicalHealthHistoryEntry.fromMap)
+        .toList(growable: false);
+  }
+
+  Future<TechnicalModuleImpact> loadModuleImpact(String moduleKey) async {
+    final result = await WantokBackend.client.rpc(
+      'get_technical_module_state_impact',
+      params: {'p_module_key': moduleKey},
+    );
+    return TechnicalModuleImpact.fromMap(_jsonMap(result));
   }
 
   Future<int> updateModuleConfiguration({

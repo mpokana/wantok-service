@@ -5,6 +5,7 @@ import 'package:wantok_ui/wantok_ui.dart';
 
 import 'technical_access_page.dart';
 import 'technical_configuration_page.dart';
+import 'technical_health_page.dart';
 
 class TechnicalShell extends StatefulWidget {
   const TechnicalShell({required this.email, super.key});
@@ -30,8 +31,11 @@ class _TechnicalShellState extends State<TechnicalShell> {
   }
 
   Future<void> _refresh() async {
-    setState(() => _future = _repository.loadModules());
-    await _future;
+    final next = _repository.loadModules();
+    setState(() {
+      _future = next;
+    });
+    await next;
   }
 
   Future<void> _setModuleState(
@@ -64,32 +68,131 @@ class _TechnicalShellState extends State<TechnicalShell> {
     }
   }
 
+  Future<bool> _confirmImpactAction(
+    TechnicalModuleAccess module, {
+    required String title,
+    required String actionLabel,
+    required String description,
+  }) async {
+    TechnicalModuleImpact impact;
+    try {
+      impact = await _repository.loadModuleImpact(module.moduleKey);
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Could not load dependency impact. ${_friendlyError(error)}',
+            ),
+          ),
+        );
+      }
+      return false;
+    }
+
+    if (!mounted) return false;
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 560),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(description),
+              const SizedBox(height: 14),
+              if (impact.impactedCount == 0)
+                const Text(
+                  'No dependent modules are registered.',
+                  style: TextStyle(fontWeight: FontWeight.w800),
+                )
+              else ...[
+                Text(
+                  '${impact.impactedCount} dependent module(s) may be affected.',
+                  style: const TextStyle(fontWeight: FontWeight.w900),
+                ),
+                const SizedBox(height: 8),
+                for (final item in impact.visibleImpacted.take(8))
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.account_tree_outlined, size: 17),
+                        const SizedBox(width: 7),
+                        Expanded(
+                          child: Text('${item.name} — ${item.failureEffect}'),
+                        ),
+                      ],
+                    ),
+                  ),
+                if (impact.visibleImpacted.length > 8)
+                  Text(
+                    '+ ${impact.visibleImpacted.length - 8} more visible module(s)',
+                    style: const TextStyle(color: WantokColors.muted),
+                  ),
+                if (impact.hiddenImpactedCount > 0)
+                  Text(
+                    '${impact.hiddenImpactedCount} additional impacted module(s) are outside your visible technical scope.',
+                    style: const TextStyle(color: WantokColors.muted),
+                  ),
+              ],
+              const SizedBox(height: 12),
+              const Text(
+                'Review Health & dependencies for the full technical context before proceeding.',
+                style: TextStyle(color: WantokColors.muted),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(actionLabel),
+          ),
+        ],
+      ),
+    );
+
+    return confirmed == true;
+  }
+
   Future<void> _toggleEnabled(TechnicalModuleAccess module) async {
     if (module.isEnabled) {
-      final confirmed = await showDialog<bool>(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text('Disable ${module.name}?'),
-          content: const Text(
-            'Disabling a module can affect users and dependent services. '
-            'Only continue when the operational impact is understood.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Cancel'),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: const Text('Disable module'),
-            ),
-          ],
-        ),
+      final confirmed = await _confirmImpactAction(
+        module,
+        title: 'Disable ${module.name}?',
+        actionLabel: 'Disable module',
+        description:
+            'Disabling this module makes its effective health down and may '
+            'degrade or stop dependent modules.',
       );
-      if (confirmed != true) return;
+      if (!confirmed) return;
     }
 
     await _setModuleState(module, enabled: !module.isEnabled);
+  }
+
+  Future<void> _setMaintenance(TechnicalModuleAccess module, bool value) async {
+    if (value) {
+      final confirmed = await _confirmImpactAction(
+        module,
+        title: 'Put ${module.name} into maintenance?',
+        actionLabel: 'Start maintenance',
+        description:
+            'Maintenance intentionally degrades this module and can affect '
+            'services that depend on it.',
+      );
+      if (!confirmed) return;
+    }
+
+    await _setModuleState(module, maintenanceMode: value);
   }
 
   @override
@@ -186,7 +289,7 @@ class _TechnicalShellState extends State<TechnicalShell> {
                 busy: _busyModuleKey == selected.moduleKey,
                 onToggleEnabled: () => _toggleEnabled(selected),
                 onMaintenanceChanged: (value) =>
-                    _setModuleState(selected, maintenanceMode: value),
+                    _setMaintenance(selected, value),
               );
 
         if (wide) {
@@ -696,6 +799,21 @@ class _ModuleWorkspace extends StatelessWidget {
         const SizedBox(height: 14),
         if (module.hasPermission('module.view'))
           _CapabilityCard(
+            icon: Icons.monitor_heart_outlined,
+            title: 'Health & dependencies',
+            description:
+                'Review reported/effective health, registered probes, '
+                'dependency impact and transition history.',
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (context) => TechnicalHealthPage(module: module),
+                ),
+              );
+            },
+          ),
+        if (module.hasPermission('module.view'))
+          _CapabilityCard(
             icon: Icons.tune_outlined,
             title: 'Configuration',
             description: module.hasPermission('module.configure')
@@ -714,7 +832,7 @@ class _ModuleWorkspace extends StatelessWidget {
           const _CapabilityCard(
             icon: Icons.monitor_heart_outlined,
             title: 'Diagnostics',
-            description: 'Diagnostic access is authorised. Health adapters and module probes are the next integration layer.',
+            description: 'Diagnostic access is authorised. Richer diagnostic adapters belong to T2.4; health and dependency reporting is available separately.',
           ),
         if (module.hasPermission('module.logs'))
           const _CapabilityCard(
@@ -866,7 +984,7 @@ class _StateSummary extends StatelessWidget {
           ),
         _StatusChip(
           icon: Icons.monitor_heart_outlined,
-          label: 'Health: ${module.healthStatus}',
+          label: 'Effective health: ${module.healthStatus}',
         ),
         if (module.version != null)
           _StatusChip(icon: Icons.commit_outlined, label: 'v${module.version}'),
