@@ -12,6 +12,7 @@ import '../services/taxi_ride_page.dart';
 import '../services/water_transport_page.dart';
 import 'client_account_tools.dart';
 import 'png_visuals.dart';
+import 'provider_discovery_page.dart';
 
 class ServicesHubPage extends StatefulWidget {
   const ServicesHubPage({
@@ -33,6 +34,7 @@ class ServicesHubPage extends StatefulWidget {
 class _ServicesHubPageState extends State<ServicesHubPage> {
   static const _catalog = CatalogRepository();
   static const _experience = ClientExperienceRepository();
+  static const _providerDiscovery = ProviderDiscoveryRepository();
 
   late Future<List<WantokServiceCategory>> _future;
   final _search = TextEditingController();
@@ -42,6 +44,8 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
       const <ClientServiceRecommendation>[];
   bool _recommendationsLoading = false;
   List<ClientServicePlace> _places = const <ClientServicePlace>[];
+  List<ClientProviderDiscovery> _topProviders =
+      const <ClientProviderDiscovery>[];
   String _query = '';
   _ServiceFamily _family = _ServiceFamily.all;
 
@@ -70,6 +74,7 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
       _loadSavedItems();
       _loadRecommendations();
       _loadPlaces();
+      _loadTopProviders();
     });
   }
 
@@ -133,6 +138,36 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
     } catch (_) {
       if (mounted) setState(() => _places = const <ClientServicePlace>[]);
     }
+  }
+
+  Future<void> _loadTopProviders() async {
+    if (widget.loadServices != null) return;
+    try {
+      final providers = await _providerDiscovery.loadTopProviders(
+        displayLimit: 5,
+      );
+      if (mounted) setState(() => _topProviders = providers);
+    } catch (_) {
+      if (mounted) {
+        setState(() => _topProviders = const <ClientProviderDiscovery>[]);
+      }
+    }
+  }
+
+  void _openProviderSearch() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) => const ProviderDiscoveryPage(),
+      ),
+    );
+  }
+
+  void _openProvider(ClientProviderDiscovery provider) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) => ProviderDetailPage(provider: provider),
+      ),
+    );
   }
 
   Future<void> _loadSavedItems() async {
@@ -262,6 +297,7 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
         _loadSavedItems(),
         _loadRecommendations(),
         _loadPlaces(),
+        _loadTopProviders(),
       ]);
     } catch (_) {
       // The FutureBuilder presents the retryable catalogue error state.
@@ -375,6 +411,64 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
                     ),
                 ],
               ),
+              if (widget.loadServices == null &&
+                  query.isEmpty &&
+                  _family == _ServiceFamily.all) ...[
+                const SizedBox(height: 20),
+                PngSectionTitle(
+                  title: 'Find providers',
+                  subtitle: 'Search approved people and businesses by provider, service or category.',
+                  trailing: TextButton.icon(
+                    onPressed: _openProviderSearch,
+                    icon: const Icon(Icons.manage_search_rounded),
+                    label: const Text('Search'),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                if (_topProviders.isEmpty)
+                  Card(
+                    child: ListTile(
+                      leading: const CircleAvatar(
+                        backgroundColor: Color(0xFFE2F3EA),
+                        child: Icon(
+                          Icons.storefront_outlined,
+                          color: WantokColors.primaryDark,
+                        ),
+                      ),
+                      title: const Text(
+                        'Find a Wantok provider',
+                        style: TextStyle(fontWeight: FontWeight.w900),
+                      ),
+                      subtitle: const Text(
+                        'Ratings, review counts and approved services are shown in provider search.',
+                      ),
+                      trailing: const Icon(Icons.chevron_right_rounded),
+                      onTap: _openProviderSearch,
+                    ),
+                  )
+                else ...[
+                  const PngSectionTitle(
+                    title: 'Top Wantoks',
+                    subtitle: 'A rotating organic selection from highly rated eligible providers.',
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: 142 + ((textScale - 1).clamp(0, 1) * 22),
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _topProviders.length,
+                      separatorBuilder: (_, _) => const SizedBox(width: 10),
+                      itemBuilder: (context, index) {
+                        final provider = _topProviders[index];
+                        return _TopProviderCard(
+                          provider: provider,
+                          onTap: () => _openProvider(provider),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ],
               if (query.isEmpty &&
                   _family == _ServiceFamily.all &&
                   _recommendations.isNotEmpty) ...[
@@ -690,6 +784,94 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
     'taxi-ride' || 'delivery' => 'FAST',
     _ => null,
   };
+}
+
+class _TopProviderCard extends StatelessWidget {
+  const _TopProviderCard({required this.provider, required this.onTap});
+
+  final ClientProviderDiscovery provider;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final category = provider.categoryNames.isEmpty
+        ? 'Wantok provider'
+        : provider.categoryNames.first;
+    final rating = provider.ratingCount == 0
+        ? 'New'
+        : '${provider.ratingAverage.toStringAsFixed(1)} (${provider.ratingCount})';
+
+    return SizedBox(
+      width: 210,
+      child: Card(
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(20),
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const CircleAvatar(
+                      radius: 20,
+                      backgroundColor: Color(0xFFE2F3EA),
+                      child: Icon(
+                        Icons.storefront_rounded,
+                        color: WantokColors.primaryDark,
+                      ),
+                    ),
+                    const Spacer(),
+                    const Icon(
+                      Icons.verified_rounded,
+                      color: WantokColors.primary,
+                      size: 18,
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  provider.displayName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontWeight: FontWeight.w900),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  category,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: WantokColors.muted,
+                    fontSize: 12,
+                  ),
+                ),
+                const Spacer(),
+                Row(
+                  children: [
+                    const Icon(
+                      Icons.star_rounded,
+                      color: Color(0xFFE6A100),
+                      size: 17,
+                    ),
+                    const SizedBox(width: 3),
+                    Text(
+                      rating,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w800,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _ServiceVisual {

@@ -22,7 +22,7 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ## FILLER-2026-10-07-01 — Provider & Service Search + Ratings
 
-**Status:** APPROVED — map to CX1F.
+**Status:** CX1F CLIENT FOUNDATION IMPLEMENTED; live Android/Web QA remains.
 
 ### Product intent
 
@@ -150,7 +150,7 @@ Do not silently mix paid ranking into organic rating scores.
 
 ## FILLER-2026-10-07-05 — Wantok AI Agent
 
-**Status:** APPROVED FOUNDATION — map to CX1I; production AI provider/model integration later.
+**Status:** CX1I FOUNDATION IMPLEMENTED; model gateway/tool execution/support triage remain.
 
 ### Client role
 

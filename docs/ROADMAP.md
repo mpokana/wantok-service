@@ -160,14 +160,17 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 
 ### CX1F — Provider & Service Search + Ratings — IN PROGRESS
 
-- [ ] searchable discovery for active verified providers registered on Wantok Services
-- [ ] searchable discovery for approved active provider services across categories
-- [ ] provider/service cards show 1–5 star rating and review count
-- [ ] provider detail/storefront surface shows approved categories/services and business/individual identity
-- [ ] category/location filters use structured service coverage where available
-- [ ] organic top-rated provider/service surfaces use rating quality plus review confidence/relevance rather than raw average alone
-- [ ] rotate/randomise a small display set from the qualified top-ranked pool so the same providers are not permanently fixed
-- [ ] keep paid placement out of organic rating scores
+- [x] searchable discovery for active verified providers registered on Wantok Services
+- [x] provider search matches approved active service titles and categories
+- [x] provider cards show 1–5 star rating and review count
+- [x] provider detail/storefront surface shows approved active services plus business/individual/organisation identity
+- [x] server-side category/province/town filters use structured service coverage where available
+- [x] expose category/province/town filters in the provider-search client UI
+- [x] organic top-rated provider surfaces use rating quality plus review confidence rather than raw average alone
+- [x] daily rotate a small display set from the qualified top-ranked pool so the same providers are not permanently fixed
+- [x] keep paid placement out of organic rating scores
+- [x] Services hub exposes **Find providers** and a compact **Top Wantoks** organic surface
+- [ ] fresh signed-in Android/Web QA of provider search, rating cards, saving providers and provider details
 
 ### CX1G — General Goods Marketplace + Fulfilment — PLANNED
 
@@ -191,15 +194,20 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 - [ ] sponsored placement never changes stored organic ratings or bypasses provider/listing approval
 - [ ] audit campaign activation/status and keep future billing references separate from Wantok Pay transaction movement
 
-### CX1I — Wantok AI Agent Foundation — PLANNED
+### CX1I — Wantok AI Agent Foundation — IN PROGRESS
 
-- [ ] client placeholder/entry point for **Wantok AI Agent** without adding a sixth bottom-navigation tab
-- [ ] provider-agnostic backend AI gateway/API contract with replaceable model/provider configuration
-- [ ] controlled tools for service/provider/product search and authorised booking/order/status lookup
+- [x] client placeholder/entry point for **Wantok AI Agent** on Home without adding a sixth bottom-navigation tab
+- [x] authenticated backend capability contract reports model/chat/handoff state and allowed/restricted tool classes
+- [x] model-backed chat remains disabled until an approved provider/gateway is configured
+- [x] provider-search fallback from Agent examples uses the real CX1F discovery API
+- [x] secured owner-private human-help handoff queue with Support/Operations/Admin visibility/update rights
+- [x] client **Talk to a person** form creates a concise human-follow-up request
+- [ ] provider-agnostic model gateway/Edge Function with replaceable provider/model configuration
+- [ ] controlled AI tools for service/provider/product search and authorised booking/order/status lookup
 - [ ] provider assistance for category selection and drafting service/product listings
 - [ ] assist users when normal search cannot find a service and prepare a controlled request where appropriate
-- [ ] human hand-off to support conversation/case with user consent and concise conversation summary
-- [ ] AI cannot approve providers, move money, grant roles or bypass workflow approvals
+- [ ] support/operations UI for triaging AI handoff requests and returning the conversation to the client
+- [x] AI foundation does not approve providers, move money, grant roles or bypass workflow approvals
 - [ ] Wantok Neurons may later provide intelligence only through this API boundary; Wantok Services remains transaction authority
 
 ### Later CX1 options

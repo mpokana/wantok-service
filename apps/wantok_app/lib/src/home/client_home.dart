@@ -11,6 +11,7 @@ import '../services/taxi_ride_page.dart';
 import '../services/water_transport_page.dart';
 import 'png_visuals.dart';
 import 'services_hub_page.dart';
+import 'wantok_ai_agent_page.dart';
 import 'wantok_pay_preview_page.dart';
 
 class ClientHome extends StatefulWidget {
@@ -92,6 +93,14 @@ class _ClientHomeState extends State<ClientHome> {
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute<void>(
                     builder: (context) => const WantokPayPreviewPage(),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
+              _WantokAiStrip(
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute<void>(
+                    builder: (context) => const WantokAiAgentPage(),
                   ),
                 ),
               ),
@@ -646,6 +655,62 @@ class _ServiceSpotlight extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _WantokAiStrip extends StatelessWidget {
+  const _WantokAiStrip({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: const Color(0xFFF4EFF8),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(20),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(15, 13, 12, 13),
+          child: Row(
+            children: [
+              const CircleAvatar(
+                backgroundColor: Color(0xFFE7DAF0),
+                child: Icon(
+                  Icons.auto_awesome_rounded,
+                  color: WantokColors.purplePay,
+                ),
+              ),
+              const SizedBox(width: 11),
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Wantok AI Agent',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 16,
+                      ),
+                    ),
+                    SizedBox(height: 3),
+                    Text(
+                      'Find services, providers and help — AI chat is being prepared.',
+                      style: TextStyle(color: WantokColors.muted, fontSize: 12),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              const Icon(
+                Icons.chevron_right_rounded,
+                color: WantokColors.purplePay,
+              ),
+            ],
           ),
         ),
       ),

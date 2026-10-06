@@ -6,13 +6,13 @@
 
 ## Resume here
 
-The current working phase is **CX1 client-experience completion**; the **CX1 gate remains open before T2.4**. Delegated booking is checkpointed across every currently implemented client service family, including scheduled Boat/Ship passenger transport. The current checkpoint includes Saved controls across discoverable entities, managed private client media, privacy-aware **For you** recommendations, and service-backed **Explore PNG** province/town discovery. Run:
+The current working phase is **CX1 client-experience completion**; the **CX1 gate remains open before T2.4**. Delegated booking is checkpointed across every currently implemented client service family. The active CX1 extensions now include **CX1F provider/service discovery with ratings** and the **CX1I Wantok AI Agent capability/human-handoff foundation**. General Marketplace/fulfilment (CX1G), sponsored promotion (CX1H) and model-backed AI/tool execution (remaining CX1I) are still planned. Run:
 
 `git log -1 --oneline`
 
 to resolve its exact commit hash.
 
-Before any new task, read root `AGENTS.md`, this file, and `docs/ROADMAP.md`.
+Before any new task, read root `AGENTS.md`, this file, `docs/ROADMAP.md`, and **`docs/ROADMAP_FILLERS.md`**. The filler file carries Mansfield's incremental additions without rewriting the main roadmap.
 
 ## Product identity
 
@@ -44,7 +44,7 @@ Checkpointed platform includes:
 - T2.2 versioned typed module configuration and Technical Control editor
 - T2.2 PNG-rich client experience polish across Home, Food/Groceries, Track, Inbox and Wantok Pay preview
 - T2.3 module health/dependency reporting, scoped probe execution and impact previews
-- CX1 reliability/discovery baseline plus CX1A richer client account/privacy, linked identities, saved service categories, trusted people, booking-linked reviews and richer Wallet preview (gate open)
+- CX1 reliability/discovery baseline plus richer client account/privacy, delegated booking, Saved/media/recommendations/Explore PNG, provider/service search with ratings, Top Wantoks organic discovery, and Wantok AI Agent placeholder/handoff foundation (gate open)
 
 ### Technical Control T1
 
@@ -120,7 +120,7 @@ Checkpointed platform includes:
 
 - **Client navigation is locked as Home · Services · Track · Wallet · Inbox.** Do not rename it to Grab-style Discover/Activity/Payment/Messages.
 - Home search selects Services; profile route has an app bar/back button.
-- Services owns rich discovery: family filters/search/clear, safe loading/error/empty states, Saved controls, a compact **For you** strip scored from real customer signals, and **Explore PNG** place cards generated only from active verified provider coverage. Tapping a covered place shows the service types actually available there. Free-text addresses alone do not manufacture destinations.
+- Services owns rich discovery: family filters/search/clear, safe loading/error/empty states, Saved controls, **For you**, **Explore PNG**, **Find providers**, and **Top Wantoks**. Provider discovery searches active verified providers through approved active services, shows real 1–5 star rating/review counts, exposes approved services on provider detail, supports saving providers, and exposes category/province/town client filters backed by structured server-side coverage. Organic ranking is confidence-aware so a 5.0/1-review provider does not automatically outrank an established high-quality provider. Top Wantoks is a daily rotating subset from the qualified organic pool; paid placement is not mixed into the score.
 - Account/Profile now includes bio/avatar URL foundation, privacy/share controls, linked-account management, Saved, Trusted people, My reviews and separate Business/Vendor profile presentation under one login.
 - Supabase identity linking is used for Google/Facebook; no parallel customer account is created by UI design.
 - owner-scoped `client_saved_items` and secured bookmark RPC validate that only discoverable entities can be saved.
@@ -128,6 +128,7 @@ Checkpointed platform includes:
 - existing `service_reviews` is extended with title/photo URL/visibility fields; review writes use a secured RPC limited to completed customer bookings; provider rating aggregation remains the existing trigger.
 - Track offers Review/Edit review for eligible completed generic service bookings and retains specialised ride/order/event/water shortcuts.
 - Wallet remains preview-only but now frames Top up/Scan/Send/Receive, verification, PNG-oriented planned services and future transaction history. No money movement exists.
+- Home now exposes a **Wantok AI Agent** entry without adding a sixth bottom-navigation tab. The authenticated capability API reports model/chat/handoff state; model chat is deliberately disabled until a controlled gateway is configured. The Agent surface can use real provider-search fallback and can create owner-private human-help requests. Support/Operations/Admin can later triage those requests; live human chat and support triage UI are not yet implemented.
 - retry failures stay in the view rather than escaping callbacks; Events/departures/order/registration/water-trip failures do not masquerade as empty records.
 - 33 focused client regressions plus the configuration smoke total 34 app tests; they use in-memory/unconfigured backends and do not replace local account data.
 - entry/back navigation coverage includes 11 categories; Taxi map/location/runtime behaviour and the new CX1A surfaces still require live QA.
@@ -139,10 +140,10 @@ At this checkpoint:
 
 - all shared Flutter packages: analysis PASS
 - Wantok app: analysis + **34 tests PASS** (33 client regressions + configuration smoke)
-- required `scripts/flutter/check.ps1`: PASS after clearing read-only attributes on generated test assets only
+- required `scripts/flutter/check.ps1`: PASS; Desktop Commander shells on EAGLT02 currently need the standard `PROGRAMFILES(X86)=C:\Program Files (x86)` supplied per process for `flutter test`
 - Wantok Operations Admin: analysis + smoke test PASS
 - Wantok Technical Control: analysis + smoke test PASS
-- database: **25 files / 564 pgTAP tests PASS** (all fixtures roll back)
+- database: **27 files / 598 pgTAP tests PASS** (all fixtures roll back), including confidence-aware provider discovery and Wantok AI capability/handoff security coverage
 - fresh Android signed-in QA on 2026-10-07 confirms **Client → Services** renders the PNG-rich discovery shell, bookmark controls and locked **Home · Services · Track · Wallet · Inbox** navigation without visible overflow; bookmark interaction, recommendation/Explore PNG live data, Account, Track, Wallet and Web evidence remain open
 - production Docker Compose parse PASS was recorded at T2.2; deployment files unchanged
 - `git diff --check`: PASS
@@ -188,11 +189,11 @@ Technical Control development server may be run on:
 
 T2.3 checkpoint: **`46d6208`**; prior CX1 reliability/discovery checkpoint: **`0c33a37`**. Required sequence: **finish CX1A/CX1 evidence → T2.4 diagnostics/logs/jobs**.
 
-CX1 now covers reliability, richer client account/profile features, delegated booking across every currently implemented client service family, Saved controls for service categories/providers/resources/events, managed private avatar/review-photo uploads, privacy-aware recommendations, and service-backed PNG province/town discovery. The navigation remains **Home · Services · Track · Wallet · Inbox**. Remaining core CX1 work is primarily fresh signed-in Android/Web evidence across the new Account/Services/Track/Wallet/media/recommendation/place surfaces and Taxi/location/populated-record checks. Achievements and social follows remain later within CX1 after the core workflows are stable. See `docs/ROADMAP.md` and `docs/CX1_CLIENT_EXPERIENCE_GATE.md`.
+CX1 now covers reliability, richer client account/profile features, delegated booking across every implemented service family, Saved/media/recommendations/PNG discovery, provider/service search with ratings and Top Wantoks organic discovery, plus the Wantok AI Agent placeholder/capability/handoff foundation. The navigation remains **Home · Services · Track · Wallet · Inbox**. Next product additions captured in `docs/ROADMAP_FILLERS.md` are **CX1G General Marketplace + logistics fulfilment**, **CX1H organic/sponsored ranking**, and remaining **CX1I model gateway/tool execution/support triage**. Fresh signed-in Android/Web evidence is still required before CX1 closes.
 
 Preserve the local development accounts, roles and data. Do not reset/reseed Supabase or replace working modules/configuration. At resume there are two local auth users/profiles and one local `tech_platform_admin` grant.
 
-T2.4 remains deferred until CX1 passes. CX1 migrations `20261006130000_cx1_client_experience_foundations.sql`, `20261006140000_delegated_booking_foundation.sql`, `20261006141000_taxi_delegated_booking.sql`, `20261006142000_event_delegated_booking.sql`, `20261006143000_commerce_delegated_booking.sql`, `20261006144000_water_delegated_booking.sql`, `20261006145000_client_media_storage.sql`, `20261007015000_client_media_ownership_hardening.sql`, `20261007062000_client_service_recommendations.sql`, `20261007063000_client_recommendation_acl_hardening.sql`, and `20261007065000_png_service_place_discovery.sql` are already applied locally; do not reset/reseed Supabase to replay them. Integrations and high-risk approvals follow later.
+T2.4 remains deferred until CX1 passes. CX1 migrations `20261006130000_cx1_client_experience_foundations.sql`, `20261006140000_delegated_booking_foundation.sql`, `20261006141000_taxi_delegated_booking.sql`, `20261006142000_event_delegated_booking.sql`, `20261006143000_commerce_delegated_booking.sql`, `20261006144000_water_delegated_booking.sql`, `20261006145000_client_media_storage.sql`, `20261007015000_client_media_ownership_hardening.sql`, `20261007062000_client_service_recommendations.sql`, `20261007063000_client_recommendation_acl_hardening.sql`, `20261007065000_png_service_place_discovery.sql`, `20261007071000_provider_service_discovery.sql`, and `20261007072000_wantok_ai_agent_foundation.sql` are already applied locally; do not reset/reseed Supabase to replay them. General Marketplace, promotions and real AI gateway integrations follow later.
 
 Do not begin Wantok Pay transaction movement until payment-rail and settlement decisions are made.
 
@@ -201,7 +202,7 @@ Do not begin Wantok Pay transaction movement until payment-rail and settlement d
 If a future chat loses context:
 
 1. open this repository;
-2. read `AGENTS.md`, `docs/HANDOVER.md`, `docs/ROADMAP.md`;
+2. read `AGENTS.md`, `docs/HANDOVER.md`, `docs/ROADMAP.md`, and `docs/ROADMAP_FILLERS.md`;
 3. run `git status --short --branch` and `git log -5 --oneline`;
 4. preserve a dirty tree until its purpose is understood;
 5. continue the roadmap rather than reconstructing architecture from memory.

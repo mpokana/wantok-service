@@ -11,4 +11,5 @@ export 'src/reservation_repository.dart';
 export 'src/taxi_repository.dart';
 export 'src/technical_control_repository.dart';
 export 'src/water_transport_repository.dart';
+export 'src/wantok_ai_agent_repository.dart';
 export 'src/wantok_backend.dart';
