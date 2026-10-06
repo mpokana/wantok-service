@@ -3,6 +3,8 @@ import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_core/wantok_core.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import 'booking_for_selector.dart';
+
 class ReservationBrowsePage extends StatefulWidget {
   const ReservationBrowsePage({required this.category, super.key});
 
@@ -341,6 +343,7 @@ class _ReservationSheetState extends State<_ReservationSheet> {
   late DateTime _end;
   final _addressController = TextEditingController();
   final _notesController = TextEditingController();
+  String? _trustedPersonId;
 
   bool _busy = false;
   String? _error;
@@ -435,6 +438,7 @@ class _ReservationSheetState extends State<_ReservationSheet> {
         endsAt: _end,
         serviceAddress: _addressController.text,
         notes: _notesController.text,
+        trustedPersonId: _trustedPersonId,
       );
 
       if (mounted) Navigator.of(context).pop(true);
@@ -481,6 +485,17 @@ class _ReservationSheetState extends State<_ReservationSheet> {
             value: _formatDateTime(_end),
             icon: Icons.stop_circle_outlined,
             onTap: _chooseEnd,
+          ),
+          const SizedBox(height: 12),
+          BookingForSelector(
+            selectedTrustedPersonId: _trustedPersonId,
+            enabled: !_busy,
+            onChanged: (value) {
+              setState(() {
+                _trustedPersonId = value;
+                _error = null;
+              });
+            },
           ),
           const SizedBox(height: 12),
           TextField(

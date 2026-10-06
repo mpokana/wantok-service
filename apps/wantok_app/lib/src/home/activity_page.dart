@@ -266,6 +266,20 @@ class _ActivityPageState extends State<ActivityPage> {
                         ),
                       if (provider['display_name'] != null)
                         Text('Provider: ${provider['display_name']}'),
+                      if (row['beneficiary_name'] != null)
+                        Text(
+                          row['beneficiary_relationship'] != null &&
+                                  row['beneficiary_relationship']
+                                      .toString()
+                                      .trim()
+                                      .isNotEmpty
+                              ? 'For: ${row['beneficiary_name']} (${row['beneficiary_relationship']})'
+                              : 'For: ${row['beneficiary_name']}',
+                          style: const TextStyle(
+                            color: WantokColors.primaryDark,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                       if (row['scheduled_start'] != null)
                         Text(
                           'When: ${_formatRange(row['scheduled_start'], row['scheduled_end'])}',

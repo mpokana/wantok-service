@@ -13,6 +13,7 @@ class OpenRequestRepository {
     double? requestedAmount,
     double quantity = 1,
     Map<String, dynamic> metadata = const <String, dynamic>{},
+    String? trustedPersonId,
   }) async {
     await WantokBackend.client.rpc(
       'create_open_service_request',
@@ -26,6 +27,7 @@ class OpenRequestRepository {
         'p_requested_amount': requestedAmount,
         'p_quantity': quantity,
         'p_metadata': metadata,
+        'p_trusted_person_id': trustedPersonId,
       },
     );
   }

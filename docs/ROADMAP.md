@@ -132,9 +132,25 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 - [x] privacy controls for profile visibility, review visibility, saved-items privacy, recommendations and profile sharing
 - [x] owner-scoped Trusted people model and Account CRUD for family/relative/staff beneficiaries
 - [x] richer Wantok Pay preview including planned actions, verification, PNG services and recent-activity framing
-- [x] database coverage: 17 pgTAP files / 394 tests PASS
+- [x] database coverage: 18 pgTAP files / 419 tests PASS
 - [x] client analysis PASS and 32 Flutter app tests PASS
-- [ ] wire trusted-person beneficiary selection into each service booking flow without changing payer/account authority
+
+### CX1B — Delegated Booking Foundation
+
+- [x] add beneficiary snapshot fields to shared `service_bookings`
+- [x] keep signed-in customer as booking owner/payer; beneficiary never receives account authority
+- [x] validate selected beneficiary is an active Trusted person owned by the signed-in customer
+- [x] preserve historical beneficiary name/relationship/contact snapshot after Trusted-person edits/deletion
+- [x] wire **Who is this for?** selector into Vehicle Hire, Boat Hire and Venue Booking reservations
+- [x] wire **Who is this for?** selector into Delivery, Errands/Pabili, Specialist Services and General Labour requests
+- [x] show delegated beneficiary in customer Track and vendor Jobs without exposing contact details in vendor list
+- [x] delegated-booking security/regression coverage included in 18 files / 419 pgTAP tests
+- [ ] wire delegated booking into Taxi/Ride
+- [ ] wire delegated booking into Events/ticketing
+- [ ] wire delegated booking into Food/Groceries commerce/order flows
+- [ ] wire delegated booking into scheduled Boat/Ship passenger transport
+- [ ] decide whether future accommodation/flights modules inherit the shared delegated-booking contract
+
 - [ ] extend Save controls from service categories to providers, resources/venues and events
 - [ ] add managed image/storage upload for avatar and review photos; URL fields are foundation only
 - [ ] recommendations from real location/history/saved data, with opt-out respected

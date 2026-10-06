@@ -121,6 +121,7 @@ class ReservationRepository {
     double quantity = 1,
     String? serviceAddress,
     String? notes,
+    String? trustedPersonId,
   }) async {
     await WantokBackend.client.rpc(
       'create_resource_reservation',
@@ -132,6 +133,7 @@ class ReservationRepository {
         'p_quantity': quantity,
         'p_service_address': serviceAddress,
         'p_notes': notes,
+        'p_trusted_person_id': trustedPersonId,
       },
     );
   }
@@ -140,7 +142,7 @@ class ReservationRepository {
     final rows = await WantokBackend.client
         .from('service_bookings')
         .select(
-          'id, status, scheduled_start, scheduled_end, requested_amount, quoted_amount, final_amount, currency, service_address, origin_address, destination_address, notes, created_at, service_categories(name, slug), provider_profiles(display_name), provider_resources(name, resource_type, address_text), service_quotes(id, amount, currency, message, status, expires_at), service_reviews(id, rating, title, comment, visibility, created_at)',
+          'id, status, scheduled_start, scheduled_end, requested_amount, quoted_amount, final_amount, currency, service_address, origin_address, destination_address, notes, created_at, trusted_person_id, beneficiary_name, beneficiary_relationship, beneficiary_phone, beneficiary_email, service_categories(name, slug), provider_profiles(display_name), provider_resources(name, resource_type, address_text), service_quotes(id, amount, currency, message, status, expires_at), service_reviews(id, rating, title, comment, visibility, created_at)',
         )
         .eq('customer_id', _userId)
         .order('created_at', ascending: false)
@@ -288,7 +290,7 @@ class ReservationRepository {
     final rows = await WantokBackend.client
         .from('service_bookings')
         .select(
-          'id, provider_id, status, scheduled_start, scheduled_end, requested_amount, quoted_amount, final_amount, currency, service_address, origin_address, destination_address, notes, created_at, service_categories(name, slug), provider_services(title, pricing_model), provider_resources(name, resource_type, address_text)',
+          'id, provider_id, status, scheduled_start, scheduled_end, requested_amount, quoted_amount, final_amount, currency, service_address, origin_address, destination_address, notes, created_at, beneficiary_name, beneficiary_relationship, service_categories(name, slug), provider_services(title, pricing_model), provider_resources(name, resource_type, address_text)',
         )
         .inFilter('status', [
           'requested',

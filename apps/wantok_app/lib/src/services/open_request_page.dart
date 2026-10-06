@@ -3,6 +3,8 @@ import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_core/wantok_core.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import 'booking_for_selector.dart';
+
 class OpenRequestPage extends StatefulWidget {
   const OpenRequestPage({required this.category, super.key});
 
@@ -22,6 +24,7 @@ class _OpenRequestPageState extends State<OpenRequestPage> {
   final _budgetController = TextEditingController();
 
   DateTime? _scheduledStart;
+  String? _trustedPersonId;
   bool _busy = false;
   String? _error;
 
@@ -111,6 +114,7 @@ class _OpenRequestPageState extends State<OpenRequestPage> {
           'client_surface': 'wantok_app',
           'request_kind': widget.category.slug,
         },
+        trustedPersonId: _trustedPersonId,
       );
 
       if (!mounted) return;
@@ -144,6 +148,17 @@ class _OpenRequestPageState extends State<OpenRequestPage> {
             style: TextStyle(color: WantokColors.muted),
           ),
           const SizedBox(height: 16),
+          BookingForSelector(
+            selectedTrustedPersonId: _trustedPersonId,
+            enabled: !_busy,
+            onChanged: (value) {
+              setState(() {
+                _trustedPersonId = value;
+                _error = null;
+              });
+            },
+          ),
+          const SizedBox(height: 12),
           if (_isDelivery) ...[
             TextField(
               controller: _originController,
