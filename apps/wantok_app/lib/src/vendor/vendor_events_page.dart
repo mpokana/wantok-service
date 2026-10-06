@@ -862,7 +862,7 @@ class _TicketDialogState extends State<_TicketDialog> {
                 decimal: true,
               ),
               decoration: const InputDecoration(
-                labelText: 'Price (PGK)',
+                labelText: 'Price (Kina / K)',
                 helperText: 'Use 0 for a free registration.',
               ),
             ),
@@ -1091,7 +1091,7 @@ String _money(dynamic value) {
 
 String _ticketPrice(Map<String, dynamic> ticket) {
   final price = _toDouble(ticket['price']) ?? 0;
-  return price == 0 ? 'FREE' : 'PGK ${price.toStringAsFixed(2)}';
+  return price == 0 ? 'FREE' : 'K${price.toStringAsFixed(2)}';
 }
 
 String _formatDateTime(dynamic value) {

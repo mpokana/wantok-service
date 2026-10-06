@@ -1,8 +1,8 @@
-# Wantok Service — Administration and Technical Control Plane
+# Wantok Services — Administration and Technical Control Plane
 
 ## Purpose
 
-Wantok Service separates business/marketplace administration from technical platform administration. The two areas may share authentication and audit infrastructure, but they must not be treated as one unrestricted "admin" surface.
+Wantok Services separates business/marketplace administration from technical platform administration. The two areas may share authentication and audit infrastructure, but they must not be treated as one unrestricted "admin" surface.
 
 ## 1. Operations Administration Console
 
@@ -144,7 +144,7 @@ Each module should expose a consistent technical contract:
 - audit events;
 - supported technical actions.
 
-This allows modules to be repaired, upgraded or disabled independently while preserving the rest of Wantok Service.
+This allows modules to be repaired, upgraded or disabled independently while preserving the rest of Wantok Services.
 
 ## 8. Separation of authority
 

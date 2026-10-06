@@ -14,7 +14,7 @@ class WantokApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Wantok Service',
+      title: 'Wantok Services',
       debugShowCheckedModeBanner: false,
       theme: WantokTheme.light(),
       home: backendConfigured

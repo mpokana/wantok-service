@@ -1,5 +1,5 @@
 name: wantok_api
-description: Supabase API and repository layer for Wantok Service.
+description: Supabase API and repository layer for Wantok Services.
 publish_to: none
 version: 0.0.1
 

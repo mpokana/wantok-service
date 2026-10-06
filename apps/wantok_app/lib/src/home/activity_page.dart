@@ -3,6 +3,7 @@ import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
 import 'messages_page.dart';
+import 'png_visuals.dart';
 
 class ActivityPage extends StatefulWidget {
   const ActivityPage({super.key});
@@ -109,25 +110,38 @@ class _ActivityPageState extends State<ActivityPage> {
           final rows = snapshot.data ?? const <Map<String, dynamic>>[];
           if (rows.isEmpty) {
             return ListView(
-              padding: const EdgeInsets.all(28),
+              padding: const EdgeInsets.fromLTRB(14, 10, 14, 28),
               children: const [
-                SizedBox(height: 90),
-                Icon(
-                  Icons.receipt_long_outlined,
-                  size: 58,
-                  color: WantokColors.primary,
-                ),
-                SizedBox(height: 14),
-                Text(
-                  'No activity yet',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
-                ),
-                SizedBox(height: 7),
-                Text(
-                  'Your service requests, reservations and completed bookings will appear here.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: WantokColors.muted),
+                _TrackHeader(),
+                SizedBox(height: 18),
+                Card(
+                  child: Padding(
+                    padding: EdgeInsets.all(24),
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.route_outlined,
+                          size: 50,
+                          color: WantokColors.primary,
+                        ),
+                        SizedBox(height: 12),
+                        Text(
+                          'Nothing to track yet',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                        SizedBox(height: 7),
+                        Text(
+                          'Your rides, deliveries, reservations and completed Wantok bookings will appear here.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: WantokColors.muted),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             );
@@ -135,10 +149,11 @@ class _ActivityPageState extends State<ActivityPage> {
 
           return ListView.separated(
             padding: const EdgeInsets.fromLTRB(18, 10, 18, 28),
-            itemCount: rows.length,
+            itemCount: rows.length + 1,
             separatorBuilder: (_, _) => const SizedBox(height: 11),
             itemBuilder: (context, index) {
-              final row = rows[index];
+              if (index == 0) return const _TrackHeader();
+              final row = rows[index - 1];
               final id = row['id'] as String;
               final status = row['status'] as String? ?? 'unknown';
               final category = _asMap(row['service_categories']);
@@ -167,7 +182,7 @@ class _ActivityPageState extends State<ActivityPage> {
                         children: [
                           Expanded(
                             child: Text(
-                              category['name'] as String? ?? 'Wantok Service',
+                              category['name'] as String? ?? 'Wantok Services',
                               style: const TextStyle(
                                 fontSize: 17,
                                 fontWeight: FontWeight.w900,
@@ -200,7 +215,7 @@ class _ActivityPageState extends State<ActivityPage> {
                         Text('Destination: ${row['destination_address']}'),
                       if (amount != null)
                         Text(
-                          'Amount: ${row['currency'] ?? 'PGK'} $amount',
+                          'Amount: ${_kina(row['currency'], amount)}',
                           style: const TextStyle(fontWeight: FontWeight.w800),
                         ),
                       if (pendingQuote != null) ...[
@@ -220,7 +235,7 @@ class _ActivityPageState extends State<ActivityPage> {
                               const SizedBox(width: 9),
                               Expanded(
                                 child: Text(
-                                  'Vendor quote: ${pendingQuote['currency'] ?? 'PGK'} ${pendingQuote['amount']}',
+                                  'Vendor quote: ${_kina(pendingQuote['currency'], pendingQuote['amount'])}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.w900,
                                   ),
@@ -255,7 +270,7 @@ class _ActivityPageState extends State<ActivityPage> {
                                         'Wantok Provider',
                                     categoryName:
                                         category['name'] as String? ??
-                                        'Wantok Service',
+                                        'Wantok Services',
                                   ),
                             icon: const Icon(Icons.chat_bubble_outline),
                             label: const Text('Message provider'),
@@ -285,6 +300,87 @@ class _ActivityPageState extends State<ActivityPage> {
             },
           );
         },
+      ),
+    );
+  }
+}
+
+class _TrackHeader extends StatelessWidget {
+  const _TrackHeader();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: PngScenicBackdrop(
+        height: 150,
+        colors: const [Color(0xFF7B2D3A), Color(0xFFC85536), Color(0xFF0B79A8)],
+        child: const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Track your Wantok',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 25,
+                height: 1,
+                fontWeight: FontWeight.w900,
+                letterSpacing: -0.7,
+              ),
+            ),
+            SizedBox(height: 8),
+            Text(
+              'Rides, deliveries, bookings and service requests in one place.',
+              style: TextStyle(
+                color: Color(0xFFFFECE6),
+                fontSize: 12.5,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            SizedBox(height: 12),
+            Row(
+              children: [
+                _TrackPill(icon: Icons.route_rounded, label: 'Ongoing'),
+                SizedBox(width: 8),
+                _TrackPill(icon: Icons.history_rounded, label: 'History'),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _TrackPill extends StatelessWidget {
+  const _TrackPill({required this.icon, required this.label});
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: Colors.white24,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+        child: Row(
+          children: [
+            Icon(icon, color: Colors.white, size: 15),
+            SizedBox(width: 5),
+            Text(
+              label,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 10.5,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -348,6 +444,14 @@ String _formatDateTime(DateTime value) {
   final hour = value.hour.toString().padLeft(2, '0');
   final minute = value.minute.toString().padLeft(2, '0');
   return '$day/$month/${value.year} $hour:$minute';
+}
+
+String _kina(dynamic currency, dynamic amount) {
+  final code = currency?.toString().toUpperCase();
+  if (code == null || code == 'PGK' || code == 'K' || code == 'KINA') {
+    return 'K$amount';
+  }
+  return '$code $amount';
 }
 
 String _friendlyError(Object error) =>

@@ -1,4 +1,4 @@
-# Wantok Service — Living Handover
+# Wantok Services — Living Handover
 
 **Updated:** 2026-10-06
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
@@ -6,7 +6,7 @@
 
 ## Resume here
 
-The current safe checkpoint is **T2.2 Typed Module Configuration + Service Visual Refresh**. This file is committed with that checkpoint; run:
+The current safe checkpoint is **T2.2 PNG-rich Client Experience Polish**. This file is committed with that checkpoint; run:
 
 `git log -1 --oneline`
 
@@ -16,7 +16,7 @@ Before any new task, read root `AGENTS.md`, this file, and `docs/ROADMAP.md`.
 
 ## Product identity
 
-- Product: Wantok Service
+- Product: Wantok Services
 - Domain: **wantokservices.com**
 - Stack: Flutter + Supabase
 - Public app: `apps/wantok_app`
@@ -42,7 +42,7 @@ Checkpointed platform includes:
 - Technical Control Plane T1
 - T2.1 Technical Staff & Module Access Management
 - T2.2 versioned typed module configuration and Technical Control editor
-- richer category-specific public service visuals
+- T2.2 PNG-rich client experience polish across Home, Food/Groceries, Track, Inbox and Wantok Pay preview
 
 ### Technical Control T1
 
@@ -84,6 +84,19 @@ Checkpointed platform includes:
 - typed Technical Control editor with reset/discard/save workflows
 - refreshed public service grid with category-specific colours and stronger lightweight icons
 
+### T2.2 PNG-rich client experience polish
+
+- product-facing name standardised as **Wantok Services** while native package IDs remain unchanged
+- PNG scenic visual language implemented with lightweight custom Flutter painters: mountain forms, tropical accents and abstract bird-of-paradise treatment
+- bilum-inspired custom bottom navigation replaces Material/Grab-like navigation
+- client navigation is **Home · Track · Inbox · Me**
+- richer Home hierarchy with scenic hero, service discovery, Wantok Pay preview strip, service spotlights and PNG purpose banner
+- Food/Groceries now use scenic commerce heroes, search/filter surfaces and richer local-vendor discovery cards
+- Track and Inbox have dedicated scenic headers and polished empty states
+- Wantok Pay remains a visual preview only with **Kina (K)** display; no payment movement is enabled
+- visible PGK-facing customer amounts use Kina-style `K` formatting where appropriate
+- live Android emulator QA completed for Home, Food, Track and Inbox without visible overflow
+
 ## Validation baseline
 
 At this checkpoint:
@@ -93,7 +106,7 @@ At this checkpoint:
 - Wantok Operations Admin: analysis + smoke test PASS
 - Wantok Technical Control: analysis + smoke test PASS
 - database: **15 files / 316 pgTAP tests PASS**
-- Android emulator rebuilt and refreshed service grid visually verified
+- Android emulator rebuilt; Home, Food, Track and Inbox PNG-rich surfaces visually verified
 - Docker Compose production configuration parse: PASS
 - `git diff --check`: PASS
 
@@ -130,7 +143,7 @@ Technical Control development server may be run on:
 - Secret-bearing configuration stores references only; never expose secret values in ordinary UI or audit metadata.
 - Do not expose production secrets, arbitrary SQL or shell execution in ordinary control-panel UI.
 - Keep services modular so one service can be repaired/disabled independently.
-- Wantok Service and Wantok Neurons remain separate systems.
+- Wantok Services and Wantok Neurons remain separate systems.
 
 ## Next phase
 

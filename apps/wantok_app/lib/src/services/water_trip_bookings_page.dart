@@ -223,7 +223,7 @@ double? _toDouble(dynamic value) {
 
 String _amount(Map<String, dynamic> booking) {
   final amount = _toDouble(booking['total_amount']) ?? 0;
-  return amount == 0 ? 'FREE' : 'PGK ${amount.toStringAsFixed(2)}';
+  return amount == 0 ? 'FREE' : 'K${amount.toStringAsFixed(2)}';
 }
 
 String _formatDateTime(dynamic value) {

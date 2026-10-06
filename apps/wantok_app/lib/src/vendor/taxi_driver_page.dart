@@ -413,8 +413,8 @@ class _TaxiDriverPageState extends State<TaxiDriverPage> {
                   child: _DriverMetric(
                     label: 'Est. fare',
                     value: fare == null
-                        ? 'PGK —'
-                        : 'PGK ${fare.toStringAsFixed(2)}',
+                        ? 'K —'
+                        : 'K${fare.toStringAsFixed(2)}',
                   ),
                 ),
               ],

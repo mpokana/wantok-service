@@ -89,7 +89,7 @@ class _OpenRequestPageState extends State<OpenRequestPage> {
     final budgetText = _budgetController.text.trim();
     final budget = budgetText.isEmpty ? null : double.tryParse(budgetText);
     if (budgetText.isNotEmpty && budget == null) {
-      setState(() => _error = 'Enter a valid PGK budget or leave it blank.');
+      setState(() => _error = 'Enter a valid Kina budget or leave it blank.');
       return;
     }
 
@@ -185,7 +185,7 @@ class _OpenRequestPageState extends State<OpenRequestPage> {
             controller: _budgetController,
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             decoration: const InputDecoration(
-              labelText: 'Budget in PGK (optional)',
+              labelText: 'Budget in Kina / K (optional)',
               hintText: 'Leave blank to receive quotes',
               prefixIcon: Icon(Icons.payments_outlined),
             ),

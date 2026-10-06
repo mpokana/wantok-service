@@ -1,5 +1,5 @@
 name: wantok_auth
-description: Shared authentication and RBAC helpers for Wantok Service.
+description: Shared authentication and RBAC helpers for Wantok Services.
 publish_to: none
 version: 0.0.1
 

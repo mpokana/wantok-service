@@ -1,4 +1,4 @@
-# AGENTS.md — Wantok Service
+# AGENTS.md — Wantok Services
 
 ## Read this before changing the project
 
@@ -13,7 +13,7 @@ For every new coding session, agent handover, Codex task, Desktop Commander task
 4. Run `git status --short --branch` and inspect the latest commits before editing.
 5. Preserve existing architecture unless Mansfield explicitly approves a refactor.
 6. Use migrations for every database/security change.
-7. Do not mix Wantok Service with GVE systems or Wantok Neurons implementation details.
+7. Do not mix Wantok Services with GVE systems or Wantok Neurons implementation details.
 
 ## Safe-change rule
 
@@ -38,7 +38,7 @@ Keep them compact. Record only information needed to safely resume work: current
 
 ## Project identity
 
-- Product: Wantok Service
+- Product: Wantok Services
 - Domain: `wantokservices.com`
 - Primary stack: Flutter + Supabase
 - Operations console: Wantok Operations Admin

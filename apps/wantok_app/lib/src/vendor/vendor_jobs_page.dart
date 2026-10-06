@@ -211,7 +211,7 @@ class _VendorJobsPageState extends State<VendorJobsPage> {
                       if (requestedAmount != null) ...[
                         const SizedBox(height: 8),
                         Text(
-                          'Requested amount: ${row['currency'] ?? 'PGK'} ${requestedAmount.toStringAsFixed(2)}',
+                          'Requested amount: K${requestedAmount.toStringAsFixed(2)}',
                           style: const TextStyle(fontWeight: FontWeight.w800),
                         ),
                       ],
@@ -223,7 +223,7 @@ class _VendorJobsPageState extends State<VendorJobsPage> {
                         children: _actionsFor(
                           bookingId: id,
                           categoryName:
-                              category['name'] as String? ?? 'Wantok Service',
+                              category['name'] as String? ?? 'Wantok Services',
                           status: status,
                           requestedAmount: requestedAmount,
                           isOpenRequest: isOpenRequest,
@@ -401,7 +401,7 @@ class _QuoteDialogState extends State<_QuoteDialog> {
                 decimal: true,
               ),
               decoration: const InputDecoration(
-                labelText: 'Amount (PGK)',
+                labelText: 'Amount (Kina / K)',
                 prefixIcon: Icon(Icons.payments_outlined),
               ),
             ),

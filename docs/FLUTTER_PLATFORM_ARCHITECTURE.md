@@ -1,8 +1,8 @@
-# Wantok Service Flutter Platform Architecture
+# Wantok Services Flutter Platform Architecture
 
 ## Product model
 
-Wantok Service is a Papua New Guinea multi-service super app.
+Wantok Services is a Papua New Guinea multi-service super app.
 
 There are two deployable applications:
 

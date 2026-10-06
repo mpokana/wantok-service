@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import 'png_visuals.dart';
+
 class MessagesPage extends StatefulWidget {
   const MessagesPage({super.key});
 
@@ -62,26 +64,38 @@ class _MessagesPageState extends State<MessagesPage> {
           final rows = snapshot.data ?? const <Map<String, dynamic>>[];
           if (rows.isEmpty) {
             return ListView(
-              padding: const EdgeInsets.all(28),
+              padding: const EdgeInsets.fromLTRB(14, 10, 14, 28),
               children: const [
-                SizedBox(height: 90),
-                Icon(
-                  Icons.chat_bubble_outline,
-                  size: 58,
-                  color: WantokColors.primary,
-                ),
-                SizedBox(height: 14),
-                Text(
-                  'No conversations yet',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
-                ),
-                SizedBox(height: 8),
-                Text(
-                  'Messaging becomes available when a booking has an assigned provider. '
-                  'Your booking conversations will appear here.',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: WantokColors.muted),
+                _InboxHeader(),
+                SizedBox(height: 18),
+                Card(
+                  child: Padding(
+                    padding: EdgeInsets.all(24),
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.forum_outlined,
+                          size: 50,
+                          color: WantokColors.primary,
+                        ),
+                        SizedBox(height: 12),
+                        Text(
+                          'No conversations yet',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'When a provider is assigned to a booking, the conversation will appear here.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: WantokColors.muted),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             );
@@ -89,10 +103,11 @@ class _MessagesPageState extends State<MessagesPage> {
 
           return ListView.separated(
             padding: const EdgeInsets.fromLTRB(14, 10, 14, 28),
-            itemCount: rows.length,
+            itemCount: rows.length + 1,
             separatorBuilder: (_, _) => const SizedBox(height: 8),
             itemBuilder: (context, index) {
-              final row = rows[index];
+              if (index == 0) return const _InboxHeader();
+              final row = rows[index - 1];
               final unread = _toInt(row['unread_count']);
               final title =
                   row['other_display_name'] as String? ?? 'Wantok user';
@@ -171,6 +186,57 @@ class _MessagesPageState extends State<MessagesPage> {
             },
           );
         },
+      ),
+    );
+  }
+}
+
+class _InboxHeader extends StatelessWidget {
+  const _InboxHeader();
+
+  @override
+  Widget build(BuildContext context) {
+    return PngScenicBackdrop(
+      height: 136,
+      colors: const [Color(0xFF075C3A), Color(0xFF087A4B), Color(0xFF5A3421)],
+      child: const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Inbox',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 27,
+              fontWeight: FontWeight.w900,
+              letterSpacing: -0.7,
+            ),
+          ),
+          SizedBox(height: 6),
+          Text(
+            'Talk with providers about active Wantok bookings.',
+            style: TextStyle(color: Color(0xFFE4F6EE), fontSize: 12.5),
+          ),
+          SizedBox(height: 11),
+          Row(
+            children: [
+              Icon(
+                Icons.verified_user_outlined,
+                color: WantokColors.gold,
+                size: 17,
+              ),
+              SizedBox(width: 6),
+              Text(
+                'Booking-linked conversations',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 10.5,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

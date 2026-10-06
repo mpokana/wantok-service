@@ -1,4 +1,4 @@
-# Wantok Service — Living Roadmap
+# Wantok Services — Living Roadmap
 
 **Updated:** 2026-10-06
 
@@ -67,6 +67,18 @@
 - [x] seven initial active module schemas
 - [x] pgTAP validation and permission tests
 - [x] richer category-specific public service visuals
+
+### T2.2 client experience polish — COMPLETE
+
+- [x] standardise customer-facing product name as Wantok Services
+- [x] PNG scenic custom-painter visual language
+- [x] bilum-inspired custom bottom navigation
+- [x] distinct client navigation: Home / Track / Inbox / Me
+- [x] richer Home hierarchy and service spotlights
+- [x] richer Food/Groceries discovery, search and local-vendor cards
+- [x] richer Track and Inbox headers/empty states
+- [x] Wantok Pay visual preview using Kina (K), without payment movement
+- [x] Android emulator visual QA with no visible overflow
 
 ## T2.3 — Module health and dependency reporting — NEXT
 

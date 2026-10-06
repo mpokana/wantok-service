@@ -463,8 +463,8 @@ class _TaxiRidePageState extends State<TaxiRidePage> {
                   child: _InfoBox(
                     label: finalFare == null ? 'Estimated fare' : 'Final fare',
                     value: fare == null
-                        ? 'PGK —'
-                        : 'PGK ${fare.toStringAsFixed(2)}',
+                        ? 'K —'
+                        : 'K${fare.toStringAsFixed(2)}',
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -671,7 +671,7 @@ class _HistoryCard extends StatelessWidget {
           trailing: fare == null
               ? null
               : Text(
-                  'PGK ${fare.toStringAsFixed(2)}',
+                  'K${fare.toStringAsFixed(2)}',
                   style: const TextStyle(fontWeight: FontWeight.w900),
                 ),
         ),

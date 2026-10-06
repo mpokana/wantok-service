@@ -1,5 +1,5 @@
 name: wantok_core
-description: Shared domain models and primitives for Wantok Service.
+description: Shared domain models and primitives for Wantok Services.
 publish_to: none
 version: 0.0.1
 

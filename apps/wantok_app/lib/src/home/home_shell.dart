@@ -14,6 +14,7 @@ import 'account_page.dart';
 import 'activity_page.dart';
 import 'client_home.dart';
 import 'messages_page.dart';
+import 'png_visuals.dart';
 import 'vendor_home.dart';
 
 class HomeShell extends StatefulWidget {
@@ -63,9 +64,7 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
     _refreshingRoles = true;
     try {
       final roles = await _auth.loadRoles();
-      if (mounted) {
-        setState(() => _roles = roles);
-      }
+      if (mounted) setState(() => _roles = roles);
     } finally {
       _refreshingRoles = false;
     }
@@ -73,47 +72,54 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    final destinations = _mode == AppMode.client
+    final navItems = _mode == AppMode.client
         ? const [
-            NavigationDestination(
-              icon: Icon(Icons.home_outlined),
-              selectedIcon: Icon(Icons.home),
+            _NavItem(
+              icon: Icons.home_rounded,
+              outlineIcon: Icons.home_outlined,
               label: 'Home',
             ),
-            NavigationDestination(
-              icon: Icon(Icons.receipt_long_outlined),
-              label: 'Activity',
+            _NavItem(
+              icon: Icons.route_rounded,
+              outlineIcon: Icons.route_outlined,
+              label: 'Track',
             ),
-            NavigationDestination(
-              icon: Icon(Icons.chat_bubble_outline),
-              label: 'Messages',
+            _NavItem(
+              icon: Icons.forum_rounded,
+              outlineIcon: Icons.forum_outlined,
+              label: 'Inbox',
             ),
-            NavigationDestination(
-              icon: Icon(Icons.person_outline),
-              label: 'Account',
+            _NavItem(
+              icon: Icons.person_rounded,
+              outlineIcon: Icons.person_outline_rounded,
+              label: 'Me',
             ),
           ]
         : const [
-            NavigationDestination(
-              icon: Icon(Icons.dashboard_outlined),
-              selectedIcon: Icon(Icons.dashboard),
+            _NavItem(
+              icon: Icons.dashboard_rounded,
+              outlineIcon: Icons.dashboard_outlined,
               label: 'Dashboard',
             ),
-            NavigationDestination(
-              icon: Icon(Icons.work_outline),
+            _NavItem(
+              icon: Icons.work_rounded,
+              outlineIcon: Icons.work_outline_rounded,
               label: 'Jobs',
             ),
-            NavigationDestination(
-              icon: Icon(Icons.storefront_outlined),
+            _NavItem(
+              icon: Icons.storefront_rounded,
+              outlineIcon: Icons.storefront_outlined,
               label: 'Listings',
             ),
-            NavigationDestination(
-              icon: Icon(Icons.chat_bubble_outline),
-              label: 'Messages',
+            _NavItem(
+              icon: Icons.forum_rounded,
+              outlineIcon: Icons.forum_outlined,
+              label: 'Inbox',
             ),
-            NavigationDestination(
-              icon: Icon(Icons.person_outline),
-              label: 'Account',
+            _NavItem(
+              icon: Icons.person_rounded,
+              outlineIcon: Icons.person_outline_rounded,
+              label: 'Me',
             ),
           ];
 
@@ -163,50 +169,203 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
           ];
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              'wantok',
-              style: TextStyle(
-                color: WantokColors.primaryDark,
-                fontWeight: FontWeight.w900,
-                letterSpacing: -1,
+      appBar: _buildAppBar(),
+      body: IndexedStack(index: _tabIndex, children: pages),
+      bottomNavigationBar: _WantokBottomBar(
+        items: navItems,
+        selectedIndex: _tabIndex,
+        onSelected: (index) => setState(() => _tabIndex = index),
+      ),
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar() {
+    final client = _mode == AppMode.client;
+
+    return AppBar(
+      backgroundColor: client ? WantokColors.primaryDark : WantokColors.canvas,
+      foregroundColor: client ? Colors.white : WantokColors.ink,
+      toolbarHeight: 72,
+      titleSpacing: 18,
+      title: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'Wantok',
+                style: TextStyle(
+                  color: client ? Colors.white : WantokColors.primaryDark,
+                  fontSize: 21,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: -0.8,
+                ),
               ),
-            ),
-            Text(
-              '.service',
-              style: TextStyle(
-                color: WantokColors.muted,
-                fontWeight: FontWeight.w600,
+              const SizedBox(width: 4),
+              const Text(
+                'Services',
+                style: TextStyle(
+                  color: WantokColors.gold,
+                  fontSize: 21,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: -0.8,
+                ),
               ),
-            ),
-          ],
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 12),
-            child: WantokModeSwitcher(
-              value: _mode,
-              onChanged: (value) {
-                setState(() {
-                  _mode = value;
-                  _tabIndex = 0;
-                });
-                if (value == AppMode.vendor) {
-                  _refreshRoles();
-                }
-              },
+            ],
+          ),
+          Text(
+            client ? 'People. Places. Possibilities.' : 'Vendor workspace',
+            style: TextStyle(
+              color: client
+                  ? Colors.white.withValues(alpha: 0.72)
+                  : WantokColors.muted,
+              fontSize: 10.5,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.1,
             ),
           ),
         ],
       ),
-      body: IndexedStack(index: _tabIndex, children: pages),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _tabIndex,
-        destinations: destinations,
-        onDestinationSelected: (index) => setState(() => _tabIndex = index),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 12),
+          child: WantokModeSwitcher(
+            value: _mode,
+            inverted: client,
+            onChanged: (value) {
+              setState(() {
+                _mode = value;
+                _tabIndex = 0;
+              });
+              if (value == AppMode.vendor) _refreshRoles();
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _NavItem {
+  const _NavItem({
+    required this.icon,
+    required this.outlineIcon,
+    required this.label,
+  });
+
+  final IconData icon;
+  final IconData outlineIcon;
+  final String label;
+}
+
+class _WantokBottomBar extends StatelessWidget {
+  const _WantokBottomBar({
+    required this.items,
+    required this.selectedIndex,
+    required this.onSelected,
+  });
+
+  final List<_NavItem> items;
+  final int selectedIndex;
+  final ValueChanged<int> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      top: false,
+      child: Container(
+        margin: const EdgeInsets.fromLTRB(10, 0, 10, 8),
+        height: 72,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.18),
+              blurRadius: 18,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(24),
+          child: CustomPaint(
+            painter: const BilumPatternPainter(),
+            child: DecoratedBox(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [WantokColors.bilumDark, WantokColors.bilum],
+                ),
+              ),
+              child: Row(
+                children: List.generate(items.length, (index) {
+                  final selected = index == selectedIndex;
+                  final item = items[index];
+
+                  return Expanded(
+                    child: InkWell(
+                      onTap: () => onSelected(index),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 3,
+                          vertical: 7,
+                        ),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 180),
+                          curve: Curves.easeOut,
+                          decoration: BoxDecoration(
+                            color: selected
+                                ? WantokColors.gold
+                                : Colors.transparent,
+                            borderRadius: BorderRadius.circular(18),
+                            boxShadow: selected
+                                ? [
+                                    BoxShadow(
+                                      color: WantokColors.gold.withValues(
+                                        alpha: 0.26,
+                                      ),
+                                      blurRadius: 9,
+                                      offset: const Offset(0, 3),
+                                    ),
+                                  ]
+                                : null,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                selected ? item.icon : item.outlineIcon,
+                                color: selected
+                                    ? const Color(0xFF39200F)
+                                    : const Color(0xFFF4E7D7),
+                                size: 23,
+                              ),
+                              const SizedBox(height: 3),
+                              Text(
+                                item.label,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: selected
+                                      ? const Color(0xFF39200F)
+                                      : const Color(0xFFF4E7D7),
+                                  fontSize: items.length > 4 ? 9.2 : 10.2,
+                                  fontWeight: selected
+                                      ? FontWeight.w900
+                                      : FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

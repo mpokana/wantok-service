@@ -280,7 +280,7 @@ class _VendorCommercePageState extends State<VendorCommercePage> {
                             style: const TextStyle(fontWeight: FontWeight.w900),
                           ),
                           subtitle: Text(
-                            '${service?['title']?.toString() ?? 'Store'} • PGK ${_money(item['price'])}${item['unit_label'] == null ? '' : ' / ${item['unit_label']}'}',
+                            '${service?['title']?.toString() ?? 'Store'} • K${_money(item['price'])}${item['unit_label'] == null ? '' : ' / ${item['unit_label']}'}',
                           ),
                           trailing: PopupMenuButton<String>(
                             onSelected: (value) {
@@ -428,7 +428,7 @@ class _VendorOrderCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'PGK ${_money(order['total_amount'])}',
+                  'K${_money(order['total_amount'])}',
                   style: const TextStyle(
                     fontWeight: FontWeight.w900,
                     color: WantokColors.primaryDark,
@@ -542,7 +542,7 @@ class _CatalogEditorDialogState extends State<_CatalogEditorDialog> {
       return;
     }
     if (price == null || price < 0) {
-      setState(() => _error = 'Enter a valid PGK price.');
+      setState(() => _error = 'Enter a valid Kina price.');
       return;
     }
 
@@ -613,7 +613,7 @@ class _CatalogEditorDialogState extends State<_CatalogEditorDialog> {
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),
-                decoration: const InputDecoration(labelText: 'Price (PGK)'),
+                decoration: const InputDecoration(labelText: 'Price (Kina / K)'),
               ),
               const SizedBox(height: 10),
               TextField(

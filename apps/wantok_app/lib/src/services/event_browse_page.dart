@@ -398,7 +398,7 @@ class _RegistrationDialogState extends State<_RegistrationDialog> {
               Text(
                 price == 0
                     ? 'Free registration'
-                    : 'Total: PGK ${total.toStringAsFixed(2)} • payment pending',
+                    : 'Total: K${total.toStringAsFixed(2)} • payment pending',
                 style: const TextStyle(
                   fontWeight: FontWeight.w900,
                   color: WantokColors.primaryDark,
@@ -610,7 +610,7 @@ double? _toDouble(dynamic value) {
 String _ticketPrice(Map<String, dynamic> ticket) {
   final price = _toDouble(ticket['price']) ?? 0;
   if (price == 0) return 'FREE';
-  return 'PGK ${price.toStringAsFixed(2)}';
+  return 'K${price.toStringAsFixed(2)}';
 }
 
 String _formatDateTime(dynamic value) {

@@ -1,6 +1,6 @@
 # Wantok
 
-Flutter application for Wantok Service clients and vendors.
+Flutter application for Wantok Services clients and vendors.
 
 Targets:
 

@@ -1195,7 +1195,7 @@ class _FareDialogState extends State<_FareDialog> {
               keyboardType: const TextInputType.numberWithOptions(
                 decimal: true,
               ),
-              decoration: const InputDecoration(labelText: 'Price (PGK)'),
+              decoration: const InputDecoration(labelText: 'Price (Kina / K)'),
             ),
             const SizedBox(height: 8),
             TextField(
@@ -1495,7 +1495,7 @@ double? _toDouble(dynamic value) {
 
 String _moneyLabel(dynamic value) {
   final amount = _toDouble(value) ?? 0;
-  return amount == 0 ? 'FREE' : 'PGK ${amount.toStringAsFixed(2)}';
+  return amount == 0 ? 'FREE' : 'K${amount.toStringAsFixed(2)}';
 }
 
 String _formatDateTime(dynamic value) {

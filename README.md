@@ -1,6 +1,6 @@
-# Wantok Service
+# Wantok Services
 
-Wantok Service is a Papua New Guinea multi-service super app platform.
+Wantok Services is a Papua New Guinea multi-service super app platform.
 
 The primary application stack is now **Flutter + Supabase**.
 

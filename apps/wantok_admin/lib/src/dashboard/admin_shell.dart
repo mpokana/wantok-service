@@ -576,7 +576,7 @@ class _BookingsPageState extends State<_BookingsPage> {
   Widget build(BuildContext context) {
     return _AdminPageFrame(
       title: 'Marketplace bookings',
-      subtitle: 'Recent non-taxi bookings across Wantok Service.',
+      subtitle: 'Recent non-taxi bookings across Wantok Services.',
       action: IconButton(onPressed: _refresh, icon: const Icon(Icons.refresh)),
       child: FutureBuilder<List<Map<String, dynamic>>>(
         future: _future,

@@ -128,7 +128,7 @@ class _CommerceOrdersPageState extends State<CommerceOrdersPage> {
                                     ),
                                   ),
                                   Text(
-                                    'PGK ${_money(item['line_total'])}',
+                                    'K${_money(item['line_total'])}',
                                     style: const TextStyle(
                                       fontWeight: FontWeight.w700,
                                     ),
@@ -155,7 +155,7 @@ class _CommerceOrdersPageState extends State<CommerceOrdersPage> {
                                 ),
                               ),
                               Text(
-                                'PGK ${_money(order['total_amount'])}',
+                                'K${_money(order['total_amount'])}',
                                 style: const TextStyle(
                                   fontWeight: FontWeight.w900,
                                   color: WantokColors.primaryDark,

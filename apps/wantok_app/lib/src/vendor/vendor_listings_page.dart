@@ -334,7 +334,7 @@ class _ServiceCard extends StatelessWidget {
             ),
             if (price != null)
               Text(
-                '${service['currency'] ?? 'PGK'} $price • ${service['pricing_model'] ?? 'quote'}',
+                'K$price • ${service['pricing_model'] ?? 'quote'}',
               ),
             const SizedBox(height: 10),
             Wrap(
@@ -566,7 +566,7 @@ class _ServiceEditorDialogState extends State<_ServiceEditorDialog> {
                   decimal: true,
                 ),
                 decoration: const InputDecoration(
-                  labelText: 'Base price (PGK)',
+                  labelText: 'Base price (Kina / K)',
                 ),
               ),
               const SizedBox(height: 10),

@@ -280,7 +280,7 @@ class _DepartureDetailPageState extends State<_DepartureDetailPage> {
                             trailing: Text(
                               price == 0
                                   ? 'FREE'
-                                  : 'PGK ${price.toStringAsFixed(2)}',
+                                  : 'K${price.toStringAsFixed(2)}',
                               style: const TextStyle(
                                 fontWeight: FontWeight.w900,
                                 color: WantokColors.primaryDark,
@@ -494,7 +494,7 @@ class _WaterBookingDialogState extends State<_WaterBookingDialog> {
               Text(
                 price == 0
                     ? '${_passengers.length} passenger(s) • FREE'
-                    : '${_passengers.length} passenger(s) • PGK ${total.toStringAsFixed(2)}',
+                    : '${_passengers.length} passenger(s) • K${total.toStringAsFixed(2)}',
                 style: const TextStyle(
                   fontWeight: FontWeight.w900,
                   color: WantokColors.primaryDark,

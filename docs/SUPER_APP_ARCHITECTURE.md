@@ -1,8 +1,8 @@
-# Wantok Service — Super-App Architecture
+# Wantok Services — Super-App Architecture
 
 ## Product direction
 
-Wantok Service is not a taxi-only application. It is a Papua New Guinea-focused multi-service marketplace and service-delivery platform inspired by the super-app pattern used by platforms such as Grab, but extended for PNG realities and service categories.
+Wantok Services is not a taxi-only application. It is a Papua New Guinea-focused multi-service marketplace and service-delivery platform inspired by the super-app pattern used by platforms such as Grab, but extended for PNG realities and service categories.
 
 One signed-in account may act as a customer and, after approval, as one or more kinds of provider. There is no separate provider application. Provider tools appear according to approved roles and services.
 
@@ -29,7 +29,7 @@ Initial and planned customer verticals:
 Do not force every transaction into the taxi `rides` table. Keep a shared marketplace core for concepts that are common across services, and use specialised tables/workflows where a vertical has materially different behaviour.
 
 ```text
-                         Wantok Service
+                         Wantok Services
                                |
               +----------------+----------------+
               |                                 |
@@ -158,7 +158,7 @@ These should be designed once and reused across all verticals:
 
 ## Wantok Neurons integration boundary
 
-Wantok Service remains the user-facing transaction platform. Wantok Neurons may later provide intelligence through APIs for support chat, translation, voice booking, OCR/KYC assistance, fraud detection, route optimisation, listing generation and travel assistance. Core bookings, payments, provider state and customer records remain owned by Wantok Service.
+Wantok Services remains the user-facing transaction platform. Wantok Neurons may later provide intelligence through APIs for support chat, translation, voice booking, OCR/KYC assistance, fraud detection, route optimisation, listing generation and travel assistance. Core bookings, payments, provider state and customer records remain owned by Wantok Services.
 
 ## Current engineering rule
 
