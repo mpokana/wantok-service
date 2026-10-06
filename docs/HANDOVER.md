@@ -6,7 +6,7 @@
 
 ## Resume here
 
-The current safe checkpoint is **T2.2 PNG-rich Client Experience Polish**. This file is committed with that checkpoint; run:
+The current safe checkpoint is **T2.2 Five-tab Client Navigation Polish**. This file is committed with that checkpoint; run:
 
 `git log -1 --oneline`
 
@@ -96,6 +96,11 @@ Checkpointed platform includes:
 - Wantok Pay remains a visual preview only with **Kina (K)** display; no payment movement is enabled
 - visible PGK-facing customer amounts use Kina-style `K` formatting where appropriate
 - live Android emulator QA completed for Home, Food, Track and Inbox without visible overflow
+- client primary navigation finalised as **Home · Services · Track · Wallet · Inbox**
+- dedicated searchable Services hub added instead of duplicating the Home surface
+- Wantok Pay preview embedded directly as the Wallet tab without a nested app bar
+- Account/Profile moved out of primary navigation and remains accessible from the Home hero profile button
+- live Android emulator QA completed for Home, Services, Wallet and Account/Profile with no visible bottom-navigation overflow
 
 ## Validation baseline
 

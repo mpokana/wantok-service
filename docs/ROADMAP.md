@@ -79,6 +79,11 @@
 - [x] richer Track and Inbox headers/empty states
 - [x] Wantok Pay visual preview using Kina (K), without payment movement
 - [x] Android emulator visual QA with no visible overflow
+- [x] final client five-tab navigation: Home / Services / Track / Wallet / Inbox
+- [x] dedicated searchable Services hub
+- [x] embedded Wallet tab using Wantok Pay preview
+- [x] move Account/Profile access to Home hero profile button
+- [x] emulator QA for five-tab layout, Services, Wallet and Account/Profile
 
 ## T2.3 — Module health and dependency reporting — NEXT
 

@@ -15,7 +15,9 @@ import 'activity_page.dart';
 import 'client_home.dart';
 import 'messages_page.dart';
 import 'png_visuals.dart';
+import 'services_hub_page.dart';
 import 'vendor_home.dart';
+import 'wantok_pay_preview_page.dart';
 
 class HomeShell extends StatefulWidget {
   const HomeShell({required this.roles, required this.email, super.key});
@@ -70,6 +72,15 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
     }
   }
 
+  void _openAccount() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) =>
+            AccountPage(roles: _roles, onSignOut: _auth.signOut),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final navItems = _mode == AppMode.client
@@ -80,19 +91,24 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
               label: 'Home',
             ),
             _NavItem(
+              icon: Icons.grid_view_rounded,
+              outlineIcon: Icons.grid_view_outlined,
+              label: 'Services',
+            ),
+            _NavItem(
               icon: Icons.route_rounded,
               outlineIcon: Icons.route_outlined,
               label: 'Track',
             ),
             _NavItem(
+              icon: Icons.account_balance_wallet_rounded,
+              outlineIcon: Icons.account_balance_wallet_outlined,
+              label: 'Wallet',
+            ),
+            _NavItem(
               icon: Icons.forum_rounded,
               outlineIcon: Icons.forum_outlined,
               label: 'Inbox',
-            ),
-            _NavItem(
-              icon: Icons.person_rounded,
-              outlineIcon: Icons.person_outline_rounded,
-              label: 'Me',
             ),
           ]
         : const [
@@ -125,10 +141,11 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
 
     final pages = _mode == AppMode.client
         ? <Widget>[
-            const ClientHome(),
+            ClientHome(onAccountTap: _openAccount),
+            const ServicesHubPage(),
             const ActivityPage(),
+            const WantokPayPreviewPage(embedded: true),
             const MessagesPage(),
-            AccountPage(roles: _roles, onSignOut: _auth.signOut),
           ]
         : <Widget>[
             VendorHome(

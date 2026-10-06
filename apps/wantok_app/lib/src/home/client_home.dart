@@ -13,7 +13,9 @@ import 'png_visuals.dart';
 import 'wantok_pay_preview_page.dart';
 
 class ClientHome extends StatefulWidget {
-  const ClientHome({super.key});
+  const ClientHome({this.onAccountTap, super.key});
+
+  final VoidCallback? onAccountTap;
 
   @override
   State<ClientHome> createState() => _ClientHomeState();
@@ -50,7 +52,7 @@ class _ClientHomeState extends State<ClientHome> {
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(14, 12, 14, 24),
             children: [
-              const _PngHomeHero(),
+              _PngHomeHero(onAccountTap: widget.onAccountTap),
               const SizedBox(height: 14),
               _WantokPayStrip(
                 onTap: () => Navigator.of(context).push(
@@ -353,7 +355,9 @@ class _ServiceVisual {
 }
 
 class _PngHomeHero extends StatelessWidget {
-  const _PngHomeHero();
+  const _PngHomeHero({this.onAccountTap});
+
+  final VoidCallback? onAccountTap;
 
   @override
   Widget build(BuildContext context) {
@@ -363,23 +367,38 @@ class _PngHomeHero extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(
+              const Icon(
                 Icons.location_on_rounded,
                 color: WantokColors.gold,
                 size: 18,
               ),
-              SizedBox(width: 5),
-              Text(
+              const SizedBox(width: 5),
+              const Text(
                 'Papua New Guinea',
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.w800,
                 ),
               ),
-              Spacer(),
-              _HeroChip(icon: Icons.verified_user_outlined, label: 'Local'),
+              const Spacer(),
+              Material(
+                color: Colors.white.withValues(alpha: 0.18),
+                shape: const CircleBorder(),
+                child: InkWell(
+                  onTap: onAccountTap,
+                  customBorder: const CircleBorder(),
+                  child: const Padding(
+                    padding: EdgeInsets.all(9),
+                    child: Icon(
+                      Icons.person_rounded,
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
           const Spacer(),
@@ -425,39 +444,6 @@ class _PngHomeHero extends StatelessWidget {
                 prefixIcon: Icon(Icons.search_rounded),
                 suffixIcon: Icon(Icons.qr_code_scanner_rounded),
               ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _HeroChip extends StatelessWidget {
-  const _HeroChip({required this.icon, required this.label});
-
-  final IconData icon;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 6),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.16),
-        borderRadius: BorderRadius.circular(999),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.22)),
-      ),
-      child: Row(
-        children: [
-          Icon(icon, color: Colors.white, size: 15),
-          const SizedBox(width: 4),
-          Text(
-            label,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 11,
-              fontWeight: FontWeight.w800,
             ),
           ),
         ],
