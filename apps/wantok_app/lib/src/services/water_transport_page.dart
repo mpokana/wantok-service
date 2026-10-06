@@ -4,6 +4,7 @@ import 'package:wantok_ui/wantok_ui.dart';
 
 import '../client_load_error.dart';
 
+import 'booking_for_selector.dart';
 import 'water_trip_bookings_page.dart';
 
 class WaterTransportPage extends StatefulWidget {
@@ -160,6 +161,7 @@ class _DepartureDetailPageState extends State<_DepartureDetailPage> {
         passengers: draft.passengers,
         contactPhone: draft.contactPhone,
         note: draft.note,
+        trustedPersonId: draft.trustedPersonId,
       );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -342,6 +344,7 @@ class _WaterBookingDialogState extends State<_WaterBookingDialog> {
   final _contact = TextEditingController();
   final _note = TextEditingController();
   final List<_PassengerDraft> _passengers = [_PassengerDraft()];
+  String? _trustedPersonId;
   String? _error;
 
   @override
@@ -367,8 +370,10 @@ class _WaterBookingDialogState extends State<_WaterBookingDialog> {
   }
 
   void _submit() {
-    for (final passenger in _passengers) {
-      if (passenger.name.text.trim().length < 2) {
+    for (var index = 0; index < _passengers.length; index++) {
+      final passenger = _passengers[index];
+      final trustedPrimary = index == 0 && _trustedPersonId != null;
+      if (!trustedPrimary && passenger.name.text.trim().length < 2) {
         setState(() => _error = 'Enter the full name for every passenger.');
         return;
       }
@@ -388,6 +393,7 @@ class _WaterBookingDialogState extends State<_WaterBookingDialog> {
             .toList(growable: false),
         contactPhone: _contact.text.trim(),
         note: _note.text.trim(),
+        trustedPersonId: _trustedPersonId,
       ),
     );
   }
@@ -405,6 +411,16 @@ class _WaterBookingDialogState extends State<_WaterBookingDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              BookingForSelector(
+                selectedTrustedPersonId: _trustedPersonId,
+                onChanged: (value) {
+                  setState(() {
+                    _trustedPersonId = value;
+                    _error = null;
+                  });
+                },
+              ),
+              const SizedBox(height: 10),
               ...List.generate(_passengers.length, (index) {
                 final passenger = _passengers[index];
                 return Card(
@@ -429,12 +445,31 @@ class _WaterBookingDialogState extends State<_WaterBookingDialog> {
                               ),
                           ],
                         ),
-                        TextField(
-                          controller: passenger.name,
-                          decoration: const InputDecoration(
-                            labelText: 'Full name',
+                        if (index == 0 && _trustedPersonId != null)
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF1F6F3),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Text(
+                              'Primary passenger name and phone will come from the selected Trusted person. Passenger type and ID remain editable below.',
+                              style: TextStyle(
+                                color: WantokColors.primaryDark,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12,
+                                height: 1.35,
+                              ),
+                            ),
+                          )
+                        else
+                          TextField(
+                            controller: passenger.name,
+                            decoration: const InputDecoration(
+                              labelText: 'Full name',
+                            ),
                           ),
-                        ),
                         const SizedBox(height: 8),
                         DropdownButtonFormField<String>(
                           initialValue: passenger.type,
@@ -459,13 +494,15 @@ class _WaterBookingDialogState extends State<_WaterBookingDialog> {
                             if (value != null) passenger.type = value;
                           },
                         ),
-                        const SizedBox(height: 8),
-                        TextField(
-                          controller: passenger.phone,
-                          decoration: const InputDecoration(
-                            labelText: 'Phone (optional)',
+                        if (!(index == 0 && _trustedPersonId != null)) ...[
+                          const SizedBox(height: 8),
+                          TextField(
+                            controller: passenger.phone,
+                            decoration: const InputDecoration(
+                              labelText: 'Phone (optional)',
+                            ),
                           ),
-                        ),
+                        ],
                         const SizedBox(height: 8),
                         TextField(
                           controller: passenger.document,
@@ -549,11 +586,13 @@ class _WaterBookingDraft {
     required this.passengers,
     required this.contactPhone,
     required this.note,
+    required this.trustedPersonId,
   });
 
   final List<Map<String, dynamic>> passengers;
   final String contactPhone;
   final String note;
+  final String? trustedPersonId;
 }
 
 class _DepartureCard extends StatelessWidget {

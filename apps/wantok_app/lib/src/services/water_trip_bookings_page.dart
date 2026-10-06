@@ -132,6 +132,38 @@ class _WaterTripBookingsPageState extends State<WaterTripBookingsPage> {
                               _Status(text: status),
                             ],
                           ),
+                          if (booking['beneficiary_name'] != null) ...[
+                            const SizedBox(height: 8),
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF1F6F3),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.family_restroom_outlined,
+                                    color: WantokColors.primaryDark,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      booking['beneficiary_relationship'] ==
+                                              null
+                                          ? 'Primary passenger: ${booking['beneficiary_name']}'
+                                          : 'Primary passenger: ${booking['beneficiary_name']} (${booking['beneficiary_relationship']})',
+                                      style: const TextStyle(
+                                        color: WantokColors.primaryDark,
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                           const SizedBox(height: 7),
                           if (departure['departs_at'] != null)
                             Text(_formatDateTime(departure['departs_at'])),

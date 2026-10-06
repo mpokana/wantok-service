@@ -620,6 +620,40 @@ class _ManifestCard extends StatelessWidget {
                 _Status(text: status),
               ],
             ),
+            if (booking['beneficiary_name'] != null) ...[
+              const SizedBox(height: 8),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF1F6F3),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      booking['beneficiary_relationship'] == null
+                          ? 'Primary passenger: ${booking['beneficiary_name']}'
+                          : 'Primary passenger: ${booking['beneficiary_name']} (${booking['beneficiary_relationship']})',
+                      style: const TextStyle(
+                        color: WantokColors.primaryDark,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    if (booking['beneficiary_phone'] != null)
+                      Text(booking['beneficiary_phone'].toString()),
+                    Text(
+                      'Booked by: ${profile['full_name']?.toString() ?? 'Wantok account'}',
+                      style: const TextStyle(
+                        color: WantokColors.muted,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
             const SizedBox(height: 5),
             Text(
               '${fare['name']?.toString() ?? 'Fare'} • ${booking['passenger_count']} passenger(s)',
@@ -635,7 +669,7 @@ class _ManifestCard extends StatelessWidget {
               (passenger) => Padding(
                 padding: const EdgeInsets.only(bottom: 3),
                 child: Text(
-                  '• ${passenger['full_name']} — ${passenger['passenger_type']}${passenger['document_reference'] == null ? '' : ' • ID ${passenger['document_reference']}'}',
+                  '• ${passenger['full_name']} — ${passenger['passenger_type']}${_asMap(passenger['metadata'])['trusted_person_primary'] == true ? ' • Primary' : ''}${passenger['document_reference'] == null ? '' : ' • ID ${passenger['document_reference']}'}',
                 ),
               ),
             ),

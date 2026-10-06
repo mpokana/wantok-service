@@ -132,10 +132,10 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 - [x] privacy controls for profile visibility, review visibility, saved-items privacy, recommendations and profile sharing
 - [x] owner-scoped Trusted people model and Account CRUD for family/relative/staff beneficiaries
 - [x] richer Wantok Pay preview including planned actions, verification, PNG services and recent-activity framing
-- [x] database coverage: 21 pgTAP files / 492 tests PASS
+- [x] database coverage: 22 pgTAP files / 525 tests PASS
 - [x] client analysis PASS and 32 Flutter app tests PASS
 
-### CX1B — Delegated Booking Foundation
+### CX1B — Delegated Booking Foundation — COMPLETE FOR CURRENT SERVICE CATALOGUE
 
 - [x] add beneficiary snapshot fields to shared `service_bookings`
 - [x] keep signed-in customer as booking owner/payer; beneficiary never receives account authority
@@ -144,11 +144,11 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 - [x] wire **Who is this for?** selector into Vehicle Hire, Boat Hire and Venue Booking reservations
 - [x] wire **Who is this for?** selector into Delivery, Errands/Pabili, Specialist Services and General Labour requests
 - [x] show delegated beneficiary in customer Track and vendor Jobs without exposing contact details in vendor list
-- [x] delegated-booking security/regression coverage included in 21 files / 492 pgTAP tests
+- [x] delegated-booking security/regression coverage included in 22 files / 525 pgTAP tests
 - [x] wire delegated booking into Taxi/Ride with actual-rider snapshot and separate booked-by identity
 - [x] wire delegated booking into Events/ticketing with trusted primary-attendee snapshots and organiser visibility
 - [x] wire delegated booking into Food/Groceries commerce/order flows with recipient snapshots and vendor visibility
-- [ ] wire delegated booking into scheduled Boat/Ship passenger transport
+- [x] wire delegated booking into scheduled Boat/Ship passenger transport with Trusted-person primary-passenger enforcement and manifest snapshots
 - [ ] decide whether future accommodation/flights modules inherit the shared delegated-booking contract
 
 - [ ] extend Save controls from service categories to providers, resources/venues and events

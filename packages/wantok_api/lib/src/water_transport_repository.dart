@@ -46,6 +46,7 @@ class WaterTransportRepository {
     required List<Map<String, dynamic>> passengers,
     String? contactPhone,
     String? note,
+    String? trustedPersonId,
   }) async {
     final response = await WantokBackend.client.rpc(
       'book_water_departure',
@@ -55,6 +56,7 @@ class WaterTransportRepository {
         'p_passengers': passengers,
         'p_contact_phone': _emptyToNull(contactPhone),
         'p_note': _emptyToNull(note),
+        'p_trusted_person_id': trustedPersonId,
       },
     );
 
@@ -65,7 +67,7 @@ class WaterTransportRepository {
     final rows = await WantokBackend.client
         .from('water_passenger_bookings')
         .select(
-          'id, departure_id, fare_class_id, passenger_count, unit_fare, total_amount, currency, status, payment_status, contact_phone, note, booked_at, water_departures(departs_at, arrives_at, status, boarding_point, water_routes(name, origin_name, destination_name), water_vessels(name, registration_number, vessel_type)), water_fare_classes(name), water_booking_passengers(id, full_name, phone, passenger_type, document_reference)',
+          'id, departure_id, fare_class_id, passenger_count, unit_fare, total_amount, currency, status, payment_status, contact_phone, note, booked_at, trusted_person_id, beneficiary_name, beneficiary_relationship, beneficiary_phone, beneficiary_email, water_departures(departs_at, arrives_at, status, boarding_point, water_routes(name, origin_name, destination_name), water_vessels(name, registration_number, vessel_type)), water_fare_classes(name), water_booking_passengers(id, full_name, phone, passenger_type, document_reference, metadata)',
         )
         .eq('customer_id', _userId)
         .order('created_at', ascending: false)
@@ -258,7 +260,7 @@ class WaterTransportRepository {
     final rows = await WantokBackend.client
         .from('water_passenger_bookings')
         .select(
-          'id, departure_id, fare_class_id, customer_id, passenger_count, unit_fare, total_amount, currency, status, payment_status, contact_phone, note, booked_at, profiles(full_name, phone), water_fare_classes(name), water_booking_passengers(id, full_name, phone, passenger_type, document_reference)',
+          'id, departure_id, fare_class_id, customer_id, passenger_count, unit_fare, total_amount, currency, status, payment_status, contact_phone, note, booked_at, trusted_person_id, beneficiary_name, beneficiary_relationship, beneficiary_phone, beneficiary_email, profiles(full_name, phone), water_fare_classes(name), water_booking_passengers(id, full_name, phone, passenger_type, document_reference, metadata)',
         )
         .eq('departure_id', departureId)
         .order('created_at');
