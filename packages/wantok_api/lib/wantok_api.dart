@@ -1,5 +1,6 @@
 export 'src/account_repository.dart';
 export 'src/catalog_repository.dart';
+export 'src/client_experience_repository.dart';
 export 'src/commerce_repository.dart';
 export 'src/events_repository.dart';
 export 'src/messaging_repository.dart';

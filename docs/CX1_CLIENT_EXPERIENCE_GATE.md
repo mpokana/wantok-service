@@ -1,47 +1,75 @@
 # CX1 — Client Experience Completion Gate
 
-**Status:** IN PROGRESS; implementation checkpoint, gate open before T2.4.
+**Status:** IN PROGRESS; CX1A foundation implemented, live gate evidence still open before T2.4.
 **Environment:** EAGLT02 local development; existing accounts/data preserved.
 **T2.3 checkpoint:** `46d6208`.
+**Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
+
+## Locked client navigation
+
+Wantok Services keeps its own five-button bottom navigation:
+
+**Home · Services · Track · Wallet · Inbox**
+
+This is intentional and must not be renamed to Grab-style Discover / Activity / Payment / Messages. The product concepts are adapted, not cloned:
+
+- **Services** owns discovery, browse, search, saved items and local service exploration.
+- **Track** owns ongoing/scheduled/completed service activity, messaging entry points and reviews.
+- **Wallet** owns Wantok Pay preview and future payment history.
+- **Inbox** owns messages/updates.
+- Profile/Account remains outside the bottom bar.
 
 ## Acceptance and evidence
 
 | Area | Evidence at this checkpoint | Status |
 | --- | --- | --- |
-| Client shell | Five tabs, Home search/profile/back; selected-tab labels/tap actions | Automated PASS; live QA pending |
-| Discovery | Search/family filters combine; clearing restores catalogue | Automated PASS |
-| Service entry/back | 11 categories from Services plus Home Food route | Automated PASS; successful live data journeys pending |
-| State handling | Delayed catalogue, repeated retry failures, empty/no-match distinction; record errors do not look empty | Automated PASS |
-| Layout/accessibility | 320/390/800 logical pixels at 1.5x text; discovery scroll and five tabs | Automated PASS; native visual QA pending |
-| Wallet | Kina (K), explicit preview/planned copy, no transaction controls/backend changes | Automated PASS |
-| Role boundary | Customer can switch modes without gaining provider or technical authority | Automated PASS; pgTAP baseline retained |
-| Checkpoint | Full Flutter checks: 32 app tests, Admin/Tech smoke tests and seven analysis targets; 16 files / 364 pgTAP tests; diff check | PASS |
+| Client shell | Five Wantok tabs, Home search/profile/back; selected-tab semantics | Automated PASS; live QA pending |
+| Services discovery | Search/family filters; errors/empty states; Saved shortcut and category bookmarks | Automated baseline PASS; live bookmark QA pending |
+| Profile & identity | Personal profile, bio/avatar URL foundation, separate Business/Vendor profile | Implemented; signed-in visual QA pending |
+| Linked accounts | Google/Facebook Supabase identity-linking UI; email sign-in remains visible | Implemented; provider OAuth configuration/live flow pending |
+| Privacy | Profile/review visibility, saved privacy, recommendations and profile-sharing settings | Database/API/UI implemented; live QA pending |
+| Saved | Owner-scoped saved-entity store, secured validation RPC and Saved screen | pgTAP PASS; provider/resource/event Save controls still pending |
+| Trusted people | Owner-scoped family/relative/staff records with Account CRUD | pgTAP PASS; booking beneficiary wiring pending |
+| Reviews | Existing booking-linked review model extended with title/photo URLs/visibility; secured completed-booking RPC; Track Review/Edit action | pgTAP PASS; live completed-booking QA pending |
+| Activity/Track | Existing specialised ride/order/event/water links plus generic booking review path | Automated baseline PASS; populated live records pending |
+| Wallet | Kina K; Top up/Scan/Send/Receive preview, verification, PNG planned services, recent-activity framing | Automated PASS; no transaction movement |
+| Role boundary | Client/Vendor switch does not grant provider or technical authority | Automated PASS; pgTAP baseline retained |
+| Database | CX1 migration and new security tests | 17 files / 394 pgTAP tests PASS |
+| Flutter client | Analysis plus existing regression suite | 32 tests PASS |
+| Visual evidence | Earlier shell QA exists; CX1A surfaces require fresh Android/Web evidence | PENDING |
 
-## Implemented fixes
+## CX1A implemented changes
 
-- Home search opens Services; decorative QR/tune controls removed.
-- Service families are working filters, with search clearing and clear-filters recovery.
-- Empty catalogue differs from unmatched search; errors use connection/retry guidance.
-- Home profile route has its own scaffold/app bar/back button.
-- Scenic headers grow with content; discovery grids, spotlights and Wallet action cards fit enlarged text.
-- Narrow client mode selection uses a compact menu; tab semantics include labels, selection and tap actions.
-- Track opens existing specialised records; generic requests/reservations are labelled accurately.
-- Retry callbacks no longer return Futures from setState or let failed refreshes escape.
-- Events, departures, orders, registrations and water trips distinguish errors from no records.
-- Wallet remains a preview; no payment adapters, database migrations, local config or account changes.
+- Migration `20261006130000_cx1_client_experience_foundations.sql` is applied locally.
+- `profiles` adds avatar URL and bio foundation.
+- `account_preferences` adds profile visibility, review visibility, saved-item privacy, recommendation opt-in and profile-sharing controls.
+- `client_saved_items` is owner-scoped and RPC-only for ordinary bookmark access; the server validates that an entity is still discoverable before saving/showing it.
+- `trusted_people` is owner-scoped with RLS and provides the beneficiary foundation for family/delegated bookings.
+- `service_reviews` reuses the existing booking-linked review system and adds title, photo URL list and visibility.
+- Direct authenticated review insertion was removed; `submit_service_review` enforces completed customer-booking eligibility.
+- Existing provider-rating aggregation remains the source of provider rating averages/counts.
+- `AccountPage` exposes Privacy & sharing, Linked accounts, Saved, Trusted people and My reviews.
+- Personal and Business/Vendor profiles remain separate identities under the same Wantok login.
+- `ServicesHubPage` remains the client discovery hub and now supports saving service categories.
+- `ActivityPage` / Track now offers Review service / Edit review for eligible completed generic bookings.
+- Wantok Pay remains preview-only. No payment adapters, balance ledger, settlement or custody logic was added.
 
-## Coverage limits and next work
+## Coverage limits and remaining CX1 work
 
-The widget tests use injected in-memory catalogue rows or an unconfigured backend. They verify navigation/layout/recovery, not successful authenticated bookings, real Realtime delivery, device location or map tiles. The Taxi route is preserved and source-reviewed, but excluded from offline route tests because it uses external map tiles and device location.
+1. Wire trusted-person beneficiary selection into service booking flows one module at a time. The signed-in customer remains the payer/requesting account; beneficiary identity must not confer account access.
+2. Extend Save controls to providers, venues/resources and events, not only service categories.
+3. Add managed Supabase Storage/image-upload flows for avatars and review photos; URL columns are only the current data foundation.
+4. Implement recommendation logic only after real saved/history/location inputs are available and honour the recommendation opt-out.
+5. Add PNG province/town/destination discovery driven by real service coverage rather than hard-coded destination buttons.
+6. Add achievements/rewards only after core service flows are stable.
+7. Defer follow/follower/social metrics until privacy, abuse/moderation and notification design are approved.
+8. Perform fresh signed-in Android/Web QA on Account tools, Services bookmarks, Track reviews and Wallet.
+9. Verify Taxi map/location permission handling and populated Track/Inbox/account records without creating destructive test data.
+10. Run full project checkpoint validation and keep T2.4 deferred until CX1 evidence is complete.
 
-1. Build and visually verify the updated client in a development Android/Web session while preserving existing sign-in/account data.
-2. Verify Taxi entry/back, map/location permission handling and existing ride history without submitting a new ride.
-3. Inspect existing populated/empty Track, orders, events, water bookings, Inbox and Account records without modifying them; verify service-specific return paths.
-4. Check offline/recovery behaviour and enlarged text on the real client.
-5. Record evidence, resolve any remaining client defects, run checkpoint checks and close CX1 before T2.4.
+## Safety boundaries
 
-The running app/admin servers and local Supabase stack were not replaced. Existing auth users/profiles remain two and the local technical-admin grant remains one. Database test fixtures are transactional and roll back.
-
-## Completion rule
-
-Keep CX1 open until live evidence is recorded for the remaining areas. Do not start T2.4 based only on analysis/widget tests. Never reset/reseed Supabase, replace local accounts or enable Wantok Pay movement.
+- Do not reset/reseed local Supabase or replace local development accounts.
+- Do not enable Wantok Pay movement before payment-rail, settlement, custody and regulatory decisions are approved.
+- Do not copy Grab branding/layout. Use only product concepts adapted to Wantok Services and PNG.
+- Keep **Home · Services · Track · Wallet · Inbox** unless Mansfield explicitly approves a future navigation redesign.

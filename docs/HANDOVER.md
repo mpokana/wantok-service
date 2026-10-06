@@ -6,7 +6,7 @@
 
 ## Resume here
 
-The current safe checkpoint is **CX1 client discovery, navigation and load recovery**; the **CX1 gate remains open**. T2.3 is checkpointed at **`46d6208`**. This file is committed with that checkpoint; run:
+The current working phase is **CX1A consumer account, saved, reviews and delegated-service foundation**; the **CX1 gate remains open before T2.4**. T2.3 is checkpointed at **`46d6208`** and the prior CX1 reliability/discovery checkpoint is **`0c33a37`**. The current CX1A changes must be validated and checkpointed before moving on. Run:
 
 `git log -1 --oneline`
 
@@ -44,7 +44,7 @@ Checkpointed platform includes:
 - T2.2 versioned typed module configuration and Technical Control editor
 - T2.2 PNG-rich client experience polish across Home, Food/Groceries, Track, Inbox and Wantok Pay preview
 - T2.3 module health/dependency reporting, scoped probe execution and impact previews
-- CX1 working discovery filters/search, accessible client navigation, specialised Track shortcuts and load recovery (gate open)
+- CX1 reliability/discovery baseline plus CX1A richer client account/privacy, linked identities, saved service categories, trusted people, booking-linked reviews and richer Wallet preview (gate open)
 
 ### Technical Control T1
 
@@ -118,16 +118,20 @@ Checkpointed platform includes:
 
 ### CX1 implementation and evidence
 
-- Home search now selects Services; profile route has an app bar/back button
-- Services family filters/search/clear work together; loading/error/empty/no-match states are distinct
-- retry failures stay in the view rather than escaping callbacks; several Future-returning setState callbacks corrected
-- Events/departures/order/registration/water-trip load failures no longer masquerade as empty records
-- Track links to existing specialised ride/order/event/water records; generic requests/reservations remain in their own model
-- client tabs expose labels, selection and semantic tap actions; narrow/enlarged-text layouts use a compact mode menu
-- Wallet copy labels planned actions; no payment movement or backend/security model changes
-- 31 focused widget regressions use in-memory catalogues or an unconfigured backend, with zero account/database writes
-- entry/back navigation coverage includes 11 categories; Taxi map/location/runtime behaviour remains live QA work
-- do not call CX1 complete from widget tests alone; see its evidence document
+- **Client navigation is locked as Home · Services · Track · Wallet · Inbox.** Do not rename it to Grab-style Discover/Activity/Payment/Messages.
+- Home search selects Services; profile route has an app bar/back button.
+- Services owns rich discovery: family filters/search/clear, safe loading/error/empty states, Saved shortcut and per-category bookmark controls.
+- Account/Profile now includes bio/avatar URL foundation, privacy/share controls, linked-account management, Saved, Trusted people, My reviews and separate Business/Vendor profile presentation under one login.
+- Supabase identity linking is used for Google/Facebook; no parallel customer account is created by UI design.
+- owner-scoped `client_saved_items` and secured bookmark RPC validate that only discoverable entities can be saved.
+- owner-scoped `trusted_people` provides the data foundation for booking services for relatives/family/staff; beneficiary selection is not yet wired into each service flow.
+- existing `service_reviews` is extended with title/photo URL/visibility fields; review writes use a secured RPC limited to completed customer bookings; provider rating aggregation remains the existing trigger.
+- Track offers Review/Edit review for eligible completed generic service bookings and retains specialised ride/order/event/water shortcuts.
+- Wallet remains preview-only but now frames Top up/Scan/Send/Receive, verification, PNG-oriented planned services and future transaction history. No money movement exists.
+- retry failures stay in the view rather than escaping callbacks; Events/departures/order/registration/water-trip failures do not masquerade as empty records.
+- 31 focused client regressions plus the configuration smoke total 32 app tests; they use in-memory/unconfigured backends and do not replace local account data.
+- entry/back navigation coverage includes 11 categories; Taxi map/location/runtime behaviour and the new CX1A surfaces still require live QA.
+- do not call CX1 complete from widget/database tests alone; see its evidence document.
 
 ## Validation baseline
 
@@ -138,8 +142,8 @@ At this checkpoint:
 - required `scripts/flutter/check.ps1`: PASS after clearing read-only attributes on generated test assets only
 - Wantok Operations Admin: analysis + smoke test PASS
 - Wantok Technical Control: analysis + smoke test PASS
-- database: **16 files / 364 pgTAP tests PASS** (all fixtures roll back)
-- Android visual QA was last recorded at T2.2; CX1 requires fresh client evidence
+- database: **17 files / 394 pgTAP tests PASS** (all fixtures roll back)
+- Android visual QA was last recorded for the earlier client shell; CX1A Account/Services bookmarks/Track reviews/Wallet changes require fresh signed-in client evidence
 - production Docker Compose parse PASS was recorded at T2.2; deployment files unchanged
 - `git diff --check`: PASS
 
@@ -182,13 +186,13 @@ Technical Control development server may be run on:
 
 **Finish CX1 — Client Experience Completion Gate**, before **T2.4**.
 
-T2.3 checkpoint: **`46d6208`**. Required sequence: **finish CX1 evidence → T2.4 diagnostics/logs/jobs**.
+T2.3 checkpoint: **`46d6208`**; prior CX1 reliability/discovery checkpoint: **`0c33a37`**. Required sequence: **finish CX1A/CX1 evidence → T2.4 diagnostics/logs/jobs**.
 
-CX1 verifies the five client tabs, Home profile access, service search/entry/back journeys, loading/error/retry/empty states, narrow screens/enlarged text, accessible controls, Kina formatting and the Wallet preview boundary. Resolve misleading or inactive controls and record focused regression/QA evidence before calling the gate complete. See `docs/ROADMAP.md` for the checklist and `docs/CX1_CLIENT_EXPERIENCE_GATE.md` for acceptance evidence and initial findings.
+CX1 now covers both reliability and the broader consumer layer approved for Wantok Services. The navigation remains **Home · Services · Track · Wallet · Inbox**. Immediate remaining work is beneficiary selection using Trusted people, Save controls on providers/resources/events, managed image upload, recommendation/destination work, and live QA of the new Account/Services/Track/Wallet surfaces. Achievements and social follows remain later within CX1 after the core workflows are stable. See `docs/ROADMAP.md` and `docs/CX1_CLIENT_EXPERIENCE_GATE.md`.
 
 Preserve the local development accounts, roles and data. Do not reset/reseed Supabase or replace working modules/configuration. At resume there are two local auth users/profiles and one local `tech_platform_admin` grant.
 
-T2.4 remains deferred until CX1 passes. Integrations and high-risk approvals follow later.
+T2.4 remains deferred until CX1 passes. CX1 migration `20261006130000_cx1_client_experience_foundations.sql` is already applied locally; do not reset/reseed Supabase to replay it. Integrations and high-risk approvals follow later.
 
 Do not begin Wantok Pay transaction movement until payment-rail and settlement decisions are made.
 

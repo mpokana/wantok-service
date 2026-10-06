@@ -173,6 +173,44 @@ class WantokPayPreviewPage extends StatelessWidget {
             ],
           ),
         ),
+        const SizedBox(height: 24),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 18),
+          child: PngSectionTitle(
+            title: 'Recent activity',
+            subtitle: 'Wallet history will appear here when payment rails are enabled.',
+          ),
+        ),
+        const SizedBox(height: 12),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 18),
+          child: Card(
+            child: Padding(
+              padding: EdgeInsets.all(22),
+              child: Column(
+                children: [
+                  Icon(
+                    Icons.receipt_long_outlined,
+                    size: 48,
+                    color: WantokColors.purplePay,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'No Wantok Pay transactions yet',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 17, fontWeight: FontWeight.w900),
+                  ),
+                  SizedBox(height: 6),
+                  Text(
+                    'This remains a safe preview. Cash-in, transfers, QR payments, bills and settlement are disabled until the Wantok Pay design gate is approved.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: WantokColors.muted, height: 1.4),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
         const SizedBox(height: 30),
       ],
     );

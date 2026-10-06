@@ -9,9 +9,16 @@ class AccountProfile {
     required this.preferredName,
     required this.phone,
     required this.addressText,
+    required this.avatarUrl,
+    required this.bio,
     required this.notifyBookingUpdates,
     required this.notifyMessages,
     required this.notifyPromotions,
+    required this.profileVisibility,
+    required this.reviewVisibility,
+    required this.savedItemsPrivate,
+    required this.allowRecommendations,
+    required this.allowProfileSharing,
   });
 
   final String id;
@@ -19,9 +26,16 @@ class AccountProfile {
   final String? preferredName;
   final String? phone;
   final String? addressText;
+  final String? avatarUrl;
+  final String? bio;
   final bool notifyBookingUpdates;
   final bool notifyMessages;
   final bool notifyPromotions;
+  final String profileVisibility;
+  final String reviewVisibility;
+  final bool savedItemsPrivate;
+  final bool allowRecommendations;
+  final bool allowProfileSharing;
 
   String get displayName {
     final preferred = preferredName?.trim();
@@ -36,9 +50,16 @@ class AccountProfile {
       preferredName: row['preferred_name'] as String?,
       phone: row['phone'] as String?,
       addressText: row['address_text'] as String?,
+      avatarUrl: row['avatar_url'] as String?,
+      bio: row['bio'] as String?,
       notifyBookingUpdates: row['notify_booking_updates'] as bool? ?? true,
       notifyMessages: row['notify_messages'] as bool? ?? true,
       notifyPromotions: row['notify_promotions'] as bool? ?? false,
+      profileVisibility: row['profile_visibility'] as String? ?? 'private',
+      reviewVisibility: row['review_visibility'] as String? ?? 'public',
+      savedItemsPrivate: row['saved_items_private'] as bool? ?? true,
+      allowRecommendations: row['allow_recommendations'] as bool? ?? true,
+      allowProfileSharing: row['allow_profile_sharing'] as bool? ?? true,
     );
   }
 }
@@ -94,7 +115,7 @@ class AccountRepository {
   String? get email => currentUser.email;
 
   Future<AccountProfile> loadAccountProfile() async {
-    final result = await _client.rpc('get_my_account_profile');
+    final result = await _client.rpc('get_my_account_profile_v2');
     final rows = (result as List<dynamic>).cast<Map<String, dynamic>>();
     if (rows.isEmpty) {
       throw StateError('Account profile not found.');
@@ -114,20 +135,38 @@ class AccountRepository {
     String? preferredName,
     String? phone,
     String? addressText,
+    String? avatarUrl,
+    String? bio,
     required bool notifyBookingUpdates,
     required bool notifyMessages,
     required bool notifyPromotions,
+    String? profileVisibility,
+    String? reviewVisibility,
+    bool? savedItemsPrivate,
+    bool? allowRecommendations,
+    bool? allowProfileSharing,
   }) async {
+    final current = await loadAccountProfile();
+
     await _client.rpc(
-      'update_my_account_profile',
+      'update_my_account_profile_v2',
       params: {
         'p_full_name': fullName,
         'p_preferred_name': preferredName,
         'p_phone': phone,
         'p_address_text': addressText,
+        'p_avatar_url': avatarUrl ?? current.avatarUrl,
+        'p_bio': bio ?? current.bio,
         'p_notify_booking_updates': notifyBookingUpdates,
         'p_notify_messages': notifyMessages,
         'p_notify_promotions': notifyPromotions,
+        'p_profile_visibility': profileVisibility ?? current.profileVisibility,
+        'p_review_visibility': reviewVisibility ?? current.reviewVisibility,
+        'p_saved_items_private': savedItemsPrivate ?? current.savedItemsPrivate,
+        'p_allow_recommendations':
+            allowRecommendations ?? current.allowRecommendations,
+        'p_allow_profile_sharing':
+            allowProfileSharing ?? current.allowProfileSharing,
       },
     );
   }

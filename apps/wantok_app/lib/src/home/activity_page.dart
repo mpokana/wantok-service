@@ -19,6 +19,7 @@ class ActivityPage extends StatefulWidget {
 class _ActivityPageState extends State<ActivityPage> {
   static const _repository = ReservationRepository();
   static const _messaging = MessagingRepository();
+  static const _experience = ClientExperienceRepository();
   late Future<List<Map<String, dynamic>>> _future;
   String? _busyId;
 
@@ -45,6 +46,45 @@ class _ActivityPageState extends State<ActivityPage> {
     try {
       await action();
       await _refresh();
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(_friendlyError(error))));
+      }
+    } finally {
+      if (mounted) setState(() => _busyId = null);
+    }
+  }
+
+  Future<void> _reviewBooking({
+    required String bookingId,
+    required String providerName,
+    Map<String, dynamic>? existingReview,
+  }) async {
+    final draft = await showDialog<_ReviewDraft>(
+      context: context,
+      builder: (context) => _ReviewDialog(
+        providerName: providerName,
+        existingReview: existingReview,
+      ),
+    );
+    if (draft == null) return;
+
+    setState(() => _busyId = bookingId);
+    try {
+      await _experience.submitServiceReview(
+        bookingId: bookingId,
+        rating: draft.rating,
+        title: draft.title,
+        comment: draft.comment,
+        visibility: draft.visibility,
+      );
+      await _refresh();
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Review saved. Thank you.')),
+        );
+      }
     } catch (error) {
       if (mounted) {
         ScaffoldMessenger.of(context)
@@ -179,6 +219,10 @@ class _ActivityPageState extends State<ActivityPage> {
               final provider = _asMap(row['provider_profiles']);
               final resource = _asMap(row['provider_resources']);
               final quotes = _asList(row['service_quotes']);
+              final reviews = _asList(row['service_reviews']);
+              final existingReview = reviews.isEmpty
+                  ? null
+                  : _asMap(reviews.first);
               final pendingQuote = quotes
                   .cast<Map<String, dynamic>?>()
                   .firstWhere(
@@ -296,6 +340,33 @@ class _ActivityPageState extends State<ActivityPage> {
                           ),
                         ),
                       ],
+                      if (status == 'completed' && provider.isNotEmpty) ...[
+                        const SizedBox(height: 12),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: OutlinedButton.icon(
+                            onPressed: busy
+                                ? null
+                                : () => _reviewBooking(
+                                    bookingId: id,
+                                    providerName:
+                                        provider['display_name'] as String? ??
+                                        'Wantok Provider',
+                                    existingReview: existingReview,
+                                  ),
+                            icon: Icon(
+                              existingReview == null
+                                  ? Icons.star_outline_rounded
+                                  : Icons.rate_review_outlined,
+                            ),
+                            label: Text(
+                              existingReview == null
+                                  ? 'Review service'
+                                  : 'Edit review',
+                            ),
+                          ),
+                        ),
+                      ],
                       if (_canCancel(status)) ...[
                         const SizedBox(height: 12),
                         Align(
@@ -322,6 +393,155 @@ class _ActivityPageState extends State<ActivityPage> {
       ),
     );
   }
+}
+
+class _ReviewDialog extends StatefulWidget {
+  const _ReviewDialog({
+    required this.providerName,
+    required this.existingReview,
+  });
+
+  final String providerName;
+  final Map<String, dynamic>? existingReview;
+
+  @override
+  State<_ReviewDialog> createState() => _ReviewDialogState();
+}
+
+class _ReviewDialogState extends State<_ReviewDialog> {
+  late int _rating;
+  late final TextEditingController _title;
+  late final TextEditingController _comment;
+  late String _visibility;
+
+  @override
+  void initState() {
+    super.initState();
+    final existing = widget.existingReview;
+    _rating = existing?['rating'] as int? ?? 5;
+    _title = TextEditingController(text: existing?['title'] as String? ?? '');
+    _comment = TextEditingController(
+      text: existing?['comment'] as String? ?? '',
+    );
+    _visibility = existing?['visibility'] as String? ?? 'default';
+  }
+
+  @override
+  void dispose() {
+    _title.dispose();
+    _comment.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    Navigator.of(context).pop(
+      _ReviewDraft(
+        rating: _rating,
+        title: _emptyToNull(_title.text),
+        comment: _emptyToNull(_comment.text),
+        visibility: _visibility == 'default' ? null : _visibility,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Review ${widget.providerName}'),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'How was the service?',
+              style: TextStyle(fontWeight: FontWeight.w800),
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 4,
+              children: List.generate(5, (index) {
+                final value = index + 1;
+                return IconButton(
+                  tooltip: '$value star',
+                  onPressed: () => setState(() => _rating = value),
+                  icon: Icon(
+                    value <= _rating
+                        ? Icons.star_rounded
+                        : Icons.star_border_rounded,
+                    color: const Color(0xFFE6A100),
+                    size: 30,
+                  ),
+                );
+              }),
+            ),
+            const SizedBox(height: 8),
+            TextField(
+              controller: _title,
+              maxLength: 160,
+              decoration: const InputDecoration(
+                labelText: 'Review title',
+                hintText: 'Helpful, fast, reliable...',
+              ),
+            ),
+            const SizedBox(height: 8),
+            TextField(
+              controller: _comment,
+              minLines: 3,
+              maxLines: 6,
+              maxLength: 4000,
+              decoration: const InputDecoration(
+                labelText: 'Tell other Wantoks about your experience',
+              ),
+            ),
+            const SizedBox(height: 8),
+            DropdownButtonFormField<String>(
+              initialValue: _visibility,
+              decoration: const InputDecoration(
+                labelText: 'Who can see this review?',
+              ),
+              items: const [
+                DropdownMenuItem(
+                  value: 'default',
+                  child: Text('Use my privacy setting'),
+                ),
+                DropdownMenuItem(value: 'private', child: Text('Only me')),
+                DropdownMenuItem(
+                  value: 'registered',
+                  child: Text('Signed-in Wantok users'),
+                ),
+                DropdownMenuItem(value: 'public', child: Text('Public')),
+              ],
+              onChanged: (value) {
+                if (value != null) setState(() => _visibility = value);
+              },
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Cancel'),
+        ),
+        FilledButton(onPressed: _submit, child: const Text('Save review')),
+      ],
+    );
+  }
+}
+
+class _ReviewDraft {
+  const _ReviewDraft({
+    required this.rating,
+    required this.title,
+    required this.comment,
+    required this.visibility,
+  });
+
+  final int rating;
+  final String? title;
+  final String? comment;
+  final String? visibility;
 }
 
 class _TrackHeader extends StatelessWidget {
@@ -469,6 +689,11 @@ String _kina(dynamic currency, dynamic amount) {
     return 'K$amount';
   }
   return '$code $amount';
+}
+
+String? _emptyToNull(String value) {
+  final trimmed = value.trim();
+  return trimmed.isEmpty ? null : trimmed;
 }
 
 String _friendlyError(Object error) =>

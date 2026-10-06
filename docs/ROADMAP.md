@@ -99,6 +99,16 @@
 
 Required sequence: **T2.3 checkpoint → CX1 → T2.4**. T2.4 must wait until the client gate is completed with recorded evidence.
 
+### Navigation decision — LOCKED
+
+Wantok Services keeps its own five-button client navigation:
+
+**Home · Services · Track · Wallet · Inbox**
+
+Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Messages**. Rich discovery belongs inside **Services**; lifecycle/activity belongs inside **Track**; profile remains outside the bottom bar and opens from Home/Account entry points.
+
+### CX1 reliability and discovery baseline
+
 - [x] automated five-tab navigation, Home search and profile entry/back checks
 - [x] working service search/family filters and entry/back coverage for 11 service categories
 - [x] replace inactive Home search/QR and family controls; clarify planned Wallet actions
@@ -108,10 +118,36 @@ Required sequence: **T2.3 checkpoint → CX1 → T2.4**. T2.4 must wait until th
 - [x] preserve Kina (K) amounts and Wantok Pay preview-only boundary
 - [x] customer Client/Vendor switch does not grant provider/technical administration
 - [x] add 31 focused offline client regressions and record their limitations
-- [x] CX1 implementation checkpoint: full Flutter checks, 364 pgTAP tests and diff check PASS
+
+### CX1A — Consumer account, saved, reviews and delegated-service foundation
+
+- [x] richer personal profile fields: avatar URL, bio and profile/privacy preferences
+- [x] separate personal and Business/Vendor profile presentation under one login
+- [x] linked-account UI backed by Supabase identity linking for Google/Facebook
+- [x] owner-scoped Saved model with validated entities and Services-category bookmarks
+- [x] Saved screen and Services shortcut
+- [x] review title/photos/visibility foundation on the existing booking-linked review model
+- [x] secured review RPC restricted to completed customer bookings
+- [x] Review/Edit review action from Track for completed generic service bookings
+- [x] privacy controls for profile visibility, review visibility, saved-items privacy, recommendations and profile sharing
+- [x] owner-scoped Trusted people model and Account CRUD for family/relative/staff beneficiaries
+- [x] richer Wantok Pay preview including planned actions, verification, PNG services and recent-activity framing
+- [x] database coverage: 17 pgTAP files / 394 tests PASS
+- [x] client analysis PASS and 32 Flutter app tests PASS
+- [ ] wire trusted-person beneficiary selection into each service booking flow without changing payer/account authority
+- [ ] extend Save controls from service categories to providers, resources/venues and events
+- [ ] add managed image/storage upload for avatar and review photos; URL fields are foundation only
+- [ ] recommendations from real location/history/saved data, with opt-out respected
+- [ ] PNG province/town/destination discovery driven by service coverage rather than hard-coded destinations
+- [ ] optional achievements/rewards after core consumer workflows are stable
+- [ ] social follow/follower metrics only after privacy/moderation design is approved
+
+### Remaining CX1 gate evidence
+
 - [ ] fresh signed-in Android/Web visual QA using existing development sessions/accounts
 - [ ] live read-only journey checks, especially Taxi map/location/history and populated Track/Inbox/account records
-- [ ] complete gate evidence review before T2.4
+- [ ] live QA of Account privacy/linked/saved/trusted/review pages, Services bookmarks, Track reviews and Wallet preview
+- [ ] complete gate evidence review and full checkpoint before T2.4
 
 Acceptance evidence and initial findings: `docs/CX1_CLIENT_EXPERIENCE_GATE.md`.
 

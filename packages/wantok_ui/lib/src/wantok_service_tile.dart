@@ -11,6 +11,8 @@ class WantokServiceTile extends StatelessWidget {
     this.accentColor,
     this.surfaceColor,
     this.badgeColor,
+    this.isSaved = false,
+    this.onSavedToggle,
     super.key,
   });
 
@@ -21,6 +23,8 @@ class WantokServiceTile extends StatelessWidget {
   final Color? accentColor;
   final Color? surfaceColor;
   final Color? badgeColor;
+  final bool isSaved;
+  final VoidCallback? onSavedToggle;
 
   @override
   Widget build(BuildContext context) {
@@ -100,6 +104,34 @@ class WantokServiceTile extends StatelessWidget {
                     ],
                   ),
                 ),
+                if (onSavedToggle != null)
+                  Positioned(
+                    left: -8,
+                    top: -8,
+                    child: Semantics(
+                      button: true,
+                      label: isSaved ? 'Remove from saved' : 'Save service',
+                      child: Material(
+                        color: Colors.white,
+                        shape: const CircleBorder(),
+                        elevation: 1,
+                        child: InkWell(
+                          customBorder: const CircleBorder(),
+                          onTap: onSavedToggle,
+                          child: Padding(
+                            padding: const EdgeInsets.all(5),
+                            child: Icon(
+                              isSaved
+                                  ? Icons.bookmark_rounded
+                                  : Icons.bookmark_border_rounded,
+                              size: 16,
+                              color: accent,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 if (badge != null)
                   Positioned(
                     right: -10,

@@ -9,6 +9,7 @@ import '../services/open_request_page.dart';
 import '../services/reservation_browse_page.dart';
 import '../services/taxi_ride_page.dart';
 import '../services/water_transport_page.dart';
+import 'client_account_tools.dart';
 import 'png_visuals.dart';
 
 class ServicesHubPage extends StatefulWidget {
@@ -22,9 +23,12 @@ class ServicesHubPage extends StatefulWidget {
 
 class _ServicesHubPageState extends State<ServicesHubPage> {
   static const _catalog = CatalogRepository();
+  static const _experience = ClientExperienceRepository();
 
   late Future<List<WantokServiceCategory>> _future;
   final _search = TextEditingController();
+  final Set<String> _savedCategoryIds = <String>{};
+  final Set<String> _savingSavedIds = <String>{};
   String _query = '';
   _ServiceFamily _family = _ServiceFamily.all;
 
@@ -49,6 +53,63 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
   void initState() {
     super.initState();
     _future = _loadServices();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadSavedItems();
+    });
+  }
+
+  Future<void> _loadSavedItems() async {
+    try {
+      final ids = await _experience.loadSavedIds('category');
+      if (mounted) {
+        setState(() {
+          _savedCategoryIds
+            ..clear()
+            ..addAll(ids);
+        });
+      }
+    } catch (_) {
+      // Saved items are optional discovery enhancement; catalogue still works.
+    }
+  }
+
+  Future<void> _toggleSaved(WantokServiceCategory service) async {
+    if (_savingSavedIds.contains(service.id)) return;
+    final wasSaved = _savedCategoryIds.contains(service.id);
+    setState(() => _savingSavedIds.add(service.id));
+    try {
+      await _experience.setSavedItem(
+        itemType: 'category',
+        entityId: service.id,
+        saved: !wasSaved,
+      );
+      if (mounted) {
+        setState(() {
+          if (wasSaved) {
+            _savedCategoryIds.remove(service.id);
+          } else {
+            _savedCategoryIds.add(service.id);
+          }
+        });
+      }
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error.toString().replaceFirst('StateError: ', '')),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _savingSavedIds.remove(service.id));
+    }
+  }
+
+  Future<void> _openSaved() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (context) => const SavedItemsPage()),
+    );
+    if (mounted) await _loadSavedItems();
   }
 
   Future<void> _reload() async {
@@ -58,6 +119,7 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
     });
     try {
       await next;
+      await _loadSavedItems();
     } catch (_) {
       // The FutureBuilder presents the retryable error state.
     }
@@ -178,10 +240,20 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
                     : snapshot.hasError
                     ? 'Services are temporarily unavailable.'
                     : '${filtered.length} service${filtered.length == 1 ? '' : 's'} available.',
-                trailing: IconButton(
-                  tooltip: 'Refresh',
-                  onPressed: _reload,
-                  icon: const Icon(Icons.refresh_rounded),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      tooltip: 'Saved',
+                      onPressed: _openSaved,
+                      icon: const Icon(Icons.bookmarks_outlined),
+                    ),
+                    IconButton(
+                      tooltip: 'Refresh',
+                      onPressed: _reload,
+                      icon: const Icon(Icons.refresh_rounded),
+                    ),
+                  ],
                 ),
               ),
               const SizedBox(height: 12),
@@ -257,6 +329,8 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
                             accentColor: visual.accent,
                             surfaceColor: visual.surface,
                             badge: _badgeFor(service.slug),
+                            isSaved: _savedCategoryIds.contains(service.id),
+                            onSavedToggle: () => _toggleSaved(service),
                             onTap: () => _openService(service),
                           );
                         },

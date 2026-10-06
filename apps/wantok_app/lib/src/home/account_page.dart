@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import '../vendor/provider_application_page.dart';
+import 'client_account_tools.dart';
+
 class AccountPage extends StatefulWidget {
   const AccountPage({required this.roles, required this.onSignOut, super.key});
 
@@ -68,6 +71,20 @@ class _AccountPageState extends State<AccountPage> {
         const SnackBar(content: Text('Password updated successfully.')),
       );
     }
+  }
+
+  Future<void> _openPrivacy(AccountProfile profile) async {
+    final changed = await Navigator.of(context).push<bool>(
+      MaterialPageRoute<bool>(
+        builder: (context) => PrivacySettingsPage(profile: profile),
+      ),
+    );
+    if (changed == true && mounted) await _refresh();
+  }
+
+  void _openTool(Widget page) {
+    Navigator.of(context)
+        .push(MaterialPageRoute<void>(builder: (context) => page));
   }
 
   @override
@@ -190,6 +207,7 @@ class _AccountPageState extends State<AccountPage> {
                     label: 'Address',
                     value: _valueOrDash(profile.addressText),
                   ),
+                  _DetailRow(label: 'Bio', value: _valueOrDash(profile.bio)),
                 ],
               ),
               const SizedBox(height: 14),
@@ -212,10 +230,67 @@ class _AccountPageState extends State<AccountPage> {
                   ),
                 ],
               ),
+              const SizedBox(height: 14),
+              _SectionCard(
+                title: 'Your Wantok',
+                icon: Icons.auto_awesome_outlined,
+                children: [
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.privacy_tip_outlined),
+                    title: const Text('Privacy & sharing'),
+                    subtitle: Text(
+                      'Profile: ${profile.profileVisibility} • Reviews: ${profile.reviewVisibility}',
+                    ),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => _openPrivacy(profile),
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.link_rounded),
+                    title: const Text('Linked accounts'),
+                    subtitle: const Text(
+                      'Google, Facebook and sign-in methods',
+                    ),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => _openTool(const LinkedAccountsPage()),
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.bookmark_outline_rounded),
+                    title: const Text('Saved'),
+                    subtitle: const Text(
+                      'Services, providers, places and events',
+                    ),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => _openTool(const SavedItemsPage()),
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.group_outlined),
+                    title: const Text('Trusted people'),
+                    subtitle: const Text(
+                      'Family, relatives or staff you may book for',
+                    ),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => _openTool(const TrustedPeoplePage()),
+                  ),
+                  ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: const Icon(Icons.rate_review_outlined),
+                    title: const Text('My reviews'),
+                    subtitle: const Text(
+                      'Ratings and feedback you have shared',
+                    ),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () => _openTool(const MyReviewsPage()),
+                  ),
+                ],
+              ),
               if (provider != null) ...[
                 const SizedBox(height: 14),
                 _SectionCard(
-                  title: 'Provider profile',
+                  title: 'Business / vendor profile',
                   icon: Icons.storefront_outlined,
                   onAction: () => _editProvider(provider),
                   children: [
@@ -258,6 +333,29 @@ class _AccountPageState extends State<AccountPage> {
                           ),
                         ),
                       ),
+                  ],
+                ),
+              ] else ...[
+                const SizedBox(height: 14),
+                _SectionCard(
+                  title: 'Business / vendor profile',
+                  icon: Icons.storefront_outlined,
+                  children: [
+                    const Text(
+                      'Use the same Wantok account for a business or provider profile. '
+                      'Provider capabilities remain subject to verification and approval.',
+                      style: TextStyle(color: WantokColors.muted, height: 1.4),
+                    ),
+                    const SizedBox(height: 10),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: OutlinedButton.icon(
+                        onPressed: () =>
+                            _openTool(const ProviderApplicationPage()),
+                        icon: const Icon(Icons.person_add_alt_1_outlined),
+                        label: const Text('Apply for vendor profile'),
+                      ),
+                    ),
                   ],
                 ),
               ],
@@ -308,6 +406,8 @@ class _EditPersonalProfilePageState extends State<_EditPersonalProfilePage> {
   late final TextEditingController _preferredName;
   late final TextEditingController _phone;
   late final TextEditingController _address;
+  late final TextEditingController _avatarUrl;
+  late final TextEditingController _bio;
   late bool _bookingUpdates;
   late bool _messages;
   late bool _promotions;
@@ -322,6 +422,8 @@ class _EditPersonalProfilePageState extends State<_EditPersonalProfilePage> {
     );
     _phone = TextEditingController(text: widget.profile.phone ?? '');
     _address = TextEditingController(text: widget.profile.addressText ?? '');
+    _avatarUrl = TextEditingController(text: widget.profile.avatarUrl ?? '');
+    _bio = TextEditingController(text: widget.profile.bio ?? '');
     _bookingUpdates = widget.profile.notifyBookingUpdates;
     _messages = widget.profile.notifyMessages;
     _promotions = widget.profile.notifyPromotions;
@@ -333,6 +435,8 @@ class _EditPersonalProfilePageState extends State<_EditPersonalProfilePage> {
     _preferredName.dispose();
     _phone.dispose();
     _address.dispose();
+    _avatarUrl.dispose();
+    _bio.dispose();
     super.dispose();
   }
 
@@ -345,6 +449,8 @@ class _EditPersonalProfilePageState extends State<_EditPersonalProfilePage> {
         preferredName: _emptyToNull(_preferredName.text),
         phone: _emptyToNull(_phone.text),
         addressText: _emptyToNull(_address.text),
+        avatarUrl: _avatarUrl.text.trim(),
+        bio: _bio.text.trim(),
         notifyBookingUpdates: _bookingUpdates,
         notifyMessages: _messages,
         notifyPromotions: _promotions,
@@ -403,6 +509,28 @@ class _EditPersonalProfilePageState extends State<_EditPersonalProfilePage> {
             decoration: const InputDecoration(
               labelText: 'Address',
               prefixIcon: Icon(Icons.location_on_outlined),
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _avatarUrl,
+            keyboardType: TextInputType.url,
+            decoration: const InputDecoration(
+              labelText: 'Profile photo URL',
+              prefixIcon: Icon(Icons.account_circle_outlined),
+              hintText: 'https://...',
+            ),
+          ),
+          const SizedBox(height: 12),
+          TextField(
+            controller: _bio,
+            minLines: 3,
+            maxLines: 5,
+            maxLength: 1200,
+            decoration: const InputDecoration(
+              labelText: 'About you',
+              prefixIcon: Icon(Icons.notes_outlined),
+              hintText: 'A short introduction for your Wantok profile.',
             ),
           ),
           const SizedBox(height: 20),
