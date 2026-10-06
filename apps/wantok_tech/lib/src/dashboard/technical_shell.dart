@@ -3,6 +3,8 @@ import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_auth/wantok_auth.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import 'technical_access_page.dart';
+
 class TechnicalShell extends StatefulWidget {
   const TechnicalShell({required this.email, super.key});
 
@@ -18,6 +20,7 @@ class _TechnicalShellState extends State<TechnicalShell> {
   late Future<List<TechnicalModuleAccess>> _future;
   String? _selectedModuleKey;
   String? _busyModuleKey;
+  bool _showAccessManagement = false;
 
   @override
   void initState() {
@@ -168,9 +171,14 @@ class _TechnicalShellState extends State<TechnicalShell> {
                 (module) => module?.moduleKey == _selectedModuleKey,
                 orElse: () => null,
               );
+        final manageableModules = modules
+            .where((module) => module.hasPermission('module.permissions'))
+            .toList(growable: false);
 
         final wide = MediaQuery.sizeOf(context).width >= 980;
-        final content = selected == null
+        final content = _showAccessManagement && manageableModules.isNotEmpty
+            ? TechnicalAccessPage(modules: manageableModules)
+            : selected == null
             ? _OverviewPage(modules: modules)
             : _ModuleWorkspace(
                 module: selected,
@@ -190,11 +198,24 @@ class _TechnicalShellState extends State<TechnicalShell> {
                   child: _TechnicalSidebar(
                     modules: modules,
                     selectedModuleKey: _selectedModuleKey,
+                    accessManagementSelected: _showAccessManagement,
                     onOverview: () {
-                      setState(() => _selectedModuleKey = null);
+                      setState(() {
+                        _showAccessManagement = false;
+                        _selectedModuleKey = null;
+                      });
+                    },
+                    onAccessManagement: () {
+                      setState(() {
+                        _showAccessManagement = true;
+                        _selectedModuleKey = null;
+                      });
                     },
                     onModule: (key) {
-                      setState(() => _selectedModuleKey = key);
+                      setState(() {
+                        _showAccessManagement = false;
+                        _selectedModuleKey = key;
+                      });
                     },
                   ),
                 ),
@@ -212,12 +233,26 @@ class _TechnicalShellState extends State<TechnicalShell> {
               child: _TechnicalSidebar(
                 modules: modules,
                 selectedModuleKey: _selectedModuleKey,
+                accessManagementSelected: _showAccessManagement,
                 onOverview: () {
-                  setState(() => _selectedModuleKey = null);
+                  setState(() {
+                    _showAccessManagement = false;
+                    _selectedModuleKey = null;
+                  });
+                  Navigator.of(context).pop();
+                },
+                onAccessManagement: () {
+                  setState(() {
+                    _showAccessManagement = true;
+                    _selectedModuleKey = null;
+                  });
                   Navigator.of(context).pop();
                 },
                 onModule: (key) {
-                  setState(() => _selectedModuleKey = key);
+                  setState(() {
+                    _showAccessManagement = false;
+                    _selectedModuleKey = key;
+                  });
                   Navigator.of(context).pop();
                 },
               ),
@@ -276,13 +311,17 @@ class _TechnicalSidebar extends StatelessWidget {
   const _TechnicalSidebar({
     required this.modules,
     required this.selectedModuleKey,
+    required this.accessManagementSelected,
     required this.onOverview,
+    required this.onAccessManagement,
     required this.onModule,
   });
 
   final List<TechnicalModuleAccess> modules;
   final String? selectedModuleKey;
+  final bool accessManagementSelected;
   final VoidCallback onOverview;
+  final VoidCallback onAccessManagement;
   final ValueChanged<String> onModule;
 
   @override
@@ -291,6 +330,9 @@ class _TechnicalSidebar extends StatelessWidget {
     for (final module in modules) {
       groups.putIfAbsent(module.groupCode, () => []).add(module);
     }
+    final canManageAccess = modules.any(
+      (module) => module.hasPermission('module.permissions'),
+    );
 
     return Material(
       color: const Color(0xFFF8FAF9),
@@ -300,9 +342,16 @@ class _TechnicalSidebar extends StatelessWidget {
           _SideTile(
             icon: Icons.dashboard_outlined,
             label: 'Overview',
-            selected: selectedModuleKey == null,
+            selected: selectedModuleKey == null && !accessManagementSelected,
             onTap: onOverview,
           ),
+          if (canManageAccess)
+            _SideTile(
+              icon: Icons.manage_accounts_outlined,
+              label: 'Technical access',
+              selected: accessManagementSelected,
+              onTap: onAccessManagement,
+            ),
           const SizedBox(height: 12),
           for (final entry in groups.entries) ...[
             Padding(

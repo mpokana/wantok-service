@@ -21,46 +21,78 @@
 
 ## T1 — Technical Control Plane foundation — COMPLETE
 
-- [x] platform module registry
-- [x] 19 initial module keys
+- [x] 19-module registry
 - [x] technical permission catalogue
 - [x] technical access levels/templates
 - [x] per-user/per-module access
 - [x] effective permission RPCs
 - [x] separate Technical Platform Administrator authority
 - [x] Operations/Technical role-grant separation
-- [x] delegated lower module access with anti-escalation
-- [x] secure module enable/disable/maintenance RPC
+- [x] secure module enable/disable/maintenance
 - [x] technical audit events
-- [x] pgTAP authority tests
 - [x] `apps/wantok_tech`
 - [x] permission-driven module navigation
-- [x] module overview/status workspace
 - [x] production `tech.wantokservices.com` deployment route
-- [x] Flutter validation updated for all three apps
 - [x] living handover/roadmap + root `AGENTS.md`
 
-## T2 — Technical operations depth — NEXT
+## T2.1 — Technical Staff & Access Management — COMPLETE
+
+- [x] Technical Access workspace
+- [x] manageable-module filtering
+- [x] controlled module staff listing
+- [x] controlled account search by name/email
+- [x] minimum search-length protection
+- [x] assignable access-level filtering
+- [x] assign/change/revoke module access
+- [x] lower-level delegation
+- [x] peer/higher access protection
+- [x] Operations/Technical directory separation
+- [x] Platform Administrator global-role protection
+- [x] pgTAP security coverage
+- [x] served Technical Control UI verification
+
+## T2.2 — Module Configuration Schema Registry — NEXT
 
 Recommended order:
 
-- [ ] technical staff/access-management UI
-- [ ] module configuration-schema registry
-- [ ] safe typed configuration editor
-- [ ] module health/dependency reporting
+- [ ] versioned module configuration-schema registry
+- [ ] supported field types and validation rules
+- [ ] safe non-secret configuration value storage
+- [ ] secret-reference fields without secret-value disclosure
+- [ ] configuration read/update RPCs
+- [ ] `module.configure` enforcement
+- [ ] audit before/after configuration changes
+- [ ] typed configuration editor in Technical Control
+- [ ] module-specific configuration grouping/help text
+- [ ] pgTAP validation and anti-escalation tests
+
+## T2.3 — Module health and dependency reporting
+
+- [ ] module dependency registry
+- [ ] health reporters/probes
+- [ ] health history
+- [ ] dependency-impact views
+- [ ] maintenance/degraded-state presentation
+
+## T2.4 — Diagnostics, logs and jobs
+
 - [ ] diagnostics adapters
 - [ ] central/module log adapters
-- [ ] background job/queue visibility and approved actions
-- [ ] integration status/configuration
-- [ ] secret-reference model (never reveal secret values)
-- [ ] high-risk action confirmation/approval
+- [ ] background job/queue visibility
+- [ ] approved job actions
 - [ ] richer technical audit views
+
+## T2.5 — Integrations and high-risk controls
+
+- [ ] integration status/configuration
+- [ ] secret-reference model integration
+- [ ] high-risk action confirmation/approval
+- [ ] critical-action dual control where appropriate
 
 ## T3 — Operational hardening
 
 - [ ] production observability
 - [ ] alerting/escalation
-- [ ] module dependency impact checks
 - [ ] maintenance windows
 - [ ] incident/status history
 - [ ] backup/restore controls where safely appropriate
@@ -82,17 +114,6 @@ Do **not** implement payment movement until decisions are made for:
 - secrets/key management
 
 After those decisions, implement payment adapters behind a common interface and technical permissions.
-
-## Later shared work
-
-- profile/media/document storage
-- push notifications
-- safety/SOS/incidents
-- disputes/refunds
-- KYC document workflows
-- promotions/rewards
-- production deployment hardening
-- defined Wantok Neurons API intelligence integrations
 
 ## Checkpoint discipline
 

@@ -242,6 +242,8 @@ Current migration sequence:
 13. `20261006070000_messages_core.sql`
 14. `20261006080000_account_profile_management.sql`
 15. `20261006090000_technical_control_plane.sql`
+16. `20261006100000_technical_staff_access_management.sql`
+17. `20261006101000_technical_access_peer_protection.sql`
 
 All production schema/security changes must be migrations committed to Git.
 
@@ -271,6 +273,7 @@ The pgTAP suite currently verifies:
 - booking-scoped customer/provider conversations, participant-only RLS, controlled message writes and read receipts;
 - owner-scoped account/profile preferences, protected provider-profile editing and privilege-escalation resistance;
 - separated Operations/Technical authority, module-scoped technical permissions, delegated lower access and audited module-state controls;
+- controlled technical staff search/listing, module access assignment/revocation, and peer/higher-authority protection;
 - restricted direct payment/audit/outbox mutation.
 
 ## Linux VPS deployment

@@ -6,7 +6,7 @@
 
 ## Resume here
 
-The current safe checkpoint is **Technical Control Plane T1 foundation**. This file is committed with that checkpoint; run:
+The current safe checkpoint is **T2.1 Technical Staff & Module Access Management**. This file is committed with that checkpoint; run:
 
 `git log -1 --oneline`
 
@@ -27,7 +27,7 @@ Operations and Technical authority are separate server-side. One does not imply 
 
 ## Verified implemented state
 
-Checkpointed platform now includes:
+Checkpointed platform includes:
 
 - Client/Vendor account model and service catalogue
 - provider onboarding/verification boundaries
@@ -40,21 +40,34 @@ Checkpointed platform now includes:
 - booking-scoped Realtime messaging/read receipts
 - Account/Profile management and preferences
 - Technical Control Plane T1
+- T2.1 Technical Staff & Module Access Management
 
-T1 Technical Control includes:
+### Technical Control T1
 
 - 19-module registry
 - module/platform permission catalogue
 - Technical Platform Administrator authority
-- Technical Administrator / Module Administrator / Support / Auditor module levels
+- Technical Administrator / Module Administrator / Support / Auditor levels
 - per-user/per-module assignments
 - effective permission RPCs
-- permission-driven technical module navigation
+- permission-driven module navigation
 - secure module enable/disable/maintenance
 - audited module state/access changes
-- lower-level delegated access with anti-escalation rules
 - separate Flutter Web Technical Control Panel
-- production deployment route at `tech.wantokservices.com`
+
+### T2.1 staff/access management
+
+- Technical Access workspace appears only where the actor has `module.permissions`
+- controlled staff list per module
+- controlled account search by name/email
+- minimum 2-character search
+- assign/change/revoke module access
+- assignable levels limited below the actor's authority
+- peer/higher assignments shown as protected
+- peer downgrade/revoke blocked server-side
+- Module Administrator/Support/Auditor cannot delegate access
+- Operations Admin cannot use Technical staff search
+- Technical Platform Administrators remain global and are not ordinary module assignments
 
 ## Validation baseline
 
@@ -64,7 +77,8 @@ At this checkpoint:
 - Wantok app: analysis + smoke test PASS
 - Wantok Operations Admin: analysis + smoke test PASS
 - Wantok Technical Control: analysis + smoke test PASS
-- database: **13 files / 247 pgTAP tests PASS**
+- database: **14 files / 274 pgTAP tests PASS**
+- served Technical Control login page rendered successfully from `http://127.0.0.1:3100`
 - Docker Compose production configuration parse: PASS
 - `git diff --check`: PASS
 
@@ -82,7 +96,11 @@ Android emulator uses ignored:
 
 and reaches the host through `10.0.2.2:54321`. Do not replace browser/web configuration with the emulator bridge address.
 
-Local development owner account is explicitly granted `tech_platform_admin` in the local database only. This is not seeded by migration and must not be assumed in production.
+The local Mansfield development account has `tech_platform_admin` only in the local database. This is not seeded by migration and must not be assumed in production.
+
+Technical Control development server may be run on:
+
+`http://127.0.0.1:3100`
 
 ## Security/architecture rules
 
@@ -91,24 +109,26 @@ Local development owner account is explicitly granted `tech_platform_admin` in t
 - Operations Admin cannot grant `tech_*` authority.
 - Technical Platform Admin does not inherit Operations approval authority.
 - Providers cannot self-verify/self-activate.
-- Technical module changes are audited.
+- Technical module/access changes are audited.
+- Lower/equal module administrators cannot modify peer/higher assignments.
 - Do not expose production secrets, arbitrary SQL or shell execution in ordinary control-panel UI.
 - Keep services modular so one service can be repaired/disabled independently.
 - Wantok Service and Wantok Neurons remain separate systems.
 
 ## Next phase
 
-**T2 — Technical operations depth**
+**T2.2 — Module Configuration Schema Registry + Safe Typed Configuration**
 
-Next useful work:
+Recommended next work:
 
-1. technical staff/access-management UI;
-2. module configuration schemas;
-3. module health/dependency reporters;
-4. logs/diagnostics adapters;
-5. background jobs/queue controls;
-6. integration status/configuration;
-7. high-risk action confirmation/approval.
+1. define versioned module configuration schemas;
+2. separate safe public configuration from secret references;
+3. typed configuration values with server-side validation;
+4. module-specific configuration read/update RPCs;
+5. permission-driven configuration editor in Technical Control;
+6. audit every configuration change.
+
+After T2.2 continue with module health/dependencies, diagnostics/log adapters, jobs/queues, integrations and high-risk approvals.
 
 Do not begin Wantok Pay transaction movement until payment-rail and settlement decisions are made.
 

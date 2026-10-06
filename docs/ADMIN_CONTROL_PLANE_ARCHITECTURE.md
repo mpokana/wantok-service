@@ -183,3 +183,24 @@ The first technical-control foundation is implemented as:
 Operations `admin` authority cannot grant `tech_*` roles. Technical Platform Administrator authority cannot automatically grant Operations roles. This separation is enforced server-side.
 
 T1 intentionally does not expose production secrets, generic shell/SQL access, or arbitrary remote execution. Module-specific configuration schemas, health adapters, logs, queues/jobs and integration adapters belong to T2.
+
+## 11. T2.1 — Technical staff and module-access management
+
+T2.1 adds controlled staff administration on top of the T1 permission model.
+
+Implemented:
+
+- Technical Control navigation entry: **Technical access**
+- module selector limited to modules where the actor has `module.permissions`
+- controlled account search by name/email through a SECURITY DEFINER RPC
+- minimum two-character account search to avoid unrestricted directory dumping
+- current module staff listing with grantor and access-note metadata
+- assign/change/revoke module access through secured RPCs
+- access-level choices automatically limited below the actor's own authority
+- Module Administrator/Support/Auditor staff cannot open access management
+- Operations Administrators cannot use the Technical staff directory
+- global Technical Platform Administrators are marked separately and do not receive redundant module assignments
+- peer/higher assignments are protected from modification or revocation by lower/equal module administrators
+- all mutations continue through the existing technical audit path
+
+T2.1 intentionally does **not** provide UI for casually granting or revoking Technical Platform Administrator status. That remains a critical platform-level action for later high-risk approval/hardening work.
