@@ -1,6 +1,6 @@
 # Wantok Service Linux VPS Deployment
 
-This folder is the production deployment boundary for the Wantok web applications, public edge proxy and production Supabase provisioning helpers.
+This folder is the production deployment boundary for Wantok Web, Wantok Operations Admin, Wantok Technical Control, the public edge proxy and production Supabase provisioning helpers.
 
 ## Public DNS
 
@@ -9,6 +9,7 @@ Create these records when the VPS is commissioned:
 - `wantokservices.com` -> VPS public IP
 - `www.wantokservices.com` -> VPS public IP
 - `admin.wantokservices.com` -> VPS public IP
+- `tech.wantokservices.com` -> VPS public IP
 - `api.wantokservices.com` -> VPS public IP
 
 Only ports 80/443 should be publicly exposed for the Wantok edge layer.
@@ -62,7 +63,7 @@ The installer is designed to be repeatable. On a fresh VPS it:
 4. starts Supabase;
 5. synchronises the publishable key and local-only database connection;
 6. applies all version-controlled Wantok migrations;
-7. builds Wantok Web and Wantok Admin Web;
+7. builds Wantok Web, Wantok Operations Admin and Wantok Technical Control;
 8. starts the Caddy TLS/reverse-proxy edge.
 
 The Supabase CLI development stack is never used as the production runtime.

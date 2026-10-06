@@ -1,0 +1,26 @@
+name: wantok_tech
+description: "Wantok Service technical control panel."
+publish_to: 'none'
+version: 0.1.0+1
+
+environment:
+  sdk: ^3.13.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+  supabase_flutter: ^2.18.0
+  wantok_api:
+    path: ../../packages/wantok_api
+  wantok_auth:
+    path: ../../packages/wantok_auth
+  wantok_ui:
+    path: ../../packages/wantok_ui
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true

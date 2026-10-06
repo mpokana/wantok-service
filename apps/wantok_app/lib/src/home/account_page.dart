@@ -871,6 +871,11 @@ String _roleLabel(String role) {
     'driver' => 'Driver',
     'admin' => 'Administrator',
     'operations' => 'Operations',
+    'tech_platform_admin' => 'Technical Platform Administrator',
+    'tech_admin' => 'Technical Administrator',
+    'tech_module_admin' => 'Module Administrator',
+    'tech_support' => 'Technical Support',
+    'tech_auditor' => 'Technical Auditor',
     _ => role.replaceAll('_', ' '),
   };
 }

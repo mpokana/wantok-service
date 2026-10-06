@@ -29,8 +29,8 @@ select is(
 
 select is(
   (select count(*)::integer from public.app_roles),
-  8,
-  'enterprise RBAC contains 8 system roles'
+  13,
+  'enterprise RBAC contains 13 system roles including technical administration'
 );
 
 select ok(

@@ -33,7 +33,7 @@ Target production URL:
 https://admin.wantokservices.com
 ```
 
-Technical platform administration is deliberately separate. The planned **Wantok Technical Control Panel** will provide module-scoped configuration, diagnostics, health and technical permissions for IT staff. See `docs/ADMIN_CONTROL_PLANE_ARCHITECTURE.md`.
+Technical platform administration is deliberately separate. The **Wantok Technical Control Panel** in `apps/wantok_tech` provides module-scoped technical access, module state controls and the foundation for configuration, diagnostics and health tooling. See `docs/ADMIN_CONTROL_PLANE_ARCHITECTURE.md`.
 
 System and technical administration are intentionally excluded from the public Wantok application.
 
@@ -45,6 +45,7 @@ Planned public surfaces:
 https://wantokservices.com
 https://www.wantokservices.com
 https://admin.wantokservices.com
+https://tech.wantokservices.com
 https://api.wantokservices.com
 ```
 
@@ -55,7 +56,8 @@ Studio, PostgreSQL and internal infrastructure are private administration surfac
 ```text
 apps/
   wantok_app/       Flutter Android/iOS/Web client + vendor app
-  wantok_admin/     Flutter Web administration console
+  wantok_admin/     Flutter Web Operations Administration Console
+  wantok_tech/      Flutter Web Technical Control Panel
 
 packages/
   wantok_core/      Shared domain models and primitives
@@ -192,10 +194,17 @@ cd apps\wantok_app
 flutter run -d chrome --dart-define-from-file=..\..\config\local.json
 ```
 
-Admin:
+Operations Admin:
 
 ```powershell
 cd apps\wantok_admin
+flutter run -d chrome --dart-define-from-file=..\..\config\local.json
+```
+
+Technical Control Panel:
+
+```powershell
+cd apps\wantok_tech
 flutter run -d chrome --dart-define-from-file=..\..\config\local.json
 ```
 
@@ -232,6 +241,7 @@ Current migration sequence:
 12. `20261005026000_water_passenger_transport.sql`
 13. `20261006070000_messages_core.sql`
 14. `20261006080000_account_profile_management.sql`
+15. `20261006090000_technical_control_plane.sql`
 
 All production schema/security changes must be migrations committed to Git.
 
@@ -260,6 +270,7 @@ The pgTAP suite currently verifies:
 - scheduled water passenger routes, vessels, departures, fare capacity, manifests, boarding and lifecycle enforcement;
 - booking-scoped customer/provider conversations, participant-only RLS, controlled message writes and read receipts;
 - owner-scoped account/profile preferences, protected provider-profile editing and privilege-escalation resistance;
+- separated Operations/Technical authority, module-scoped technical permissions, delegated lower access and audited module-state controls;
 - restricted direct payment/audit/outbox mutation.
 
 ## Linux VPS deployment
@@ -352,7 +363,8 @@ The `VERSION` file is the application release source of truth.
 ## Security principles
 
 - `user_roles` is the authoritative authorization source.
-- Admin controls exist only in Wantok Admin.
+- Operations administration exists only in Wantok Operations Admin.
+- Technical platform administration exists only in Wantok Technical Control and remains a separate authority plane.
 - Ordinary clients cannot grant themselves privileged roles.
 - Provider/service approval occurs through trusted backend functions.
 - RLS is mandatory on application-owned tables.

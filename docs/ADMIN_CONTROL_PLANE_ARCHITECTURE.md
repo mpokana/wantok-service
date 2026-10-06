@@ -163,3 +163,23 @@ A person may hold both, but access is granted explicitly. Being an Operations Ad
 7. Integrate payments only after payment-rail and settlement decisions are finalised.
 
 All changes remain migration-driven, modular and reversible.
+
+## 10. Current implementation — T1 foundation
+
+The first technical-control foundation is implemented as:
+
+- Flutter Web app: `apps/wantok_tech`
+- Planned production URL: `https://tech.wantokservices.com`
+- Module registry: `public.technical_modules`
+- Permission catalogue: `public.technical_permissions`
+- Access levels: `public.technical_access_levels`
+- Access-level permission templates: `public.technical_access_level_permissions`
+- Per-user/per-module assignment: `public.technical_user_module_access`
+- Effective permission checks: `has_technical_permission`, `has_platform_permission`
+- Permission-driven module listing: `list_my_technical_modules`
+- Audited module enable/disable/maintenance: `set_technical_module_state`
+- Delegated lower module access: `grant_technical_module_access` / `revoke_technical_module_access`
+
+Operations `admin` authority cannot grant `tech_*` roles. Technical Platform Administrator authority cannot automatically grant Operations roles. This separation is enforced server-side.
+
+T1 intentionally does not expose production secrets, generic shell/SQL access, or arbitrary remote execution. Module-specific configuration schemas, health adapters, logs, queues/jobs and integration adapters belong to T2.

@@ -6,7 +6,8 @@ $targets = @(
   'packages\wantok_auth',
   'packages\wantok_ui',
   'apps\wantok_app',
-  'apps\wantok_admin'
+  'apps\wantok_admin',
+  'apps\wantok_tech'
 )
 
 foreach ($target in $targets) {

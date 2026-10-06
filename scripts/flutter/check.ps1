@@ -6,7 +6,8 @@ $targets = @(
   'packages\wantok_auth',
   'packages\wantok_ui',
   'apps\wantok_app',
-  'apps\wantok_admin'
+  'apps\wantok_admin',
+  'apps\wantok_tech'
 )
 
 function Invoke-FlutterChecked {
@@ -37,3 +38,6 @@ Invoke-FlutterChecked -WorkingDirectory (Join-Path $root 'apps\wantok_app') -Arg
 
 Write-Host '==> flutter test: apps\wantok_admin'
 Invoke-FlutterChecked -WorkingDirectory (Join-Path $root 'apps\wantok_admin') -Arguments @('test')
+
+Write-Host '==> flutter test: apps\wantok_tech'
+Invoke-FlutterChecked -WorkingDirectory (Join-Path $root 'apps\wantok_tech') -Arguments @('test')

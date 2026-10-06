@@ -35,6 +35,23 @@ services:
       timeout: 5s
       retries: 3
 
+  wantok-tech:
+    build:
+      context: ../..
+      dockerfile: deploy/vps/Dockerfile.flutter-web
+      args:
+        APP_PATH: apps/wantok_tech
+        APP_ENV: production
+        SUPABASE_URL: https://api.${WANTOK_DOMAIN}
+        SUPABASE_PUBLISHABLE_KEY: ${SUPABASE_PUBLISHABLE_KEY}
+        PUBLIC_WEB_URL: https://tech.${WANTOK_DOMAIN}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
   caddy:
     image: caddy:2.10-alpine
     restart: unless-stopped
@@ -42,6 +59,8 @@ services:
       wantok-web:
         condition: service_healthy
       wantok-admin:
+        condition: service_healthy
+      wantok-tech:
         condition: service_healthy
     ports:
       - "80:80"
