@@ -46,6 +46,7 @@ class EventsRepository {
     String? attendeeName,
     String? attendeeContact,
     String? note,
+    String? trustedPersonId,
   }) async {
     final response = await WantokBackend.client.rpc(
       'register_for_event',
@@ -56,6 +57,7 @@ class EventsRepository {
         'p_attendee_name': _emptyToNull(attendeeName),
         'p_attendee_contact': _emptyToNull(attendeeContact),
         'p_note': _emptyToNull(note),
+        'p_trusted_person_id': trustedPersonId,
       },
     );
     return _asMap(response);
@@ -65,7 +67,7 @@ class EventsRepository {
     final rows = await WantokBackend.client
         .from('event_registrations')
         .select(
-          'id, event_id, ticket_type_id, quantity, unit_price, total_amount, currency, status, payment_status, attendee_name, attendee_contact, note, registered_at, events(title, venue_name, venue_address, starts_at, ends_at, status), event_ticket_types(name)',
+          'id, event_id, ticket_type_id, quantity, unit_price, total_amount, currency, status, payment_status, attendee_name, attendee_contact, attendee_relationship, attendee_phone, attendee_email, trusted_person_id, note, registered_at, events(title, venue_name, venue_address, starts_at, ends_at, status), event_ticket_types(name)',
         )
         .eq('customer_id', _userId)
         .order('created_at', ascending: false);
@@ -235,7 +237,7 @@ class EventsRepository {
     final rows = await WantokBackend.client
         .from('event_registrations')
         .select(
-          'id, event_id, ticket_type_id, customer_id, quantity, unit_price, total_amount, currency, status, payment_status, attendee_name, attendee_contact, note, registered_at, event_ticket_types(name), profiles(full_name, phone)',
+          'id, event_id, ticket_type_id, customer_id, quantity, unit_price, total_amount, currency, status, payment_status, attendee_name, attendee_contact, attendee_relationship, attendee_phone, attendee_email, trusted_person_id, note, registered_at, event_ticket_types(name), profiles(full_name, phone)',
         )
         .eq('event_id', eventId)
         .order('created_at');

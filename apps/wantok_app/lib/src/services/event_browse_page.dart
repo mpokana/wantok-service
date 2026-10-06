@@ -4,6 +4,7 @@ import 'package:wantok_ui/wantok_ui.dart';
 
 import '../client_load_error.dart';
 
+import 'booking_for_selector.dart';
 import 'event_registrations_page.dart';
 
 class EventBrowsePage extends StatefulWidget {
@@ -160,6 +161,7 @@ class _EventDetailPageState extends State<_EventDetailPage> {
         attendeeName: draft.name,
         attendeeContact: draft.contact,
         note: draft.note,
+        trustedPersonId: draft.trustedPersonId,
       );
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -346,6 +348,7 @@ class _RegistrationDialogState extends State<_RegistrationDialog> {
   final _contact = TextEditingController();
   final _note = TextEditingController();
   int _quantity = 1;
+  String? _trustedPersonId;
 
   @override
   void dispose() {
@@ -390,19 +393,42 @@ class _RegistrationDialogState extends State<_RegistrationDialog> {
                 ],
               ),
               const SizedBox(height: 10),
-              TextField(
-                controller: _name,
-                decoration: const InputDecoration(
-                  labelText: 'Attendee name (optional)',
-                ),
+              BookingForSelector(
+                selectedTrustedPersonId: _trustedPersonId,
+                onChanged: (value) {
+                  setState(() {
+                    _trustedPersonId = value;
+                  });
+                },
               ),
-              const SizedBox(height: 10),
-              TextField(
-                controller: _contact,
-                decoration: const InputDecoration(
-                  labelText: 'Contact (optional)',
+              if (_trustedPersonId == null) ...[
+                const SizedBox(height: 10),
+                TextField(
+                  controller: _name,
+                  decoration: const InputDecoration(
+                    labelText: 'Attendee name (optional)',
+                  ),
                 ),
-              ),
+                const SizedBox(height: 10),
+                TextField(
+                  controller: _contact,
+                  decoration: const InputDecoration(
+                    labelText: 'Contact (optional)',
+                  ),
+                ),
+              ] else ...[
+                const SizedBox(height: 8),
+                Text(
+                  _quantity > 1
+                      ? 'The selected Trusted person will be the primary attendee for this $_quantity-ticket registration.'
+                      : 'The selected Trusted person will be the attendee for this registration.',
+                  style: const TextStyle(
+                    color: WantokColors.muted,
+                    fontSize: 12,
+                    height: 1.35,
+                  ),
+                ),
+              ],
               const SizedBox(height: 10),
               TextField(
                 controller: _note,
@@ -436,6 +462,7 @@ class _RegistrationDialogState extends State<_RegistrationDialog> {
               name: _name.text,
               contact: _contact.text,
               note: _note.text,
+              trustedPersonId: _trustedPersonId,
             ),
           ),
           child: const Text('Reserve'),
@@ -451,12 +478,14 @@ class _RegistrationDraft {
     required this.name,
     required this.contact,
     required this.note,
+    required this.trustedPersonId,
   });
 
   final int quantity;
   final String name;
   final String contact;
   final String note;
+  final String? trustedPersonId;
 }
 
 class _EventCard extends StatelessWidget {

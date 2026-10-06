@@ -29,18 +29,18 @@ This is intentional and must not be renamed to Grab-style Discover / Activity / 
 | Linked accounts | Google/Facebook Supabase identity-linking UI; email sign-in remains visible | Implemented; provider OAuth configuration/live flow pending |
 | Privacy | Profile/review visibility, saved privacy, recommendations and profile-sharing settings | Database/API/UI implemented; live QA pending |
 | Saved | Owner-scoped saved-entity store, secured validation RPC and Saved screen | pgTAP PASS; provider/resource/event Save controls still pending |
-| Trusted people / delegated booking | Owner-scoped family/relative/staff records; shared beneficiary selector and snapshot contracts | Generic reservations/open requests + Taxi/Ride PASS; Events/Commerce/Water modules pending |
+| Trusted people / delegated booking | Owner-scoped family/relative/staff records; shared beneficiary selector and snapshot contracts | Generic reservations/open requests + Taxi/Ride + Events PASS; Commerce/Water modules pending |
 | Reviews | Existing booking-linked review model extended with title/photo URLs/visibility; secured completed-booking RPC; Track Review/Edit action | pgTAP PASS; live completed-booking QA pending |
 | Activity/Track | Existing specialised ride/order/event/water links plus generic booking review path | Automated baseline PASS; populated live records pending |
 | Wallet | Kina K; Top up/Scan/Send/Receive preview, verification, PNG planned services, recent-activity framing | Automated PASS; no transaction movement |
 | Role boundary | Client/Vendor switch does not grant provider or technical authority | Automated PASS; pgTAP baseline retained |
-| Database | CX1/CX1B migrations and security tests | 19 files / 444 pgTAP tests PASS |
+| Database | CX1/CX1B migrations and security tests | 20 files / 468 pgTAP tests PASS |
 | Flutter client | Analysis plus existing regression suite | 32 tests PASS |
 | Visual evidence | Earlier shell QA exists; CX1A surfaces require fresh Android/Web evidence | PENDING |
 
 ## CX1A implemented changes
 
-- Migrations `20261006130000_cx1_client_experience_foundations.sql`, `20261006140000_delegated_booking_foundation.sql`, and `20261006141000_taxi_delegated_booking.sql` are applied locally.
+- Migrations `20261006130000_cx1_client_experience_foundations.sql`, `20261006140000_delegated_booking_foundation.sql`, `20261006141000_taxi_delegated_booking.sql`, and `20261006142000_event_delegated_booking.sql` are applied locally.
 - `profiles` adds avatar URL and bio foundation.
 - `account_preferences` adds profile visibility, review visibility, saved-item privacy, recommendation opt-in and profile-sharing controls.
 - `client_saved_items` is owner-scoped and RPC-only for ordinary bookmark access; the server validates that an entity is still discoverable before saving/showing it.
@@ -56,7 +56,7 @@ This is intentional and must not be renamed to Grab-style Discover / Activity / 
 
 ## Coverage limits and remaining CX1 work
 
-1. Delegated booking is complete for Vehicle Hire, Boat Hire, Venue Booking, Delivery, Errands/Pabili, Specialist Services, General Labour and Taxi/Ride. Continue module-by-module with Events/ticketing, Food/Groceries commerce and scheduled Boat/Ship passenger transport. The signed-in customer remains the payer/requesting account; beneficiary identity must not confer account access.
+1. Delegated booking is complete for Vehicle Hire, Boat Hire, Venue Booking, Delivery, Errands/Pabili, Specialist Services, General Labour, Taxi/Ride and Events/ticketing. Continue module-by-module with Food/Groceries commerce and scheduled Boat/Ship passenger transport. The signed-in customer remains the payer/requesting account; beneficiary identity must not confer account access.
 2. Extend Save controls to providers, venues/resources and events, not only service categories.
 3. Add managed Supabase Storage/image-upload flows for avatars and review photos; URL columns are only the current data foundation.
 4. Implement recommendation logic only after real saved/history/location inputs are available and honour the recommendation opt-out.

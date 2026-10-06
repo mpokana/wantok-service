@@ -134,6 +134,36 @@ class _EventRegistrationsPageState extends State<EventRegistrationsPage> {
                             ),
                           ),
                           const SizedBox(height: 5),
+                          if (row['attendee_name'] != null) ...[
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 8),
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF1F6F3),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.person_pin_circle_outlined,
+                                    color: WantokColors.primaryDark,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      row['trusted_person_id'] != null
+                                          ? 'For: ${row['attendee_name']}${row['attendee_relationship'] == null ? '' : ' (${row['attendee_relationship']})'}'
+                                          : 'Attendee: ${row['attendee_name']}',
+                                      style: const TextStyle(
+                                        color: WantokColors.primaryDark,
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                           if (event['starts_at'] != null)
                             Text(_formatDateTime(event['starts_at'])),
                           if (event['venue_name'] != null)

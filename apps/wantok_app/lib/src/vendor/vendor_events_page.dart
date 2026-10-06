@@ -505,11 +505,42 @@ class _ManageEventPageState extends State<_ManageEventPage> {
                                   color: WantokColors.muted,
                                 ),
                               ),
-                              if (registration['attendee_contact'] != null)
+                              if (registration['trusted_person_id'] != null)
+                                Text(
+                                  'Booked by: ${profile['full_name']?.toString() ?? 'Wantok account'}',
+                                  style: const TextStyle(
+                                    color: WantokColors.muted,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              if (registration['attendee_relationship'] != null)
+                                Text(
+                                  'Relationship: ${registration['attendee_relationship']}',
+                                  style: const TextStyle(
+                                    color: WantokColors.muted,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              if (registration['attendee_phone'] != null)
+                                Text(
+                                  registration['attendee_phone'].toString(),
+                                  style: const TextStyle(
+                                    color: WantokColors.muted,
+                                  ),
+                                )
+                              else if (registration['attendee_contact'] != null)
                                 Text(
                                   registration['attendee_contact'].toString(),
                                   style: const TextStyle(
                                     color: WantokColors.muted,
+                                  ),
+                                ),
+                              if (registration['attendee_email'] != null)
+                                Text(
+                                  registration['attendee_email'].toString(),
+                                  style: const TextStyle(
+                                    color: WantokColors.muted,
+                                    fontSize: 12,
                                   ),
                                 ),
                               if (status == 'reserved') ...[
