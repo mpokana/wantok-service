@@ -129,7 +129,7 @@ Checkpointed platform includes:
 - Track offers Review/Edit review for eligible completed generic service bookings and retains specialised ride/order/event/water shortcuts.
 - Wallet remains preview-only but now frames Top up/Scan/Send/Receive, verification, PNG-oriented planned services and future transaction history. No money movement exists.
 - retry failures stay in the view rather than escaping callbacks; Events/departures/order/registration/water-trip failures do not masquerade as empty records.
-- 32 focused client regressions plus the configuration smoke total 33 app tests; they use in-memory/unconfigured backends and do not replace local account data.
+- 33 focused client regressions plus the configuration smoke total 34 app tests; they use in-memory/unconfigured backends and do not replace local account data.
 - entry/back navigation coverage includes 11 categories; Taxi map/location/runtime behaviour and the new CX1A surfaces still require live QA.
 - do not call CX1 complete from widget/database tests alone; see its evidence document.
 
