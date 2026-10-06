@@ -29,8 +29,15 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   Future<void> _refresh() async {
-    setState(() => _future = _load());
-    await _future;
+    final next = _load();
+    setState(() {
+      _future = next;
+    });
+    try {
+      await next;
+    } catch (_) {
+      // The FutureBuilder presents the retryable error state.
+    }
   }
 
   Future<void> _editPersonal(AccountProfile profile) async {
@@ -87,7 +94,9 @@ class _AccountPageState extends State<AccountPage> {
                       color: WantokColors.coral,
                     ),
                     title: const Text('Could not load your account'),
-                    subtitle: Text(_friendlyError(snapshot.error!)),
+                    subtitle: const Text(
+                      'Check your connection and try again.',
+                    ),
                     trailing: IconButton(
                       onPressed: _refresh,
                       icon: const Icon(Icons.refresh),

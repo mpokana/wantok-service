@@ -7,6 +7,7 @@ class PngScenicBackdrop extends StatelessWidget {
   const PngScenicBackdrop({
     required this.child,
     this.height,
+    this.minHeight = 0,
     this.padding = const EdgeInsets.all(18),
     this.colors,
     super.key,
@@ -14,32 +15,36 @@ class PngScenicBackdrop extends StatelessWidget {
 
   final Widget child;
   final double? height;
+  final double minHeight;
   final EdgeInsetsGeometry padding;
   final List<Color>? colors;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(28),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors:
-                  colors ??
-                  const [
-                    Color(0xFF075C3A),
-                    Color(0xFF087A4B),
-                    Color(0xFF0B79A8),
-                  ],
+    return ConstrainedBox(
+      constraints: BoxConstraints(minHeight: minHeight),
+      child: SizedBox(
+        height: height,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(28),
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors:
+                    colors ??
+                    const [
+                      Color(0xFF075C3A),
+                      Color(0xFF087A4B),
+                      Color(0xFF0B79A8),
+                    ],
+              ),
             ),
-          ),
-          child: CustomPaint(
-            painter: const PngLandscapePainter(),
-            child: Padding(padding: padding, child: child),
+            child: CustomPaint(
+              painter: const PngLandscapePainter(),
+              child: Padding(padding: padding, child: child),
+            ),
           ),
         ),
       ),

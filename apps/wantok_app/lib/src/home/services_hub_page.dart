@@ -12,7 +12,9 @@ import '../services/water_transport_page.dart';
 import 'png_visuals.dart';
 
 class ServicesHubPage extends StatefulWidget {
-  const ServicesHubPage({super.key});
+  const ServicesHubPage({this.loadServices, super.key});
+
+  final Future<List<WantokServiceCategory>> Function()? loadServices;
 
   @override
   State<ServicesHubPage> createState() => _ServicesHubPageState();
@@ -22,18 +24,43 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
   static const _catalog = CatalogRepository();
 
   late Future<List<WantokServiceCategory>> _future;
+  final _search = TextEditingController();
   String _query = '';
+  _ServiceFamily _family = _ServiceFamily.all;
+
+  Future<List<WantokServiceCategory>> _loadServices() =>
+      (widget.loadServices ?? _catalog.loadActiveServices)();
+
+  @override
+  void dispose() {
+    _search.dispose();
+    super.dispose();
+  }
+
+  void _clearFilters() {
+    _search.clear();
+    setState(() {
+      _query = '';
+      _family = _ServiceFamily.all;
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    _future = _catalog.loadActiveServices();
+    _future = _loadServices();
   }
 
   Future<void> _reload() async {
-    final next = _catalog.loadActiveServices();
-    setState(() => _future = next);
-    await next;
+    final next = _loadServices();
+    setState(() {
+      _future = next;
+    });
+    try {
+      await next;
+    } catch (_) {
+      // The FutureBuilder presents the retryable error state.
+    }
   }
 
   @override
@@ -45,22 +72,23 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
         builder: (context, snapshot) {
           final services = snapshot.data ?? const <WantokServiceCategory>[];
           final query = _query.trim().toLowerCase();
-          final filtered = query.isEmpty
-              ? services
-              : services
-                    .where(
-                      (service) =>
-                          service.name.toLowerCase().contains(query) ||
-                          service.slug.toLowerCase().contains(query),
-                    )
-                    .toList(growable: false);
+          final filtered = services
+              .where((service) {
+                final matchesQuery =
+                    query.isEmpty ||
+                    service.name.toLowerCase().contains(query) ||
+                    service.slug.toLowerCase().contains(query);
+                return matchesQuery && _family.matches(service.slug);
+              })
+              .toList(growable: false);
+          final textScale = MediaQuery.textScalerOf(context).scale(1);
 
           return ListView(
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(14, 12, 14, 24),
             children: [
               PngScenicBackdrop(
-                height: 158,
+                minHeight: 158,
                 colors: const [
                   Color(0xFF075C3A),
                   Color(0xFF0B79A8),
@@ -110,22 +138,45 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
               ),
               const SizedBox(height: 14),
               TextField(
+                controller: _search,
                 onChanged: (value) => setState(() => _query = value),
-                decoration: const InputDecoration(
-                  hintText: 'Search Wantok Services',
-                  prefixIcon: Icon(Icons.search_rounded),
-                  suffixIcon: Icon(Icons.tune_rounded),
+                decoration: InputDecoration(
+                  labelText: 'Search Wantok Services',
+                  prefixIcon: const Icon(Icons.search_rounded),
+                  suffixIcon: _query.isEmpty
+                      ? null
+                      : IconButton(
+                          tooltip: 'Clear search',
+                          onPressed: () {
+                            _search.clear();
+                            setState(() => _query = '');
+                          },
+                          icon: const Icon(Icons.close_rounded),
+                        ),
                   filled: true,
                   fillColor: Colors.white,
                 ),
               ),
               const SizedBox(height: 10),
-              const SizedBox(height: 40, child: _ServiceFamilies()),
+              Wrap(
+                spacing: 8,
+                runSpacing: 4,
+                children: [
+                  for (final family in _ServiceFamily.values)
+                    ChoiceChip(
+                      label: Text(family.label),
+                      selected: _family == family,
+                      onSelected: (_) => setState(() => _family = family),
+                    ),
+                ],
+              ),
               const SizedBox(height: 20),
               PngSectionTitle(
                 title: 'Services',
                 subtitle: snapshot.connectionState != ConnectionState.done
                     ? 'Loading available services…'
+                    : snapshot.hasError
+                    ? 'Services are temporarily unavailable.'
                     : '${filtered.length} service${filtered.length == 1 ? '' : 's'} available.',
                 trailing: IconButton(
                   tooltip: 'Refresh',
@@ -143,13 +194,25 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
                 _StateCard(
                   icon: Icons.cloud_off_outlined,
                   title: 'Could not load services',
-                  body: snapshot.error.toString(),
+                  body: 'Check your connection and try again.',
+                  actionLabel: 'Retry',
+                  onAction: _reload,
+                )
+              else if (services.isEmpty)
+                _StateCard(
+                  icon: Icons.storefront_outlined,
+                  title: 'No services available yet',
+                  body: 'Please check back soon for local services.',
+                  actionLabel: 'Refresh',
+                  onAction: _reload,
                 )
               else if (filtered.isEmpty)
-                const _StateCard(
+                _StateCard(
                   icon: Icons.search_off_rounded,
                   title: 'No service matched',
-                  body: 'Try another service name.',
+                  body: 'Try another name or service family.',
+                  actionLabel: 'Clear filters',
+                  onAction: _clearFilters,
                 )
               else
                 Container(
@@ -166,27 +229,37 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
                       ),
                     ],
                   ),
-                  child: GridView.builder(
-                    itemCount: filtered.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 4,
-                          mainAxisExtent: 114,
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final columns =
+                          (constraints.maxWidth / (88 * textScale.clamp(1, 2)))
+                              .floor()
+                              .clamp(2, 6);
+                      return GridView.builder(
+                        itemCount: filtered.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: columns,
+                          mainAxisExtent:
+                              92 +
+                              MediaQuery.textScalerOf(context).scale(11.8) *
+                                  2.4,
                           crossAxisSpacing: 5,
                           mainAxisSpacing: 3,
                         ),
-                    itemBuilder: (context, index) {
-                      final service = filtered[index];
-                      final visual = _visualFor(service.slug);
-                      return WantokServiceTile(
-                        label: service.name,
-                        icon: visual.icon,
-                        accentColor: visual.accent,
-                        surfaceColor: visual.surface,
-                        badge: _badgeFor(service.slug),
-                        onTap: () => _openService(service),
+                        itemBuilder: (context, index) {
+                          final service = filtered[index];
+                          final visual = _visualFor(service.slug);
+                          return WantokServiceTile(
+                            label: service.name,
+                            icon: visual.icon,
+                            accentColor: visual.accent,
+                            surfaceColor: visual.surface,
+                            badge: _badgeFor(service.slug),
+                            onTap: () => _openService(service),
+                          );
+                        },
                       );
                     },
                   ),
@@ -346,36 +419,30 @@ class _ServiceVisual {
   final Color surface;
 }
 
-class _ServiceFamilies extends StatelessWidget {
-  const _ServiceFamilies();
+enum _ServiceFamily {
+  all('All'),
+  move('Move'),
+  eatShop('Eat & shop'),
+  book('Book'),
+  people('People');
 
-  @override
-  Widget build(BuildContext context) {
-    return ListView(
-      scrollDirection: Axis.horizontal,
-      children: const [
-        Chip(
-          avatar: Icon(Icons.directions_car_rounded, size: 17),
-          label: Text('Move'),
-        ),
-        SizedBox(width: 8),
-        Chip(
-          avatar: Icon(Icons.restaurant_rounded, size: 17),
-          label: Text('Eat & shop'),
-        ),
-        SizedBox(width: 8),
-        Chip(
-          avatar: Icon(Icons.event_available_rounded, size: 17),
-          label: Text('Book'),
-        ),
-        SizedBox(width: 8),
-        Chip(
-          avatar: Icon(Icons.groups_rounded, size: 17),
-          label: Text('People'),
-        ),
-      ],
-    );
-  }
+  const _ServiceFamily(this.label);
+  final String label;
+
+  bool matches(String slug) => switch (this) {
+    all => true,
+    move => const {
+      'taxi-ride',
+      'vehicle-hire',
+      'boat-hire',
+      'boat-ship-rides',
+      'delivery',
+      'errands',
+    }.contains(slug),
+    eatShop => const {'food', 'groceries'}.contains(slug),
+    book => const {'venue-booking', 'events'}.contains(slug),
+    people => const {'specialist-services', 'general-labour'}.contains(slug),
+  };
 }
 
 class _ServicePromiseCard extends StatelessWidget {
@@ -413,10 +480,14 @@ class _StateCard extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.body,
+    this.actionLabel,
+    this.onAction,
   });
   final IconData icon;
   final String title;
   final String body;
+  final String? actionLabel;
+  final VoidCallback? onAction;
 
   @override
   Widget build(BuildContext context) {
@@ -437,6 +508,10 @@ class _StateCard extends StatelessWidget {
               textAlign: TextAlign.center,
               style: const TextStyle(color: WantokColors.muted),
             ),
+            if (onAction != null) ...[
+              const SizedBox(height: 12),
+              OutlinedButton(onPressed: onAction, child: Text(actionLabel!)),
+            ],
           ],
         ),
       ),

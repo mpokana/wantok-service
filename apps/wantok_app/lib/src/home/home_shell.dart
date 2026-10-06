@@ -67,16 +67,36 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
     try {
       final roles = await _auth.loadRoles();
       if (mounted) setState(() => _roles = roles);
+    } catch (_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text(
+              'Could not refresh account access. Check your connection.',
+            ),
+          ),
+        );
+      }
     } finally {
       _refreshingRoles = false;
     }
   }
 
+  void _changeMode(AppMode value) {
+    setState(() {
+      _mode = value;
+      _tabIndex = 0;
+    });
+    if (value == AppMode.vendor) _refreshRoles();
+  }
+
   void _openAccount() {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (context) =>
-            AccountPage(roles: _roles, onSignOut: _auth.signOut),
+        builder: (context) => Scaffold(
+          appBar: AppBar(title: const Text('Account and profile')),
+          body: AccountPage(roles: _roles, onSignOut: _auth.signOut),
+        ),
       ),
     );
   }
@@ -141,7 +161,10 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
 
     final pages = _mode == AppMode.client
         ? <Widget>[
-            ClientHome(onAccountTap: _openAccount),
+            ClientHome(
+              onAccountTap: _openAccount,
+              onServicesTap: () => setState(() => _tabIndex = 1),
+            ),
             const ServicesHubPage(),
             const ActivityPage(),
             const WantokPayPreviewPage(embedded: true),
@@ -207,32 +230,38 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Wantok',
-                style: TextStyle(
-                  color: client ? Colors.white : WantokColors.primaryDark,
-                  fontSize: 21,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: -0.8,
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Wantok',
+                  style: TextStyle(
+                    color: client ? Colors.white : WantokColors.primaryDark,
+                    fontSize: 21,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: -0.8,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 4),
-              const Text(
-                'Services',
-                style: TextStyle(
-                  color: WantokColors.gold,
-                  fontSize: 21,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: -0.8,
+                const SizedBox(width: 4),
+                const Text(
+                  'Services',
+                  style: TextStyle(
+                    color: WantokColors.gold,
+                    fontSize: 21,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: -0.8,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
           Text(
             client ? 'People. Places. Possibilities.' : 'Vendor workspace',
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: client
                   ? Colors.white.withValues(alpha: 0.72)
@@ -247,17 +276,37 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
       actions: [
         Padding(
           padding: const EdgeInsets.only(right: 12),
-          child: WantokModeSwitcher(
-            value: _mode,
-            inverted: client,
-            onChanged: (value) {
-              setState(() {
-                _mode = value;
-                _tabIndex = 0;
-              });
-              if (value == AppMode.vendor) _refreshRoles();
-            },
-          ),
+          child:
+              MediaQuery.sizeOf(context).width < 420 ||
+                  MediaQuery.textScalerOf(context).scale(1) > 1.2
+              ? PopupMenuButton<AppMode>(
+                  tooltip: 'Switch Client/Vendor mode',
+                  initialValue: _mode,
+                  onSelected: _changeMode,
+                  itemBuilder: (context) => const [
+                    PopupMenuItem(value: AppMode.client, child: Text('Client')),
+                    PopupMenuItem(value: AppMode.vendor, child: Text('Vendor')),
+                  ],
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 12,
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(client ? 'Client' : 'Vendor'),
+                        const SizedBox(width: 4),
+                        const Icon(Icons.expand_more),
+                      ],
+                    ),
+                  ),
+                )
+              : WantokModeSwitcher(
+                  value: _mode,
+                  inverted: client,
+                  onChanged: _changeMode,
+                ),
         ),
       ],
     );
@@ -320,59 +369,67 @@ class _WantokBottomBar extends StatelessWidget {
                   final item = items[index];
 
                   return Expanded(
-                    child: InkWell(
+                    child: Semantics(
+                      key: ValueKey('wantok-nav-${item.label}'),
+                      label: item.label,
+                      button: true,
+                      selected: selected,
                       onTap: () => onSelected(index),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 3,
-                          vertical: 7,
-                        ),
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 180),
-                          curve: Curves.easeOut,
-                          decoration: BoxDecoration(
-                            color: selected
-                                ? WantokColors.gold
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(18),
-                            boxShadow: selected
-                                ? [
-                                    BoxShadow(
-                                      color: WantokColors.gold.withValues(
-                                        alpha: 0.26,
-                                      ),
-                                      blurRadius: 9,
-                                      offset: const Offset(0, 3),
-                                    ),
-                                  ]
-                                : null,
+                      excludeSemantics: true,
+                      child: InkWell(
+                        onTap: () => onSelected(index),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 3,
+                            vertical: 7,
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                selected ? item.icon : item.outlineIcon,
-                                color: selected
-                                    ? const Color(0xFF39200F)
-                                    : const Color(0xFFF4E7D7),
-                                size: 23,
-                              ),
-                              const SizedBox(height: 3),
-                              Text(
-                                item.label,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 180),
+                            curve: Curves.easeOut,
+                            decoration: BoxDecoration(
+                              color: selected
+                                  ? WantokColors.gold
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(18),
+                              boxShadow: selected
+                                  ? [
+                                      BoxShadow(
+                                        color: WantokColors.gold.withValues(
+                                          alpha: 0.26,
+                                        ),
+                                        blurRadius: 9,
+                                        offset: const Offset(0, 3),
+                                      ),
+                                    ]
+                                  : null,
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  selected ? item.icon : item.outlineIcon,
                                   color: selected
                                       ? const Color(0xFF39200F)
                                       : const Color(0xFFF4E7D7),
-                                  fontSize: items.length > 4 ? 9.2 : 10.2,
-                                  fontWeight: selected
-                                      ? FontWeight.w900
-                                      : FontWeight.w700,
+                                  size: 23,
                                 ),
-                              ),
-                            ],
+                                const SizedBox(height: 3),
+                                Text(
+                                  item.label,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: selected
+                                        ? const Color(0xFF39200F)
+                                        : const Color(0xFFF4E7D7),
+                                    fontSize: items.length > 4 ? 9.2 : 10.2,
+                                    fontWeight: selected
+                                        ? FontWeight.w900
+                                        : FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),

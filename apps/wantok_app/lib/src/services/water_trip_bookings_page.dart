@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import '../client_load_error.dart';
+
 class WaterTripBookingsPage extends StatefulWidget {
   const WaterTripBookingsPage({super.key});
 
@@ -21,8 +23,15 @@ class _WaterTripBookingsPageState extends State<WaterTripBookingsPage> {
   }
 
   Future<void> _refresh() async {
-    setState(() => _future = _repository.loadMyBookings());
-    await _future;
+    final next = _repository.loadMyBookings();
+    setState(() {
+      _future = next;
+    });
+    try {
+      await next;
+    } catch (_) {
+      // The FutureBuilder presents the retryable error state.
+    }
   }
 
   Future<void> _cancel(String id) async {
@@ -51,6 +60,13 @@ class _WaterTripBookingsPageState extends State<WaterTripBookingsPage> {
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
               return const Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasError) {
+              return ClientLoadError(
+                title: 'Could not load your water trips',
+                onRetry: _refresh,
+              );
             }
 
             final rows = snapshot.data ?? const <Map<String, dynamic>>[];

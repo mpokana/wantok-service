@@ -24,8 +24,15 @@ class _MessagesPageState extends State<MessagesPage> {
   }
 
   Future<void> _reload() async {
-    setState(() => _future = _repository.loadThreads());
-    await _future;
+    final next = _repository.loadThreads();
+    setState(() {
+      _future = next;
+    });
+    try {
+      await next;
+    } catch (_) {
+      // The FutureBuilder presents the retryable error state.
+    }
   }
 
   @override
@@ -50,8 +57,11 @@ class _MessagesPageState extends State<MessagesPage> {
                       color: WantokColors.coral,
                     ),
                     title: const Text('Could not load messages'),
-                    subtitle: Text(_friendlyError(snapshot.error!)),
+                    subtitle: const Text(
+                      'Check your connection and try again.',
+                    ),
                     trailing: IconButton(
+                      tooltip: 'Retry messages',
                       onPressed: _reload,
                       icon: const Icon(Icons.refresh),
                     ),

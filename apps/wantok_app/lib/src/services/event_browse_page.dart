@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import '../client_load_error.dart';
+
 import 'event_registrations_page.dart';
 
 class EventBrowsePage extends StatefulWidget {
@@ -22,8 +24,15 @@ class _EventBrowsePageState extends State<EventBrowsePage> {
   }
 
   Future<void> _refresh() async {
-    setState(() => _future = _repository.loadUpcomingEvents());
-    await _future;
+    final next = _repository.loadUpcomingEvents();
+    setState(() {
+      _future = next;
+    });
+    try {
+      await next;
+    } catch (_) {
+      // The FutureBuilder presents the retryable error state.
+    }
   }
 
   @override
@@ -50,6 +59,13 @@ class _EventBrowsePageState extends State<EventBrowsePage> {
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
               return const Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasError) {
+              return ClientLoadError(
+                title: 'Could not load events',
+                onRetry: _refresh,
+              );
             }
 
             final events = snapshot.data ?? const <Map<String, dynamic>>[];

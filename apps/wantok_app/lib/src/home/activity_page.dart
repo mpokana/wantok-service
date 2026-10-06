@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import '../services/commerce_orders_page.dart';
+import '../services/event_registrations_page.dart';
+import '../services/taxi_ride_page.dart';
+import '../services/water_trip_bookings_page.dart';
 import 'messages_page.dart';
 import 'png_visuals.dart';
 
@@ -25,10 +29,15 @@ class _ActivityPageState extends State<ActivityPage> {
   }
 
   Future<void> _refresh() async {
+    final next = _repository.loadMyReservations();
     setState(() {
-      _future = _repository.loadMyReservations();
+      _future = next;
     });
-    await _future;
+    try {
+      await next;
+    } catch (_) {
+      // The FutureBuilder presents the retryable error state.
+    }
   }
 
   Future<void> _run(String bookingId, Future<void> Function() action) async {
@@ -89,6 +98,10 @@ class _ActivityPageState extends State<ActivityPage> {
             return ListView(
               padding: const EdgeInsets.all(20),
               children: [
+                const _TrackHeader(),
+                const SizedBox(height: 12),
+                const _TrackJourneyLinks(),
+                const SizedBox(height: 12),
                 Card(
                   child: ListTile(
                     leading: const Icon(
@@ -96,8 +109,11 @@ class _ActivityPageState extends State<ActivityPage> {
                       color: WantokColors.coral,
                     ),
                     title: const Text('Could not load your activity'),
-                    subtitle: Text(snapshot.error.toString()),
+                    subtitle: const Text(
+                      'Check your connection and try again.',
+                    ),
                     trailing: IconButton(
+                      tooltip: 'Retry activity',
                       onPressed: _refresh,
                       icon: const Icon(Icons.refresh),
                     ),
@@ -113,6 +129,8 @@ class _ActivityPageState extends State<ActivityPage> {
               padding: const EdgeInsets.fromLTRB(14, 10, 14, 28),
               children: const [
                 _TrackHeader(),
+                SizedBox(height: 12),
+                _TrackJourneyLinks(),
                 SizedBox(height: 18),
                 Card(
                   child: Padding(
@@ -126,7 +144,7 @@ class _ActivityPageState extends State<ActivityPage> {
                         ),
                         SizedBox(height: 12),
                         Text(
-                          'Nothing to track yet',
+                          'No requests or reservations yet',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 20,
@@ -135,7 +153,7 @@ class _ActivityPageState extends State<ActivityPage> {
                         ),
                         SizedBox(height: 7),
                         Text(
-                          'Your rides, deliveries, reservations and completed Wantok bookings will appear here.',
+                          'Your service requests, quotes and reservations will appear here. Use the shortcuts above for rides, orders, events and water trips.',
                           textAlign: TextAlign.center,
                           style: TextStyle(color: WantokColors.muted),
                         ),
@@ -149,11 +167,12 @@ class _ActivityPageState extends State<ActivityPage> {
 
           return ListView.separated(
             padding: const EdgeInsets.fromLTRB(18, 10, 18, 28),
-            itemCount: rows.length + 1,
+            itemCount: rows.length + 2,
             separatorBuilder: (_, _) => const SizedBox(height: 11),
             itemBuilder: (context, index) {
               if (index == 0) return const _TrackHeader();
-              final row = rows[index - 1];
+              if (index == 1) return const _TrackJourneyLinks();
+              final row = rows[index - 2];
               final id = row['id'] as String;
               final status = row['status'] as String? ?? 'unknown';
               final category = _asMap(row['service_categories']);
@@ -313,7 +332,7 @@ class _TrackHeader extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 4),
       child: PngScenicBackdrop(
-        height: 150,
+        minHeight: 150,
         colors: const [Color(0xFF7B2D3A), Color(0xFFC85536), Color(0xFF0B79A8)],
         child: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -331,20 +350,12 @@ class _TrackHeader extends StatelessWidget {
             ),
             SizedBox(height: 8),
             Text(
-              'Rides, deliveries, bookings and service requests in one place.',
+              'Open your service records or review requests and reservations below.',
               style: TextStyle(
                 color: Color(0xFFFFECE6),
                 fontSize: 12.5,
                 fontWeight: FontWeight.w600,
               ),
-            ),
-            SizedBox(height: 12),
-            Row(
-              children: [
-                _TrackPill(icon: Icons.route_rounded, label: 'Ongoing'),
-                SizedBox(width: 8),
-                _TrackPill(icon: Icons.history_rounded, label: 'History'),
-              ],
             ),
           ],
         ),
@@ -353,35 +364,41 @@ class _TrackHeader extends StatelessWidget {
   }
 }
 
-class _TrackPill extends StatelessWidget {
-  const _TrackPill({required this.icon, required this.label});
-  final IconData icon;
-  final String label;
+class _TrackJourneyLinks extends StatelessWidget {
+  const _TrackJourneyLinks();
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: Colors.white24,
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-        child: Row(
-          children: [
-            Icon(icon, color: Colors.white, size: 15),
-            SizedBox(width: 5),
-            Text(
-              label,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 10.5,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-          ],
-        ),
-      ),
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: [
+        for (final (label, icon, page) in <(String, IconData, Widget)>[
+          ('Taxi rides', Icons.local_taxi_outlined, const TaxiRidePage()),
+          (
+            'Food & shop orders',
+            Icons.shopping_bag_outlined,
+            const CommerceOrdersPage(),
+          ),
+          (
+            'Event registrations',
+            Icons.event_outlined,
+            const EventRegistrationsPage(),
+          ),
+          (
+            'Water trips',
+            Icons.sailing_outlined,
+            const WaterTripBookingsPage(),
+          ),
+        ])
+          OutlinedButton.icon(
+            onPressed: () =>
+                Navigator.of(context)
+                    .push(MaterialPageRoute<void>(builder: (context) => page)),
+            icon: Icon(icon),
+            label: Text(label),
+          ),
+      ],
     );
   }
 }

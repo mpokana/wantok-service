@@ -95,19 +95,23 @@
 - [x] separate `module.health_run` permission; auditors remain read-only
 - [x] restricted dependency identity/description privacy and pgTAP coverage
 
-## CX1 — Client Experience Completion Gate — NEXT
+## CX1 — Client Experience Completion Gate — IN PROGRESS
 
 Required sequence: **T2.3 checkpoint → CX1 → T2.4**. T2.4 must wait until the client gate is completed with recorded evidence.
 
-- [ ] verify Home / Services / Track / Wallet / Inbox and Home profile access
-- [ ] verify service discovery/search and supported service entry/back journeys
-- [ ] resolve misleading or inactive controls; label future features clearly
-- [ ] verify loading, error/retry, empty and no-search-match states
-- [ ] verify narrow-screen layouts, enlarged text and accessible navigation
-- [ ] preserve Kina (K) amounts and Wantok Pay preview-only boundary
-- [ ] verify Client/Vendor authority boundaries without exposing administration
-- [ ] add focused client regression coverage and record QA evidence/remaining limits
-- [ ] full checkpoint validation, living documents and clean Git checkpoint
+- [x] automated five-tab navigation, Home search and profile entry/back checks
+- [x] working service search/family filters and entry/back coverage for 11 service categories
+- [x] replace inactive Home search/QR and family controls; clarify planned Wallet actions
+- [x] distinguish load failures from empty records; retry safely after repeated failures
+- [x] responsive scenic headers/grids, narrow mode menu and accessible selected-tab actions
+- [x] automated 320/390/800-pixel layouts at 1.5x text across discovery and five client tabs
+- [x] preserve Kina (K) amounts and Wantok Pay preview-only boundary
+- [x] customer Client/Vendor switch does not grant provider/technical administration
+- [x] add 31 focused offline client regressions and record their limitations
+- [x] CX1 implementation checkpoint: full Flutter checks, 364 pgTAP tests and diff check PASS
+- [ ] fresh signed-in Android/Web visual QA using existing development sessions/accounts
+- [ ] live read-only journey checks, especially Taxi map/location/history and populated Track/Inbox/account records
+- [ ] complete gate evidence review before T2.4
 
 Acceptance evidence and initial findings: `docs/CX1_CLIENT_EXPERIENCE_GATE.md`.
 

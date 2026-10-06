@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import '../client_load_error.dart';
+
 class CommerceOrdersPage extends StatefulWidget {
   const CommerceOrdersPage({super.key});
 
@@ -21,8 +23,15 @@ class _CommerceOrdersPageState extends State<CommerceOrdersPage> {
   }
 
   Future<void> _refresh() async {
-    setState(() => _future = _repository.loadMyOrders());
-    await _future;
+    final next = _repository.loadMyOrders();
+    setState(() {
+      _future = next;
+    });
+    try {
+      await next;
+    } catch (_) {
+      // The FutureBuilder presents the retryable error state.
+    }
   }
 
   Future<void> _cancel(String orderId) async {
@@ -51,6 +60,13 @@ class _CommerceOrdersPageState extends State<CommerceOrdersPage> {
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
               return const Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasError) {
+              return ClientLoadError(
+                title: 'Could not load your orders',
+                onRetry: _refresh,
+              );
             }
 
             final orders = snapshot.data ?? const <Map<String, dynamic>>[];

@@ -1,0 +1,267 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:wantok_core/wantok_core.dart';
+import 'package:wantok_ui/wantok_ui.dart';
+import 'package:wantok_app/src/home/client_home.dart';
+import 'package:wantok_app/src/home/home_shell.dart';
+import 'package:wantok_app/src/home/services_hub_page.dart';
+import 'package:wantok_app/src/home/wantok_pay_preview_page.dart';
+
+const services = [
+  WantokServiceCategory(
+    id: '1',
+    slug: 'food',
+    name: 'Food',
+    vertical: 'commerce',
+    bookingMode: 'commerce',
+  ),
+  WantokServiceCategory(
+    id: '2',
+    slug: 'groceries',
+    name: 'Groceries',
+    vertical: 'commerce',
+    bookingMode: 'commerce',
+  ),
+  WantokServiceCategory(
+    id: '3',
+    slug: 'taxi-ride',
+    name: 'Taxi',
+    vertical: 'mobility',
+    bookingMode: 'on_demand',
+  ),
+  WantokServiceCategory(
+    id: '4',
+    slug: 'specialist-services',
+    name: 'Specialists',
+    vertical: 'marketplace',
+    bookingMode: 'quote',
+  ),
+];
+
+Future<void> showPage(
+  WidgetTester tester,
+  Widget page, {
+  double width = 390,
+  double scale = 1,
+}) async {
+  tester.view.physicalSize = Size(width, 900);
+  tester.view.devicePixelRatio = 1;
+  addTearDown(tester.view.resetPhysicalSize);
+  addTearDown(tester.view.resetDevicePixelRatio);
+  await tester.pumpWidget(
+    MaterialApp(
+      theme: WantokTheme.light(),
+      builder: (context, child) => MediaQuery(
+        data: MediaQuery.of(context)
+            .copyWith(textScaler: TextScaler.linear(scale)),
+        child: child!,
+      ),
+      home: Scaffold(body: page),
+    ),
+  );
+  await tester.pumpAndSettle();
+}
+
+void main() {
+  testWidgets('Home search and profile perform their actions', (tester) async {
+    var searches = 0;
+    var profiles = 0;
+    await showPage(
+      tester,
+      ClientHome(
+        loadServices: () async => [],
+        onServicesTap: () => searches++,
+        onAccountTap: () => profiles++,
+      ),
+    );
+    await tester.tap(find.text('Search Wantok Services'));
+    await tester.tap(find.byTooltip('Account and profile'));
+    expect(searches, 1);
+    expect(profiles, 1);
+    expect(
+      find.text('No services available yet. Please check back soon.'),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('service family and search combine, clear restores catalogue', (
+    tester,
+  ) async {
+    await showPage(tester, ServicesHubPage(loadServices: () async => services));
+    await tester.tap(find.widgetWithText(ChoiceChip, 'Eat & shop'));
+    await tester.pumpAndSettle();
+    expect(find.text('Food'), findsOneWidget);
+    expect(find.text('Groceries'), findsOneWidget);
+    expect(find.text('Taxi'), findsNothing);
+    await tester.enterText(find.byType(TextField), 'taxi');
+    await tester.pumpAndSettle();
+    expect(find.text('No service matched'), findsOneWidget);
+    await tester.ensureVisible(find.text('Clear filters'));
+    await tester.tap(find.text('Clear filters'));
+    await tester.pumpAndSettle();
+    expect(find.text('Taxi'), findsOneWidget);
+    expect(
+      tester.widget<TextField>(find.byType(TextField)).controller!.text,
+      isEmpty,
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('catalogue failure has a safe error and working retry', (
+    tester,
+  ) async {
+    var loads = 0;
+    await showPage(
+      tester,
+      ServicesHubPage(
+        loadServices: () async {
+          if (++loads < 3) throw StateError('internal database detail');
+          return services;
+        },
+      ),
+    );
+    expect(find.text('Could not load services'), findsOneWidget);
+    expect(find.textContaining('internal database detail'), findsNothing);
+    await tester.ensureVisible(find.text('Retry'));
+    await tester.tap(find.text('Retry'));
+    await tester.pumpAndSettle();
+    expect(find.text('Could not load services'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    await tester.tap(find.text('Retry'));
+    await tester.pumpAndSettle();
+    expect(find.text('Food'), findsOneWidget);
+    expect(loads, 3);
+  });
+
+  testWidgets('empty catalogue differs from unmatched search', (tester) async {
+    await showPage(tester, ServicesHubPage(loadServices: () async => []));
+    expect(find.text('No services available yet'), findsOneWidget);
+    expect(find.text('No service matched'), findsNothing);
+  });
+
+  testWidgets('Services shows loading before a delayed catalogue resolves', (
+    tester,
+  ) async {
+    final completer = Completer<List<WantokServiceCategory>>();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: ServicesHubPage(loadServices: () => completer.future),
+        ),
+      ),
+    );
+    await tester.pump();
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    completer.complete(services);
+    await tester.pumpAndSettle();
+    expect(find.text('Food'), findsOneWidget);
+  });
+
+  testWidgets(
+    'five client tabs and account back navigation work without admin UI',
+    (tester) async {
+      await showPage(tester, const HomeShell(roles: {'customer'}, email: null));
+      for (final tab in ['Home', 'Services', 'Track', 'Wallet', 'Inbox']) {
+        final navigation = find.byKey(ValueKey('wantok-nav-$tab'));
+        expect(navigation, findsOneWidget);
+        await tester.tap(navigation);
+        await tester.pumpAndSettle();
+        expect(
+          tester.widget<Semantics>(navigation).properties.selected,
+          isTrue,
+        );
+        expect(
+          tester.widget<Semantics>(navigation).properties.onTap,
+          isNotNull,
+        );
+        expect(tester.takeException(), isNull);
+      }
+      expect(find.text('Technical access'), findsNothing);
+      await tester.tap(find.text('Home'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byTooltip('Account and profile'));
+      await tester.pumpAndSettle();
+      expect(find.text('Account and profile'), findsOneWidget);
+      expect(find.byType(BackButton), findsOneWidget);
+      await tester.tap(find.byType(BackButton));
+      await tester.pumpAndSettle();
+      expect(find.text('Home'), findsOneWidget);
+    },
+  );
+
+  testWidgets('Client/Vendor switch does not grant provider or admin access', (
+    tester,
+  ) async {
+    await showPage(tester, const HomeShell(roles: {'customer'}, email: null));
+    await tester.tap(find.byTooltip('Switch Client/Vendor mode'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Vendor').last);
+    await tester.pumpAndSettle();
+    expect(find.text('Become a Wantok Vendor'), findsOneWidget);
+    expect(find.text('Taxi Driver Console'), findsNothing);
+    expect(find.text('Technical access'), findsNothing);
+    expect(tester.takeException(), isNull);
+    await tester.tap(find.byTooltip('Switch Client/Vendor mode'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Client').last);
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('wantok-nav-Home')), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  for (final width in [320.0, 390.0, 800.0]) {
+    testWidgets('discovery fits width $width with enlarged text', (
+      tester,
+    ) async {
+      await showPage(
+        tester,
+        ServicesHubPage(loadServices: () async => services),
+        width: width,
+        scale: 1.5,
+      );
+      expect(tester.takeException(), isNull);
+      await showPage(
+        tester,
+        ClientHome(loadServices: () async => services, onAccountTap: () {}),
+        width: width,
+        scale: 1.5,
+      );
+      expect(tester.takeException(), isNull);
+      await tester.drag(find.byType(ListView).first, const Offset(0, -1200));
+      await tester.pumpAndSettle();
+      expect(tester.takeException(), isNull);
+      await showPage(
+        tester,
+        const HomeShell(roles: {'customer'}, email: null),
+        width: width,
+        scale: 1.5,
+      );
+      for (final tab in ['Home', 'Services', 'Track', 'Wallet', 'Inbox']) {
+        await tester.tap(find.byKey(ValueKey('wantok-nav-$tab')));
+        await tester.pumpAndSettle();
+        expect(tester.takeException(), isNull);
+      }
+    });
+  }
+
+  testWidgets('Wallet is Kina preview with no enabled transaction buttons', (
+    tester,
+  ) async {
+    await showPage(
+      tester,
+      const WantokPayPreviewPage(embedded: true),
+      width: 320,
+    );
+    expect(find.text('K0.00'), findsOneWidget);
+    expect(
+      find.text('Preview only — payment rails are not active yet.'),
+      findsOneWidget,
+    );
+    expect(find.byType(FilledButton), findsNothing);
+    expect(find.byType(TextField), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+}

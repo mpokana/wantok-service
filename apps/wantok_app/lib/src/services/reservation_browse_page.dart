@@ -23,10 +23,15 @@ class _ReservationBrowsePageState extends State<ReservationBrowsePage> {
   }
 
   Future<void> _refresh() async {
+    final next = _repository.loadOffers(widget.category.slug);
     setState(() {
-      _future = _repository.loadOffers(widget.category.slug);
+      _future = next;
     });
-    await _future;
+    try {
+      await next;
+    } catch (_) {
+      // The FutureBuilder presents the retryable error state.
+    }
   }
 
   Future<void> _openReservation(ReservableOffer offer) async {

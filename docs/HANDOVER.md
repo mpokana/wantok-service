@@ -6,7 +6,7 @@
 
 ## Resume here
 
-The current safe checkpoint is **T2.3 Module Health and Dependency Reporting**. This file is committed with that checkpoint; run:
+The current safe checkpoint is **CX1 client discovery, navigation and load recovery**; the **CX1 gate remains open**. T2.3 is checkpointed at **`46d6208`**. This file is committed with that checkpoint; run:
 
 `git log -1 --oneline`
 
@@ -44,6 +44,7 @@ Checkpointed platform includes:
 - T2.2 versioned typed module configuration and Technical Control editor
 - T2.2 PNG-rich client experience polish across Home, Food/Groceries, Track, Inbox and Wantok Pay preview
 - T2.3 module health/dependency reporting, scoped probe execution and impact previews
+- CX1 working discovery filters/search, accessible client navigation, specialised Track shortcuts and load recovery (gate open)
 
 ### Technical Control T1
 
@@ -115,12 +116,26 @@ Checkpointed platform includes:
 - Technical Control Health & dependencies page and pre-action impact confirmations
 - four migrations `20261006120000` through `20261006123000` already applied locally; do not replay/reset
 
+### CX1 implementation and evidence
+
+- Home search now selects Services; profile route has an app bar/back button
+- Services family filters/search/clear work together; loading/error/empty/no-match states are distinct
+- retry failures stay in the view rather than escaping callbacks; several Future-returning setState callbacks corrected
+- Events/departures/order/registration/water-trip load failures no longer masquerade as empty records
+- Track links to existing specialised ride/order/event/water records; generic requests/reservations remain in their own model
+- client tabs expose labels, selection and semantic tap actions; narrow/enlarged-text layouts use a compact mode menu
+- Wallet copy labels planned actions; no payment movement or backend/security model changes
+- 31 focused widget regressions use in-memory catalogues or an unconfigured backend, with zero account/database writes
+- entry/back navigation coverage includes 11 categories; Taxi map/location/runtime behaviour remains live QA work
+- do not call CX1 complete from widget tests alone; see its evidence document
+
 ## Validation baseline
 
 At this checkpoint:
 
 - all shared Flutter packages: analysis PASS
-- Wantok app: analysis + smoke test PASS
+- Wantok app: analysis + **32 tests PASS** (31 client regressions + configuration smoke)
+- required `scripts/flutter/check.ps1`: PASS after clearing read-only attributes on generated test assets only
 - Wantok Operations Admin: analysis + smoke test PASS
 - Wantok Technical Control: analysis + smoke test PASS
 - database: **16 files / 364 pgTAP tests PASS** (all fixtures roll back)
@@ -165,9 +180,9 @@ Technical Control development server may be run on:
 
 ## Next phase
 
-**CX1 — Client Experience Completion Gate**, before **T2.4**.
+**Finish CX1 — Client Experience Completion Gate**, before **T2.4**.
 
-Required sequence: **checkpoint T2.3 → complete CX1 → T2.4 diagnostics/logs/jobs**.
+T2.3 checkpoint: **`46d6208`**. Required sequence: **finish CX1 evidence → T2.4 diagnostics/logs/jobs**.
 
 CX1 verifies the five client tabs, Home profile access, service search/entry/back journeys, loading/error/retry/empty states, narrow screens/enlarged text, accessible controls, Kina formatting and the Wallet preview boundary. Resolve misleading or inactive controls and record focused regression/QA evidence before calling the gate complete. See `docs/ROADMAP.md` for the checklist and `docs/CX1_CLIENT_EXPERIENCE_GATE.md` for acceptance evidence and initial findings.
 

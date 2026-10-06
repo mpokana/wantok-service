@@ -25,7 +25,7 @@ class WantokPayPreviewPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'Simple, secure everyday payments for PNG.',
+                'A preview of everyday payments for PNG.',
                 style: TextStyle(
                   color: Color(0xFFEDE4FF),
                   fontSize: 16,
@@ -53,7 +53,7 @@ class WantokPayPreviewPage extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Wantok Wallet',
+                            'Wantok Wallet preview',
                             style: TextStyle(
                               color: WantokColors.muted,
                               fontWeight: FontWeight.w700,
@@ -98,13 +98,15 @@ class WantokPayPreviewPage extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18),
           child: PngSectionTitle(
-            title: 'Quick actions',
+            title: 'Planned actions',
             subtitle: 'Prepared for future PNG payment integrations.',
           ),
         ),
         const SizedBox(height: 12),
         SizedBox(
-          height: 98,
+          height:
+              116 +
+              (MediaQuery.textScalerOf(context).scale(1) - 1).clamp(0, 2) * 100,
           child: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 14),
             scrollDirection: Axis.horizontal,
@@ -203,7 +205,9 @@ class _PayAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 92,
+      width:
+          108 +
+          (MediaQuery.textScalerOf(context).scale(1) - 1).clamp(0, 2) * 70,
       margin: const EdgeInsets.symmetric(horizontal: 4),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(

@@ -10,12 +10,20 @@ import '../services/reservation_browse_page.dart';
 import '../services/taxi_ride_page.dart';
 import '../services/water_transport_page.dart';
 import 'png_visuals.dart';
+import 'services_hub_page.dart';
 import 'wantok_pay_preview_page.dart';
 
 class ClientHome extends StatefulWidget {
-  const ClientHome({this.onAccountTap, super.key});
+  const ClientHome({
+    this.onAccountTap,
+    this.onServicesTap,
+    this.loadServices,
+    super.key,
+  });
 
   final VoidCallback? onAccountTap;
+  final VoidCallback? onServicesTap;
+  final Future<List<WantokServiceCategory>> Function()? loadServices;
 
   @override
   State<ClientHome> createState() => _ClientHomeState();
@@ -25,18 +33,40 @@ class _ClientHomeState extends State<ClientHome> {
   final _catalog = const CatalogRepository();
   late Future<List<WantokServiceCategory>> _services;
 
+  Future<List<WantokServiceCategory>> _loadServices() =>
+      (widget.loadServices ?? _catalog.loadActiveServices)();
+
+  void _openServices() {
+    if (widget.onServicesTap != null) {
+      widget.onServicesTap!();
+      return;
+    }
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) => Scaffold(
+          appBar: AppBar(title: const Text('Services')),
+          body: ServicesHubPage(loadServices: widget.loadServices),
+        ),
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
-    _services = _catalog.loadActiveServices();
+    _services = _loadServices();
   }
 
   Future<void> _reload() async {
-    final next = _catalog.loadActiveServices();
+    final next = _loadServices();
     setState(() {
       _services = next;
     });
-    await next;
+    try {
+      await next;
+    } catch (_) {
+      // The FutureBuilder presents the retryable error state.
+    }
   }
 
   @override
@@ -47,12 +77,16 @@ class _ClientHomeState extends State<ClientHome> {
         future: _services,
         builder: (context, snapshot) {
           final services = snapshot.data ?? const <WantokServiceCategory>[];
+          final textScale = MediaQuery.textScalerOf(context).scale(1);
 
           return ListView(
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(14, 12, 14, 24),
             children: [
-              _PngHomeHero(onAccountTap: widget.onAccountTap),
+              _PngHomeHero(
+                onAccountTap: widget.onAccountTap,
+                onServicesTap: _openServices,
+              ),
               const SizedBox(height: 14),
               _WantokPayStrip(
                 onTap: () => Navigator.of(context).push(
@@ -84,10 +118,20 @@ class _ClientHomeState extends State<ClientHome> {
                           ),
                         ),
                         IconButton(
+                          tooltip: 'Retry services',
                           onPressed: _reload,
                           icon: const Icon(Icons.refresh),
                         ),
                       ],
+                    ),
+                  ),
+                )
+              else if (services.isEmpty)
+                const Card(
+                  child: Padding(
+                    padding: EdgeInsets.all(22),
+                    child: Text(
+                      'No services available yet. Please check back soon.',
                     ),
                   ),
                 )
@@ -106,27 +150,37 @@ class _ClientHomeState extends State<ClientHome> {
                       ),
                     ],
                   ),
-                  child: GridView.builder(
-                    itemCount: services.length,
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 4,
-                          mainAxisExtent: 114,
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      final columns =
+                          (constraints.maxWidth / (88 * textScale.clamp(1, 2)))
+                              .floor()
+                              .clamp(2, 6);
+                      return GridView.builder(
+                        itemCount: services.length,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: columns,
+                          mainAxisExtent:
+                              92 +
+                              MediaQuery.textScalerOf(context).scale(11.8) *
+                                  2.4,
                           crossAxisSpacing: 5,
                           mainAxisSpacing: 3,
                         ),
-                    itemBuilder: (context, index) {
-                      final service = services[index];
-                      final visual = _visualFor(service.slug);
-                      return WantokServiceTile(
-                        label: service.name,
-                        icon: visual.icon,
-                        accentColor: visual.accent,
-                        surfaceColor: visual.surface,
-                        badge: _badgeFor(service.slug),
-                        onTap: () => _openService(service),
+                        itemBuilder: (context, index) {
+                          final service = services[index];
+                          final visual = _visualFor(service.slug);
+                          return WantokServiceTile(
+                            label: service.name,
+                            icon: visual.icon,
+                            accentColor: visual.accent,
+                            surfaceColor: visual.surface,
+                            badge: _badgeFor(service.slug),
+                            onTap: () => _openService(service),
+                          );
+                        },
                       );
                     },
                   ),
@@ -143,7 +197,7 @@ class _ClientHomeState extends State<ClientHome> {
                 ),
                 const SizedBox(height: 10),
                 SizedBox(
-                  height: 152,
+                  height: 196 + (textScale - 1).clamp(0, 2) * 140,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: _spotlights(services),
@@ -355,14 +409,15 @@ class _ServiceVisual {
 }
 
 class _PngHomeHero extends StatelessWidget {
-  const _PngHomeHero({this.onAccountTap});
+  const _PngHomeHero({this.onAccountTap, required this.onServicesTap});
 
   final VoidCallback? onAccountTap;
+  final VoidCallback onServicesTap;
 
   @override
   Widget build(BuildContext context) {
     return PngScenicBackdrop(
-      height: 214,
+      minHeight: 214,
       padding: const EdgeInsets.fromLTRB(18, 16, 18, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -375,33 +430,31 @@ class _PngHomeHero extends StatelessWidget {
                 size: 18,
               ),
               const SizedBox(width: 5),
-              const Text(
-                'Papua New Guinea',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
+              const Expanded(
+                child: Text(
+                  'Papua New Guinea',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ),
-              const Spacer(),
               Material(
                 color: Colors.white.withValues(alpha: 0.18),
                 shape: const CircleBorder(),
-                child: InkWell(
-                  onTap: onAccountTap,
-                  customBorder: const CircleBorder(),
-                  child: const Padding(
-                    padding: EdgeInsets.all(9),
-                    child: Icon(
-                      Icons.person_rounded,
-                      color: Colors.white,
-                      size: 20,
-                    ),
+                child: IconButton(
+                  tooltip: 'Account and profile',
+                  onPressed: onAccountTap,
+                  icon: const Icon(
+                    Icons.person_rounded,
+                    color: Colors.white,
+                    size: 20,
                   ),
                 ),
               ),
             ],
           ),
-          const Spacer(),
+          const SizedBox(height: 18),
           const Text(
             'Wan ples. Planti rot.',
             style: TextStyle(
@@ -434,16 +487,19 @@ class _PngHomeHero extends StatelessWidget {
                 ),
               ],
             ),
-            child: const TextField(
-              readOnly: true,
-              decoration: InputDecoration(
-                filled: false,
-                border: InputBorder.none,
-                enabledBorder: InputBorder.none,
-                hintText: 'Search services, places or people',
-                prefixIcon: Icon(Icons.search_rounded),
-                suffixIcon: Icon(Icons.qr_code_scanner_rounded),
+            child: TextButton.icon(
+              onPressed: onServicesTap,
+              style: TextButton.styleFrom(
+                minimumSize: const Size(double.infinity, 52),
+                alignment: Alignment.centerLeft,
+                foregroundColor: WantokColors.primaryDark,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
               ),
+              icon: const Icon(Icons.search_rounded),
+              label: const Text('Search Wantok Services'),
             ),
           ),
         ],
@@ -603,7 +659,7 @@ class _PngPurposeBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PngScenicBackdrop(
-      height: 142,
+      minHeight: 142,
       colors: const [Color(0xFF60331E), Color(0xFF8A4A25), Color(0xFF087A4B)],
       child: const Row(
         children: [

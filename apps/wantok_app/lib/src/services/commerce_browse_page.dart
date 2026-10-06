@@ -32,7 +32,11 @@ class _CommerceBrowsePageState extends State<CommerceBrowsePage> {
     setState(() {
       _future = next;
     });
-    await next;
+    try {
+      await next;
+    } catch (_) {
+      // The FutureBuilder presents the retryable error state.
+    }
   }
 
   @override
@@ -87,10 +91,7 @@ class _CommerceBrowsePageState extends State<CommerceBrowsePage> {
                 children: [
                   _CommerceHero(isFood: isFood, count: 0),
                   const SizedBox(height: 14),
-                  _CommerceSearch(
-                    isFood: isFood,
-                    onChanged: (_) {},
-                  ),
+                  _CommerceSearch(isFood: isFood, onChanged: (_) {}),
                   const SizedBox(height: 18),
                   _MessageCard(
                     icon: isFood
@@ -99,8 +100,7 @@ class _CommerceBrowsePageState extends State<CommerceBrowsePage> {
                     title: isFood
                         ? 'No food vendors are live yet'
                         : 'No shops are live yet',
-                    body:
-                        'Approved Wantok vendors will appear here when their storefront is active.',
+                    body: 'Approved Wantok vendors will appear here when their storefront is active.',
                   ),
                 ],
               );
