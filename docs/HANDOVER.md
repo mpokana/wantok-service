@@ -134,6 +134,14 @@ Checkpointed platform includes:
 - entry/back navigation coverage includes 11 categories; Taxi map/location/runtime behaviour and the new CX1A surfaces still require live QA.
 - do not call CX1 complete from widget/database tests alone; see its evidence document.
 
+## Android continuation evidence — 2026-10-07
+
+- Resumed clean `feature/flutter-platform-v1` at `b69656b`. Prior debug APK build confirmed complete by Gradle daemon Success at 08:32:04 PGT and matching APK/SHA-1 artifacts. Installed it with `adb install -r` on the preserved emulator; Success, unchanged first-install timestamp and existing Mansfield sign-in. New rebuild attempts with `.wantok/local-android.json` failed with Java loopback IOException, including the IPv4 retry; do not report those attempts as PASS.
+- Home/Services retain locked five-tab navigation. Services → Find providers, Agent → plumber search, clear/Top Wantoks empty state and category/province menus verified. Local DB has **0 provider profiles / 0 provider services**; menus contain only All, town disabled. Populated filter/rating/save/detail evidence remains open and needs real approved service coverage; no fixtures/approvals were created.
+- Wantok AI Agent capability status and disabled model input verified. Android Talk to a person submission showed success and created one `open` request owned by the existing Mansfield profile, ID `640eded2-0367-402a-8555-1252b306acb0`, with `source=wantok_ai_agent`, `chat_enabled=false`. It is explicitly labelled QA with no operational assistance required; retained for evidence. Staff response/live human chat and Web handoff remain unverified.
+- Existing Auth/Profile counts remain **2/2**. No app/Supabase/AVD reset or role changes. Screenshots/XML and fresh build/check logs are retained locally under ignored `.wantok/`; full evidence and APK hash are in `docs/CX1_CLIENT_EXPERIENCE_GATE.md`.
+- Fresh full Flutter checkpoint PASS: seven analysis targets, 34 app tests, Admin/Technical smoke tests. Database PASS: 27 files / 598 tests. CX1 remains open, T2.4 deferred, CX1G not started. Resolve the documentation checkpoint hash with `git log -1 --oneline`.
+
 ## Validation baseline
 
 At this checkpoint:

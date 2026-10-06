@@ -170,7 +170,8 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 - [x] daily rotate a small display set from the qualified top-ranked pool so the same providers are not permanently fixed
 - [x] keep paid placement out of organic rating scores
 - [x] Services hub exposes **Find providers** and a compact **Top Wantoks** organic surface
-- [ ] fresh signed-in Android/Web QA of provider search, rating cards, saving providers and provider details
+- [x] signed-in Android Services/Agent provider-search entries, plumber-query empty state, clear/Top Wantoks empty state and filter-menu presentation verified on 2026-10-07
+- [ ] populated Android category/province/town filters, rating cards, provider saving/details and Web QA; local DB currently has 0 provider profiles / 0 provider services, so only All filter choices are available and town is disabled
 
 ### CX1G — General Goods Marketplace + Fulfilment — PLANNED
 
@@ -202,6 +203,8 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 - [x] provider-search fallback from Agent examples uses the real CX1F discovery API
 - [x] secured owner-private human-help handoff queue with Support/Operations/Admin visibility/update rights
 - [x] client **Talk to a person** form creates a concise human-follow-up request
+- [x] signed-in Android capability/model-disabled status, real plumber-search fallback and human-handoff capture verified on 2026-10-07; success snackbar plus one owner-linked persisted QA request confirmed
+- [ ] Web handoff QA and staff response/live human chat evidence
 - [ ] provider-agnostic model gateway/Edge Function with replaceable provider/model configuration
 - [ ] controlled AI tools for service/provider/product search and authorised booking/order/status lookup
 - [ ] provider assistance for category selection and drafting service/product listings
@@ -224,6 +227,8 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 - [ ] complete gate evidence review and full checkpoint before T2.4
 
 Acceptance evidence and initial findings: `docs/CX1_CLIENT_EXPERIENCE_GATE.md`.
+
+2026-10-07 Android continuation from `b69656b`: prior debug APK build verified complete and installed in-place with `adb install -r`; existing sign-in/app/AVD/Supabase data preserved. New normal/IPv4 rebuild attempts failed with Java loopback IOException. Full Flutter checkpoint and 27-file/598-test database suite PASS. Local captures/logs remain in ignored `.wantok/`. Provider populated-data evidence remains open; CX1G has not started and T2.4 remains deferred.
 
 Use existing local development accounts/data. No Supabase reset, reseed, account replacement or payment movement is part of CX1.
 
