@@ -355,6 +355,7 @@ class _VendorOrderCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final status = order['status']?.toString() ?? 'placed';
     final service = _asMap(order['provider_services']);
+    final customer = _asMap(order['profiles']);
     final items =
         (order['commerce_order_items'] as List<dynamic>? ?? const <dynamic>[])
             .map(_asMap)
@@ -380,6 +381,39 @@ class _VendorOrderCard extends StatelessWidget {
                 _MiniStatus(text: status),
               ],
             ),
+            if (order['beneficiary_name'] != null) ...[
+              const SizedBox(height: 8),
+              Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF1F6F3),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      order['beneficiary_relationship'] == null
+                          ? 'For: ${order['beneficiary_name']}'
+                          : 'For: ${order['beneficiary_name']} (${order['beneficiary_relationship']})',
+                      style: const TextStyle(
+                        color: WantokColors.primaryDark,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    if (order['beneficiary_phone'] != null)
+                      Text(order['beneficiary_phone'].toString()),
+                    Text(
+                      'Booked by: ${customer['full_name']?.toString() ?? 'Wantok account'}',
+                      style: const TextStyle(
+                        color: WantokColors.muted,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
             const SizedBox(height: 8),
             ...items.map(
               (item) => Padding(
@@ -613,7 +647,9 @@ class _CatalogEditorDialogState extends State<_CatalogEditorDialog> {
                 keyboardType: const TextInputType.numberWithOptions(
                   decimal: true,
                 ),
-                decoration: const InputDecoration(labelText: 'Price (Kina / K)'),
+                decoration: const InputDecoration(
+                  labelText: 'Price (Kina / K)',
+                ),
               ),
               const SizedBox(height: 10),
               TextField(

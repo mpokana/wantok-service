@@ -4,6 +4,7 @@ import 'package:wantok_core/wantok_core.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
 import '../home/png_visuals.dart';
+import 'booking_for_selector.dart';
 import 'commerce_orders_page.dart';
 
 class CommerceBrowsePage extends StatefulWidget {
@@ -290,6 +291,7 @@ class _StorefrontPageState extends State<_StorefrontPage> {
         fulfillmentType: draft.fulfillmentType,
         deliveryAddress: draft.deliveryAddress,
         customerNote: draft.note,
+        trustedPersonId: draft.trustedPersonId,
       );
 
       if (!mounted) return;
@@ -562,6 +564,7 @@ class _CheckoutSheetState extends State<_CheckoutSheet> {
   final _addressController = TextEditingController();
   final _noteController = TextEditingController();
   String _fulfillmentType = 'delivery';
+  String? _trustedPersonId;
   String? _error;
 
   @override
@@ -585,6 +588,7 @@ class _CheckoutSheetState extends State<_CheckoutSheet> {
             ? _addressController.text.trim()
             : null,
         note: _noteController.text.trim(),
+        trustedPersonId: _trustedPersonId,
       ),
     );
   }
@@ -644,6 +648,16 @@ class _CheckoutSheetState extends State<_CheckoutSheet> {
             ),
           ],
           const SizedBox(height: 14),
+          BookingForSelector(
+            selectedTrustedPersonId: _trustedPersonId,
+            onChanged: (value) {
+              setState(() {
+                _trustedPersonId = value;
+                _error = null;
+              });
+            },
+          ),
+          const SizedBox(height: 14),
           TextField(
             controller: _noteController,
             minLines: 2,
@@ -697,11 +711,13 @@ class _CheckoutDraft {
     required this.fulfillmentType,
     this.deliveryAddress,
     this.note,
+    this.trustedPersonId,
   });
 
   final String fulfillmentType;
   final String? deliveryAddress;
   final String? note;
+  final String? trustedPersonId;
 }
 
 class _CommerceSearch extends StatelessWidget {

@@ -132,7 +132,7 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 - [x] privacy controls for profile visibility, review visibility, saved-items privacy, recommendations and profile sharing
 - [x] owner-scoped Trusted people model and Account CRUD for family/relative/staff beneficiaries
 - [x] richer Wantok Pay preview including planned actions, verification, PNG services and recent-activity framing
-- [x] database coverage: 20 pgTAP files / 468 tests PASS
+- [x] database coverage: 21 pgTAP files / 492 tests PASS
 - [x] client analysis PASS and 32 Flutter app tests PASS
 
 ### CX1B — Delegated Booking Foundation
@@ -144,10 +144,10 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 - [x] wire **Who is this for?** selector into Vehicle Hire, Boat Hire and Venue Booking reservations
 - [x] wire **Who is this for?** selector into Delivery, Errands/Pabili, Specialist Services and General Labour requests
 - [x] show delegated beneficiary in customer Track and vendor Jobs without exposing contact details in vendor list
-- [x] delegated-booking security/regression coverage included in 20 files / 468 pgTAP tests
+- [x] delegated-booking security/regression coverage included in 21 files / 492 pgTAP tests
 - [x] wire delegated booking into Taxi/Ride with actual-rider snapshot and separate booked-by identity
 - [x] wire delegated booking into Events/ticketing with trusted primary-attendee snapshots and organiser visibility
-- [ ] wire delegated booking into Food/Groceries commerce/order flows
+- [x] wire delegated booking into Food/Groceries commerce/order flows with recipient snapshots and vendor visibility
 - [ ] wire delegated booking into scheduled Boat/Ship passenger transport
 - [ ] decide whether future accommodation/flights modules inherit the shared delegated-booking contract
 

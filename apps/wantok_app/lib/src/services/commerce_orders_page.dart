@@ -132,6 +132,36 @@ class _CommerceOrdersPageState extends State<CommerceOrdersPage> {
                               _OrderStatusChip(status: status),
                             ],
                           ),
+                          if (order['beneficiary_name'] != null) ...[
+                            const SizedBox(height: 9),
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF1F6F3),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(
+                                    Icons.family_restroom_outlined,
+                                    color: WantokColors.primaryDark,
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      order['beneficiary_relationship'] == null
+                                          ? 'Order for ${order['beneficiary_name']}'
+                                          : 'Order for ${order['beneficiary_name']} (${order['beneficiary_relationship']})',
+                                      style: const TextStyle(
+                                        color: WantokColors.primaryDark,
+                                        fontWeight: FontWeight.w800,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                           const SizedBox(height: 9),
                           ...items.map(
                             (item) => Padding(

@@ -58,6 +58,7 @@ class CommerceRepository {
     double? deliveryLng,
     String? customerNote,
     String paymentMethod = 'cash',
+    String? trustedPersonId,
   }) async {
     final items = quantities.entries
         .where((entry) => entry.value > 0)
@@ -79,6 +80,7 @@ class CommerceRepository {
         'p_delivery_lng': deliveryLng,
         'p_customer_note': _emptyToNull(customerNote),
         'p_payment_method': paymentMethod,
+        'p_trusted_person_id': trustedPersonId,
       },
     );
 
@@ -89,7 +91,7 @@ class CommerceRepository {
     final rows = await WantokBackend.client
         .from('commerce_orders')
         .select(
-          'id, status, fulfillment_type, delivery_address, customer_note, subtotal, delivery_fee, total_amount, currency, payment_method, payment_status, placed_at, accepted_at, preparing_at, ready_at, out_for_delivery_at, completed_at, cancelled_at, rejection_reason:cancellation_reason, provider_services(title), service_categories(name, slug), commerce_order_items(id, item_name, unit_label, quantity, unit_price, line_total)',
+          'id, status, fulfillment_type, delivery_address, customer_note, subtotal, delivery_fee, total_amount, currency, payment_method, payment_status, placed_at, accepted_at, preparing_at, ready_at, out_for_delivery_at, completed_at, cancelled_at, rejection_reason:cancellation_reason, trusted_person_id, beneficiary_name, beneficiary_relationship, beneficiary_phone, beneficiary_email, provider_services(title), service_categories(name, slug), commerce_order_items(id, item_name, unit_label, quantity, unit_price, line_total)',
         )
         .eq('customer_id', _userId)
         .order('created_at', ascending: false)
@@ -196,7 +198,7 @@ class CommerceRepository {
     final rows = await WantokBackend.client
         .from('commerce_orders')
         .select(
-          'id, customer_id, status, fulfillment_type, delivery_address, customer_note, subtotal, delivery_fee, total_amount, currency, payment_method, payment_status, placed_at, provider_services(title), service_categories(name, slug), commerce_order_items(id, item_name, unit_label, quantity, unit_price, line_total)',
+          'id, customer_id, status, fulfillment_type, delivery_address, customer_note, subtotal, delivery_fee, total_amount, currency, payment_method, payment_status, placed_at, trusted_person_id, beneficiary_name, beneficiary_relationship, beneficiary_phone, beneficiary_email, profiles(full_name, phone), provider_services(title), service_categories(name, slug), commerce_order_items(id, item_name, unit_label, quantity, unit_price, line_total)',
         )
         .eq('provider_id', _userId)
         .inFilter('status', [
