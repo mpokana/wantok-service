@@ -4,6 +4,7 @@ import 'package:wantok_auth/wantok_auth.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
 import 'technical_access_page.dart';
+import 'technical_configuration_page.dart';
 
 class TechnicalShell extends StatefulWidget {
   const TechnicalShell({required this.email, super.key});
@@ -693,11 +694,21 @@ class _ModuleWorkspace extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 14),
-        if (module.hasPermission('module.configure'))
-          const _CapabilityCard(
+        if (module.hasPermission('module.view'))
+          _CapabilityCard(
             icon: Icons.tune_outlined,
             title: 'Configuration',
-            description: 'Configuration authority is ready. Module-specific schemas will be registered incrementally in Phase T2.',
+            description: module.hasPermission('module.configure')
+                ? 'Open and edit the versioned, typed configuration schema.'
+                : 'Inspect the effective typed configuration in read-only mode.',
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (context) =>
+                      TechnicalConfigurationPage(module: module),
+                ),
+              );
+            },
           ),
         if (module.hasPermission('module.diagnostics'))
           const _CapabilityCard(
@@ -756,16 +767,19 @@ class _CapabilityCard extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.description,
+    this.onTap,
   });
 
   final IconData icon;
   final String title;
   final String description;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
+        onTap: onTap,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 18,
           vertical: 10,

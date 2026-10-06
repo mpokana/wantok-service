@@ -6,7 +6,7 @@
 
 ## Resume here
 
-The current safe checkpoint is **T2.1 Technical Staff & Module Access Management**. This file is committed with that checkpoint; run:
+The current safe checkpoint is **T2.2 Typed Module Configuration + Service Visual Refresh**. This file is committed with that checkpoint; run:
 
 `git log -1 --oneline`
 
@@ -41,6 +41,8 @@ Checkpointed platform includes:
 - Account/Profile management and preferences
 - Technical Control Plane T1
 - T2.1 Technical Staff & Module Access Management
+- T2.2 versioned typed module configuration and Technical Control editor
+- richer category-specific public service visuals
 
 ### Technical Control T1
 
@@ -69,6 +71,19 @@ Checkpointed platform includes:
 - Operations Admin cannot use Technical staff search
 - Technical Platform Administrators remain global and are not ordinary module assignments
 
+### T2.2 typed configuration
+
+- versioned per-module configuration schemas
+- typed fields with server-side validation
+- schema defaults plus controlled overrides
+- `module.view` read-only inspection and `module.configure` editing
+- batched schema-versioned updates with audit history
+- secret references only (`env://`, `vault://`, `external-secret://`, `supabase://`), never secret values
+- secret references redacted from audit metadata
+- initial schemas for Taxi, Water Transport, Messaging, Food, Groceries, Delivery and Notifications
+- typed Technical Control editor with reset/discard/save workflows
+- refreshed public service grid with category-specific colours and stronger lightweight icons
+
 ## Validation baseline
 
 At this checkpoint:
@@ -77,8 +92,8 @@ At this checkpoint:
 - Wantok app: analysis + smoke test PASS
 - Wantok Operations Admin: analysis + smoke test PASS
 - Wantok Technical Control: analysis + smoke test PASS
-- database: **14 files / 274 pgTAP tests PASS**
-- served Technical Control login page rendered successfully from `http://127.0.0.1:3100`
+- database: **15 files / 316 pgTAP tests PASS**
+- Android emulator rebuilt and refreshed service grid visually verified
 - Docker Compose production configuration parse: PASS
 - `git diff --check`: PASS
 
@@ -111,24 +126,25 @@ Technical Control development server may be run on:
 - Providers cannot self-verify/self-activate.
 - Technical module/access changes are audited.
 - Lower/equal module administrators cannot modify peer/higher assignments.
+- Configuration writes must be schema-versioned and validated server-side.
+- Secret-bearing configuration stores references only; never expose secret values in ordinary UI or audit metadata.
 - Do not expose production secrets, arbitrary SQL or shell execution in ordinary control-panel UI.
 - Keep services modular so one service can be repaired/disabled independently.
 - Wantok Service and Wantok Neurons remain separate systems.
 
 ## Next phase
 
-**T2.2 — Module Configuration Schema Registry + Safe Typed Configuration**
+**T2.3 — Module Health and Dependency Reporting**
 
 Recommended next work:
 
-1. define versioned module configuration schemas;
-2. separate safe public configuration from secret references;
-3. typed configuration values with server-side validation;
-4. module-specific configuration read/update RPCs;
-5. permission-driven configuration editor in Technical Control;
-6. audit every configuration change.
+1. define explicit module dependencies;
+2. add module health probes/reporters;
+3. record health history and degraded/down transitions;
+4. show dependency impact before maintenance/disable actions;
+5. build Technical Control health and dependency views.
 
-After T2.2 continue with module health/dependencies, diagnostics/log adapters, jobs/queues, integrations and high-risk approvals.
+After T2.3 continue with diagnostics/log adapters, jobs/queues, integrations and high-risk approvals.
 
 Do not begin Wantok Pay transaction movement until payment-rail and settlement decisions are made.
 

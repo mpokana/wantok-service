@@ -204,3 +204,27 @@ Implemented:
 - all mutations continue through the existing technical audit path
 
 T2.1 intentionally does **not** provide UI for casually granting or revoking Technical Platform Administrator status. That remains a critical platform-level action for later high-risk approval/hardening work.
+
+## 12. T2.2 — Typed module configuration
+
+T2.2 replaces generic configuration editing with versioned, typed module schemas.
+
+Implemented:
+
+- versioned schema registry per technical module;
+- typed field definitions for strings, integers, decimals, booleans, enums, URLs, string lists, durations and secret references;
+- grouped labels, help text, required/advanced flags, defaults and validation metadata;
+- override storage separate from schema defaults;
+- server-side validation for every write;
+- `module.view` read-only configuration inspection;
+- `module.configure` required for changes;
+- batched configuration updates with schema-version checks;
+- reset-to-default by removing an override;
+- audited before/after configuration changes;
+- secret-reference fields that accept identifiers such as `env://...` or `vault://...`, never secret values;
+- secret-reference identifiers are redacted from audit metadata;
+- typed Technical Control editor with permission-aware read-only/edit modes.
+
+Initial active schemas cover Taxi, Water Transport, Messaging, Food, Groceries, Delivery and Notifications. Wantok Pay remains behind its separate payment-rail and settlement design gate.
+
+The public Wantok home screen was also refreshed during T2.2 with richer category-specific service visuals. The icons remain lightweight Flutter-rendered assets rather than downloaded artwork, preserving performance and Wantok's own visual identity.

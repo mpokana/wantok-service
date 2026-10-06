@@ -8,6 +8,9 @@ class WantokServiceTile extends StatelessWidget {
     required this.icon,
     this.onTap,
     this.badge,
+    this.accentColor,
+    this.surfaceColor,
+    this.badgeColor,
     super.key,
   });
 
@@ -15,14 +18,21 @@ class WantokServiceTile extends StatelessWidget {
   final IconData icon;
   final VoidCallback? onTap;
   final String? badge;
+  final Color? accentColor;
+  final Color? surfaceColor;
+  final Color? badgeColor;
 
   @override
   Widget build(BuildContext context) {
+    final accent = accentColor ?? WantokColors.primaryDark;
+    final surface = surfaceColor ?? const Color(0xFFE7F4ED);
+    final badgeSurface = badgeColor ?? WantokColors.gold;
+
     return InkWell(
-      borderRadius: BorderRadius.circular(18),
+      borderRadius: BorderRadius.circular(22),
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 3, vertical: 7),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -30,13 +40,65 @@ class WantokServiceTile extends StatelessWidget {
               clipBehavior: Clip.none,
               children: [
                 Container(
-                  width: 54,
-                  height: 54,
+                  width: 64,
+                  height: 64,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFE7F4ED),
-                    borderRadius: BorderRadius.circular(17),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        Color.lerp(surface, Colors.white, 0.08)!,
+                        surface,
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(21),
+                    boxShadow: [
+                      BoxShadow(
+                        color: accent.withValues(alpha: 0.10),
+                        blurRadius: 12,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
                   ),
-                  child: Icon(icon, color: WantokColors.primaryDark, size: 28),
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        right: 7,
+                        top: 7,
+                        child: Container(
+                          width: 15,
+                          height: 15,
+                          decoration: BoxDecoration(
+                            color: accent.withValues(alpha: 0.12),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        left: 8,
+                        bottom: 8,
+                        child: Container(
+                          width: 22,
+                          height: 7,
+                          decoration: BoxDecoration(
+                            color: accent.withValues(alpha: 0.10),
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                        ),
+                      ),
+                      Center(
+                        child: Container(
+                          width: 43,
+                          height: 43,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withValues(alpha: 0.82),
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          child: Icon(icon, color: accent, size: 29),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 if (badge != null)
                   Positioned(
@@ -44,8 +106,15 @@ class WantokServiceTile extends StatelessWidget {
                     top: -8,
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: WantokColors.gold,
+                        color: badgeSurface,
                         borderRadius: BorderRadius.circular(999),
+                        boxShadow: [
+                          BoxShadow(
+                            color: badgeSurface.withValues(alpha: 0.22),
+                            blurRadius: 7,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
                       ),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(
@@ -57,7 +126,8 @@ class WantokServiceTile extends StatelessWidget {
                           style: const TextStyle(
                             color: WantokColors.ink,
                             fontSize: 9,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 0.15,
                           ),
                         ),
                       ),
@@ -73,8 +143,9 @@ class WantokServiceTile extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 color: WantokColors.ink,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
+                fontSize: 11.8,
+                height: 1.16,
+                fontWeight: FontWeight.w700,
               ),
             ),
           ],

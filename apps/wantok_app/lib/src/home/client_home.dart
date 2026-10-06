@@ -98,9 +98,12 @@ class _ClientHomeState extends State<ClientHome> {
                 ),
                 itemBuilder: (context, index) {
                   final service = services[index];
+                  final visual = _visualFor(service.slug);
                   return WantokServiceTile(
                     label: service.name,
-                    icon: _iconFor(service.slug),
+                    icon: visual.icon,
+                    accentColor: visual.accent,
+                    surfaceColor: visual.surface,
                     badge: _badgeFor(service.slug),
                     onTap: () => _openService(service),
                   );
@@ -182,26 +185,86 @@ class _ClientHomeState extends State<ClientHome> {
     );
   }
 
-  IconData _iconFor(String slug) => switch (slug) {
-    'taxi-ride' => Icons.local_taxi_outlined,
-    'vehicle-hire' => Icons.directions_car_outlined,
-    'boat-hire' => Icons.directions_boat_outlined,
-    'boat-ship-rides' => Icons.sailing_outlined,
-    'specialist-services' => Icons.handyman_outlined,
-    'general-labour' => Icons.groups_outlined,
-    'venue-booking' => Icons.meeting_room_outlined,
-    'events' => Icons.event_outlined,
-    'delivery' => Icons.local_shipping_outlined,
-    'errands' => Icons.shopping_bag_outlined,
-    'food' => Icons.restaurant_outlined,
-    'groceries' => Icons.local_grocery_store_outlined,
-    _ => Icons.apps_outlined,
+  _ServiceVisual _visualFor(String slug) => switch (slug) {
+    'taxi-ride' => const _ServiceVisual(
+      Icons.local_taxi,
+      Color(0xFF007A50),
+      Color(0xFFDDF5E9),
+    ),
+    'vehicle-hire' => const _ServiceVisual(
+      Icons.directions_car,
+      Color(0xFF2864DC),
+      Color(0xFFE3EDFF),
+    ),
+    'boat-hire' => const _ServiceVisual(
+      Icons.directions_boat,
+      Color(0xFF087F8C),
+      Color(0xFFDDF6F8),
+    ),
+    'boat-ship-rides' => const _ServiceVisual(
+      Icons.sailing,
+      Color(0xFF006C7C),
+      Color(0xFFDDF3F5),
+    ),
+    'specialist-services' => const _ServiceVisual(
+      Icons.handyman,
+      Color(0xFFD86020),
+      Color(0xFFFFE9DB),
+    ),
+    'general-labour' => const _ServiceVisual(
+      Icons.groups,
+      Color(0xFF744AC7),
+      Color(0xFFEEE6FF),
+    ),
+    'venue-booking' => const _ServiceVisual(
+      Icons.meeting_room,
+      Color(0xFF8A4CA6),
+      Color(0xFFF4E6F7),
+    ),
+    'events' => const _ServiceVisual(
+      Icons.event,
+      Color(0xFFD84A6A),
+      Color(0xFFFFE4EA),
+    ),
+    'delivery' => const _ServiceVisual(
+      Icons.local_shipping,
+      Color(0xFF1585C1),
+      Color(0xFFE0F2FF),
+    ),
+    'errands' => const _ServiceVisual(
+      Icons.shopping_bag,
+      Color(0xFFB66A00),
+      Color(0xFFFFF0D8),
+    ),
+    'food' => const _ServiceVisual(
+      Icons.restaurant,
+      Color(0xFFE24B2D),
+      Color(0xFFFFE5DE),
+    ),
+    'groceries' => const _ServiceVisual(
+      Icons.local_grocery_store,
+      Color(0xFF2E8B57),
+      Color(0xFFE1F4E7),
+    ),
+    _ => const _ServiceVisual(
+      Icons.apps,
+      WantokColors.primaryDark,
+      Color(0xFFE7F4ED),
+    ),
   };
 
   String? _badgeFor(String slug) => switch (slug) {
     'taxi-ride' || 'delivery' => 'FAST',
     _ => null,
   };
+}
+
+class _ServiceVisual {
+  const _ServiceVisual(this.icon, this.accent, this.surface);
+
+  final IconData icon;
+  final Color accent;
+  final Color surface;
 }
 
 class _LocationSearchCard extends StatelessWidget {

@@ -51,22 +51,24 @@
 - [x] pgTAP security coverage
 - [x] served Technical Control UI verification
 
-## T2.2 — Module Configuration Schema Registry — NEXT
+## T2.2 — Module Configuration Schema Registry — COMPLETE
 
-Recommended order:
+- [x] versioned module configuration-schema registry
+- [x] supported field types and server-side validation rules
+- [x] safe non-secret configuration override storage
+- [x] secret-reference fields without secret-value disclosure
+- [x] configuration read/update RPCs
+- [x] `module.view` read-only inspection
+- [x] `module.configure` write enforcement
+- [x] audit before/after configuration changes
+- [x] secret-reference audit redaction
+- [x] typed configuration editor in Technical Control
+- [x] module-specific configuration grouping/help text
+- [x] seven initial active module schemas
+- [x] pgTAP validation and permission tests
+- [x] richer category-specific public service visuals
 
-- [ ] versioned module configuration-schema registry
-- [ ] supported field types and validation rules
-- [ ] safe non-secret configuration value storage
-- [ ] secret-reference fields without secret-value disclosure
-- [ ] configuration read/update RPCs
-- [ ] `module.configure` enforcement
-- [ ] audit before/after configuration changes
-- [ ] typed configuration editor in Technical Control
-- [ ] module-specific configuration grouping/help text
-- [ ] pgTAP validation and anti-escalation tests
-
-## T2.3 — Module health and dependency reporting
+## T2.3 — Module health and dependency reporting — NEXT
 
 - [ ] module dependency registry
 - [ ] health reporters/probes

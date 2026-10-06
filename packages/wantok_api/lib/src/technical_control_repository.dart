@@ -150,6 +150,79 @@ class TechnicalAccountCandidate {
   }
 }
 
+class TechnicalConfigField {
+  const TechnicalConfigField({
+    required this.schemaVersion,
+    required this.schemaTitle,
+    required this.schemaDescription,
+    required this.fieldKey,
+    required this.fieldType,
+    required this.groupKey,
+    required this.groupLabel,
+    required this.label,
+    required this.helpText,
+    required this.sortOrder,
+    required this.isRequired,
+    required this.isAdvanced,
+    required this.defaultValue,
+    required this.currentValue,
+    required this.effectiveValue,
+    required this.isOverridden,
+    required this.validation,
+    required this.updatedAt,
+    required this.updatedByName,
+    required this.canConfigure,
+  });
+
+  final int schemaVersion;
+  final String schemaTitle;
+  final String? schemaDescription;
+  final String fieldKey;
+  final String fieldType;
+  final String groupKey;
+  final String groupLabel;
+  final String label;
+  final String? helpText;
+  final int sortOrder;
+  final bool isRequired;
+  final bool isAdvanced;
+  final dynamic defaultValue;
+  final dynamic currentValue;
+  final dynamic effectiveValue;
+  final bool isOverridden;
+  final Map<String, dynamic> validation;
+  final DateTime? updatedAt;
+  final String? updatedByName;
+  final bool canConfigure;
+
+  bool get isSecretReference => fieldType == 'secret_reference';
+
+  factory TechnicalConfigField.fromMap(Map<String, dynamic> row) {
+    return TechnicalConfigField(
+      schemaVersion: row['schema_version'] as int,
+      schemaTitle: row['schema_title'] as String,
+      schemaDescription: row['schema_description'] as String?,
+      fieldKey: row['field_key'] as String,
+      fieldType: row['field_type'] as String,
+      groupKey: row['group_key'] as String,
+      groupLabel: row['group_label'] as String,
+      label: row['label'] as String,
+      helpText: row['help_text'] as String?,
+      sortOrder: row['sort_order'] as int? ?? 0,
+      isRequired: row['is_required'] as bool? ?? false,
+      isAdvanced: row['is_advanced'] as bool? ?? false,
+      defaultValue: row['default_value'],
+      currentValue: row['current_value'],
+      effectiveValue: row['effective_value'],
+      isOverridden: row['is_overridden'] as bool? ?? false,
+      validation: _jsonMap(row['validation']),
+      updatedAt: _dateTime(row['updated_at']),
+      updatedByName: row['updated_by_name'] as String?,
+      canConfigure: row['can_configure'] as bool? ?? false,
+    );
+  }
+}
+
 class TechnicalControlRepository {
   const TechnicalControlRepository();
 
@@ -252,6 +325,34 @@ class TechnicalControlRepository {
     );
     return result == true;
   }
+
+  Future<List<TechnicalConfigField>> loadModuleConfiguration(
+    String moduleKey,
+  ) async {
+    final result = await WantokBackend.client.rpc(
+      'list_technical_module_configuration',
+      params: {'p_module_key': moduleKey},
+    );
+    return _maps(result)
+        .map(TechnicalConfigField.fromMap)
+        .toList(growable: false);
+  }
+
+  Future<int> updateModuleConfiguration({
+    required String moduleKey,
+    required int schemaVersion,
+    required Map<String, dynamic> values,
+  }) async {
+    final result = await WantokBackend.client.rpc(
+      'update_technical_module_configuration',
+      params: {
+        'p_module_key': moduleKey,
+        'p_schema_version': schemaVersion,
+        'p_values': values,
+      },
+    );
+    return result as int? ?? 0;
+  }
 }
 
 List<Map<String, dynamic>> _maps(dynamic value) {
@@ -259,6 +360,12 @@ List<Map<String, dynamic>> _maps(dynamic value) {
   return value
       .map((row) => Map<String, dynamic>.from(row as Map))
       .toList(growable: false);
+}
+
+Map<String, dynamic> _jsonMap(dynamic value) {
+  if (value is Map<String, dynamic>) return value;
+  if (value is Map) return Map<String, dynamic>.from(value);
+  return const <String, dynamic>{};
 }
 
 Map<String, dynamic> _singleMap(dynamic value) {
