@@ -28,6 +28,8 @@
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Wantok uses your location to set taxi pickup points and, for approved drivers, to share foreground trip location while online.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Wantok lets you choose profile and review photos from your photo library.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

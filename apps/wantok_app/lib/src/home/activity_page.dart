@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
@@ -70,15 +71,49 @@ class _ActivityPageState extends State<ActivityPage> {
     );
     if (draft == null) return;
 
+    final existingPhotoRefs = _stringList(existingReview?['photo_urls']);
+    final uploadedRefs = <String>[];
+
     setState(() => _busyId = bookingId);
     try {
+      var photoRefs = existingPhotoRefs;
+      if (draft.replacePhotos) {
+        final uploads = <ClientMediaUpload>[];
+        for (final file in draft.photos) {
+          uploads.add(
+            ClientMediaUpload(
+              bytes: await file.readAsBytes(),
+              fileName: file.name,
+              mimeType: file.mimeType,
+            ),
+          );
+        }
+        uploadedRefs.addAll(
+          await _experience.uploadReviewPhotos(
+            bookingId: bookingId,
+            uploads: uploads,
+          ),
+        );
+        photoRefs = uploadedRefs;
+      }
+
       await _experience.submitServiceReview(
         bookingId: bookingId,
         rating: draft.rating,
         title: draft.title,
         comment: draft.comment,
+        photoUrls: photoRefs,
         visibility: draft.visibility,
       );
+
+      if (draft.replacePhotos && existingPhotoRefs.isNotEmpty) {
+        try {
+          await _experience.removeMediaReferences(existingPhotoRefs);
+        } catch (_) {
+          // Review save succeeded; stale media cleanup is best-effort.
+        }
+      }
+
       await _refresh();
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -86,6 +121,13 @@ class _ActivityPageState extends State<ActivityPage> {
         );
       }
     } catch (error) {
+      if (uploadedRefs.isNotEmpty) {
+        try {
+          await _experience.removeMediaReferences(uploadedRefs);
+        } catch (_) {
+          // Preserve the primary review-save error.
+        }
+      }
       if (mounted) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(_friendlyError(error))));
@@ -423,10 +465,16 @@ class _ReviewDialog extends StatefulWidget {
 }
 
 class _ReviewDialogState extends State<_ReviewDialog> {
+  final ImagePicker _picker = ImagePicker();
+
   late int _rating;
   late final TextEditingController _title;
   late final TextEditingController _comment;
   late String _visibility;
+  late final List<String> _existingPhotos;
+  List<XFile> _selectedPhotos = const <XFile>[];
+  bool _replacePhotos = false;
+  bool _pickingPhotos = false;
 
   @override
   void initState() {
@@ -438,6 +486,47 @@ class _ReviewDialogState extends State<_ReviewDialog> {
       text: existing?['comment'] as String? ?? '',
     );
     _visibility = existing?['visibility'] as String? ?? 'default';
+    _existingPhotos = _stringList(existing?['photo_urls']);
+  }
+
+  Future<void> _pickPhotos() async {
+    if (_pickingPhotos) return;
+    setState(() => _pickingPhotos = true);
+    try {
+      final files = await _picker.pickMultiImage(
+        maxWidth: 1920,
+        imageQuality: 88,
+      );
+      if (!mounted || files.isEmpty) return;
+
+      final selected = files.take(5).toList(growable: false);
+      setState(() {
+        _selectedPhotos = selected;
+        _replacePhotos = true;
+      });
+
+      if (files.length > 5 && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Only the first five photos were kept.'),
+          ),
+        );
+      }
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(_friendlyError(error))));
+      }
+    } finally {
+      if (mounted) setState(() => _pickingPhotos = false);
+    }
+  }
+
+  void _removePhotos() {
+    setState(() {
+      _selectedPhotos = const <XFile>[];
+      _replacePhotos = true;
+    });
   }
 
   @override
@@ -454,6 +543,8 @@ class _ReviewDialogState extends State<_ReviewDialog> {
         title: _emptyToNull(_title.text),
         comment: _emptyToNull(_comment.text),
         visibility: _visibility == 'default' ? null : _visibility,
+        photos: _selectedPhotos,
+        replacePhotos: _replacePhotos,
       ),
     );
   }
@@ -509,6 +600,68 @@ class _ReviewDialogState extends State<_ReviewDialog> {
               ),
             ),
             const SizedBox(height: 8),
+            Card(
+              color: const Color(0xFFF7FAF8),
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Photos',
+                      style: TextStyle(fontWeight: FontWeight.w800),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      _replacePhotos
+                          ? _selectedPhotos.isEmpty
+                                ? 'No photos selected'
+                                : '${_selectedPhotos.length} photo(s) selected'
+                          : _existingPhotos.isEmpty
+                          ? 'No photos'
+                          : '${_existingPhotos.length} existing photo(s)',
+                      style: const TextStyle(
+                        color: WantokColors.muted,
+                        fontSize: 12,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 6,
+                      children: [
+                        OutlinedButton.icon(
+                          onPressed: _pickingPhotos ? null : _pickPhotos,
+                          icon: _pickingPhotos
+                              ? const SizedBox.square(
+                                  dimension: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : const Icon(Icons.photo_library_outlined),
+                          label: Text(
+                            _pickingPhotos
+                                ? 'Opening...'
+                                : _existingPhotos.isEmpty && !_replacePhotos
+                                ? 'Add photos'
+                                : 'Replace photos',
+                          ),
+                        ),
+                        if ((_existingPhotos.isNotEmpty && !_replacePhotos) ||
+                            (_replacePhotos && _selectedPhotos.isNotEmpty))
+                          TextButton.icon(
+                            onPressed: _pickingPhotos ? null : _removePhotos,
+                            icon: const Icon(Icons.delete_outline),
+                            label: const Text('Remove photos'),
+                          ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
             DropdownButtonFormField<String>(
               initialValue: _visibility,
               decoration: const InputDecoration(
@@ -550,12 +703,16 @@ class _ReviewDraft {
     required this.title,
     required this.comment,
     required this.visibility,
+    required this.photos,
+    required this.replacePhotos,
   });
 
   final int rating;
   final String? title;
   final String? comment;
   final String? visibility;
+  final List<XFile> photos;
+  final bool replacePhotos;
 }
 
 class _TrackHeader extends StatelessWidget {
@@ -677,6 +834,13 @@ Map<String, dynamic> _asMap(dynamic value) {
 List<dynamic> _asList(dynamic value) {
   if (value is List<dynamic>) return value;
   return const <dynamic>[];
+}
+
+List<String> _stringList(dynamic value) {
+  if (value is List) {
+    return value.map((item) => item.toString()).toList(growable: false);
+  }
+  return const <String>[];
 }
 
 String _formatRange(dynamic startValue, dynamic endValue) {

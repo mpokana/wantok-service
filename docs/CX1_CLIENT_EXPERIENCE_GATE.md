@@ -25,22 +25,22 @@ This is intentional and must not be renamed to Grab-style Discover / Activity / 
 | --- | --- | --- |
 | Client shell | Five Wantok tabs, Home search/profile/back; selected-tab semantics | Automated PASS; live QA pending |
 | Services discovery | Search/family filters; errors/empty states; Saved shortcut; category, provider, resource/venue and event bookmarks | Automated baseline PASS; live bookmark QA pending |
-| Profile & identity | Personal profile, bio/avatar URL foundation, separate Business/Vendor profile | Implemented; signed-in visual QA pending |
+| Profile & identity | Personal profile, bio, managed private avatar upload, separate Business/Vendor profile | Implemented; signed-in visual/media QA pending |
 | Linked accounts | Google/Facebook Supabase identity-linking UI; email sign-in remains visible | Implemented; provider OAuth configuration/live flow pending |
 | Privacy | Profile/review visibility, saved privacy, recommendations and profile-sharing settings | Database/API/UI implemented; live QA pending |
 | Saved | Owner-scoped saved-entity store, secured validation RPC, Saved screen, category/provider/resource/event Save controls | pgTAP PASS; live interaction QA pending |
 | Trusted people / delegated booking | Owner-scoped family/relative/staff records; shared beneficiary selector and snapshot contracts | PASS across generic reservations/open requests, Taxi/Ride, Events, Commerce and scheduled Water transport |
-| Reviews | Existing booking-linked review model extended with title/photo URLs/visibility; secured completed-booking RPC; Track Review/Edit action | pgTAP PASS; live completed-booking QA pending |
+| Reviews | Existing booking-linked review model extended with title/managed review photos/visibility; secured completed-booking RPC; Track Review/Edit action | pgTAP PASS; live completed-booking/media QA pending |
 | Activity/Track | Existing specialised ride/order/event/water links plus generic booking review path | Automated baseline PASS; populated live records pending |
 | Wallet | Kina K; Top up/Scan/Send/Receive preview, verification, PNG planned services, recent-activity framing | Automated PASS; no transaction movement |
 | Role boundary | Client/Vendor switch does not grant provider or technical authority | Automated PASS; pgTAP baseline retained |
-| Database | CX1/CX1B migrations and security tests | 22 files / 525 pgTAP tests PASS |
+| Database | CX1/CX1B/CX1C migrations and security tests | 23 files / 539 pgTAP tests PASS |
 | Flutter client | Analysis plus existing regression suite | 32 tests PASS |
 | Visual evidence | Earlier shell QA exists; CX1A surfaces require fresh Android/Web evidence | PENDING |
 
 ## CX1A implemented changes
 
-- Migrations `20261006130000_cx1_client_experience_foundations.sql`, `20261006140000_delegated_booking_foundation.sql`, `20261006141000_taxi_delegated_booking.sql`, `20261006142000_event_delegated_booking.sql`, `20261006143000_commerce_delegated_booking.sql`, and `20261006144000_water_delegated_booking.sql` are applied locally.
+- Migrations `20261006130000_cx1_client_experience_foundations.sql`, `20261006140000_delegated_booking_foundation.sql`, `20261006141000_taxi_delegated_booking.sql`, `20261006142000_event_delegated_booking.sql`, `20261006143000_commerce_delegated_booking.sql`, `20261006144000_water_delegated_booking.sql`, `20261006145000_client_media_storage.sql`, and `20261007015000_client_media_ownership_hardening.sql` are applied locally.
 - `profiles` adds avatar URL and bio foundation.
 - `account_preferences` adds profile visibility, review visibility, saved-item privacy, recommendation opt-in and profile-sharing controls.
 - `client_saved_items` is owner-scoped and RPC-only for ordinary bookmark access; the server validates that an entity is still discoverable before saving/showing it.
@@ -49,6 +49,7 @@ This is intentional and must not be renamed to Grab-style Discover / Activity / 
 - Direct authenticated review insertion was removed; `submit_service_review` enforces completed customer-booking eligibility.
 - Existing provider-rating aggregation remains the source of provider rating averages/counts.
 - `AccountPage` exposes Privacy & sharing, Linked accounts, Saved, Trusted people and My reviews.
+- managed client media now stores profile avatars and review photos in the private `client-media` Supabase Storage bucket. The app stores stable `storage://client-media/...` references, resolves signed URLs for display, limits uploads to JPG/PNG/WebP up to 5 MiB each, and binds managed references to the owning account folder.
 - Personal and Business/Vendor profiles remain separate identities under the same Wantok login.
 - `ServicesHubPage` remains the client discovery hub and now supports saving service categories.
 - `ActivityPage` / Track now offers Review service / Edit review for eligible completed generic bookings.
@@ -57,14 +58,13 @@ This is intentional and must not be renamed to Grab-style Discover / Activity / 
 ## Coverage limits and remaining CX1 work
 
 1. Delegated booking is complete across every currently implemented client service family: Vehicle Hire, Boat Hire, Venue Booking, Delivery, Errands/Pabili, Specialist Services, General Labour, Taxi/Ride, Events/ticketing, Food/Groceries commerce and scheduled Boat/Ship passenger transport. The signed-in customer remains the payer/requesting account; beneficiary identity must not confer account access. Future accommodation/flights modules should explicitly adopt or reject this shared contract during their design phase.
-2. Add managed Supabase Storage/image-upload flows for avatars and review photos; URL columns are only the current data foundation.
-3. Implement recommendation logic only after real saved/history/location inputs are available and honour the recommendation opt-out.
-4. Add PNG province/town/destination discovery driven by real service coverage rather than hard-coded destination buttons.
-5. Add achievements/rewards only after core service flows are stable.
-6. Defer follow/follower/social metrics until privacy, abuse/moderation and notification design are approved.
-7. Perform fresh signed-in Android/Web QA on Account tools, Services bookmarks, Track reviews and Wallet.
-8. Verify Taxi map/location permission handling and populated Track/Inbox/account records without creating destructive test data.
-9. Run full project checkpoint validation and keep T2.4 deferred until CX1 evidence is complete.
+2. Implement recommendation logic only after real saved/history/location inputs are available and honour the recommendation opt-out.
+3. Add PNG province/town/destination discovery driven by real service coverage rather than hard-coded destination buttons.
+4. Add achievements/rewards only after core service flows are stable.
+5. Defer follow/follower/social metrics until privacy, abuse/moderation and notification design are approved.
+6. Perform fresh signed-in Android/Web QA on Account tools, avatar/review-photo upload, Services bookmarks, Track reviews and Wallet.
+7. Verify Taxi map/location permission handling and populated Track/Inbox/account records without creating destructive test data.
+8. Run full project checkpoint validation and keep T2.4 deferred until CX1 evidence is complete.
 
 ## Safety boundaries
 

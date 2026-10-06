@@ -673,6 +673,10 @@ class _MyReviewsPageState extends State<MyReviewsPage> {
                           const SizedBox(height: 5),
                           Text(review.comment!),
                         ],
+                        if (review.photoUrls.isNotEmpty) ...[
+                          const SizedBox(height: 10),
+                          _ReviewPhotoStrip(references: review.photoUrls),
+                        ],
                         const SizedBox(height: 8),
                         Text(
                           'Visibility: ${review.visibility.replaceAll('_', ' ')}',
@@ -690,6 +694,67 @@ class _MyReviewsPageState extends State<MyReviewsPage> {
           },
         ),
       ),
+    );
+  }
+}
+
+class _ReviewPhotoStrip extends StatelessWidget {
+  const _ReviewPhotoStrip({required this.references});
+
+  static const _repository = ClientExperienceRepository();
+
+  final List<String> references;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<List<String>>(
+      future: _repository.resolveMediaReferences(references),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const SizedBox(
+            height: 72,
+            child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+          );
+        }
+
+        final urls = snapshot.data ?? const <String>[];
+        if (urls.isEmpty) {
+          return const Text(
+            'Review photos are unavailable.',
+            style: TextStyle(color: WantokColors.muted, fontSize: 12),
+          );
+        }
+
+        return SizedBox(
+          height: 76,
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: urls.length,
+            separatorBuilder: (_, _) => const SizedBox(width: 8),
+            itemBuilder: (context, index) {
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.network(
+                  urls[index],
+                  width: 92,
+                  height: 76,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) => Container(
+                    width: 92,
+                    height: 76,
+                    color: const Color(0xFFF0F2F1),
+                    alignment: Alignment.center,
+                    child: const Icon(
+                      Icons.broken_image_outlined,
+                      color: WantokColors.muted,
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

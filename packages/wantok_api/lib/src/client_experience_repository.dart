@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import 'wantok_backend.dart';
@@ -108,6 +110,18 @@ class ClientReview {
   }
 }
 
+class ClientMediaUpload {
+  const ClientMediaUpload({
+    required this.bytes,
+    required this.fileName,
+    this.mimeType,
+  });
+
+  final Uint8List bytes;
+  final String fileName;
+  final String? mimeType;
+}
+
 class ClientExperienceRepository {
   const ClientExperienceRepository();
 
@@ -119,6 +133,151 @@ class ClientExperienceRepository {
       throw StateError('Authentication required.');
     }
     return user;
+  }
+
+  static const _mediaBucket = 'client-media';
+  static const _mediaPrefix = 'storage://client-media/';
+  static const _maxImageBytes = 5 * 1024 * 1024;
+
+  Future<String> uploadAvatar(ClientMediaUpload upload) async {
+    final type = _imageType(upload);
+    _validateUploadSize(upload);
+
+    final stamp = DateTime.now().microsecondsSinceEpoch;
+    final path = '${_user.id}/avatar/$stamp.${type.extension}';
+    await _client.storage
+        .from(_mediaBucket)
+        .uploadBinary(
+          path,
+          upload.bytes,
+          fileOptions: FileOptions(
+            contentType: type.mimeType,
+            upsert: true,
+            cacheControl: '3600',
+          ),
+        );
+    return '$_mediaPrefix$path';
+  }
+
+  Future<List<String>> uploadReviewPhotos({
+    required String bookingId,
+    required List<ClientMediaUpload> uploads,
+  }) async {
+    if (uploads.length > 5) {
+      throw ArgumentError('A review can include up to five photos.');
+    }
+    if (!RegExp(r'^[0-9a-fA-F-]{36}$').hasMatch(bookingId)) {
+      throw ArgumentError('Invalid booking identifier.');
+    }
+
+    final uploadedPaths = <String>[];
+    try {
+      for (var index = 0; index < uploads.length; index++) {
+        final upload = uploads[index];
+        final type = _imageType(upload);
+        _validateUploadSize(upload);
+        final stamp = DateTime.now().microsecondsSinceEpoch;
+        final path =
+            '${_user.id}/reviews/$bookingId/$stamp-$index.${type.extension}';
+
+        await _client.storage
+            .from(_mediaBucket)
+            .uploadBinary(
+              path,
+              upload.bytes,
+              fileOptions: FileOptions(
+                contentType: type.mimeType,
+                upsert: false,
+                cacheControl: '3600',
+              ),
+            );
+        uploadedPaths.add(path);
+      }
+    } catch (_) {
+      if (uploadedPaths.isNotEmpty) {
+        try {
+          await _client.storage.from(_mediaBucket).remove(uploadedPaths);
+        } catch (_) {
+          // Best-effort cleanup. The upload error remains the primary failure.
+        }
+      }
+      rethrow;
+    }
+
+    return uploadedPaths
+        .map((path) => '$_mediaPrefix$path')
+        .toList(growable: false);
+  }
+
+  Future<String?> resolveMediaReference(
+    String? reference, {
+    int expiresInSeconds = 3600,
+  }) async {
+    final value = reference?.trim();
+    if (value == null || value.isEmpty) return null;
+    if (!value.startsWith(_mediaPrefix)) return value;
+
+    final path = value.substring(_mediaPrefix.length);
+    if (path.isEmpty) return null;
+    return _client.storage
+        .from(_mediaBucket)
+        .createSignedUrl(path, expiresInSeconds);
+  }
+
+  Future<List<String>> resolveMediaReferences(
+    Iterable<String> references, {
+    int expiresInSeconds = 3600,
+  }) async {
+    final resolved = <String>[];
+    for (final reference in references) {
+      final url = await resolveMediaReference(
+        reference,
+        expiresInSeconds: expiresInSeconds,
+      );
+      if (url != null) resolved.add(url);
+    }
+    return resolved;
+  }
+
+  Future<void> removeMediaReferences(Iterable<String> references) async {
+    final ownPrefix = '${_user.id}/';
+    final paths = references
+        .map((reference) => reference.trim())
+        .where((reference) => reference.startsWith(_mediaPrefix))
+        .map((reference) => reference.substring(_mediaPrefix.length))
+        .where((path) => path.startsWith(ownPrefix))
+        .toSet()
+        .toList(growable: false);
+
+    if (paths.isEmpty) return;
+    await _client.storage.from(_mediaBucket).remove(paths);
+  }
+
+  static void _validateUploadSize(ClientMediaUpload upload) {
+    if (upload.bytes.isEmpty) {
+      throw ArgumentError('Image file is empty.');
+    }
+    if (upload.bytes.length > _maxImageBytes) {
+      throw ArgumentError('Image must be 5 MB or smaller.');
+    }
+  }
+
+  static _ClientImageType _imageType(ClientMediaUpload upload) {
+    final mime = upload.mimeType?.trim().toLowerCase();
+    final name = upload.fileName.toLowerCase();
+
+    if (mime == 'image/jpeg' ||
+        name.endsWith('.jpg') ||
+        name.endsWith('.jpeg')) {
+      return const _ClientImageType('jpg', 'image/jpeg');
+    }
+    if (mime == 'image/png' || name.endsWith('.png')) {
+      return const _ClientImageType('png', 'image/png');
+    }
+    if (mime == 'image/webp' || name.endsWith('.webp')) {
+      return const _ClientImageType('webp', 'image/webp');
+    }
+    throw ArgumentError('Use a JPG, PNG or WebP image.');
   }
 
   List<UserIdentity> get linkedIdentities =>
@@ -273,6 +432,13 @@ class ClientExperienceRepository {
     final trimmed = value?.trim();
     return trimmed == null || trimmed.isEmpty ? null : trimmed;
   }
+}
+
+class _ClientImageType {
+  const _ClientImageType(this.extension, this.mimeType);
+
+  final String extension;
+  final String mimeType;
 }
 
 Map<String, dynamic> _mapValue(dynamic value) {

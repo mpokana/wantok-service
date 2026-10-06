@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
@@ -17,6 +20,7 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   static const _repository = AccountRepository();
+  static const _experience = ClientExperienceRepository();
   late Future<_AccountData> _future;
 
   @override
@@ -28,7 +32,19 @@ class _AccountPageState extends State<AccountPage> {
   Future<_AccountData> _load() async {
     final profile = await _repository.loadAccountProfile();
     final provider = await _repository.loadProviderProfile();
-    return _AccountData(profile: profile, provider: provider);
+    String? avatarDisplayUrl;
+    try {
+      avatarDisplayUrl = await _experience.resolveMediaReference(
+        profile.avatarUrl,
+      );
+    } catch (_) {
+      avatarDisplayUrl = null;
+    }
+    return _AccountData(
+      profile: profile,
+      provider: provider,
+      avatarDisplayUrl: avatarDisplayUrl,
+    );
   }
 
   Future<void> _refresh() async {
@@ -140,14 +156,19 @@ class _AccountPageState extends State<AccountPage> {
                       CircleAvatar(
                         radius: 32,
                         backgroundColor: const Color(0xFFE2F3E9),
-                        child: Text(
-                          _initials(profile.displayName),
-                          style: const TextStyle(
-                            color: WantokColors.primaryDark,
-                            fontSize: 19,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
+                        backgroundImage: data.avatarDisplayUrl == null
+                            ? null
+                            : NetworkImage(data.avatarDisplayUrl!),
+                        child: data.avatarDisplayUrl == null
+                            ? Text(
+                                _initials(profile.displayName),
+                                style: const TextStyle(
+                                  color: WantokColors.primaryDark,
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.w900,
+                                ),
+                              )
+                            : null,
                       ),
                       const SizedBox(width: 14),
                       Expanded(
@@ -401,13 +422,19 @@ class _EditPersonalProfilePage extends StatefulWidget {
 
 class _EditPersonalProfilePageState extends State<_EditPersonalProfilePage> {
   static const _repository = AccountRepository();
+  static const _experience = ClientExperienceRepository();
 
+  final ImagePicker _picker = ImagePicker();
   late final TextEditingController _fullName;
   late final TextEditingController _preferredName;
   late final TextEditingController _phone;
   late final TextEditingController _address;
-  late final TextEditingController _avatarUrl;
   late final TextEditingController _bio;
+  late String _avatarReference;
+  String? _avatarPreviewUrl;
+  XFile? _pendingAvatar;
+  Uint8List? _pendingAvatarBytes;
+  bool _pickingAvatar = false;
   late bool _bookingUpdates;
   late bool _messages;
   late bool _promotions;
@@ -422,8 +449,11 @@ class _EditPersonalProfilePageState extends State<_EditPersonalProfilePage> {
     );
     _phone = TextEditingController(text: widget.profile.phone ?? '');
     _address = TextEditingController(text: widget.profile.addressText ?? '');
-    _avatarUrl = TextEditingController(text: widget.profile.avatarUrl ?? '');
     _bio = TextEditingController(text: widget.profile.bio ?? '');
+    _avatarReference = widget.profile.avatarUrl ?? '';
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _resolveAvatarPreview();
+    });
     _bookingUpdates = widget.profile.notifyBookingUpdates;
     _messages = widget.profile.notifyMessages;
     _promotions = widget.profile.notifyPromotions;
@@ -435,28 +465,109 @@ class _EditPersonalProfilePageState extends State<_EditPersonalProfilePage> {
     _preferredName.dispose();
     _phone.dispose();
     _address.dispose();
-    _avatarUrl.dispose();
     _bio.dispose();
     super.dispose();
+  }
+
+  Future<void> _resolveAvatarPreview() async {
+    if (_avatarReference.trim().isEmpty) {
+      if (mounted) setState(() => _avatarPreviewUrl = null);
+      return;
+    }
+    try {
+      final url = await _experience.resolveMediaReference(_avatarReference);
+      if (mounted) setState(() => _avatarPreviewUrl = url);
+    } catch (_) {
+      if (mounted) setState(() => _avatarPreviewUrl = null);
+    }
+  }
+
+  Future<void> _pickAvatar() async {
+    if (_pickingAvatar || _saving) return;
+    setState(() => _pickingAvatar = true);
+    try {
+      final file = await _picker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1600,
+        imageQuality: 88,
+      );
+      if (file == null) return;
+      final bytes = await file.readAsBytes();
+      if (!mounted) return;
+      setState(() {
+        _pendingAvatar = file;
+        _pendingAvatarBytes = bytes;
+      });
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(_friendlyError(error))));
+      }
+    } finally {
+      if (mounted) setState(() => _pickingAvatar = false);
+    }
+  }
+
+  void _removeAvatar() {
+    setState(() {
+      _pendingAvatar = null;
+      _pendingAvatarBytes = null;
+      _avatarReference = '';
+      _avatarPreviewUrl = null;
+    });
   }
 
   Future<void> _save() async {
     if (_fullName.text.trim().isEmpty || _saving) return;
     setState(() => _saving = true);
+
+    final previousAvatar = widget.profile.avatarUrl;
+    String? newlyUploaded;
+    var avatarReference = _avatarReference;
+
     try {
+      if (_pendingAvatar != null && _pendingAvatarBytes != null) {
+        newlyUploaded = await _experience.uploadAvatar(
+          ClientMediaUpload(
+            bytes: _pendingAvatarBytes!,
+            fileName: _pendingAvatar!.name,
+            mimeType: _pendingAvatar!.mimeType,
+          ),
+        );
+        avatarReference = newlyUploaded;
+      }
+
       await _repository.updateAccountProfile(
         fullName: _fullName.text.trim(),
         preferredName: _emptyToNull(_preferredName.text),
         phone: _emptyToNull(_phone.text),
         addressText: _emptyToNull(_address.text),
-        avatarUrl: _avatarUrl.text.trim(),
+        avatarUrl: avatarReference,
         bio: _bio.text.trim(),
         notifyBookingUpdates: _bookingUpdates,
         notifyMessages: _messages,
         notifyPromotions: _promotions,
       );
+
+      if (previousAvatar != null &&
+          previousAvatar.trim().isNotEmpty &&
+          previousAvatar != avatarReference) {
+        try {
+          await _experience.removeMediaReferences([previousAvatar]);
+        } catch (_) {
+          // Profile update succeeded; stale media cleanup is best-effort.
+        }
+      }
+
       if (mounted) Navigator.of(context).pop(true);
     } catch (error) {
+      if (newlyUploaded != null) {
+        try {
+          await _experience.removeMediaReferences([newlyUploaded]);
+        } catch (_) {
+          // Preserve the primary save error.
+        }
+      }
       if (mounted) {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text(_friendlyError(error))));
@@ -512,13 +623,87 @@ class _EditPersonalProfilePageState extends State<_EditPersonalProfilePage> {
             ),
           ),
           const SizedBox(height: 12),
-          TextField(
-            controller: _avatarUrl,
-            keyboardType: TextInputType.url,
-            decoration: const InputDecoration(
-              labelText: 'Profile photo URL',
-              prefixIcon: Icon(Icons.account_circle_outlined),
-              hintText: 'https://...',
+          Card(
+            color: const Color(0xFFF7FAF8),
+            child: Padding(
+              padding: const EdgeInsets.all(14),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 34,
+                    backgroundColor: const Color(0xFFE2F3E9),
+                    backgroundImage: _pendingAvatarBytes != null
+                        ? MemoryImage(_pendingAvatarBytes!)
+                        : _avatarPreviewUrl == null
+                        ? null
+                        : NetworkImage(_avatarPreviewUrl!) as ImageProvider,
+                    child:
+                        _pendingAvatarBytes == null && _avatarPreviewUrl == null
+                        ? Text(
+                            _initials(
+                              _preferredName.text.trim().isEmpty
+                                  ? _fullName.text
+                                  : _preferredName.text,
+                            ),
+                            style: const TextStyle(
+                              color: WantokColors.primaryDark,
+                              fontWeight: FontWeight.w900,
+                            ),
+                          )
+                        : null,
+                  ),
+                  const SizedBox(width: 14),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Profile photo',
+                          style: TextStyle(fontWeight: FontWeight.w900),
+                        ),
+                        const SizedBox(height: 3),
+                        const Text(
+                          'JPG, PNG or WebP • maximum 5 MB',
+                          style: TextStyle(
+                            color: WantokColors.muted,
+                            fontSize: 12,
+                          ),
+                        ),
+                        const SizedBox(height: 9),
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 6,
+                          children: [
+                            OutlinedButton.icon(
+                              onPressed: _pickingAvatar || _saving
+                                  ? null
+                                  : _pickAvatar,
+                              icon: _pickingAvatar
+                                  ? const SizedBox.square(
+                                      dimension: 16,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                      ),
+                                    )
+                                  : const Icon(Icons.photo_library_outlined),
+                              label: Text(
+                                _pickingAvatar ? 'Opening...' : 'Choose photo',
+                              ),
+                            ),
+                            if (_pendingAvatarBytes != null ||
+                                _avatarReference.trim().isNotEmpty)
+                              TextButton.icon(
+                                onPressed: _saving ? null : _removeAvatar,
+                                icon: const Icon(Icons.delete_outline),
+                                label: const Text('Remove'),
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 12),
@@ -971,9 +1156,15 @@ class _PreferenceRow extends StatelessWidget {
 }
 
 class _AccountData {
-  const _AccountData({required this.profile, required this.provider});
+  const _AccountData({
+    required this.profile,
+    required this.provider,
+    required this.avatarDisplayUrl,
+  });
+
   final AccountProfile profile;
   final ProviderAccountProfile? provider;
+  final String? avatarDisplayUrl;
 }
 
 String _valueOrDash(String? value) {

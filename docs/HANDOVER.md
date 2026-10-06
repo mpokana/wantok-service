@@ -1,12 +1,12 @@
 # Wantok Services — Living Handover
 
-**Updated:** 2026-10-06
+**Updated:** 2026-10-07
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
 ## Resume here
 
-The current working phase is **CX1 client-experience completion**; the **CX1 gate remains open before T2.4**. Delegated booking is checkpointed across every currently implemented client service family, including scheduled Boat/Ship passenger transport. The current clean checkpoint also extends Saved controls from service categories to providers, reservable resources/venues and events. Run:
+The current working phase is **CX1 client-experience completion**; the **CX1 gate remains open before T2.4**. Delegated booking is checkpointed across every currently implemented client service family, including scheduled Boat/Ship passenger transport. The current checkpoint extends Saved controls from service categories to providers, reservable resources/venues and events, and adds managed private client-media uploads for profile avatars and review photos. Run:
 
 `git log -1 --oneline`
 
@@ -142,7 +142,7 @@ At this checkpoint:
 - required `scripts/flutter/check.ps1`: PASS after clearing read-only attributes on generated test assets only
 - Wantok Operations Admin: analysis + smoke test PASS
 - Wantok Technical Control: analysis + smoke test PASS
-- database: **22 files / 525 pgTAP tests PASS** (all fixtures roll back)
+- database: **23 files / 539 pgTAP tests PASS** (all fixtures roll back)
 - Android visual QA was last recorded for the earlier client shell; CX1A Account/Services bookmarks/Track reviews/Wallet changes require fresh signed-in client evidence
 - production Docker Compose parse PASS was recorded at T2.2; deployment files unchanged
 - `git diff --check`: PASS
@@ -188,11 +188,11 @@ Technical Control development server may be run on:
 
 T2.3 checkpoint: **`46d6208`**; prior CX1 reliability/discovery checkpoint: **`0c33a37`**. Required sequence: **finish CX1A/CX1 evidence → T2.4 diagnostics/logs/jobs**.
 
-CX1 now covers reliability, richer client account/profile features, delegated booking across every currently implemented client service family, and Saved controls for service categories, providers, reservable resources/venues and events. The navigation remains **Home · Services · Track · Wallet · Inbox**. Remaining CX1 work includes managed image upload, recommendation/destination work, and live QA of the new Account/Services/Track/Wallet surfaces. Achievements and social follows remain later within CX1 after the core workflows are stable. See `docs/ROADMAP.md` and `docs/CX1_CLIENT_EXPERIENCE_GATE.md`.
+CX1 now covers reliability, richer client account/profile features, delegated booking across every currently implemented client service family, Saved controls for service categories/providers/resources/events, and managed private avatar/review-photo uploads. The navigation remains **Home · Services · Track · Wallet · Inbox**. Remaining CX1 work includes recommendation/destination work and live QA of the new Account/Services/Track/Wallet/media surfaces. Achievements and social follows remain later within CX1 after the core workflows are stable. See `docs/ROADMAP.md` and `docs/CX1_CLIENT_EXPERIENCE_GATE.md`.
 
 Preserve the local development accounts, roles and data. Do not reset/reseed Supabase or replace working modules/configuration. At resume there are two local auth users/profiles and one local `tech_platform_admin` grant.
 
-T2.4 remains deferred until CX1 passes. CX1 migrations `20261006130000_cx1_client_experience_foundations.sql`, `20261006140000_delegated_booking_foundation.sql`, `20261006141000_taxi_delegated_booking.sql`, `20261006142000_event_delegated_booking.sql`, `20261006143000_commerce_delegated_booking.sql`, and `20261006144000_water_delegated_booking.sql` are already applied locally; do not reset/reseed Supabase to replay them. Integrations and high-risk approvals follow later.
+T2.4 remains deferred until CX1 passes. CX1 migrations `20261006130000_cx1_client_experience_foundations.sql`, `20261006140000_delegated_booking_foundation.sql`, `20261006141000_taxi_delegated_booking.sql`, `20261006142000_event_delegated_booking.sql`, `20261006143000_commerce_delegated_booking.sql`, `20261006144000_water_delegated_booking.sql`, `20261006145000_client_media_storage.sql`, and `20261007015000_client_media_ownership_hardening.sql` are already applied locally; do not reset/reseed Supabase to replay them. Integrations and high-risk approvals follow later.
 
 Do not begin Wantok Pay transaction movement until payment-rail and settlement decisions are made.
 
