@@ -6,14 +6,15 @@ For every new coding session, agent handover, Codex task, Desktop Commander task
 
 1. Read `docs/HANDOVER.md`.
 2. Read `docs/ROADMAP.md`.
-3. Read the architecture document relevant to the task:
+3. Read `docs/ROADMAP_FILLERS.md` for Mansfield's incremental additions and clarifications.
+4. Read the architecture document relevant to the task:
    - `docs/SUPER_APP_ARCHITECTURE.md`
    - `docs/FLUTTER_PLATFORM_ARCHITECTURE.md`
    - `docs/ADMIN_CONTROL_PLANE_ARCHITECTURE.md`
-4. Run `git status --short --branch` and inspect the latest commits before editing.
-5. Preserve existing architecture unless Mansfield explicitly approves a refactor.
-6. Use migrations for every database/security change.
-7. Do not mix Wantok Services with GVE systems or Wantok Neurons implementation details.
+5. Run `git status --short --branch` and inspect the latest commits before editing.
+6. Preserve existing architecture unless Mansfield explicitly approves a refactor.
+7. Use migrations for every database/security change.
+8. Do not mix Wantok Services with GVE systems or Wantok Neurons implementation details. Wantok Neurons may later integrate only through approved API boundaries documented for Wantok Services.
 
 ## Safe-change rule
 
@@ -33,6 +34,7 @@ After a meaningful phase or safe Git checkpoint, update:
 
 - `docs/HANDOVER.md`
 - `docs/ROADMAP.md`
+- `docs/ROADMAP_FILLERS.md` when filler items are added, resolved or remapped
 
 Keep them compact. Record only information needed to safely resume work: current branch/commit, validated state, active architecture decisions, current phase, important local-development facts, and next tasks.
 

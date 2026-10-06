@@ -151,10 +151,59 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 - [x] wire delegated booking into scheduled Boat/Ship passenger transport with Trusted-person primary-passenger enforcement and manifest snapshots
 - [ ] decide whether future accommodation/flights modules inherit the shared delegated-booking contract
 
+### CX1C–CX1E — Saved, media, recommendations and PNG discovery — COMPLETE
+
 - [x] extend Save controls from service categories to providers, resources/venues and events
 - [x] add managed private Supabase Storage uploads for profile avatars and review photos, with stable storage references, signed reads and owner-bound media constraints
 - [x] privacy-aware **For you** recommendations from saved/history and optional already-authorised cached location data, with server-side opt-out enforcement
 - [x] PNG province/town/destination discovery from structured active service/resource/event/water-route coverage, without hard-coded destinations or free-text address inference
+
+### CX1F — Provider & Service Search + Ratings — IN PROGRESS
+
+- [ ] searchable discovery for active verified providers registered on Wantok Services
+- [ ] searchable discovery for approved active provider services across categories
+- [ ] provider/service cards show 1–5 star rating and review count
+- [ ] provider detail/storefront surface shows approved categories/services and business/individual identity
+- [ ] category/location filters use structured service coverage where available
+- [ ] organic top-rated provider/service surfaces use rating quality plus review confidence/relevance rather than raw average alone
+- [ ] rotate/randomise a small display set from the qualified top-ranked pool so the same providers are not permanently fixed
+- [ ] keep paid placement out of organic rating scores
+
+### CX1G — General Goods Marketplace + Fulfilment — PLANNED
+
+- [ ] activate a general **Marketplace / Products** commerce category beyond Food/Groceries
+- [ ] allow verified individual/business/organisation vendors to create approved product storefronts under the same Wantok account
+- [ ] product listings: category, title, description, SKU, price, availability/stock, images and approval state
+- [ ] customer product/store search and browse with vendor ratings
+- [ ] reuse the existing commerce order core rather than create a parallel cart/order system
+- [ ] support fulfilment choices: self pickup, vendor drop-off and Wantok third-party Delivery/Courier
+- [ ] preserve vendor ownership of the sale when a separate logistics provider performs delivery
+- [ ] support customer/vendor selection or request of an approved delivery/logistics provider
+- [ ] delivery quote/acceptance/status hand-off and later proof-of-pickup/proof-of-delivery
+- [ ] 1–5 star post-completion ratings for the relevant sale/service/delivery relationship
+
+### CX1H — Organic Ranking + Sponsored Promotion — PLANNED
+
+- [ ] transparent organic ranking from rating quality, review volume/confidence, category/search/location relevance and reliability signals
+- [ ] category front-page/top-service surfaces may rotate up to five eligible high-ranked results
+- [ ] sponsored campaign model with approved provider/listing target, schedule, duration, category/location targeting and impression caps
+- [ ] clearly label paid placements **Sponsored** / **Promoted**
+- [ ] sponsored placement never changes stored organic ratings or bypasses provider/listing approval
+- [ ] audit campaign activation/status and keep future billing references separate from Wantok Pay transaction movement
+
+### CX1I — Wantok AI Agent Foundation — PLANNED
+
+- [ ] client placeholder/entry point for **Wantok AI Agent** without adding a sixth bottom-navigation tab
+- [ ] provider-agnostic backend AI gateway/API contract with replaceable model/provider configuration
+- [ ] controlled tools for service/provider/product search and authorised booking/order/status lookup
+- [ ] provider assistance for category selection and drafting service/product listings
+- [ ] assist users when normal search cannot find a service and prepare a controlled request where appropriate
+- [ ] human hand-off to support conversation/case with user consent and concise conversation summary
+- [ ] AI cannot approve providers, move money, grant roles or bypass workflow approvals
+- [ ] Wantok Neurons may later provide intelligence only through this API boundary; Wantok Services remains transaction authority
+
+### Later CX1 options
+
 - [ ] optional achievements/rewards after core consumer workflows are stable
 - [ ] social follow/follower metrics only after privacy/moderation design is approved
 
