@@ -24,11 +24,11 @@ This is intentional and must not be renamed to Grab-style Discover / Activity / 
 | Area | Evidence at this checkpoint | Status |
 | --- | --- | --- |
 | Client shell | Five Wantok tabs, Home search/profile/back; selected-tab semantics | Automated PASS; live QA pending |
-| Services discovery | Search/family filters; errors/empty states; Saved shortcut and category bookmarks | Automated baseline PASS; live bookmark QA pending |
+| Services discovery | Search/family filters; errors/empty states; Saved shortcut; category, provider, resource/venue and event bookmarks | Automated baseline PASS; live bookmark QA pending |
 | Profile & identity | Personal profile, bio/avatar URL foundation, separate Business/Vendor profile | Implemented; signed-in visual QA pending |
 | Linked accounts | Google/Facebook Supabase identity-linking UI; email sign-in remains visible | Implemented; provider OAuth configuration/live flow pending |
 | Privacy | Profile/review visibility, saved privacy, recommendations and profile-sharing settings | Database/API/UI implemented; live QA pending |
-| Saved | Owner-scoped saved-entity store, secured validation RPC and Saved screen | pgTAP PASS; provider/resource/event Save controls still pending |
+| Saved | Owner-scoped saved-entity store, secured validation RPC, Saved screen, category/provider/resource/event Save controls | pgTAP PASS; live interaction QA pending |
 | Trusted people / delegated booking | Owner-scoped family/relative/staff records; shared beneficiary selector and snapshot contracts | PASS across generic reservations/open requests, Taxi/Ride, Events, Commerce and scheduled Water transport |
 | Reviews | Existing booking-linked review model extended with title/photo URLs/visibility; secured completed-booking RPC; Track Review/Edit action | pgTAP PASS; live completed-booking QA pending |
 | Activity/Track | Existing specialised ride/order/event/water links plus generic booking review path | Automated baseline PASS; populated live records pending |
@@ -57,15 +57,14 @@ This is intentional and must not be renamed to Grab-style Discover / Activity / 
 ## Coverage limits and remaining CX1 work
 
 1. Delegated booking is complete across every currently implemented client service family: Vehicle Hire, Boat Hire, Venue Booking, Delivery, Errands/Pabili, Specialist Services, General Labour, Taxi/Ride, Events/ticketing, Food/Groceries commerce and scheduled Boat/Ship passenger transport. The signed-in customer remains the payer/requesting account; beneficiary identity must not confer account access. Future accommodation/flights modules should explicitly adopt or reject this shared contract during their design phase.
-2. Extend Save controls to providers, venues/resources and events, not only service categories.
-3. Add managed Supabase Storage/image-upload flows for avatars and review photos; URL columns are only the current data foundation.
-4. Implement recommendation logic only after real saved/history/location inputs are available and honour the recommendation opt-out.
-5. Add PNG province/town/destination discovery driven by real service coverage rather than hard-coded destination buttons.
-6. Add achievements/rewards only after core service flows are stable.
-7. Defer follow/follower/social metrics until privacy, abuse/moderation and notification design are approved.
-8. Perform fresh signed-in Android/Web QA on Account tools, Services bookmarks, Track reviews and Wallet.
-9. Verify Taxi map/location permission handling and populated Track/Inbox/account records without creating destructive test data.
-10. Run full project checkpoint validation and keep T2.4 deferred until CX1 evidence is complete.
+2. Add managed Supabase Storage/image-upload flows for avatars and review photos; URL columns are only the current data foundation.
+3. Implement recommendation logic only after real saved/history/location inputs are available and honour the recommendation opt-out.
+4. Add PNG province/town/destination discovery driven by real service coverage rather than hard-coded destination buttons.
+5. Add achievements/rewards only after core service flows are stable.
+6. Defer follow/follower/social metrics until privacy, abuse/moderation and notification design are approved.
+7. Perform fresh signed-in Android/Web QA on Account tools, Services bookmarks, Track reviews and Wallet.
+8. Verify Taxi map/location permission handling and populated Track/Inbox/account records without creating destructive test data.
+9. Run full project checkpoint validation and keep T2.4 deferred until CX1 evidence is complete.
 
 ## Safety boundaries
 

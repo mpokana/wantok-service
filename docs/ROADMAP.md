@@ -151,7 +151,7 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 - [x] wire delegated booking into scheduled Boat/Ship passenger transport with Trusted-person primary-passenger enforcement and manifest snapshots
 - [ ] decide whether future accommodation/flights modules inherit the shared delegated-booking contract
 
-- [ ] extend Save controls from service categories to providers, resources/venues and events
+- [x] extend Save controls from service categories to providers, resources/venues and events
 - [ ] add managed image/storage upload for avatar and review photos; URL fields are foundation only
 - [ ] recommendations from real location/history/saved data, with opt-out respected
 - [ ] PNG province/town/destination discovery driven by service coverage rather than hard-coded destinations

@@ -16,12 +16,64 @@ class EventBrowsePage extends StatefulWidget {
 
 class _EventBrowsePageState extends State<EventBrowsePage> {
   static const _repository = EventsRepository();
+  static const _experience = ClientExperienceRepository();
+
   late Future<List<Map<String, dynamic>>> _future;
+  final Set<String> _savedEventIds = <String>{};
+  final Set<String> _savingEventIds = <String>{};
 
   @override
   void initState() {
     super.initState();
     _future = _repository.loadUpcomingEvents();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadSavedEvents();
+    });
+  }
+
+  Future<void> _loadSavedEvents() async {
+    try {
+      final ids = await _experience.loadSavedIds('event');
+      if (!mounted) return;
+      setState(() {
+        _savedEventIds
+          ..clear()
+          ..addAll(ids);
+      });
+    } catch (_) {
+      // Saving is optional; event browsing remains available.
+    }
+  }
+
+  Future<void> _toggleSavedEvent(String eventId) async {
+    if (_savingEventIds.contains(eventId)) return;
+    final wasSaved = _savedEventIds.contains(eventId);
+    setState(() => _savingEventIds.add(eventId));
+    try {
+      await _experience.setSavedItem(
+        itemType: 'event',
+        entityId: eventId,
+        saved: !wasSaved,
+      );
+      if (!mounted) return;
+      setState(() {
+        if (wasSaved) {
+          _savedEventIds.remove(eventId);
+        } else {
+          _savedEventIds.add(eventId);
+        }
+      });
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error.toString().replaceFirst('StateError: ', '')),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _savingEventIds.remove(eventId));
+    }
   }
 
   Future<void> _refresh() async {
@@ -31,6 +83,7 @@ class _EventBrowsePageState extends State<EventBrowsePage> {
     });
     try {
       await next;
+      await _loadSavedEvents();
     } catch (_) {
       // The FutureBuilder presents the retryable error state.
     }
@@ -103,6 +156,10 @@ class _EventBrowsePageState extends State<EventBrowsePage> {
                     padding: const EdgeInsets.only(bottom: 10),
                     child: _EventCard(
                       event: event,
+                      isSaved: _savedEventIds.contains(event['id']),
+                      busy: _savingEventIds.contains(event['id']),
+                      onSavedToggle: () =>
+                          _toggleSavedEvent(event['id'] as String),
                       onTap: () => Navigator.of(context).push(
                         MaterialPageRoute<void>(
                           builder: (context) => _EventDetailPage(event: event),
@@ -489,9 +546,18 @@ class _RegistrationDraft {
 }
 
 class _EventCard extends StatelessWidget {
-  const _EventCard({required this.event, required this.onTap});
+  const _EventCard({
+    required this.event,
+    required this.isSaved,
+    required this.busy,
+    required this.onSavedToggle,
+    required this.onTap,
+  });
 
   final Map<String, dynamic> event;
+  final bool isSaved;
+  final bool busy;
+  final VoidCallback onSavedToggle;
   final VoidCallback onTap;
 
   @override
@@ -570,7 +636,29 @@ class _EventCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const Icon(Icons.chevron_right),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    tooltip: isSaved ? 'Remove event from Saved' : 'Save event',
+                    onPressed: busy ? null : onSavedToggle,
+                    icon: busy
+                        ? const SizedBox.square(
+                            dimension: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : Icon(
+                            isSaved
+                                ? Icons.bookmark_rounded
+                                : Icons.bookmark_border_rounded,
+                            color: isSaved
+                                ? WantokColors.primary
+                                : WantokColors.muted,
+                          ),
+                  ),
+                  const Icon(Icons.chevron_right),
+                ],
+              ),
             ],
           ),
         ),

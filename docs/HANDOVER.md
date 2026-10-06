@@ -6,7 +6,7 @@
 
 ## Resume here
 
-The current working phase is **CX1 client-experience completion**, following clean checkpoints through **`8b8b414`** (Food/Groceries delegated commerce); the **CX1 gate remains open before T2.4**. The current checkpoint completes delegated booking for scheduled Boat/Ship passenger transport across the existing service catalogue. Run:
+The current working phase is **CX1 client-experience completion**; the **CX1 gate remains open before T2.4**. Delegated booking is checkpointed across every currently implemented client service family, including scheduled Boat/Ship passenger transport. The current clean checkpoint also extends Saved controls from service categories to providers, reservable resources/venues and events. Run:
 
 `git log -1 --oneline`
 
@@ -188,7 +188,7 @@ Technical Control development server may be run on:
 
 T2.3 checkpoint: **`46d6208`**; prior CX1 reliability/discovery checkpoint: **`0c33a37`**. Required sequence: **finish CX1A/CX1 evidence → T2.4 diagnostics/logs/jobs**.
 
-CX1 now covers reliability, richer client account/profile features and delegated booking across every currently implemented client service family: shared reservations/open requests, Taxi/Ride, Events/ticketing, Food/Groceries commerce and scheduled Boat/Ship passenger transport. The navigation remains **Home · Services · Track · Wallet · Inbox**. Remaining CX1 work includes Save controls on providers/resources/events, managed image upload, recommendation/destination work, and live QA of the new Account/Services/Track/Wallet surfaces. Achievements and social follows remain later within CX1 after the core workflows are stable. See `docs/ROADMAP.md` and `docs/CX1_CLIENT_EXPERIENCE_GATE.md`.
+CX1 now covers reliability, richer client account/profile features, delegated booking across every currently implemented client service family, and Saved controls for service categories, providers, reservable resources/venues and events. The navigation remains **Home · Services · Track · Wallet · Inbox**. Remaining CX1 work includes managed image upload, recommendation/destination work, and live QA of the new Account/Services/Track/Wallet surfaces. Achievements and social follows remain later within CX1 after the core workflows are stable. See `docs/ROADMAP.md` and `docs/CX1_CLIENT_EXPERIENCE_GATE.md`.
 
 Preserve the local development accounts, roles and data. Do not reset/reseed Supabase or replace working modules/configuration. At resume there are two local auth users/profiles and one local `tech_platform_admin` grant.
 

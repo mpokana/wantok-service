@@ -16,12 +16,80 @@ class ReservationBrowsePage extends StatefulWidget {
 
 class _ReservationBrowsePageState extends State<ReservationBrowsePage> {
   static const _repository = ReservationRepository();
+  static const _experience = ClientExperienceRepository();
+
   late Future<List<ReservableOffer>> _future;
+  final Set<String> _savedResourceIds = <String>{};
+  final Set<String> _savedProviderIds = <String>{};
+  final Set<String> _savingKeys = <String>{};
 
   @override
   void initState() {
     super.initState();
     _future = _repository.loadOffers(widget.category.slug);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _loadSaved();
+    });
+  }
+
+  Future<void> _loadSaved() async {
+    try {
+      final results = await Future.wait<Set<String>>([
+        _experience.loadSavedIds('resource'),
+        _experience.loadSavedIds('provider'),
+      ]);
+      if (!mounted) return;
+      setState(() {
+        _savedResourceIds
+          ..clear()
+          ..addAll(results[0]);
+        _savedProviderIds
+          ..clear()
+          ..addAll(results[1]);
+      });
+    } catch (_) {
+      // Saving is optional; browsing must remain available.
+    }
+  }
+
+  Future<void> _toggleSaved({
+    required String itemType,
+    required String entityId,
+  }) async {
+    final key = '$itemType:$entityId';
+    if (_savingKeys.contains(key)) return;
+
+    final target = itemType == 'resource'
+        ? _savedResourceIds
+        : _savedProviderIds;
+    final wasSaved = target.contains(entityId);
+
+    setState(() => _savingKeys.add(key));
+    try {
+      await _experience.setSavedItem(
+        itemType: itemType,
+        entityId: entityId,
+        saved: !wasSaved,
+      );
+      if (!mounted) return;
+      setState(() {
+        if (wasSaved) {
+          target.remove(entityId);
+        } else {
+          target.add(entityId);
+        }
+      });
+    } catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(error.toString().replaceFirst('StateError: ', '')),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _savingKeys.remove(key));
+    }
   }
 
   Future<void> _refresh() async {
@@ -31,6 +99,7 @@ class _ReservationBrowsePageState extends State<ReservationBrowsePage> {
     });
     try {
       await next;
+      await _loadSaved();
     } catch (_) {
       // The FutureBuilder presents the retryable error state.
     }
@@ -122,6 +191,26 @@ class _ReservationBrowsePageState extends State<ReservationBrowsePage> {
                     padding: const EdgeInsets.only(bottom: 12),
                     child: _OfferCard(
                       offer: offer,
+                      resourceSaved: _savedResourceIds.contains(
+                        offer.resourceId,
+                      ),
+                      providerSaved: _savedProviderIds.contains(
+                        offer.providerId,
+                      ),
+                      resourceBusy: _savingKeys.contains(
+                        'resource:${offer.resourceId}',
+                      ),
+                      providerBusy: _savingKeys.contains(
+                        'provider:${offer.providerId}',
+                      ),
+                      onToggleResource: () => _toggleSaved(
+                        itemType: 'resource',
+                        entityId: offer.resourceId,
+                      ),
+                      onToggleProvider: () => _toggleSaved(
+                        itemType: 'provider',
+                        entityId: offer.providerId,
+                      ),
                       onTap: () => _openReservation(offer),
                     ),
                   ),
@@ -193,9 +282,24 @@ class _CategoryHero extends StatelessWidget {
 }
 
 class _OfferCard extends StatelessWidget {
-  const _OfferCard({required this.offer, required this.onTap});
+  const _OfferCard({
+    required this.offer,
+    required this.resourceSaved,
+    required this.providerSaved,
+    required this.resourceBusy,
+    required this.providerBusy,
+    required this.onToggleResource,
+    required this.onToggleProvider,
+    required this.onTap,
+  });
 
   final ReservableOffer offer;
+  final bool resourceSaved;
+  final bool providerSaved;
+  final bool resourceBusy;
+  final bool providerBusy;
+  final VoidCallback onToggleResource;
+  final VoidCallback onToggleProvider;
   final VoidCallback onTap;
 
   @override
@@ -292,7 +396,49 @@ class _OfferCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const Icon(Icons.chevron_right),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    tooltip: resourceSaved
+                        ? 'Remove place from Saved'
+                        : 'Save this place',
+                    onPressed: resourceBusy ? null : onToggleResource,
+                    icon: resourceBusy
+                        ? const SizedBox.square(
+                            dimension: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : Icon(
+                            resourceSaved
+                                ? Icons.bookmark_rounded
+                                : Icons.bookmark_border_rounded,
+                            color: resourceSaved
+                                ? WantokColors.primary
+                                : WantokColors.muted,
+                          ),
+                  ),
+                  IconButton(
+                    tooltip: providerSaved
+                        ? 'Remove provider from Saved'
+                        : 'Save provider',
+                    onPressed: providerBusy ? null : onToggleProvider,
+                    icon: providerBusy
+                        ? const SizedBox.square(
+                            dimension: 18,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : Icon(
+                            providerSaved
+                                ? Icons.storefront_rounded
+                                : Icons.storefront_outlined,
+                            color: providerSaved
+                                ? WantokColors.primary
+                                : WantokColors.muted,
+                          ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),
