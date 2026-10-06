@@ -132,8 +132,8 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 - [x] privacy controls for profile visibility, review visibility, saved-items privacy, recommendations and profile sharing
 - [x] owner-scoped Trusted people model and Account CRUD for family/relative/staff beneficiaries
 - [x] richer Wantok Pay preview including planned actions, verification, PNG services and recent-activity framing
-- [x] database coverage: 24 pgTAP files / 551 tests PASS
-- [x] client analysis PASS and 33 Flutter app tests PASS
+- [x] database coverage: 25 pgTAP files / 564 tests PASS
+- [x] client analysis PASS and 34 Flutter app tests PASS
 
 ### CX1B — Delegated Booking Foundation — COMPLETE FOR CURRENT SERVICE CATALOGUE
 
@@ -154,7 +154,7 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 - [x] extend Save controls from service categories to providers, resources/venues and events
 - [x] add managed private Supabase Storage uploads for profile avatars and review photos, with stable storage references, signed reads and owner-bound media constraints
 - [x] privacy-aware **For you** recommendations from saved/history and optional already-authorised cached location data, with server-side opt-out enforcement
-- [ ] PNG province/town/destination discovery driven by service coverage rather than hard-coded destinations
+- [x] PNG province/town/destination discovery from structured active service/resource/event/water-route coverage, without hard-coded destinations or free-text address inference
 - [ ] optional achievements/rewards after core consumer workflows are stable
 - [ ] social follow/follower metrics only after privacy/moderation design is approved
 
@@ -162,7 +162,7 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 
 - [ ] fresh signed-in Android/Web visual QA using existing development sessions/accounts
 - [ ] live read-only journey checks, especially Taxi map/location/history and populated Track/Inbox/account records
-- [ ] live QA of Account privacy/linked/saved/trusted/review pages, Services bookmarks, Track reviews and Wallet preview
+- [ ] live QA of Account privacy/linked/saved/trusted/review pages, Services bookmarks/recommendations/Explore PNG, Track reviews and Wallet preview
 - [ ] complete gate evidence review and full checkpoint before T2.4
 
 Acceptance evidence and initial findings: `docs/CX1_CLIENT_EXPERIENCE_GATE.md`.

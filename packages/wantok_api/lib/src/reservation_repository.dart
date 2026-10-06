@@ -169,7 +169,7 @@ class ReservationRepository {
     final rows = await WantokBackend.client
         .from('provider_services')
         .select(
-          'id, provider_id, category_id, title, description, pricing_model, base_price, minimum_charge, currency, unit_label, service_address, booking_notice_minutes, status, service_categories(name, slug)',
+          'id, provider_id, category_id, title, description, pricing_model, base_price, minimum_charge, currency, unit_label, service_address, coverage_province, coverage_town, booking_notice_minutes, status, service_categories(name, slug)',
         )
         .eq('provider_id', _userId)
         .order('created_at');
@@ -185,6 +185,8 @@ class ReservationRepository {
     double? basePrice,
     String? unitLabel,
     String? serviceAddress,
+    String? coverageProvince,
+    String? coverageTown,
   }) async {
     await WantokBackend.client
         .from('provider_services')
@@ -195,6 +197,8 @@ class ReservationRepository {
           'base_price': basePrice,
           'unit_label': _emptyToNull(unitLabel),
           'service_address': _emptyToNull(serviceAddress),
+          'coverage_province': _emptyToNull(coverageProvince),
+          'coverage_town': _emptyToNull(coverageTown),
         })
         .eq('id', serviceId)
         .eq('provider_id', _userId);
@@ -211,7 +215,7 @@ class ReservationRepository {
     final rows = await WantokBackend.client
         .from('provider_resources')
         .select(
-          'id, provider_id, category_id, resource_type, name, description, capacity, address_text, status, metadata, service_categories(name, slug)',
+          'id, provider_id, category_id, resource_type, name, description, capacity, address_text, coverage_province, coverage_town, status, metadata, service_categories(name, slug)',
         )
         .eq('provider_id', _userId)
         .order('created_at');
@@ -226,6 +230,8 @@ class ReservationRepository {
     String? description,
     int? capacity,
     String? address,
+    String? coverageProvince,
+    String? coverageTown,
   }) async {
     await WantokBackend.client.from('provider_resources').insert({
       'provider_id': _userId,
@@ -235,6 +241,8 @@ class ReservationRepository {
       'description': _emptyToNull(description),
       'capacity': capacity,
       'address_text': _emptyToNull(address),
+      'coverage_province': _emptyToNull(coverageProvince),
+      'coverage_town': _emptyToNull(coverageTown),
       'metadata': <String, dynamic>{},
     });
   }
@@ -246,6 +254,8 @@ class ReservationRepository {
     String? description,
     int? capacity,
     String? address,
+    String? coverageProvince,
+    String? coverageTown,
   }) async {
     await WantokBackend.client
         .from('provider_resources')
@@ -255,6 +265,8 @@ class ReservationRepository {
           'description': _emptyToNull(description),
           'capacity': capacity,
           'address_text': _emptyToNull(address),
+          'coverage_province': _emptyToNull(coverageProvince),
+          'coverage_town': _emptyToNull(coverageTown),
         })
         .eq('id', resourceId)
         .eq('provider_id', _userId);

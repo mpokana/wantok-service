@@ -74,8 +74,12 @@ class _VendorWaterTransportPageState extends State<VendorWaterTransportPage> {
         name: draft.name,
         originName: draft.originName,
         originAddress: draft.originAddress,
+        originProvince: draft.originProvince,
+        originTown: draft.originTown,
         destinationName: draft.destinationName,
         destinationAddress: draft.destinationAddress,
+        destinationProvince: draft.destinationProvince,
+        destinationTown: draft.destinationTown,
         estimatedMinutes: draft.estimatedMinutes,
       ),
     );
@@ -711,8 +715,12 @@ class _RouteDialogState extends State<_RouteDialog> {
   final _name = TextEditingController();
   final _origin = TextEditingController();
   final _originAddress = TextEditingController();
+  final _originProvince = TextEditingController();
+  final _originTown = TextEditingController();
   final _destination = TextEditingController();
   final _destinationAddress = TextEditingController();
+  final _destinationProvince = TextEditingController();
+  final _destinationTown = TextEditingController();
   final _minutes = TextEditingController();
   String? _error;
 
@@ -727,8 +735,12 @@ class _RouteDialogState extends State<_RouteDialog> {
     _name.dispose();
     _origin.dispose();
     _originAddress.dispose();
+    _originProvince.dispose();
+    _originTown.dispose();
     _destination.dispose();
     _destinationAddress.dispose();
+    _destinationProvince.dispose();
+    _destinationTown.dispose();
     _minutes.dispose();
     super.dispose();
   }
@@ -753,8 +765,12 @@ class _RouteDialogState extends State<_RouteDialog> {
         name: _name.text.trim(),
         originName: _origin.text.trim(),
         originAddress: _originAddress.text.trim(),
+        originProvince: _originProvince.text.trim(),
+        originTown: _originTown.text.trim(),
         destinationName: _destination.text.trim(),
         destinationAddress: _destinationAddress.text.trim(),
+        destinationProvince: _destinationProvince.text.trim(),
+        destinationTown: _destinationTown.text.trim(),
         estimatedMinutes: minutes,
       ),
     );
@@ -806,6 +822,22 @@ class _RouteDialogState extends State<_RouteDialog> {
               ),
               const SizedBox(height: 8),
               TextField(
+                controller: _originProvince,
+                decoration: const InputDecoration(
+                  labelText: 'Origin province / region',
+                  hintText: 'Morobe Province',
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: _originTown,
+                decoration: const InputDecoration(
+                  labelText: 'Origin town / local area',
+                  hintText: 'Lae',
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextField(
                 controller: _destination,
                 decoration: const InputDecoration(labelText: 'Destination'),
               ),
@@ -814,6 +846,22 @@ class _RouteDialogState extends State<_RouteDialog> {
                 controller: _destinationAddress,
                 decoration: const InputDecoration(
                   labelText: 'Destination wharf / address',
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: _destinationProvince,
+                decoration: const InputDecoration(
+                  labelText: 'Destination province / region',
+                  hintText: 'Morobe Province',
+                ),
+              ),
+              const SizedBox(height: 8),
+              TextField(
+                controller: _destinationTown,
+                decoration: const InputDecoration(
+                  labelText: 'Destination town / local area',
+                  hintText: 'Finschhafen',
                 ),
               ),
               const SizedBox(height: 8),
@@ -1262,8 +1310,12 @@ class _RouteDraft {
     required this.name,
     required this.originName,
     required this.originAddress,
+    required this.originProvince,
+    required this.originTown,
     required this.destinationName,
     required this.destinationAddress,
+    required this.destinationProvince,
+    required this.destinationTown,
     required this.estimatedMinutes,
   });
 
@@ -1271,8 +1323,12 @@ class _RouteDraft {
   final String name;
   final String originName;
   final String originAddress;
+  final String originProvince;
+  final String originTown;
   final String destinationName;
   final String destinationAddress;
+  final String destinationProvince;
+  final String destinationTown;
   final int? estimatedMinutes;
 }
 

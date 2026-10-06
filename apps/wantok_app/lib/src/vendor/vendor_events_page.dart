@@ -78,6 +78,8 @@ class _VendorEventsPageState extends State<VendorEventsPage> {
         description: draft.description,
         venueName: draft.venueName,
         venueAddress: draft.venueAddress,
+        venueProvince: draft.venueProvince,
+        venueTown: draft.venueTown,
         startsAt: draft.startsAt,
         endsAt: draft.endsAt,
         capacity: draft.capacity,
@@ -104,6 +106,8 @@ class _VendorEventsPageState extends State<VendorEventsPage> {
         description: draft.description,
         venueName: draft.venueName,
         venueAddress: draft.venueAddress,
+        venueProvince: draft.venueProvince,
+        venueTown: draft.venueTown,
         startsAt: draft.startsAt,
         endsAt: draft.endsAt,
         capacity: draft.capacity,
@@ -601,6 +605,8 @@ class _EventEditorDialogState extends State<_EventEditorDialog> {
   late final TextEditingController _description;
   late final TextEditingController _venue;
   late final TextEditingController _address;
+  late final TextEditingController _province;
+  late final TextEditingController _town;
   late final TextEditingController _capacity;
   late DateTime _startsAt;
   late DateTime _endsAt;
@@ -623,6 +629,10 @@ class _EventEditorDialogState extends State<_EventEditorDialog> {
     _address = TextEditingController(
       text: event?['venue_address']?.toString() ?? '',
     );
+    _province = TextEditingController(
+      text: event?['venue_province']?.toString() ?? '',
+    );
+    _town = TextEditingController(text: event?['venue_town']?.toString() ?? '');
     _capacity = TextEditingController(
       text: event?['capacity']?.toString() ?? '',
     );
@@ -640,6 +650,8 @@ class _EventEditorDialogState extends State<_EventEditorDialog> {
     _description.dispose();
     _venue.dispose();
     _address.dispose();
+    _province.dispose();
+    _town.dispose();
     _capacity.dispose();
     super.dispose();
   }
@@ -685,6 +697,8 @@ class _EventEditorDialogState extends State<_EventEditorDialog> {
         description: _description.text.trim(),
         venueName: _venue.text.trim(),
         venueAddress: _address.text.trim(),
+        venueProvince: _province.text.trim(),
+        venueTown: _town.text.trim(),
         startsAt: _startsAt,
         endsAt: _endsAt,
         capacity: capacity,
@@ -743,6 +757,22 @@ class _EventEditorDialogState extends State<_EventEditorDialog> {
                 controller: _address,
                 decoration: const InputDecoration(
                   labelText: 'Venue address / landmark',
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: _province,
+                decoration: const InputDecoration(
+                  labelText: 'Province / region',
+                  hintText: 'Morobe Province',
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: _town,
+                decoration: const InputDecoration(
+                  labelText: 'Town / local area',
+                  hintText: 'Lae',
                 ),
               ),
               const SizedBox(height: 10),
@@ -937,6 +967,8 @@ class _EventDraft {
     required this.description,
     required this.venueName,
     required this.venueAddress,
+    required this.venueProvince,
+    required this.venueTown,
     required this.startsAt,
     required this.endsAt,
     required this.capacity,
@@ -947,6 +979,8 @@ class _EventDraft {
   final String description;
   final String venueName;
   final String venueAddress;
+  final String venueProvince;
+  final String venueTown;
   final DateTime startsAt;
   final DateTime endsAt;
   final int? capacity;

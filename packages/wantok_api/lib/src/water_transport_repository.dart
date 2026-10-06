@@ -15,7 +15,7 @@ class WaterTransportRepository {
     final rows = await WantokBackend.client
         .from('water_departures')
         .select(
-          'id, provider_id, provider_service_id, route_id, vessel_id, departs_at, arrives_at, status, booking_open, boarding_point, notes, water_routes(name, origin_name, origin_address, destination_name, destination_address, estimated_minutes), water_vessels(name, registration_number, vessel_type, total_capacity), provider_profiles(display_name, rating_average, rating_count)',
+          'id, provider_id, provider_service_id, route_id, vessel_id, departs_at, arrives_at, status, booking_open, boarding_point, notes, water_routes(name, origin_name, origin_address, origin_province, origin_town, destination_name, destination_address, destination_province, destination_town, estimated_minutes), water_vessels(name, registration_number, vessel_type, total_capacity), provider_profiles(display_name, rating_average, rating_count)',
         )
         .eq('booking_open', true)
         .eq('status', 'scheduled')
@@ -106,7 +106,7 @@ class WaterTransportRepository {
     final rows = await WantokBackend.client
         .from('water_routes')
         .select(
-          'id, provider_id, provider_service_id, name, origin_name, origin_address, destination_name, destination_address, estimated_minutes, status',
+          'id, provider_id, provider_service_id, name, origin_name, origin_address, origin_province, origin_town, destination_name, destination_address, destination_province, destination_town, estimated_minutes, status',
         )
         .eq('provider_id', _userId)
         .order('name');
@@ -144,8 +144,12 @@ class WaterTransportRepository {
     required String name,
     required String originName,
     String? originAddress,
+    String? originProvince,
+    String? originTown,
     required String destinationName,
     String? destinationAddress,
+    String? destinationProvince,
+    String? destinationTown,
     int? estimatedMinutes,
   }) async {
     final row = await WantokBackend.client
@@ -156,8 +160,12 @@ class WaterTransportRepository {
           'name': name.trim(),
           'origin_name': originName.trim(),
           'origin_address': _emptyToNull(originAddress),
+          'origin_province': _emptyToNull(originProvince),
+          'origin_town': _emptyToNull(originTown),
           'destination_name': destinationName.trim(),
           'destination_address': _emptyToNull(destinationAddress),
+          'destination_province': _emptyToNull(destinationProvince),
+          'destination_town': _emptyToNull(destinationTown),
           'estimated_minutes': estimatedMinutes,
           'status': 'active',
         })

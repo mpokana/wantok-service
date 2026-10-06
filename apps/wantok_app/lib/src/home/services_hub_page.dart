@@ -17,12 +17,14 @@ class ServicesHubPage extends StatefulWidget {
   const ServicesHubPage({
     this.loadServices,
     this.loadRecommendations,
+    this.loadPlaces,
     super.key,
   });
 
   final Future<List<WantokServiceCategory>> Function()? loadServices;
   final Future<List<ClientServiceRecommendation>> Function()?
   loadRecommendations;
+  final Future<List<ClientServicePlace>> Function()? loadPlaces;
 
   @override
   State<ServicesHubPage> createState() => _ServicesHubPageState();
@@ -39,6 +41,7 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
   List<ClientServiceRecommendation> _recommendations =
       const <ClientServiceRecommendation>[];
   bool _recommendationsLoading = false;
+  List<ClientServicePlace> _places = const <ClientServicePlace>[];
   String _query = '';
   _ServiceFamily _family = _ServiceFamily.all;
 
@@ -66,6 +69,7 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _loadSavedItems();
       _loadRecommendations();
+      _loadPlaces();
     });
   }
 
@@ -114,6 +118,20 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
       }
     } finally {
       if (mounted) setState(() => _recommendationsLoading = false);
+    }
+  }
+
+  Future<void> _loadPlaces() async {
+    try {
+      final injected = widget.loadPlaces;
+      final places = injected != null
+          ? await injected()
+          : widget.loadServices != null
+          ? const <ClientServicePlace>[]
+          : await _experience.loadServicePlaces();
+      if (mounted) setState(() => _places = places);
+    } catch (_) {
+      if (mounted) setState(() => _places = const <ClientServicePlace>[]);
     }
   }
 
@@ -171,6 +189,68 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
     if (mounted) await _loadSavedItems();
   }
 
+  Future<void> _openPlace(
+    ClientServicePlace place,
+    List<WantokServiceCategory> services,
+  ) async {
+    final available = services
+        .where((service) => place.categoryIds.contains(service.id))
+        .toList(growable: false);
+
+    await showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(18, 0, 18, 22),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                place.town == null
+                    ? place.province
+                    : '${place.town}, ${place.province}',
+                style: Theme.of(context).textTheme.titleLarge
+                    ?.copyWith(fontWeight: FontWeight.w900),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                '${place.coverageCount} active coverage point${place.coverageCount == 1 ? '' : 's'} across ${available.length} service type${available.length == 1 ? '' : 's'}.',
+                style: const TextStyle(color: WantokColors.muted),
+              ),
+              const SizedBox(height: 14),
+              if (available.isEmpty)
+                const Text('No matching client service is available right now.')
+              else
+                ...available.map(
+                  (service) => ListTile(
+                    contentPadding: EdgeInsets.zero,
+                    leading: CircleAvatar(
+                      backgroundColor: _visualFor(service.slug).surface,
+                      child: Icon(
+                        _visualFor(service.slug).icon,
+                        color: _visualFor(service.slug).accent,
+                      ),
+                    ),
+                    title: Text(
+                      service.name,
+                      style: const TextStyle(fontWeight: FontWeight.w800),
+                    ),
+                    trailing: const Icon(Icons.chevron_right_rounded),
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      _openService(service);
+                    },
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   Future<void> _reload() async {
     final next = _loadServices();
     setState(() {
@@ -178,7 +258,11 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
     });
     try {
       await next;
-      await Future.wait([_loadSavedItems(), _loadRecommendations()]);
+      await Future.wait([
+        _loadSavedItems(),
+        _loadRecommendations(),
+        _loadPlaces(),
+      ]);
     } catch (_) {
       // The FutureBuilder presents the retryable catalogue error state.
     }
@@ -324,6 +408,31 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
                             }
                           }
                         },
+                      );
+                    },
+                  ),
+                ),
+              ],
+              if (query.isEmpty &&
+                  _family == _ServiceFamily.all &&
+                  _places.isNotEmpty) ...[
+                const SizedBox(height: 20),
+                const PngSectionTitle(
+                  title: 'Explore PNG',
+                  subtitle: 'Places appear here only when active Wantok services cover them.',
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  height: 132 + ((textScale - 1).clamp(0, 1) * 20),
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: _places.length,
+                    separatorBuilder: (_, _) => const SizedBox(width: 10),
+                    itemBuilder: (context, index) {
+                      final place = _places[index];
+                      return _PlaceCard(
+                        place: place,
+                        onTap: () => _openPlace(place, services),
                       );
                     },
                   ),
@@ -614,6 +723,73 @@ enum _ServiceFamily {
     book => const {'venue-booking', 'events'}.contains(slug),
     people => const {'specialist-services', 'general-labour'}.contains(slug),
   };
+}
+
+class _PlaceCard extends StatelessWidget {
+  const _PlaceCard({required this.place, required this.onTap});
+
+  final ClientServicePlace place;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final title = place.town ?? place.province;
+    final subtitle = place.town == null ? 'Province / region' : place.province;
+    final serviceTypes = place.categoryIds.length;
+
+    return SizedBox(
+      width: 174,
+      child: Material(
+        color: const Color(0xFFF1F7F4),
+        borderRadius: BorderRadius.circular(20),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(20),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Icon(Icons.place_outlined, color: WantokColors.primary),
+                const Spacer(),
+                Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w900,
+                    fontSize: 15,
+                  ),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: WantokColors.muted,
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  '$serviceTypes service type${serviceTypes == 1 ? '' : 's'} • ${place.coverageCount} coverage',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: WantokColors.primaryDark,
+                    fontSize: 10.5,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 class _RecommendationCard extends StatelessWidget {

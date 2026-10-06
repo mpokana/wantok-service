@@ -68,6 +68,48 @@ class ClientServiceRecommendation {
   }
 }
 
+class ClientServicePlace {
+  const ClientServicePlace({
+    required this.province,
+    required this.town,
+    required this.categoryIds,
+    required this.categoryNames,
+    required this.listingCount,
+    required this.eventCount,
+    required this.routeCount,
+  });
+
+  final String province;
+  final String? town;
+  final List<String> categoryIds;
+  final List<String> categoryNames;
+  final int listingCount;
+  final int eventCount;
+  final int routeCount;
+
+  int get coverageCount => listingCount + eventCount + routeCount;
+
+  factory ClientServicePlace.fromMap(Map<String, dynamic> row) {
+    List<String> strings(dynamic value) => value is List
+        ? value.map((item) => item.toString()).toList(growable: false)
+        : const <String>[];
+
+    int number(dynamic value) => value is num
+        ? value.toInt()
+        : int.tryParse(value?.toString() ?? '') ?? 0;
+
+    return ClientServicePlace(
+      province: row['province'] as String? ?? 'Papua New Guinea',
+      town: row['town'] as String?,
+      categoryIds: strings(row['category_ids']),
+      categoryNames: strings(row['category_names']),
+      listingCount: number(row['listing_count']),
+      eventCount: number(row['event_count']),
+      routeCount: number(row['route_count']),
+    );
+  }
+}
+
 class TrustedPerson {
   const TrustedPerson({
     required this.id,
@@ -370,6 +412,18 @@ class ClientExperienceRepository {
     return (result as List<dynamic>)
         .cast<Map<String, dynamic>>()
         .map(ClientServiceRecommendation.fromMap)
+        .toList(growable: false);
+  }
+
+  Future<List<ClientServicePlace>> loadServicePlaces({int limit = 30}) async {
+    final result = await _client.rpc(
+      'list_client_service_places',
+      params: {'p_limit': limit.clamp(1, 100)},
+    );
+
+    return (result as List<dynamic>)
+        .cast<Map<String, dynamic>>()
+        .map(ClientServicePlace.fromMap)
         .toList(growable: false);
   }
 

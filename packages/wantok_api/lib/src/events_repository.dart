@@ -15,7 +15,7 @@ class EventsRepository {
     final rows = await WantokBackend.client
         .from('events')
         .select(
-          'id, provider_id, provider_service_id, title, description, venue_name, venue_address, venue_lat, venue_lng, starts_at, ends_at, capacity, status, image_url, is_featured, provider_services(title), provider_profiles(display_name, rating_average, rating_count)',
+          'id, provider_id, provider_service_id, title, description, venue_name, venue_address, venue_province, venue_town, venue_lat, venue_lng, starts_at, ends_at, capacity, status, image_url, is_featured, provider_services(title), provider_profiles(display_name, rating_average, rating_count)',
         )
         .eq('status', 'published')
         .gte('starts_at', DateTime.now().toUtc().toIso8601String())
@@ -105,7 +105,7 @@ class EventsRepository {
     final rows = await WantokBackend.client
         .from('events')
         .select(
-          'id, provider_id, provider_service_id, title, description, venue_name, venue_address, starts_at, ends_at, capacity, status, image_url, is_featured, provider_services(title)',
+          'id, provider_id, provider_service_id, title, description, venue_name, venue_address, venue_province, venue_town, starts_at, ends_at, capacity, status, image_url, is_featured, provider_services(title)',
         )
         .eq('provider_id', _userId)
         .order('starts_at', ascending: false);
@@ -119,6 +119,8 @@ class EventsRepository {
     String? description,
     String? venueName,
     String? venueAddress,
+    String? venueProvince,
+    String? venueTown,
     required DateTime startsAt,
     DateTime? endsAt,
     int? capacity,
@@ -132,6 +134,8 @@ class EventsRepository {
           'description': _emptyToNull(description),
           'venue_name': _emptyToNull(venueName),
           'venue_address': _emptyToNull(venueAddress),
+          'venue_province': _emptyToNull(venueProvince),
+          'venue_town': _emptyToNull(venueTown),
           'starts_at': startsAt.toUtc().toIso8601String(),
           'ends_at': endsAt?.toUtc().toIso8601String(),
           'capacity': capacity,
@@ -149,6 +153,8 @@ class EventsRepository {
     String? description,
     String? venueName,
     String? venueAddress,
+    String? venueProvince,
+    String? venueTown,
     required DateTime startsAt,
     DateTime? endsAt,
     int? capacity,
@@ -160,6 +166,8 @@ class EventsRepository {
           'description': _emptyToNull(description),
           'venue_name': _emptyToNull(venueName),
           'venue_address': _emptyToNull(venueAddress),
+          'venue_province': _emptyToNull(venueProvince),
+          'venue_town': _emptyToNull(venueTown),
           'starts_at': startsAt.toUtc().toIso8601String(),
           'ends_at': endsAt?.toUtc().toIso8601String(),
           'capacity': capacity,

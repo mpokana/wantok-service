@@ -52,6 +52,18 @@ const recommendations = [
   ),
 ];
 
+const places = [
+  ClientServicePlace(
+    province: 'Morobe Province',
+    town: 'Lae',
+    categoryIds: ['1', '3'],
+    categoryNames: ['Food', 'Taxi'],
+    listingCount: 3,
+    eventCount: 0,
+    routeCount: 1,
+  ),
+];
+
 Future<void> showPage(
   WidgetTester tester,
   Widget page, {
@@ -147,6 +159,31 @@ void main() {
       expect(tester.takeException(), isNull);
     },
   );
+
+  testWidgets('Explore PNG uses covered places and opens available service types', (
+    tester,
+  ) async {
+    await showPage(
+      tester,
+      ServicesHubPage(
+        loadServices: () async => services,
+        loadPlaces: () async => places,
+      ),
+    );
+
+    expect(find.text('Explore PNG'), findsOneWidget);
+    expect(find.text('Lae'), findsOneWidget);
+    expect(find.text('Morobe Province'), findsOneWidget);
+
+    await tester.tap(find.text('Lae'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Lae, Morobe Province'), findsOneWidget);
+    expect(find.text('4 active coverage points across 2 service types.'), findsOneWidget);
+    expect(find.text('Food'), findsWidgets);
+    expect(find.text('Taxi'), findsWidgets);
+    expect(tester.takeException(), isNull);
+  });
 
   testWidgets('catalogue failure has a safe error and working retry', (
     tester,

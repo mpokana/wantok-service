@@ -66,6 +66,8 @@ class _VendorListingsPageState extends State<VendorListingsPage> {
         basePrice: draft.basePrice,
         unitLabel: draft.unitLabel,
         serviceAddress: draft.address,
+        coverageProvince: draft.province,
+        coverageTown: draft.town,
       ),
     );
   }
@@ -106,6 +108,8 @@ class _VendorListingsPageState extends State<VendorListingsPage> {
         description: draft.description,
         capacity: draft.capacity,
         address: draft.address,
+        coverageProvince: draft.province,
+        coverageTown: draft.town,
       ),
     );
   }
@@ -131,6 +135,8 @@ class _VendorListingsPageState extends State<VendorListingsPage> {
         description: draft.description,
         capacity: draft.capacity,
         address: draft.address,
+        coverageProvince: draft.province,
+        coverageTown: draft.town,
       ),
     );
   }
@@ -333,9 +339,7 @@ class _ServiceCard extends StatelessWidget {
               style: const TextStyle(color: WantokColors.primaryDark),
             ),
             if (price != null)
-              Text(
-                'K$price • ${service['pricing_model'] ?? 'quote'}',
-              ),
+              Text('K$price • ${service['pricing_model'] ?? 'quote'}'),
             const SizedBox(height: 10),
             Wrap(
               spacing: 8,
@@ -463,6 +467,8 @@ class _ServiceEditorDialogState extends State<_ServiceEditorDialog> {
   late final TextEditingController _price;
   late final TextEditingController _unit;
   late final TextEditingController _address;
+  late final TextEditingController _province;
+  late final TextEditingController _town;
   late String _pricingModel;
 
   static const _pricingModels = [
@@ -493,6 +499,12 @@ class _ServiceEditorDialogState extends State<_ServiceEditorDialog> {
     _address = TextEditingController(
       text: service['service_address']?.toString() ?? '',
     );
+    _province = TextEditingController(
+      text: service['coverage_province']?.toString() ?? '',
+    );
+    _town = TextEditingController(
+      text: service['coverage_town']?.toString() ?? '',
+    );
     _pricingModel = service['pricing_model']?.toString() ?? 'quote';
   }
 
@@ -503,6 +515,8 @@ class _ServiceEditorDialogState extends State<_ServiceEditorDialog> {
     _price.dispose();
     _unit.dispose();
     _address.dispose();
+    _province.dispose();
+    _town.dispose();
     super.dispose();
   }
 
@@ -519,6 +533,8 @@ class _ServiceEditorDialogState extends State<_ServiceEditorDialog> {
         basePrice: basePrice,
         unitLabel: _unit.text.trim(),
         address: _address.text.trim(),
+        province: _province.text.trim(),
+        town: _town.text.trim(),
       ),
     );
   }
@@ -582,6 +598,22 @@ class _ServiceEditorDialogState extends State<_ServiceEditorDialog> {
                 controller: _address,
                 decoration: const InputDecoration(labelText: 'Service address'),
               ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: _province,
+                decoration: const InputDecoration(
+                  labelText: 'Province / region',
+                  hintText: 'Morobe Province',
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: _town,
+                decoration: const InputDecoration(
+                  labelText: 'Town / local area',
+                  hintText: 'Lae',
+                ),
+              ),
             ],
           ),
         ),
@@ -614,6 +646,8 @@ class _ResourceEditorDialogState extends State<_ResourceEditorDialog> {
   late final TextEditingController _description;
   late final TextEditingController _capacity;
   late final TextEditingController _address;
+  late final TextEditingController _province;
+  late final TextEditingController _town;
 
   @override
   void initState() {
@@ -635,6 +669,12 @@ class _ResourceEditorDialogState extends State<_ResourceEditorDialog> {
     _address = TextEditingController(
       text: resource?['address_text']?.toString() ?? '',
     );
+    _province = TextEditingController(
+      text: resource?['coverage_province']?.toString() ?? '',
+    );
+    _town = TextEditingController(
+      text: resource?['coverage_town']?.toString() ?? '',
+    );
   }
 
   @override
@@ -644,6 +684,8 @@ class _ResourceEditorDialogState extends State<_ResourceEditorDialog> {
     _description.dispose();
     _capacity.dispose();
     _address.dispose();
+    _province.dispose();
+    _town.dispose();
     super.dispose();
   }
 
@@ -657,6 +699,8 @@ class _ResourceEditorDialogState extends State<_ResourceEditorDialog> {
         description: _description.text.trim(),
         capacity: int.tryParse(_capacity.text.trim()),
         address: _address.text.trim(),
+        province: _province.text.trim(),
+        town: _town.text.trim(),
       ),
     );
   }
@@ -719,6 +763,22 @@ class _ResourceEditorDialogState extends State<_ResourceEditorDialog> {
               TextField(
                 controller: _address,
                 decoration: const InputDecoration(labelText: 'Location'),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: _province,
+                decoration: const InputDecoration(
+                  labelText: 'Province / region',
+                  hintText: 'Morobe Province',
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: _town,
+                decoration: const InputDecoration(
+                  labelText: 'Town / local area',
+                  hintText: 'Lae',
+                ),
               ),
             ],
           ),
@@ -908,6 +968,8 @@ class _ServiceDraft {
     required this.basePrice,
     required this.unitLabel,
     required this.address,
+    required this.province,
+    required this.town,
   });
 
   final String title;
@@ -916,6 +978,8 @@ class _ServiceDraft {
   final double? basePrice;
   final String unitLabel;
   final String address;
+  final String province;
+  final String town;
 }
 
 class _ResourceDraft {
@@ -926,6 +990,8 @@ class _ResourceDraft {
     required this.description,
     required this.capacity,
     required this.address,
+    required this.province,
+    required this.town,
   });
 
   final String categoryId;
@@ -934,6 +1000,8 @@ class _ResourceDraft {
   final String description;
   final int? capacity;
   final String address;
+  final String province;
+  final String town;
 }
 
 class _BlockTimeDraft {
