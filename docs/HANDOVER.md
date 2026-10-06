@@ -143,7 +143,7 @@ At this checkpoint:
 - Wantok Operations Admin: analysis + smoke test PASS
 - Wantok Technical Control: analysis + smoke test PASS
 - database: **25 files / 564 pgTAP tests PASS** (all fixtures roll back)
-- Android visual QA was last recorded for the earlier client shell; CX1A Account/Services bookmarks/Track reviews/Wallet changes require fresh signed-in client evidence
+- fresh Android signed-in QA on 2026-10-07 confirms **Client → Services** renders the PNG-rich discovery shell, bookmark controls and locked **Home · Services · Track · Wallet · Inbox** navigation without visible overflow; bookmark interaction, recommendation/Explore PNG live data, Account, Track, Wallet and Web evidence remain open
 - production Docker Compose parse PASS was recorded at T2.2; deployment files unchanged
 - `git diff --check`: PASS
 

@@ -160,9 +160,10 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 
 ### Remaining CX1 gate evidence
 
-- [ ] fresh signed-in Android/Web visual QA using existing development sessions/accounts
+- [x] fresh signed-in Android **Client → Services** shell/navigation visual QA on the existing development session; locked Home / Services / Track / Wallet / Inbox layout renders without visible overflow
+- [ ] remaining signed-in Android/Web visual QA using existing development sessions/accounts
 - [ ] live read-only journey checks, especially Taxi map/location/history and populated Track/Inbox/account records
-- [ ] live QA of Account privacy/linked/saved/trusted/review pages, Services bookmarks/recommendations/Explore PNG, Track reviews and Wallet preview
+- [ ] live QA of Account privacy/linked/saved/trusted/review pages, Services bookmark interaction/recommendations/Explore PNG live data, Track reviews and Wallet preview
 - [ ] complete gate evidence review and full checkpoint before T2.4
 
 Acceptance evidence and initial findings: `docs/CX1_CLIENT_EXPERIENCE_GATE.md`.

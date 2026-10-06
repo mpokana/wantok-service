@@ -24,7 +24,7 @@ This is intentional and must not be renamed to Grab-style Discover / Activity / 
 | Area | Evidence at this checkpoint | Status |
 | --- | --- | --- |
 | Client shell | Five Wantok tabs, Home search/profile/back; selected-tab semantics | Automated PASS; live QA pending |
-| Services discovery | Search/family filters; errors/empty states; Saved controls; privacy-aware **For you** recommendations; **Explore PNG** places generated only from structured active verified service coverage | Automated PASS; live bookmark/recommendation/place QA pending |
+| Services discovery | Search/family filters; errors/empty states; Saved controls; privacy-aware **For you** recommendations; **Explore PNG** places generated only from structured active verified service coverage | Automated PASS; fresh Android Services shell/navigation visual PASS; live bookmark/recommendation/place interaction QA pending |
 | Profile & identity | Personal profile, bio, managed private avatar upload, separate Business/Vendor profile | Implemented; signed-in visual/media QA pending |
 | Linked accounts | Google/Facebook Supabase identity-linking UI; email sign-in remains visible | Implemented; provider OAuth configuration/live flow pending |
 | Privacy | Profile/review visibility, saved privacy, recommendation opt-out and profile-sharing settings; recommendation opt-out enforced in the RPC | Database/API/UI implemented; live QA pending |
@@ -36,7 +36,7 @@ This is intentional and must not be renamed to Grab-style Discover / Activity / 
 | Role boundary | Client/Vendor switch does not grant provider or technical authority | Automated PASS; pgTAP baseline retained |
 | Database | CX1/CX1B/CX1C/CX1D/CX1E migrations and security tests | 25 files / 564 pgTAP tests PASS |
 | Flutter client | Analysis plus existing regression suite | 34 tests PASS |
-| Visual evidence | Earlier shell QA exists; CX1A surfaces require fresh Android/Web evidence | PENDING |
+| Visual evidence | Fresh signed-in Android Client → Services visual QA on 2026-10-07 confirms PNG-rich Services shell and locked five-button Wantok navigation without visible overflow; remaining CX1A surfaces and Web still require evidence | PARTIAL PASS |
 
 ## CX1A implemented changes
 
@@ -60,7 +60,7 @@ This is intentional and must not be renamed to Grab-style Discover / Activity / 
 1. Delegated booking is complete across every currently implemented client service family: Vehicle Hire, Boat Hire, Venue Booking, Delivery, Errands/Pabili, Specialist Services, General Labour, Taxi/Ride, Events/ticketing, Food/Groceries commerce and scheduled Boat/Ship passenger transport. The signed-in customer remains the payer/requesting account; beneficiary identity must not confer account access. Future accommodation/flights modules should explicitly adopt or reject this shared contract during their design phase.
 2. Add achievements/rewards only after core consumer workflows are stable.
 3. Defer follow/follower/social metrics until privacy, abuse/moderation and notification design are approved.
-4. Perform fresh signed-in Android/Web QA on Account tools, avatar/review-photo upload, Services bookmarks/recommendations/Explore PNG, Track reviews and Wallet.
+4. Continue fresh signed-in Android/Web QA on Account tools, avatar/review-photo upload, Services bookmark interaction/recommendations/Explore PNG live data, Track reviews and Wallet; the Android Client → Services shell/navigation visual check is already PASS.
 5. Verify Taxi map/location permission handling and populated Track/Inbox/account records without creating destructive test data.
 6. Run the final CX1 evidence review and keep T2.4 deferred until the client gate is complete.
 
