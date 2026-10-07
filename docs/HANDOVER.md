@@ -130,7 +130,7 @@ Checkpointed platform includes:
 - Wallet remains preview-only but now frames Top up/Scan/Send/Receive, verification, PNG-oriented planned services and future transaction history. No money movement exists.
 - The user-facing assistant is **Wantok Agent**. It is a compact client-header action rather than a large Home card and still does not add a sixth bottom-navigation tab. Home is intentionally shortcut-first and currently limits its service grid to six high-frequency entries with **See all** routing to Services. The authenticated capability API reports model/chat/handoff state; model chat is deliberately disabled until a controlled gateway is configured. The Agent surface can use real provider-search fallback and create owner-private human-help requests. Support/Operations/Admin can later triage those requests; live human chat and support triage UI are not yet implemented. Internal compatibility identifiers such as `WantokAiAgentRepository` and `wantok_ai_agent` remain unchanged.
 - retry failures stay in the view rather than escaping callbacks; Events/departures/order/registration/water-trip failures do not masquerade as empty records.
-- 34 focused client regressions plus the configuration smoke total **35 app tests**; they use in-memory/unconfigured backends and do not replace local account data.
+- 35 focused client regressions plus the configuration smoke total **36 app tests**; they use in-memory/unconfigured backends and do not replace local account data.
 - entry/back navigation coverage includes 11 categories; Taxi map/location/runtime behaviour and the new CX1A surfaces still require live QA.
 - do not call CX1 complete from widget/database tests alone; see its evidence document.
 
@@ -160,14 +160,15 @@ Checkpointed platform includes:
 - `service_catalog_taxonomy.dart` centralises the client-facing service families as **Move & travel · Food & shopping · Send & errands · People & skills · Book & events**. Services uses the same taxonomy for horizontal filters and grouped full-catalogue panels while individual backend service categories remain independently managed.
 - Fresh debug APK built successfully after resolving the known generated `cleanMergeDebugAssets` lock by stopping Gradle and clearing only `apps/wantok_app/build`. The APK was installed in-place with `adb install -r`; existing sign-in, Supabase data and AVD userdata were preserved.
 - Live Android visual QA PASS: simplified Home, grouped Services catalogue, Top Wantoks/provider discovery, locked five-tab navigation and renamed Wantok Agent page render without visible overflow. Evidence is retained under ignored `.wantok/`.
-- Fresh full checkpoint PASS: all seven Flutter analysis targets, **35 Wantok app tests**, Operations Admin smoke, Technical Control smoke, and **27 files / 598 pgTAP tests**.
+- Track now normalises PostgREST embedded to-one and to-many quote/review relationships before rendering, preventing completed-booking review/quote data from disappearing when PostgREST returns an object instead of a list. A dedicated regression covers both shapes.
+- Fresh full checkpoint PASS: all seven Flutter analysis targets, **36 Wantok app tests**, Operations Admin smoke, Technical Control smoke, and **27 files / 598 pgTAP tests**.
 
 ## Validation baseline
 
 At this checkpoint:
 
 - all shared Flutter packages: analysis PASS
-- Wantok app: analysis + **35 tests PASS** (34 client regressions + configuration smoke)
+- Wantok app: analysis + **36 tests PASS** (35 client regressions + configuration smoke)
 - required `scripts/flutter/check.ps1`: PASS; Desktop Commander shells on EAGLT02 currently need the standard `PROGRAMFILES(X86)=C:\Program Files (x86)` supplied per process for `flutter test`
 - Wantok Operations Admin: analysis + smoke test PASS
 - Wantok Technical Control: analysis + smoke test PASS

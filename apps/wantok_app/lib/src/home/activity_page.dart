@@ -260,8 +260,12 @@ class _ActivityPageState extends State<ActivityPage> {
               final category = _asMap(row['service_categories']);
               final provider = _asMap(row['provider_profiles']);
               final resource = _asMap(row['provider_resources']);
-              final quotes = _asList(row['service_quotes']);
-              final reviews = _asList(row['service_reviews']);
+              final quotes = normalisePostgrestEmbeddedRows(
+                row['service_quotes'],
+              );
+              final reviews = normalisePostgrestEmbeddedRows(
+                row['service_reviews'],
+              );
               final existingReview = reviews.isEmpty
                   ? null
                   : _asMap(reviews.first);
@@ -831,8 +835,11 @@ Map<String, dynamic> _asMap(dynamic value) {
   return <String, dynamic>{};
 }
 
-List<dynamic> _asList(dynamic value) {
+@visibleForTesting
+List<dynamic> normalisePostgrestEmbeddedRows(dynamic value) {
   if (value is List<dynamic>) return value;
+  if (value is Map<String, dynamic>) return <dynamic>[value];
+  if (value is Map) return <dynamic>[Map<String, dynamic>.from(value)];
   return const <dynamic>[];
 }
 
