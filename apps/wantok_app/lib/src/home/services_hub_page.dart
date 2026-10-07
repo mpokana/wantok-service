@@ -1065,7 +1065,7 @@ class _PlaceCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 5),
                 Text(
-                  '$serviceTypes service type${serviceTypes == 1 ? '' : 's'} • ${place.coverageCount} coverage',
+                  '$serviceTypes service type${serviceTypes == 1 ? '' : 's'} | ${place.coverageCount} coverage',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(

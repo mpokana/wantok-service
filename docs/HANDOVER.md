@@ -183,7 +183,7 @@ At this checkpoint:
 - Wantok Operations Admin: analysis + smoke test PASS
 - Wantok Technical Control: analysis + smoke test PASS
 - database: **27 files / 598 pgTAP tests PASS** (all fixtures roll back), including confidence-aware provider discovery and Wantok AI capability/handoff security coverage
-- fresh Android signed-in QA on 2026-10-07 confirms locked **Home · Services · Track · Wallet · Inbox** navigation without visible overflow; populated CX1F provider discovery, Track Completed history, Account privacy/linked/saved/trusted/reviews and categorised Inbox/support-detail are PASS within the evidence limits. Taxi runtime, Account mutations/media, Services recommendation/Explore PNG interactions, Wallet live preview and Web evidence remain open
+- fresh Android signed-in QA on 2026-10-07 confirms locked **Home · Services · Track · Wallet · Inbox** navigation without visible overflow; populated CX1F provider discovery, **For you** recommendation interaction, **Explore PNG** Lae/Morobe coverage, Track Completed history, Account privacy/linked/saved/trusted/reviews, categorised Inbox/support-detail and **Wallet preview** are PASS within the evidence limits. Taxi runtime, Account mutations/media and Web evidence remain open
 - production Docker Compose parse PASS was recorded at T2.2; deployment files unchanged
 - `git diff --check`: PASS
 

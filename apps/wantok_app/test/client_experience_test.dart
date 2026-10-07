@@ -358,7 +358,7 @@ void main() {
     );
     expect(find.text('K0.00'), findsOneWidget);
     expect(
-      find.text('Preview only — payment rails are not active yet.'),
+      find.text('Preview only - payment rails are not active yet.'),
       findsOneWidget,
     );
     expect(find.byType(FilledButton), findsNothing);

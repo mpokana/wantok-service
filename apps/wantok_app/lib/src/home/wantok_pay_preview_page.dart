@@ -70,7 +70,7 @@ class WantokPayPreviewPage extends StatelessWidget {
                           ),
                           SizedBox(height: 6),
                           Text(
-                            'Preview only — payment rails are not active yet.',
+                            'Preview only - payment rails are not active yet.',
                             style: TextStyle(
                               color: WantokColors.muted,
                               fontSize: 11.5,
