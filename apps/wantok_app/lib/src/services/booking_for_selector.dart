@@ -31,7 +31,9 @@ class _BookingForSelectorState extends State<BookingForSelector> {
 
   Future<void> _retry() async {
     final next = _repository.loadTrustedPeople();
-    setState(() => _future = next);
+    setState(() {
+      _future = next;
+    });
     try {
       await next;
     } catch (_) {}
@@ -128,7 +130,7 @@ class _BookingForSelectorState extends State<BookingForSelector> {
                         value: person.id,
                         child: Text(
                           person.relationship?.trim().isNotEmpty == true
-                              ? '${person.displayName} — ${person.relationship}'
+                              ? '${person.displayName} - ${person.relationship}'
                               : person.displayName,
                           overflow: TextOverflow.ellipsis,
                         ),

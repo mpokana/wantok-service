@@ -261,7 +261,7 @@ class _AccountPageState extends State<AccountPage> {
                     leading: const Icon(Icons.privacy_tip_outlined),
                     title: const Text('Privacy & sharing'),
                     subtitle: Text(
-                      'Profile: ${profile.profileVisibility} • Reviews: ${profile.reviewVisibility}',
+                      'Profile: ${profile.profileVisibility} | Reviews: ${profile.reviewVisibility}',
                     ),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () => _openPrivacy(profile),
@@ -340,7 +340,7 @@ class _AccountPageState extends State<AccountPage> {
                     _DetailRow(
                       label: 'Service radius',
                       value: provider.serviceRadiusKm == null
-                          ? '—'
+                          ? '-'
                           : '${provider.serviceRadiusKm!.toStringAsFixed(0)} km',
                     ),
                     if (provider.bio?.trim().isNotEmpty == true)
@@ -385,7 +385,7 @@ class _AccountPageState extends State<AccountPage> {
                 title: 'Security',
                 icon: Icons.shield_outlined,
                 children: [
-                  _DetailRow(label: 'Email', value: _repository.email ?? '—'),
+                  _DetailRow(label: 'Email', value: _repository.email ?? '-'),
                   const SizedBox(height: 10),
                   Align(
                     alignment: Alignment.centerLeft,
@@ -663,7 +663,7 @@ class _EditPersonalProfilePageState extends State<_EditPersonalProfilePage> {
                         ),
                         const SizedBox(height: 3),
                         const Text(
-                          'JPG, PNG or WebP • maximum 5 MB',
+                          'JPG, PNG or WebP - maximum 5 MB',
                           style: TextStyle(
                             color: WantokColors.muted,
                             fontSize: 12,
@@ -1169,7 +1169,7 @@ class _AccountData {
 
 String _valueOrDash(String? value) {
   final trimmed = value?.trim();
-  return trimmed == null || trimmed.isEmpty ? '—' : trimmed;
+  return trimmed == null || trimmed.isEmpty ? '-' : trimmed;
 }
 
 String? _emptyToNull(String value) {

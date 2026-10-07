@@ -297,7 +297,9 @@ class _SavedItemsPageState extends State<SavedItemsPage> {
 
   Future<void> _refresh() async {
     final next = _repository.loadSavedItems();
-    setState(() => _future = next);
+    setState(() {
+      _future = next;
+    });
     try {
       await next;
     } catch (_) {}
@@ -360,7 +362,7 @@ class _SavedItemsPageState extends State<SavedItemsPage> {
                 final item = items[index];
                 final subtitle = item.subtitle == null
                     ? _savedTypeLabel(item.itemType)
-                    : '${_savedTypeLabel(item.itemType)} • ${item.subtitle!}';
+                    : '${_savedTypeLabel(item.itemType)} | ${item.subtitle!}';
                 return Card(
                   child: ListTile(
                     leading: CircleAvatar(
@@ -417,7 +419,9 @@ class _TrustedPeoplePageState extends State<TrustedPeoplePage> {
 
   Future<void> _refresh() async {
     final next = _repository.loadTrustedPeople(includeInactive: true);
-    setState(() => _future = next);
+    setState(() {
+      _future = next;
+    });
     try {
       await next;
     } catch (_) {}
@@ -558,7 +562,7 @@ class _TrustedPeoplePageState extends State<TrustedPeoplePage> {
                     person.displayName,
                     style: const TextStyle(fontWeight: FontWeight.w800),
                   ),
-                  subtitle: Text(details.join(' • ')),
+                  subtitle: Text(details.join(', ')),
                   trailing: PopupMenuButton<String>(
                     onSelected: (value) {
                       if (value == 'edit') _edit(person);
@@ -598,7 +602,9 @@ class _MyReviewsPageState extends State<MyReviewsPage> {
 
   Future<void> _refresh() async {
     final next = _repository.loadMyReviews();
-    setState(() => _future = next);
+    setState(() {
+      _future = next;
+    });
     try {
       await next;
     } catch (_) {}
