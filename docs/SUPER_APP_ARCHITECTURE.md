@@ -2,9 +2,11 @@
 
 ## Product direction
 
-Wantok Services is not a taxi-only application. It is a Papua New Guinea-focused multi-service marketplace and service-delivery platform inspired by the super-app pattern used by platforms such as Grab, but extended for PNG realities and service categories.
+Wantok Services is not a taxi-only application and is **not limited to Papua New Guinea**. It is a global multi-service marketplace, service-delivery and travel platform built from PNG as its launch/home market. PNG-specific strengths remain first-class, but country boundaries must not be embedded into the platform core.
 
 One signed-in account may act as a customer and, after approval, as one or more kinds of provider. There is no separate provider application. Provider tools appear according to approved roles and services.
+
+Global expansion must preserve one Wantok account and one consistent product model while allowing market-specific catalogue availability, currencies, languages, time zones, addresses, payment rails, tax/regulatory requirements, provider rules and travel integrations.
 
 ## Core service scope
 
@@ -22,7 +24,7 @@ Initial and planned customer verticals:
 - Errands / Pabili-style buying and collection tasks.
 - Food ordering.
 - Groceries / shops / everyday goods.
-- Later travel modules: buses/coaches, accommodation and flights.
+- Global travel: flights, accommodation, buses/coaches/rail/ferries where supported, airport transfers, itinerary management and destination services through specialised travel integrations.
 
 ## Design principle: shared core plus specialised verticals
 
@@ -130,13 +132,11 @@ Provider onboarding should evolve toward:
 
 Keep one customer-facing Services hub rather than a bottom tab for every service. Each service opens its own route/stack.
 
-Recommended primary navigation:
+The current client navigation decision is locked as:
 
-- Services
-- Explore
-- Provider (conditional)
-- Admin (conditional)
-- Account
+**Home · Services · Track · Wallet · Inbox**
+
+Global travel, international discovery and itineraries must live within this product hierarchy rather than creating a permanent tab for every vertical. Account/Profile remains outside the bottom bar. Provider and administrative authority remain role/permission driven rather than being granted by client navigation.
 
 ## Future shared platform services
 

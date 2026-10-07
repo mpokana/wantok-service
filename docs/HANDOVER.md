@@ -6,17 +6,18 @@
 
 ## Resume here
 
-The current working phase is **CX1 client-experience completion**; the **CX1 gate remains open before T2.4**. Delegated booking is checkpointed across every currently implemented client service family. The active CX1 extensions now include **CX1F provider/service discovery with ratings** and the **CX1I Wantok Agent capability/human-handoff foundation**. General Marketplace/fulfilment (CX1G), sponsored promotion (CX1H) and model-backed AI/tool execution (remaining CX1I) are still planned. A separate future first-party **ADS1 Wantok Ads** module is approved for managed external social/video advertising; it is distinct from CX1H and is not part of the current CX1 completion gate. **Wantok Operations Admin is the future ADS1 commercial/approval/campaign authority; Wantok Technical Control owns only integration credentials/health and does not inherit campaign approval authority.** Run:
+The current working phase is **CX1 client-experience completion**; the **CX1 gate remains open before T2.4**. Delegated booking is checkpointed across every currently implemented client service family. The active CX1 extensions now include **CX1F provider/service discovery with ratings** and the **CX1I Wantok Agent capability/human-handoff foundation**. General Marketplace/fulfilment (CX1G), sponsored promotion (CX1H) and model-backed AI/tool execution (remaining CX1I) are still planned. A separate future first-party **ADS1 Wantok Ads** module is approved for managed external social/video advertising. Product scope is now explicitly **global**: PNG is the launch/home market, not the platform boundary. Future **GLOB1 Global Market Foundation** and **TRV1 Global Travel + Itinerary** streams cover country/currency/time-zone foundations, flights/accommodation/transport and Wantok Agent travel orchestration. These are planned architecture only and do not bypass the current CX1/T2.4 sequence. **Wantok Operations Admin is the future ADS1 commercial/approval/campaign authority; Wantok Technical Control owns only integration credentials/health and does not inherit campaign approval authority.** Run:
 
 `git log -1 --oneline`
 
 to resolve its exact commit hash.
 
-Before any new task, read root `AGENTS.md`, this file, `docs/ROADMAP.md`, and **`docs/ROADMAP_FILLERS.md`**. The filler file carries Mansfield's incremental additions without rewriting the main roadmap.
+Before any new task, read root `AGENTS.md`, this file, `docs/ROADMAP.md`, and **`docs/ROADMAP_FILLERS.md`**. For global/travel work also read **`docs/GLOBAL_TRAVEL_ARCHITECTURE.md`**. The filler file carries Mansfield's incremental additions without rewriting the main roadmap.
 
 ## Product identity
 
 - Product: Wantok Services
+- Scope: **global multi-service + travel platform; Papua New Guinea is the launch/home market**
 - Domain: **wantokservices.com**
 - Stack: Flutter + Supabase
 - Public app: `apps/wantok_app`
@@ -231,7 +232,7 @@ Technical Control development server may be run on:
 
 T2.3 checkpoint: **`46d6208`**; prior CX1 reliability/discovery checkpoint: **`0c33a37`**. Required sequence: **finish CX1A/CX1 evidence → T2.4 diagnostics/logs/jobs**.
 
-CX1 now covers reliability, richer client account/profile features, delegated booking across every implemented service family, Saved/media/recommendations/PNG discovery, provider/service search with ratings and Top Wantoks organic discovery, plus the Wantok Agent capability/handoff foundation. The navigation remains **Home · Services · Track · Wallet · Inbox**. Next product additions captured in `docs/ROADMAP_FILLERS.md` are **CX1G General Marketplace + logistics fulfilment**, **CX1H organic/sponsored ranking**, and remaining **CX1I model gateway/tool execution/support triage**. Fresh signed-in Android/Web evidence is still required before CX1 closes.
+CX1 now covers reliability, richer client account/profile features, delegated booking across every implemented service family, Saved/media/recommendations/PNG discovery, provider/service search with ratings and Top Wantoks organic discovery, plus the Wantok Agent capability/handoff foundation. The navigation remains **Home · Services · Track · Wallet · Inbox**. Next product additions captured in `docs/ROADMAP_FILLERS.md` include **CX1G General Marketplace + logistics fulfilment**, **CX1H organic/sponsored ranking**, remaining **CX1I model gateway/tool execution/support triage**, **ADS1 Wantok Ads**, and the approved future **GLOB1/TRV1 global-market + international-travel** streams. Fresh signed-in Android/Web evidence is still required before CX1 closes.
 
 Preserve the local development accounts, roles and data. Do not reset/reseed Supabase or replace working modules/configuration. At resume there are two local auth users/profiles and one local `tech_platform_admin` grant.
 
@@ -244,7 +245,7 @@ Do not begin Wantok Pay transaction movement until payment-rail and settlement d
 If a future chat loses context:
 
 1. open this repository;
-2. read `AGENTS.md`, `docs/HANDOVER.md`, `docs/ROADMAP.md`, and `docs/ROADMAP_FILLERS.md`;
+2. read `AGENTS.md`, `docs/HANDOVER.md`, `docs/ROADMAP.md`, and `docs/ROADMAP_FILLERS.md`; for global/travel work also read `docs/GLOBAL_TRAVEL_ARCHITECTURE.md`;
 3. run `git status --short --branch` and `git log -5 --oneline`;
 4. preserve a dirty tree until its purpose is understood;
 5. continue the roadmap rather than reconstructing architecture from memory.

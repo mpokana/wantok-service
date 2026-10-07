@@ -256,6 +256,50 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 
 Detailed product rules: `docs/ROADMAP_FILLERS.md`, FILLER-2026-10-07-06.
 
+## GLOB1 — Global Market Foundation — PLANNED
+
+**Product decision:** Wantok Services is a worldwide platform launched from Papua New Guinea. PNG remains the home/launch market, but shared platform contracts must not assume one country, currency, time zone, address format or regulatory regime.
+
+- [ ] country/subdivision-aware service availability and market capability configuration
+- [ ] explicit currency on all monetary amounts; remove implicit single-currency assumptions from shared primitives
+- [ ] IANA time-zone handling with UTC-normalised persistence
+- [ ] locale/language preferences and international phone/address structures
+- [ ] market-specific payment rails, provider requirements, tax/regulatory/consumer-protection configuration
+- [ ] evolve **Explore PNG** into a global Explore model while preserving a first-class PNG launch experience
+- [ ] preserve one Wantok account and common Track/Inbox/Wallet/Agent experience across markets
+- [ ] do not rewrite working PNG verticals merely to add global capability
+
+Detailed product rules: `docs/ROADMAP_FILLERS.md`, FILLER-2026-10-07-07.
+
+## TRV1 — Global Travel + Itinerary — PLANNED
+
+**Sequencing:** specialised future travel vertical built after the current CX1/T2.4 gates and global-market foundations. Travel reuses shared Wantok identity, Track, Inbox, Wallet/payment-intent, notifications, safety and audit primitives but has its own supplier/offer/order lifecycle.
+
+- [ ] trip/itinerary container combining flights, accommodation, transfers, rail/bus/ferry where supported, vehicle hire, events and local Wantok services
+- [ ] traveller model separate from account/payment authority, with dedicated protected-document boundary for passport/identity data
+- [ ] provider-agnostic server adapters for airline direct/NDC, GDS/travel-content, hotel/accommodation and later transport suppliers
+- [ ] ephemeral travel offers with source, expiry/revalidation, fare/cabin/baggage/stops, taxes/fees, currency and supplier conditions
+- [ ] dedicated travel-order lifecycle; never show confirmed/ticketed until the supplier confirms that state
+- [ ] explicit customer approval after offer revalidation and before purchase/ticketing; material price/itinerary changes require re-approval
+- [ ] multi-currency payment/refund references separated into supplier amount, taxes/fees and Wantok service fees
+- [ ] Track itinerary timeline and travel lifecycle; Inbox travel/supplier updates separated from provider/support conversations
+- [ ] Operations Admin handles authorised booking exceptions, cancellation/refund/service incidents and support
+- [ ] Technical Control handles supplier credentials, callbacks/webhooks, adapter health and diagnostics without inheriting commercial booking/refund authority
+- [ ] disruption/change/cancellation/refund workflows with idempotency and audit correlation
+- [ ] international destination-local orchestration: airport transfer, Wantok taxi/ride, vehicle hire, events and local providers
+
+### Wantok Agent travel orchestration
+
+- [ ] natural-language trip planning for origin/destination/dates/travellers/preferences
+- [ ] authorised flight/accommodation/transport search through controlled tools
+- [ ] compare valid returned offers and explain supplier-provided stops, baggage, duration, fare/change/refund conditions
+- [ ] assemble multi-day itineraries spanning international travel and local Wantok services
+- [ ] prepare a booking basket and explicit approval step; **Agent cannot autonomously spend money, ticket, change, cancel or refund**
+- [ ] do not invent live fares, availability, entry/visa requirements or supplier policies
+- [ ] material supplier/price changes after approval trigger re-approval rather than silent substitution
+
+Detailed architecture: `docs/GLOBAL_TRAVEL_ARCHITECTURE.md`.
+
 ### Remaining CX1 gate evidence
 
 - [x] fresh signed-in Android **Client → Services** shell/navigation visual QA on the existing development session; locked Home / Services / Track / Wallet / Inbox layout renders without visible overflow, Home is shortcut-first, and Wantok Agent is accessible from the client header
@@ -300,15 +344,17 @@ Use existing local development accounts/data. No Supabase reset, reseed, account
 
 Do **not** implement payment movement until decisions are made for:
 
-- PNG payment rails/providers
+- market-specific payment rails/providers, with PNG as the launch market
 - cards/mobile money/bank integration
+- multi-currency amount, FX-display and settlement rules for global use
 - cash boundary
 - wallet scope
-- provider settlement
-- commissions/fees
-- refunds/disputes
+- provider/supplier settlement
+- commissions/service fees
+- taxes/fees and travel supplier amounts
+- refunds/disputes, including partial supplier refunds
 - reconciliation
-- custody/regulatory boundary
+- custody/regulatory boundary by market
 - secrets/key management
 
 After those decisions, implement payment adapters behind a common interface and technical permissions.

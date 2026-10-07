@@ -326,3 +326,81 @@ Metrics from external platforms are reported data, not Wantok-generated performa
 **CX1H** remains advertising **inside Wantok Services** (Sponsored/Promoted discovery). **ADS1 Wantok Ads** is a managed service that publishes campaigns to external social/video advertising networks. The two may later share campaign, creative, approval, billing-reference and reporting primitives, but paid external media spend must remain separate from organic Wantok ranking and from in-app sponsored placement.
 
 Wantok Agent may later help customers prepare a campaign brief or draft copy, but it must not publish ads, spend money or bypass customer/Operations approval autonomously.
+
+---
+
+## FILLER-2026-10-07-07 - Global Platform + International Travel
+
+**Status:** APPROVED product direction. Map to future **GLOB1 Global Market Foundation** and **TRV1 Global Travel & Itinerary** streams. Do not start implementation ahead of the current CX1 completion gate.
+
+### Product scope decision
+
+Wantok Services is **worldwide**, with Papua New Guinea as the launch/home market rather than the platform boundary.
+
+Existing PNG-specific discovery, service names, Kina presentation and local provider strengths remain first-class. New shared architecture must not assume that every customer, provider, address, currency, time zone or service is in PNG.
+
+### Global market foundation
+
+Future shared contracts must support:
+- country/subdivision-aware service availability;
+- multiple currencies and explicit currency on every money amount;
+- IANA time zones and UTC-normalised timestamps;
+- locale/language preferences;
+- international phone/address structures;
+- market-specific payment rails, tax/regulatory rules and provider requirements;
+- country-aware discovery rather than hard-coded PNG-only geography.
+
+**Explore PNG** remains appropriate for the PNG launch experience. It should later sit inside a global **Explore** model capable of other countries/destinations.
+
+### International travel
+
+Wantok Services should support a specialised global Travel capability including:
+- airplane/flight search and booking;
+- accommodation/hotel search and booking;
+- buses/coaches/rail/ferries where approved integrations exist;
+- airport transfers, local taxi/ride and vehicle hire;
+- events/activities/local Wantok services at the destination;
+- multi-day itineraries combining multiple booking types;
+- trip changes, cancellations/refunds and disruption support later.
+
+Travel uses dedicated travel offers/orders/itineraries rather than forcing airline/hotel inventory into ordinary `service_bookings`.
+
+### Wantok Agent as travel orchestrator
+
+Wantok Agent should be able to handle requests such as:
+- "Find me flights from Port Moresby to Singapore next month."
+- "Compare the best options for two adults and one child."
+- "Build me a five-day itinerary with a hotel and airport transfer."
+- "Add a Wantok taxi from the airport and show local services near my hotel."
+- "Show me my trip and explain what is confirmed."
+- "Find a replacement option if this flight changes."
+
+The Agent may search authorised travel inventory, compare returned offers, explain supplier-provided conditions, build itineraries and prepare a booking basket.
+
+It must **not** invent live fares/availability/visa rules, spend money, ticket, cancel, change or refund travel without the explicit authority and confirmation defined by the workflow.
+
+Before commitment, the user must see and explicitly approve the current revalidated itinerary/offer, travellers, total/currency, material fare/refund/change conditions, Wantok fees and payment method/rail when enabled. Material price/itinerary changes after approval require re-approval.
+
+### Travel data and supplier boundary
+
+Travel integrations should use replaceable server-side adapters for airline direct/NDC, GDS/travel-content, hotel/accommodation and other approved transport suppliers.
+
+Wantok clients call Wantok APIs only. Supplier credentials/secrets remain behind Technical Control. Supplier-specific payloads must be normalised before reaching product UI/business logic.
+
+Store authoritative external references, offer expiry/revalidation state, supplier confirmation/ticketing state and audit correlation IDs. A displayed offer is not a confirmed booking.
+
+### Track / Inbox / Wallet
+
+- **Track** should later show whole-trip lifecycle: itinerary timeline, flights, hotel, transfers, check-in reminders and supplier status.
+- **Inbox** should separate travel-system/supplier updates from provider conversations and Help & support.
+- **Wallet** must support multi-currency payment intent/accounting before travel purchase is enabled. Supplier funds, taxes/fees, Wantok service fees and refunds remain separately auditable.
+
+### Administrative authority
+
+**Wantok Operations Admin** owns customer/commercial travel intervention such as approved manual booking actions, cancellation/refund cases, service incidents, support and authorised fee/commercial configuration.
+
+**Wantok Technical Control** owns adapter credentials, callbacks/webhooks, provider health and technical diagnostics. Technical integration authority does not imply commercial booking/refund authority.
+
+### Architecture reference
+
+Detailed design: `docs/GLOBAL_TRAVEL_ARCHITECTURE.md`.
