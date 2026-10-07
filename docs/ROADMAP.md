@@ -260,7 +260,7 @@ Detailed product rules: `docs/ROADMAP_FILLERS.md`, FILLER-2026-10-07-06.
 
 - [x] fresh signed-in Android **Client → Services** shell/navigation visual QA on the existing development session; locked Home / Services / Track / Wallet / Inbox layout renders without visible overflow, Home is shortcut-first, and Wantok Agent is accessible from the client header
 - [ ] remaining signed-in Android/Web visual QA using existing development sessions/accounts
-- [ ] live read-only journey checks: **Account and populated Inbox/support are now verified**, retained Track Completed history is verified; Taxi map/location/history and other remaining populated journeys still pending
+- [ ] live read-only journey checks: **Account, populated Inbox/support, retained Track Completed history and Taxi current-location/history are now verified**; other populated journeys still pending
 - [ ] live mutation/interaction QA still needed for Account privacy save, OAuth linking, Trusted-person CRUD and review editing/media; **Services For you/Explore PNG interactions and Wallet preview are now signed-in Android verified**, alongside Account read-only privacy/linked/saved/trusted/reviews and provider Saved persistence
 - [ ] complete gate evidence review and full checkpoint before T2.4
 

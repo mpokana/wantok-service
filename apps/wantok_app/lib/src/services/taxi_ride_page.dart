@@ -711,14 +711,14 @@ class _HistoryCard extends StatelessWidget {
         child: ListTile(
           leading: const CircleAvatar(child: Icon(Icons.local_taxi_outlined)),
           title: Text(
-            '${ride['pickup_label']?.toString() ?? 'Pickup'} → ${ride['dropoff_label']?.toString() ?? 'Destination'}',
+            '${ride['pickup_label']?.toString() ?? 'Pickup'} > ${ride['dropoff_label']?.toString() ?? 'Destination'}',
           ),
           subtitle: Text(
             [
               (ride['status']?.toString() ?? '').replaceAll('_', ' '),
               if (ride['beneficiary_name'] != null)
                 'for ${ride['beneficiary_name']}',
-            ].where((value) => value.isNotEmpty).join(' • '),
+            ].where((value) => value.isNotEmpty).join(', '),
           ),
           trailing: fare == null
               ? null

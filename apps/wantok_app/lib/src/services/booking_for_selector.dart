@@ -176,7 +176,7 @@ class _BookingForSelectorState extends State<BookingForSelector> {
                 if (people.isEmpty) ...[
                   const SizedBox(height: 8),
                   const Text(
-                    'To book for a relative, family member or staff member, add them first under Account → Trusted people.',
+                    'To book for a relative, family member or staff member, add them first under Account > Trusted people.',
                     style: TextStyle(
                       color: WantokColors.primaryDark,
                       fontSize: 12,

@@ -172,6 +172,7 @@ Checkpointed platform includes:
 - Inbox now separates **Services** booking-linked provider conversations from **Help & support** owner-private Wantok Agent handoff requests. The two sources load independently so a service-messaging failure does not suppress support requests, and support failure does not remove service conversations.
 - Signed-in Android Inbox QA PASS with retained data: **Services (0)**, **Help & support (1)**, persisted owner QA request, OPEN status and detail sheet. The detail explicitly states live human chat is not enabled and that authorised Support/Operations staff may handle the request.
 - Responsive Inbox regressions cover compact/enlarged-text layouts plus source fault isolation. Full Flutter checkpoint PASS is now **42 Wantok app tests**; database remains **27 files / 598 pgTAP tests PASS**. Final debug APK was rebuilt and installed in-place with `adb install -r`; account/session/AVD/Supabase data were preserved.
+- Taxi/Ride signed-in Android read-only QA PASS without creating a new ride: location service enabled, fine/coarse permission already granted, Pickup resolved to **Current location**, delegated-beneficiary selector remained on Myself, Request ride was not submitted, and the retained Mansfield cancelled ride renders under **Recent rides** with its K8.68 fare. Taxi presentation separators were normalised to plain text for clean accessibility output.
 
 ## Validation baseline
 
@@ -183,7 +184,7 @@ At this checkpoint:
 - Wantok Operations Admin: analysis + smoke test PASS
 - Wantok Technical Control: analysis + smoke test PASS
 - database: **27 files / 598 pgTAP tests PASS** (all fixtures roll back), including confidence-aware provider discovery and Wantok AI capability/handoff security coverage
-- fresh Android signed-in QA on 2026-10-07 confirms locked **Home · Services · Track · Wallet · Inbox** navigation without visible overflow; populated CX1F provider discovery, **For you** recommendation interaction, **Explore PNG** Lae/Morobe coverage, Track Completed history, Account privacy/linked/saved/trusted/reviews, categorised Inbox/support-detail and **Wallet preview** are PASS within the evidence limits. Taxi runtime, Account mutations/media and Web evidence remain open
+- fresh Android signed-in QA on 2026-10-07 confirms locked **Home · Services · Track · Wallet · Inbox** navigation without visible overflow; populated CX1F provider discovery, **For you** recommendation interaction, **Explore PNG** Lae/Morobe coverage, Taxi current-location/history runtime, Track Completed history, Account privacy/linked/saved/trusted/reviews, categorised Inbox/support-detail and **Wallet preview** are PASS within the evidence limits. Account mutations/media, other populated journeys and Web evidence remain open
 - production Docker Compose parse PASS was recorded at T2.2; deployment files unchanged
 - `git diff --check`: PASS
 
