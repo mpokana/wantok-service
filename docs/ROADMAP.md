@@ -192,6 +192,8 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 - [x] canonical Home dashboard includes real Popular categories/Top providers plus clearly planned **Travel & Flights** and **Hotels** entry points without fabricating live travel inventory
 - [x] canonical Home **Pay your way** strip previews Wantok Pay, Visa, Mastercard, PayPal, Google Pay and Bank Transfer; inactive rails remain non-transactional and clearly planned
 - [x] Local Providers promotion retains the approved `assets/images/vanessa_local_provider.jpg` asset; ordinary dashboard work must not replace it
+- [x] align the **existing Food/Groceries commerce browser** to the Wantok enterprise marketplace style: delivery/pickup context, search-first discovery, branded hero/filters, rating-based featured approved vendors, real backend storefront/product media where supplied, and truthful empty-market states. This is presentation work on the existing commerce core and **does not start CX1G**
+- [x] signed-in Android Groceries empty-market QA verifies the new commerce layout with the preserved local dataset (**0 live Food/Groceries storefronts / 0 catalogue items**); populated vendor presentation is covered by deterministic widget tests rather than fabricated local inventory
 
 ### CX1G — General Goods Marketplace + Fulfilment — PLANNED
 

@@ -8,9 +8,15 @@ import 'booking_for_selector.dart';
 import 'commerce_orders_page.dart';
 
 class CommerceBrowsePage extends StatefulWidget {
-  const CommerceBrowsePage({required this.category, super.key});
+  const CommerceBrowsePage({
+    required this.category,
+    this.loadStores,
+    super.key,
+  });
 
   final WantokServiceCategory category;
+  final Future<List<Map<String, dynamic>>> Function(String categorySlug)?
+  loadStores;
 
   @override
   State<CommerceBrowsePage> createState() => _CommerceBrowsePageState();
@@ -22,14 +28,17 @@ class _CommerceBrowsePageState extends State<CommerceBrowsePage> {
   String _query = '';
   bool _topRatedOnly = false;
 
+  Future<List<Map<String, dynamic>>> _loadStores() =>
+      (widget.loadStores ?? _repository.loadStores)(widget.category.slug);
+
   @override
   void initState() {
     super.initState();
-    _future = _repository.loadStores(widget.category.slug);
+    _future = _loadStores();
   }
 
   Future<void> _refresh() async {
-    final next = _repository.loadStores(widget.category.slug);
+    final next = _loadStores();
     setState(() {
       _future = next;
     });
@@ -90,18 +99,27 @@ class _CommerceBrowsePageState extends State<CommerceBrowsePage> {
               return ListView(
                 padding: const EdgeInsets.fromLTRB(14, 8, 14, 28),
                 children: [
-                  _CommerceHero(isFood: isFood, count: 0),
-                  const SizedBox(height: 14),
+                  _CommerceFulfilmentBar(isFood: isFood),
+                  const SizedBox(height: 10),
                   _CommerceSearch(isFood: isFood, onChanged: (_) {}),
-                  const SizedBox(height: 18),
+                  const SizedBox(height: 12),
+                  _CommerceHero(isFood: isFood, count: 0),
+                  const SizedBox(height: 12),
+                  _CommerceFilters(
+                    topRatedOnly: false,
+                    isFood: isFood,
+                    onAll: () {},
+                    onTopRated: () {},
+                  ),
+                  const SizedBox(height: 20),
                   _MessageCard(
                     icon: isFood
                         ? Icons.restaurant_outlined
                         : Icons.local_grocery_store_outlined,
                     title: isFood
-                        ? 'No food vendors are live yet'
-                        : 'No shops are live yet',
-                    body: 'Approved Wantok vendors will appear here when their storefront is active.',
+                        ? 'No approved food vendors in this market yet'
+                        : 'No approved shops in this market yet',
+                    body: 'Wantok only shows active approved vendors. New storefronts will appear here when they are ready.',
                   ),
                 ],
               );
@@ -125,16 +143,24 @@ class _CommerceBrowsePageState extends State<CommerceBrowsePage> {
                 })
                 .toList(growable: false);
 
+            final featured = [...filtered]
+              ..sort(
+                (left, right) =>
+                    _vendorScore(right).compareTo(_vendorScore(left)),
+              );
+
             return ListView(
               padding: const EdgeInsets.fromLTRB(14, 8, 14, 28),
               children: [
-                _CommerceHero(isFood: isFood, count: stores.length),
-                const SizedBox(height: 14),
+                _CommerceFulfilmentBar(isFood: isFood),
+                const SizedBox(height: 10),
                 _CommerceSearch(
                   isFood: isFood,
                   onChanged: (value) => setState(() => _query = value),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
+                _CommerceHero(isFood: isFood, count: stores.length),
+                const SizedBox(height: 12),
                 _CommerceFilters(
                   topRatedOnly: _topRatedOnly,
                   isFood: isFood,
@@ -143,10 +169,12 @@ class _CommerceBrowsePageState extends State<CommerceBrowsePage> {
                 ),
                 const SizedBox(height: 20),
                 PngSectionTitle(
-                  title: isFood ? 'Popular local food' : 'Local shops',
+                  title: isFood
+                      ? 'Featured food vendors'
+                      : 'Featured local stores',
                   subtitle: filtered.isEmpty
                       ? 'No vendors match your filters.'
-                      : '${filtered.length} approved Wantok vendor${filtered.length == 1 ? '' : 's'}.',
+                      : '${filtered.length} approved Wantok vendor${filtered.length == 1 ? '' : 's'} available.',
                   trailing: IconButton(
                     tooltip: 'Refresh',
                     onPressed: _refresh,
@@ -165,9 +193,9 @@ class _CommerceBrowsePageState extends State<CommerceBrowsePage> {
                     height: 190,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: filtered.length,
+                      itemCount: featured.length,
                       itemBuilder: (context, index) {
-                        final store = filtered[index];
+                        final store = featured[index];
                         return _StoreFeatureCard(
                           store: store,
                           isFood: isFood,
@@ -185,7 +213,9 @@ class _CommerceBrowsePageState extends State<CommerceBrowsePage> {
                   ),
                   const SizedBox(height: 20),
                   PngSectionTitle(
-                    title: isFood ? 'All food vendors' : 'All shops',
+                    title: isFood
+                        ? 'Browse all food vendors'
+                        : 'Browse all shops',
                     subtitle: 'Approved providers on Wantok Services.',
                   ),
                   const SizedBox(height: 10),
@@ -410,6 +440,7 @@ class _StorefrontPageState extends State<_StorefrontPage> {
                     ...items.map((item) {
                       final itemId = item['id'] as String;
                       final quantity = _quantities[itemId] ?? 0;
+                      final imageUrl = item['image_url']?.toString().trim();
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 10),
                         child: Card(
@@ -418,18 +449,32 @@ class _StorefrontPageState extends State<_StorefrontPage> {
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
-                                  width: 58,
-                                  height: 58,
-                                  decoration: BoxDecoration(
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: Container(
+                                    width: 64,
+                                    height: 64,
                                     color: const Color(0xFFF0F5F2),
-                                    borderRadius: BorderRadius.circular(16),
-                                  ),
-                                  child: Icon(
-                                    widget.category.slug == 'food'
-                                        ? Icons.lunch_dining_outlined
-                                        : Icons.shopping_basket_outlined,
-                                    color: WantokColors.primary,
+                                    child:
+                                        imageUrl != null && imageUrl.isNotEmpty
+                                        ? Image.network(
+                                            imageUrl,
+                                            fit: BoxFit.cover,
+                                            errorBuilder: (_, _, _) => Icon(
+                                              widget.category.slug == 'food'
+                                                  ? Icons.lunch_dining_outlined
+                                                  : Icons
+                                                        .shopping_basket_outlined,
+                                              color: WantokColors.primary,
+                                            ),
+                                          )
+                                        : Icon(
+                                            widget.category.slug == 'food'
+                                                ? Icons.lunch_dining_outlined
+                                                : Icons
+                                                      .shopping_basket_outlined,
+                                            color: WantokColors.primary,
+                                          ),
                                   ),
                                 ),
                                 const SizedBox(width: 12),
@@ -720,6 +765,89 @@ class _CheckoutDraft {
   final String? trustedPersonId;
 }
 
+class _CommerceFulfilmentBar extends StatelessWidget {
+  const _CommerceFulfilmentBar({required this.isFood});
+
+  final bool isFood;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(20),
+      child: InkWell(
+        onTap: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text(
+                'Delivery or pickup details are selected when you place an order.',
+              ),
+            ),
+          );
+        },
+        borderRadius: BorderRadius.circular(20),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: const Color(0xFFE1E9E5)),
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: 42,
+                height: 42,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE5F4EC),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Icon(
+                  isFood
+                      ? Icons.delivery_dining_rounded
+                      : Icons.local_shipping_outlined,
+                  color: WantokColors.primaryDark,
+                ),
+              ),
+              const SizedBox(width: 12),
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'DELIVERY OR PICKUP',
+                      style: TextStyle(
+                        color: WantokColors.primaryDark,
+                        fontSize: 10,
+                        letterSpacing: 0.45,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    SizedBox(height: 3),
+                    Text(
+                      'Choose your address or pickup option at checkout',
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(
+                        color: WantokColors.ink,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(
+                Icons.chevron_right_rounded,
+                color: WantokColors.primaryDark,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _CommerceSearch extends StatelessWidget {
   const _CommerceSearch({required this.isFood, required this.onChanged});
 
@@ -813,6 +941,8 @@ class _StoreFeatureCard extends StatelessWidget {
     final ratingCount = provider['rating_count'] ?? 0;
     final title = store['title']?.toString() ?? 'Wantok Store';
     final palette = _palette(title);
+    final metadata = _asMap(store['metadata']);
+    final imageUrl = metadata['image_url']?.toString().trim();
 
     return Container(
       width: 220,
@@ -841,33 +971,48 @@ class _StoreFeatureCard extends StatelessWidget {
                       ),
                     ),
                     child: Stack(
+                      fit: StackFit.expand,
                       children: [
-                        Positioned(
-                          right: -10,
-                          bottom: -14,
-                          child: Icon(
-                            isFood
-                                ? Icons.ramen_dining_rounded
-                                : Icons.shopping_basket_rounded,
-                            color: Colors.white.withValues(alpha: 0.18),
-                            size: 92,
-                          ),
-                        ),
-                        Center(
-                          child: CircleAvatar(
-                            radius: 33,
-                            backgroundColor: Colors.white.withValues(
-                              alpha: 0.9,
+                        if (imageUrl != null && imageUrl.isNotEmpty)
+                          ClipRRect(
+                            borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(23),
                             ),
+                            child: Image.network(
+                              imageUrl,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, _, _) =>
+                                  const SizedBox.shrink(),
+                            ),
+                          ),
+                        if (imageUrl == null || imageUrl.isEmpty)
+                          Positioned(
+                            right: -10,
+                            bottom: -14,
                             child: Icon(
                               isFood
-                                  ? Icons.restaurant_rounded
-                                  : Icons.storefront_rounded,
-                              color: palette.first,
-                              size: 33,
+                                  ? Icons.ramen_dining_rounded
+                                  : Icons.shopping_basket_rounded,
+                              color: Colors.white.withValues(alpha: 0.18),
+                              size: 92,
                             ),
                           ),
-                        ),
+                        if (imageUrl == null || imageUrl.isEmpty)
+                          Center(
+                            child: CircleAvatar(
+                              radius: 33,
+                              backgroundColor: Colors.white.withValues(
+                                alpha: 0.9,
+                              ),
+                              child: Icon(
+                                isFood
+                                    ? Icons.restaurant_rounded
+                                    : Icons.storefront_rounded,
+                                color: palette.first,
+                                size: 33,
+                              ),
+                            ),
+                          ),
                         const Positioned(
                           left: 10,
                           top: 10,
@@ -981,7 +1126,7 @@ class _CommerceHero extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PngScenicBackdrop(
-      height: 176,
+      minHeight: 176,
       colors: isFood
           ? const [Color(0xFF8A381D), Color(0xFFD86020), Color(0xFF087A4B)]
           : const [Color(0xFF075C3A), Color(0xFF2E8B57), Color(0xFF0B79A8)],
@@ -1150,6 +1295,16 @@ Map<String, dynamic> _asMap(dynamic value) {
   if (value is Map<String, dynamic>) return value;
   if (value is Map) return Map<String, dynamic>.from(value);
   return <String, dynamic>{};
+}
+
+double _vendorScore(Map<String, dynamic> store) {
+  final provider = _asMap(store['provider_profiles']);
+  final rating = _toDouble(provider['rating_average']) ?? 0;
+  final countValue = provider['rating_count'];
+  final ratingCount = countValue is num
+      ? countValue.toDouble()
+      : double.tryParse(countValue?.toString() ?? '') ?? 0;
+  return (rating * 1000) + ratingCount.clamp(0, 999);
 }
 
 double? _toDouble(dynamic value) {

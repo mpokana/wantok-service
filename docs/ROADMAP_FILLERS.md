@@ -470,3 +470,43 @@ Services follows the approved enterprise hierarchy:
 Taxi/Ride follows a map-first pickup/destination planning pattern while keeping Wantok-owned dispatch, delegated-beneficiary rules, explicit Request ride authority and history intact.
 
 This visual direction may take interaction inspiration from leading super-app patterns, but Wantok must keep its own branding, data authority, workflows and product architecture.
+
+---
+
+## FILLER-2026-10-08-01 - Existing Food/Groceries Commerce UX Alignment
+
+**Status:** IMPLEMENTED presentation continuation on the existing commerce core. **This does not start CX1G General Marketplace.**
+
+### Scope
+
+The current Food and Groceries/Shops customer journeys are aligned to the approved Wantok enterprise marketplace visual system while preserving the existing commerce transaction authority.
+
+Implemented presentation contract:
+- delivery/pickup context is shown before vendor discovery; the actual fulfilment choice remains authoritative at checkout;
+- search remains prominent and filters remain lightweight;
+- the commerce hero uses the Wantok scenic visual language;
+- populated markets show **Featured approved vendors** followed by **Browse all vendors**;
+- featured ordering may use existing rating/review signals for presentation only; stored ratings are not rewritten;
+- storefront cards may render real backend media from provider-service metadata when supplied;
+- product rows may render existing `commerce_catalog_items.image_url`; missing/failed media falls back to Wantok icons;
+- existing checkout, fulfilment, delegated-beneficiary, order and cancellation authority is unchanged.
+
+### Truthful inventory rule
+
+Do not fabricate stores, products, stock, discounts, delivery times, ratings or promotions to make the marketplace look populated.
+
+The preserved local QA dataset currently contains **0 active Food/Groceries storefronts and 0 available commerce catalogue items**. Therefore:
+- signed-in Android QA verifies the polished empty-market state;
+- deterministic widget tests verify the populated-vendor presentation using injected test data only;
+- no local production-like vendor/catalogue fixtures were created merely for screenshots.
+
+### CX1G boundary
+
+CX1G remains the future general-products expansion beyond Food/Groceries. This filler does **not** activate:
+- a general Marketplace/Products category;
+- broader vendor/product schema;
+- stock/inventory expansion;
+- third-party logistics sale/delivery separation;
+- new marketplace payment movement.
+
+Those items remain governed by the existing CX1G roadmap gate.

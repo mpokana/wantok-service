@@ -1,6 +1,6 @@
 # Wantok Services — Living Handover
 
-**Updated:** 2026-10-07
+**Updated:** 2026-10-08
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
@@ -131,8 +131,8 @@ Checkpointed platform includes:
 - Wallet remains preview-only but now frames Top up/Scan/Send/Receive, verification, PNG-oriented planned services and future transaction history. No money movement exists.
 - The user-facing assistant is **Wantok Agent**. It remains outside the five-tab navigation and now appears as a compact **Ask Wantok** discovery shortcut rather than occupying the permanent app header or a large Home card. Home/Services are service-and-goods-first marketplace surfaces; the profile circle owns the conventional top-right header position and Client/Vendor mode switching moved inside Account. The authenticated capability API reports model/chat/handoff state; model chat is deliberately disabled until a controlled gateway is configured. The Agent surface can use real provider-search fallback and create owner-private human-help requests. Support/Operations/Admin can later triage those requests; live human chat and support triage UI are not yet implemented. Internal compatibility identifiers such as `WantokAiAgentRepository` and `wantok_ai_agent` remain unchanged.
 - retry failures stay in the view rather than escaping callbacks; Events/departures/order/registration/water-trip failures do not masquerade as empty records.
-- 42 focused client regressions plus the configuration smoke total **43 app tests**; they use in-memory/unconfigured backends and do not replace local account data.
-- entry/back navigation coverage includes 11 categories. Signed-in Account read-only surfaces and categorised Inbox/support are now live-verified; Taxi map/location/runtime behaviour and Account mutation paths still require live QA.
+- 44 focused client regressions plus the configuration smoke total **45 app tests**; they use in-memory/unconfigured backends and do not replace local account data.
+- entry/back navigation coverage includes 11 categories. Signed-in Android Account read/write/media, categorised Inbox/support, map-first Taxi runtime, Services/Wallet and the existing Food/Groceries empty-market commerce journey are now live-verified within the documented evidence limits; signed-in Web and other unavailable populated journeys remain open.
 - do not call CX1 complete from widget/database tests alone; see its evidence document.
 
 ## Android continuation evidence — 2026-10-07
@@ -172,7 +172,7 @@ Checkpointed platform includes:
 - Account Saved renders the retained Wantok QA Plumbing Services provider; My reviews renders the retained 5-star public QA review. Trusted people live CRUD/delegation PASS: a temporary QA person was added through the UI, persisted, appeared in Taxi **Who is this for?**, then removed through the UI and the table returned to 0. This exposed a stale-list defect caused by Future-returning `setState` refresh callbacks in Saved/Trusted/Reviews and the booking selector; all four callbacks now use void block updates and Trusted add/delete refresh immediately. Review mutation PASS: the retained QA title was changed and restored, then one temporary review image was uploaded through managed storage and removed; final rating/title/comment/visibility/photo array match the original. Avatar mutation PASS: one temporary QA PNG was uploaded through the system picker to owner-private `client-media`, then removed through Account and both `avatar_url` and the storage object returned to empty.
 - Inbox now separates **Services** booking-linked provider conversations from **Help & support** owner-private Wantok Agent handoff requests. The two sources load independently so a service-messaging failure does not suppress support requests, and support failure does not remove service conversations.
 - Signed-in Android Inbox QA PASS with retained data: **Services (0)**, **Help & support (1)**, persisted owner QA request, OPEN status and detail sheet. The detail explicitly states live human chat is not enabled and that authorised Support/Operations staff may handle the request.
-- Responsive Inbox regressions cover compact/enlarged-text layouts plus source fault isolation. The current full Flutter checkpoint is **43 Wantok app tests PASS**; database remains **27 files / 598 pgTAP tests PASS**. Final debug APK was rebuilt and installed in-place with `adb install -r`; account/session/AVD/Supabase data were preserved.
+- Responsive Inbox regressions cover compact/enlarged-text layouts plus source fault isolation. The current full Flutter checkpoint is **45 Wantok app tests PASS**; database remains **27 files / 598 pgTAP tests PASS**. Debug APK installs preserve account/session/AVD/Supabase data; when the retained emulator carried local version code 4003, the newer debug source build used `adb install -r -d` to permit the local debug downgrade without uninstalling or wiping data.
 - Taxi/Ride signed-in Android read-only QA PASS without creating a new ride: location service enabled, fine/coarse permission already granted, Pickup resolved to **Current location**, delegated-beneficiary selector remained on Myself, Request ride was not submitted, and the retained Mansfield cancelled ride renders under **Recent rides** with its K8.68 fare. Taxi presentation separators were normalised to plain text for clean accessibility output.
 
 ## Enterprise marketplace dashboard baseline — 2026-10-07
@@ -181,19 +181,30 @@ Checkpointed platform includes:
 - Client chrome is intentionally quieter: one conventional profile circle owns the top-right header position. Client/Vendor mode switching moved into Account, and **Wantok Agent** moved to a compact **Ask Wantok** discovery shortcut rather than permanently consuming header/search space.
 - Home renders real catalogue categories and real provider-discovery data; no mock stores/providers or fabricated ratings were introduced. The canonical Home now also exposes **Travel & Flights** and **Hotels** as clearly planned global entry points, and **Pay your way** previews Wantok Pay, Visa, Mastercard, PayPal, Google Pay and Bank Transfer without enabling money movement. Services follows the approved hierarchy with **Popular categories → Top providers → Recommended for you**, retains Saved/Explore PNG/provider filters/search, and exposes a grouped **All Wantok Services** catalogue from **See all**.
 - The approved Local Providers promotion keeps `apps/wantok_app/assets/images/vanessa_local_provider.jpg` as its current image asset; ordinary dashboard work must not replace it. The signed-in Android debug APK was rebuilt and installed in-place with `adb install -r`; Home and Services were visually verified on the preserved emulator with no visible overflow. Evidence is retained under ignored `.wantok/dashboard-redesign-*.png` and `.wantok/dashboard-redesign-*.log`.
-- Fresh full checkpoint PASS: all seven Flutter analysis targets, **43 Wantok app tests**, Operations Admin smoke, Technical Control smoke, **27 files / 598 pgTAP tests**, and `git diff --check`.
+- Fresh full checkpoint PASS: all seven Flutter analysis targets, **45 Wantok app tests**, Operations Admin smoke, Technical Control smoke, **27 files / 598 pgTAP tests**, and `git diff --check`.
+
+## Food/Groceries commerce UX continuation — 2026-10-08
+
+- Existing **Food/Groceries commerce authority is unchanged**: approved provider storefronts, real catalogue items, quantities, checkout, fulfilment choice, delegated beneficiary and order creation remain backed by the existing commerce repository/RPCs.
+- The customer marketplace presentation now follows the approved Wantok enterprise style: **Delivery or pickup context → prominent search → branded commerce hero → filters → Featured approved vendors → Browse all vendors**.
+- Storefront feature cards use real backend media from provider-service metadata when supplied; catalogue product rows use the existing `commerce_catalog_items.image_url`. Missing/failed media falls back to Wantok-branded icons rather than invented product imagery.
+- Vendor feature ordering is derived only from existing rating average/review count for presentation; persisted ratings and organic provider ranking are not modified.
+- Empty markets remain explicit and truthful. The preserved local database currently has **0 active Food/Groceries storefronts and 0 available commerce catalogue items**, so live Android QA verifies the polished **No approved shops in this market yet** state. The populated layout is covered by injected widget-test vendor data only; no fake database stores, discounts or inventory were created.
+- Live Android QA used the same preserved AVD. A stuck graphical Quick Boot path was replaced with a headless cold boot using `-no-snapshot-load`; app/userdata were not wiped. Because the retained QA build had local version code 4003 and the current debug APK reports code 3, installation used `adb install -r -d` to preserve the existing app data/session.
+- Fresh client checkpoint: all seven Flutter analysis targets PASS; Wantok app **45 tests PASS**, including compact empty-market and populated-vendor commerce regressions; Operations Admin and Technical Control smoke tests PASS. Database remains **27 files / 598 pgTAP tests PASS** and `git diff --check` is clean.
+- This is **existing Food/Groceries UX alignment only**. **CX1G General Marketplace remains PLANNED**; no general-product schema, vendor-expansion or fulfilment architecture was activated by this continuation.
 
 ## Validation baseline
 
 At this checkpoint:
 
 - all shared Flutter packages: analysis PASS
-- Wantok app: analysis + **43 tests PASS** (42 client regressions + configuration smoke)
+- Wantok app: analysis + **45 tests PASS** (44 client regressions + configuration smoke)
 - required `scripts/flutter/check.ps1`: PASS; Desktop Commander shells on EAGLT02 currently need the standard `PROGRAMFILES(X86)=C:\Program Files (x86)` supplied per process for `flutter test`
 - Wantok Operations Admin: analysis + smoke test PASS
 - Wantok Technical Control: analysis + smoke test PASS
 - database: **27 files / 598 pgTAP tests PASS** (all fixtures roll back), including confidence-aware provider discovery and Wantok AI capability/handoff security coverage
-- fresh Android signed-in QA on 2026-10-07 confirms locked **Home · Services · Track · Wallet · Inbox** navigation without visible overflow; populated CX1F provider discovery, **Recommended for you** interaction, **Explore PNG** Lae/Morobe coverage, Taxi current-location/history runtime, Track Completed history, Account privacy + Trusted CRUD/delegation + review edit/photo + avatar-media mutations, linked/saved/reviews surfaces, categorised Inbox/support-detail and **Wallet preview** are PASS within the evidence limits. OAuth is environment-blocked; other populated journeys and Web evidence remain open
+- signed-in Android QA through 2026-10-08 confirms locked **Home · Services · Track · Wallet · Inbox** navigation without visible overflow; populated CX1F provider discovery, **Recommended for you**, **Explore PNG**, map-first Taxi, Track Completed history, Account mutation/media, categorised Inbox/support, **Wallet/payment preview**, and the truthful Groceries empty-market commerce layout are PASS within the evidence limits. OAuth is environment-blocked; local commerce has no live stores/items for populated Android evidence; other populated journeys and signed-in Web evidence remain open
 - production Docker Compose parse PASS was recorded at T2.2; deployment files unchanged
 - `git diff --check`: PASS
 
