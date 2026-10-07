@@ -122,7 +122,7 @@ class _SignInPageState extends State<SignInPage> {
                                 ),
                               ),
                               Text(
-                                'Everyday services, one PNG app',
+                                'Everyday services. One Wantok.',
                                 style: TextStyle(color: WantokColors.muted),
                               ),
                             ],

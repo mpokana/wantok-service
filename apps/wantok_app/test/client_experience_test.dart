@@ -89,22 +89,24 @@ Future<void> showPage(
 }
 
 void main() {
-  testWidgets('Home search and profile perform their actions', (tester) async {
+  testWidgets('Home search and Agent perform their service actions', (
+    tester,
+  ) async {
     var searches = 0;
-    var profiles = 0;
+    var agentOpens = 0;
     await showPage(
       tester,
       ClientHome(
         loadServices: () async => [],
         onServicesTap: () => searches++,
-        onAccountTap: () => profiles++,
+        onAgentTap: () => agentOpens++,
       ),
     );
-    await tester.tap(find.text('Search Wantok Services'));
-    await tester.tap(find.byTooltip('Account and profile'));
+    await tester.tap(find.text('Search services, goods or providers'));
+    await tester.tap(find.widgetWithText(ActionChip, 'Ask Wantok'));
     expect(searches, 1);
-    expect(profiles, 1);
-    expect(find.text('Quick access'), findsOneWidget);
+    expect(agentOpens, 1);
+    expect(find.text('Popular categories'), findsOneWidget);
     expect(find.text('Wantok Pay'), findsNothing);
     expect(find.text('Wantok AI Agent'), findsNothing);
     expect(
@@ -277,12 +279,12 @@ void main() {
     },
   );
 
-  testWidgets('Wantok Agent is a compact client header action', (tester) async {
+  testWidgets('Wantok Agent is a compact discovery action', (tester) async {
     await showPage(tester, const HomeShell(roles: {'customer'}, email: null));
-    expect(find.byTooltip('Wantok Agent'), findsOneWidget);
+    expect(find.widgetWithText(ActionChip, 'Ask Wantok'), findsOneWidget);
     expect(find.text('Wantok AI Agent'), findsNothing);
 
-    await tester.tap(find.byTooltip('Wantok Agent'));
+    await tester.tap(find.widgetWithText(ActionChip, 'Ask Wantok'));
     await tester.pumpAndSettle();
     expect(find.text('Wantok Agent'), findsOneWidget);
     expect(find.text('Your Wantok guide'), findsOneWidget);
@@ -293,25 +295,34 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Client/Vendor switch does not grant provider or admin access', (
-    tester,
-  ) async {
-    await showPage(tester, const HomeShell(roles: {'customer'}, email: null));
-    await tester.tap(find.byTooltip('Switch Client/Vendor mode'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Vendor').last);
-    await tester.pumpAndSettle();
-    expect(find.text('Become a Wantok Vendor'), findsOneWidget);
-    expect(find.text('Taxi Driver Console'), findsNothing);
-    expect(find.text('Technical access'), findsNothing);
-    expect(tester.takeException(), isNull);
-    await tester.tap(find.byTooltip('Switch Client/Vendor mode'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Client').last);
-    await tester.pumpAndSettle();
-    expect(find.byKey(const ValueKey('wantok-nav-Home')), findsOneWidget);
-    expect(tester.takeException(), isNull);
-  });
+  testWidgets(
+    'Client/Vendor switch remains inside Account and grants no access',
+    (tester) async {
+      await showPage(tester, const HomeShell(roles: {'customer'}, email: null));
+
+      await tester.tap(find.byTooltip('Account and profile'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byTooltip('Switch Client/Vendor mode'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Vendor mode').last);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Become a Wantok Vendor'), findsOneWidget);
+      expect(find.text('Taxi Driver Console'), findsNothing);
+      expect(find.text('Technical access'), findsNothing);
+      expect(tester.takeException(), isNull);
+
+      await tester.tap(find.byTooltip('Account and profile'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byTooltip('Switch Client/Vendor mode'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Client mode').last);
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const ValueKey('wantok-nav-Home')), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   for (final width in [320.0, 390.0, 800.0]) {
     testWidgets('discovery fits width $width with enlarged text', (

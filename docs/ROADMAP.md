@@ -178,13 +178,14 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 ### CX1 client information architecture — IMPLEMENTED
 
 - [x] keep the locked **Home · Services · Track · Wallet · Inbox** primary navigation
-- [x] keep Home focused on a scenic search hero, six high-frequency **Quick access** shortcuts and lightweight service spotlights
+- [x] enterprise marketplace visual baseline: Home/Services prioritise **services and goods** with prominent search, compact category discovery, local-provider promotion, real top-provider surfaces and the locked five-tab navigation
+- [x] conventional profile placement: one compact profile circle in the top-right app header; Client/Vendor mode switching moved inside Account so non-service controls no longer dominate the client header
 - [x] remove duplicate Wantok Pay promotion from Home; Wallet is the authoritative Wantok Pay surface
-- [x] expose the user-facing **Wantok Agent** as a compact client-header action rather than a large Home card
+- [x] expose the user-facing **Wantok Agent** as a compact **Ask Wantok** discovery shortcut rather than a permanent header control or large Home card
 - [x] centralise client service taxonomy as **Move & travel · Food & shopping · Send & errands · People & skills · Book & events**
 - [x] use the same taxonomy for Services filters and the grouped full catalogue
 - [x] preserve backend service-category independence so new services can be mapped into client families without changing transaction modules
-- [x] live Android visual QA confirms the new Home, grouped Services catalogue and Wantok Agent surfaces without visible overflow
+- [x] live Android visual QA confirms the enterprise marketplace Home/Services baseline, conventional top-right profile placement, Ask Wantok discovery action and locked navigation without visible overflow
 
 ### CX1G — General Goods Marketplace + Fulfilment — PLANNED
 
@@ -302,7 +303,7 @@ Detailed architecture: `docs/GLOBAL_TRAVEL_ARCHITECTURE.md`.
 
 ### Remaining CX1 gate evidence
 
-- [x] fresh signed-in Android **Client → Services** shell/navigation visual QA on the existing development session; locked Home / Services / Track / Wallet / Inbox layout renders without visible overflow, Home is shortcut-first, and Wantok Agent is accessible from the client header
+- [x] fresh signed-in Android **Client → Services** shell/navigation visual QA on the existing development session; locked Home / Services / Track / Wallet / Inbox layout renders without visible overflow, Home/Services are service-and-goods-first marketplace surfaces, profile is top-right, and Wantok Agent is available from the discovery shortcuts
 - [ ] remaining signed-in Android/Web visual QA using existing development sessions/accounts
 - [ ] live read-only journey checks: **Account, populated Inbox/support, retained Track Completed history and Taxi current-location/history are now verified**; other populated journeys still pending
 - [ ] live Account mutation QA is complete for privacy save, Trusted-person CRUD/delegation, review editing/review media and avatar media, with all temporary changes restored. **OAuth linking remains environment-blocked until Google/Facebook Supabase provider configuration exists**. Services For you/Explore PNG, Wallet preview, Account read-only surfaces and provider Saved persistence are also signed-in Android verified

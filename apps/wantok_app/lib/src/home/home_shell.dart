@@ -94,8 +94,31 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
   void _openAccount() {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
-        builder: (context) => Scaffold(
-          appBar: AppBar(title: const Text('Account and profile')),
+        builder: (routeContext) => Scaffold(
+          appBar: AppBar(
+            title: const Text('Account and profile'),
+            actions: [
+              PopupMenuButton<AppMode>(
+                tooltip: 'Switch Client/Vendor mode',
+                initialValue: _mode,
+                onSelected: (value) {
+                  Navigator.of(routeContext).pop();
+                  _changeMode(value);
+                },
+                itemBuilder: (context) => const [
+                  PopupMenuItem(
+                    value: AppMode.client,
+                    child: Text('Client mode'),
+                  ),
+                  PopupMenuItem(
+                    value: AppMode.vendor,
+                    child: Text('Vendor mode'),
+                  ),
+                ],
+                icon: const Icon(Icons.swap_horiz_rounded),
+              ),
+            ],
+          ),
           body: AccountPage(roles: _roles, onSignOut: _auth.signOut),
         ),
       ),
@@ -170,6 +193,7 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
         ? <Widget>[
             ClientHome(
               onAccountTap: _openAccount,
+              onAgentTap: _openAgent,
               onServicesTap: () => setState(() => _tabIndex = 1),
             ),
             const ServicesHubPage(),
@@ -281,45 +305,49 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
         ],
       ),
       actions: [
-        if (client)
-          IconButton(
-            tooltip: 'Wantok Agent',
-            onPressed: _openAgent,
-            icon: const Icon(Icons.auto_awesome_rounded),
-          ),
         Padding(
-          padding: const EdgeInsets.only(right: 12),
-          child:
-              MediaQuery.sizeOf(context).width < 420 ||
-                  MediaQuery.textScalerOf(context).scale(1) > 1.2
-              ? PopupMenuButton<AppMode>(
-                  tooltip: 'Switch Client/Vendor mode',
-                  initialValue: _mode,
-                  onSelected: _changeMode,
-                  itemBuilder: (context) => const [
-                    PopupMenuItem(value: AppMode.client, child: Text('Client')),
-                    PopupMenuItem(value: AppMode.vendor, child: Text('Vendor')),
-                  ],
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 12,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(client ? 'Client' : 'Vendor'),
-                        const SizedBox(width: 4),
-                        const Icon(Icons.expand_more),
-                      ],
+          padding: const EdgeInsets.only(right: 14),
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              IconButton(
+                tooltip: 'Account and profile',
+                onPressed: _openAccount,
+                style: IconButton.styleFrom(
+                  backgroundColor: client
+                      ? Colors.white.withValues(alpha: 0.14)
+                      : WantokColors.primaryDark.withValues(alpha: 0.08),
+                  side: BorderSide(
+                    color: client
+                        ? Colors.white.withValues(alpha: 0.32)
+                        : WantokColors.primaryDark.withValues(alpha: 0.16),
+                  ),
+                ),
+                icon: Icon(
+                  Icons.person_rounded,
+                  color: client ? Colors.white : WantokColors.primaryDark,
+                ),
+              ),
+              Positioned(
+                right: 2,
+                top: 7,
+                child: Container(
+                  width: 9,
+                  height: 9,
+                  decoration: BoxDecoration(
+                    color: WantokColors.gold,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: client
+                          ? WantokColors.primaryDark
+                          : WantokColors.canvas,
+                      width: 1.5,
                     ),
                   ),
-                )
-              : WantokModeSwitcher(
-                  value: _mode,
-                  inverted: client,
-                  onChanged: _changeMode,
                 ),
+              ),
+            ],
+          ),
         ),
       ],
     );

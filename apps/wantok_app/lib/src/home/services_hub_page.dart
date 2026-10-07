@@ -329,64 +329,80 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(14, 12, 14, 24),
             children: [
-              PngScenicBackdrop(
-                minHeight: 158,
-                colors: const [
-                  Color(0xFF075C3A),
-                  Color(0xFF0B79A8),
-                  Color(0xFF6C3C24),
-                ],
-                child: const Row(
+              Container(
+                padding: const EdgeInsets.fromLTRB(18, 18, 18, 16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(28),
+                  gradient: const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [Color(0xFFFFFEF8), Color(0xFFF0F8F3)],
+                  ),
+                  border: Border.all(color: const Color(0xFFE1EBE5)),
+                ),
+                child: Stack(
                   children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'All Wantok Services',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 25,
-                              height: 1,
-                              fontWeight: FontWeight.w900,
-                              letterSpacing: -0.7,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Move, eat, shop, book and find local help across PNG.',
-                            style: TextStyle(
-                              color: Color(0xFFE5F5EE),
-                              fontSize: 12.5,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
+                    Positioned(
+                      right: -20,
+                      top: -18,
+                      child: Icon(
+                        Icons.landscape_rounded,
+                        size: 150,
+                        color: WantokColors.primaryDark.withValues(alpha: 0.08),
                       ),
                     ),
-                    SizedBox(width: 10),
-                    CircleAvatar(
-                      radius: 29,
-                      backgroundColor: Color(0x33FFFFFF),
-                      child: Icon(
-                        Icons.apps_rounded,
-                        color: Colors.white,
-                        size: 34,
+                    Positioned(
+                      right: 25,
+                      top: 2,
+                      child: Container(
+                        width: 44,
+                        height: 44,
+                        decoration: BoxDecoration(
+                          color: WantokColors.gold.withValues(alpha: 0.82),
+                          shape: BoxShape.circle,
+                        ),
                       ),
+                    ),
+                    const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Explore services and goods',
+                          style: TextStyle(
+                            color: WantokColors.ink,
+                            fontSize: 29,
+                            height: 1.04,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: -0.9,
+                          ),
+                        ),
+                        SizedBox(height: 7),
+                        Text(
+                          'Find trusted providers for everyday needs wherever you are.',
+                          style: TextStyle(
+                            color: WantokColors.muted,
+                            fontSize: 13.5,
+                            height: 1.35,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 14),
+              const SizedBox(height: 12),
               TextField(
                 controller: _search,
                 onChanged: (value) => setState(() => _query = value),
                 decoration: InputDecoration(
-                  labelText: 'Search Wantok Services',
+                  hintText: 'Search services, goods or providers',
                   prefixIcon: const Icon(Icons.search_rounded),
                   suffixIcon: _query.isEmpty
-                      ? null
+                      ? const Icon(
+                          Icons.arrow_forward_rounded,
+                          color: WantokColors.primaryDark,
+                        )
                       : IconButton(
                           tooltip: 'Clear search',
                           onPressed: () {
@@ -397,13 +413,20 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
                         ),
                   filled: true,
                   fillColor: Colors.white,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    borderSide: BorderSide(color: Color(0xFFDCE7E1)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
+                    borderSide: BorderSide(color: Color(0xFFDCE7E1)),
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
               const PngSectionTitle(
-                title: 'Browse by need',
-                subtitle:
-                    'Choose a category or search across the full catalogue.',
+                title: 'Browse services',
+                subtitle: 'Choose a need or search the complete catalogue.',
               ),
               const SizedBox(height: 10),
               SizedBox(
@@ -426,7 +449,9 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
               if (widget.loadServices == null &&
                   query.isEmpty &&
                   _family == WantokServiceFamily.all) ...[
-                const SizedBox(height: 20),
+                const SizedBox(height: 18),
+                _ServicesMarketplacePromo(onTap: _openProviderSearch),
+                const SizedBox(height: 22),
                 PngSectionTitle(
                   title: 'Find providers',
                   subtitle: 'Search approved people and businesses by provider, service or category.',
@@ -460,8 +485,8 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
                   )
                 else ...[
                   const PngSectionTitle(
-                    title: 'Top Wantoks',
-                    subtitle: 'A rotating organic selection from highly rated eligible providers.',
+                    title: 'Top providers',
+                    subtitle: 'Verified providers ranked organically from real service signals.',
                   ),
                   const SizedBox(height: 10),
                   SizedBox(
@@ -919,6 +944,96 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
     'taxi-ride' || 'delivery' => 'FAST',
     _ => null,
   };
+}
+
+class _ServicesMarketplacePromo extends StatelessWidget {
+  const _ServicesMarketplacePromo({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints(minHeight: 146),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(26),
+        gradient: const LinearGradient(
+          colors: [Color(0xFF075C3A), Color(0xFF0A7D50)],
+        ),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(26),
+        child: Stack(
+          children: [
+            Positioned(
+              right: -16,
+              bottom: -24,
+              child: Icon(
+                Icons.storefront_rounded,
+                size: 160,
+                color: Colors.white.withValues(alpha: 0.12),
+              ),
+            ),
+            Positioned(
+              right: 26,
+              top: 22,
+              child: CircleAvatar(
+                radius: 34,
+                backgroundColor: Colors.white.withValues(alpha: 0.16),
+                child: const Icon(
+                  Icons.handshake_rounded,
+                  color: WantokColors.gold,
+                  size: 36,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(18, 17, 116, 17),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'LOCAL PROVIDERS',
+                    style: TextStyle(
+                      color: WantokColors.gold,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.3,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  const Text(
+                    'Services for everyday life',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 21,
+                      height: 1.05,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  const Text(
+                    'Great providers. Real people.',
+                    style: TextStyle(color: Color(0xFFE0F1E8), fontSize: 12.5),
+                  ),
+                  const SizedBox(height: 12),
+                  FilledButton.icon(
+                    onPressed: onTap,
+                    style: FilledButton.styleFrom(
+                      backgroundColor: WantokColors.gold,
+                      foregroundColor: const Color(0xFF2D1B05),
+                    ),
+                    icon: const Icon(Icons.search_rounded, size: 17),
+                    label: const Text('Explore providers'),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class _TopProviderCard extends StatelessWidget {
