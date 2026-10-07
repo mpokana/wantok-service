@@ -312,10 +312,10 @@ Detailed architecture: `docs/GLOBAL_TRAVEL_ARCHITECTURE.md`.
 ### Remaining CX1 gate evidence
 
 - [x] fresh signed-in Android **Client → Services** shell/navigation visual QA on the existing development session; locked Home / Services / Track / Wallet / Inbox layout renders without visible overflow, Home/Services are service-and-goods-first marketplace surfaces, profile is top-right, and Wantok Agent is available from the discovery shortcuts
-- [ ] remaining signed-in Android/Web visual QA using existing development sessions/accounts
-- [ ] live read-only journey checks: **Account, populated Inbox/support, retained Track Completed history and Taxi current-location/history are now verified**; other populated journeys still pending
-- [ ] live Account mutation QA is complete for privacy save, Trusted-person CRUD/delegation, review editing/review media and avatar media, with all temporary changes restored. **OAuth linking remains environment-blocked until Google/Facebook Supabase provider configuration exists**. Services For you/Explore PNG, Wallet preview, Account read-only surfaces and provider Saved persistence are also signed-in Android verified
-- [ ] complete gate evidence review and full checkpoint before T2.4
+- [ ] **signed-in Web visual QA remains open**; Android Home/Services/provider discovery/Taxi/Track/Wallet/Inbox/Account and the existing Food/Groceries empty-market journey are verified on the preserved development session within available local data
+- [ ] live read-only journey checks are complete for every retained populated client state currently available locally: Account, provider discovery/detail/Saved, Inbox/support, Track Completed, Taxi current-location/history, Services recommendations/Explore PNG and Wallet preview. Food/Groceries currently has no live storefront/catalogue data, so only truthful empty-market live evidence is possible without creating fixtures; other unpopulated verticals remain evidence-limited rather than failed
+- [x] live Account mutation QA complete for privacy save, Trusted-person CRUD/delegation, review editing/review media and avatar media, with all temporary changes restored. **OAuth linking remains environment-blocked until Google/Facebook Supabase provider configuration exists**
+- [ ] complete gate evidence review and signed-in Web evidence before T2.4
 
 Acceptance evidence and initial findings: `docs/CX1_CLIENT_EXPERIENCE_GATE.md`.
 
