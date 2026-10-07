@@ -240,12 +240,15 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 - [ ] creative service catalogue for copy/text, static images, short social video, produced video and configurable add-ons/revisions
 - [ ] configurable campaign-duration/service tiers without hard-coded PGK pricing in the client
 - [ ] separate creative/production fee, campaign-management fee and external media/ad-spend accounting
-- [ ] Operations-managed package catalogue, quote/approval workflow and campaign queue
+- [ ] **Wantok Operations Admin** (`apps/wantok_admin`) is the authoritative ADS1 approval/operations surface for package catalogue, quotes, advertiser/product eligibility, creative review, customer-approval evidence, channel targeting, budgets/spend ceilings, scheduling, submission, pause/resume/cancel, incidents and reporting
+- [ ] granular ADS1 permissions such as `ads.view`, `ads.quote`, `ads.creative_review`, `ads.compliance_review`, `ads.approve`, `ads.publish`, `ads.pause`, `ads.report`; do not collapse all authority into a generic admin flag
+- [ ] high-value/risk publication and material spend increases support configurable dual approval/four-eyes control with immutable audit events
 - [ ] customer approval of final creative before platform submission
 - [ ] compliance/product/platform-policy review and auditable rejection/resubmission states
 - [ ] campaign lifecycle: draft, waiting customer, waiting platform, scheduled, live, paused, rejected, completed/cancelled
+- [ ] Admin browser actions call secured server RPC/API/job commands; no raw advertising credentials or direct browser-to-network publishing
 - [ ] official OAuth/ad-account access; never collect social-media passwords
-- [ ] secret references and platform credentials remain behind Technical Control/integration boundaries
+- [ ] secret references, OAuth/ad-account credentials, adapter health and callbacks remain behind **Technical Control**; technical integration authority must not imply campaign/commercial approval authority
 - [ ] platform metrics ingestion with source/time/ad identifiers, spend, reach/impressions, views, clicks and authorised results/conversions
 - [ ] customer campaign reporting and Operations reconciliation/audit
 - [ ] Wantok Agent may help draft campaign briefs/copy later but cannot autonomously publish ads or spend money
@@ -257,8 +260,8 @@ Detailed product rules: `docs/ROADMAP_FILLERS.md`, FILLER-2026-10-07-06.
 
 - [x] fresh signed-in Android **Client → Services** shell/navigation visual QA on the existing development session; locked Home / Services / Track / Wallet / Inbox layout renders without visible overflow, Home is shortcut-first, and Wantok Agent is accessible from the client header
 - [ ] remaining signed-in Android/Web visual QA using existing development sessions/accounts
-- [ ] live read-only journey checks, especially Taxi map/location/history and populated Inbox/account records; retained populated Track Completed history is now verified
-- [ ] live QA of Account privacy/linked/saved/trusted/review pages, Services bookmark interaction/recommendations/Explore PNG live data, Track review editing and Wallet preview
+- [ ] live read-only journey checks: **Account and populated Inbox/support are now verified**, retained Track Completed history is verified; Taxi map/location/history and other remaining populated journeys still pending
+- [ ] live mutation/interaction QA still needed for Account privacy save, OAuth linking, Trusted-person CRUD, review editing/media, Services recommendations/Explore PNG, and Wallet preview; Account read-only privacy/linked/saved/trusted/reviews pages and provider Saved persistence are verified
 - [ ] complete gate evidence review and full checkpoint before T2.4
 
 Acceptance evidence and initial findings: `docs/CX1_CLIENT_EXPERIENCE_GATE.md`.

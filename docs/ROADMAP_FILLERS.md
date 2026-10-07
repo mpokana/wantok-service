@@ -266,6 +266,39 @@ Campaign lifecycle should support:
 
 Operations staff need a controlled workspace for campaign queue, creative approvals, platform status, spend references, customer approvals, incidents and reporting. Customer-facing status should clearly distinguish **Waiting for Wantok**, **Waiting for customer**, **Waiting for platform review**, **Scheduled**, **Live**, **Paused**, **Rejected** and **Completed**.
 
+### Operations Admin authority
+
+The authoritative back-office surface for ADS1 is **Wantok Operations Admin** (`apps/wantok_admin` / `admin.wantokservices.com`). Customer campaign submission happens in the client, but a campaign must not be published, scheduled, resumed or allocated external media spend merely because the customer submitted or paid for it.
+
+Operations Admin should own:
+- advertiser/customer and advertised product/service eligibility review;
+- package/tier selection, quote construction and approved commercial adjustments;
+- creative asset review, revision requests and final internal creative approval;
+- customer final-creative approval evidence;
+- channel/placement eligibility for Meta/Facebook/Instagram, TikTok, YouTube and later adapters;
+- targeting, dates, duration, frequency/budget limits and media-spend ceiling;
+- compliance/platform-policy approval or rejection with reason codes;
+- campaign submission/schedule/pause/resume/cancel controls after all gates pass;
+- platform-review state, external campaign/ad identifiers and rejection/resubmission handling;
+- incident notes, customer communication state, evidence attachments and close-out report approval;
+- reconciliation of quoted fees, approved spend references and platform-reported spend.
+
+Admin actions must be server-authoritative. The browser must call secured RPC/API/job commands; it must never hold raw platform credentials or publish directly to an advertising network.
+
+Recommended future ADS1 permissions should be granular rather than a single broad admin flag, for example:
+- `ads.view`;
+- `ads.quote`;
+- `ads.creative_review`;
+- `ads.compliance_review`;
+- `ads.approve`;
+- `ads.publish`;
+- `ads.pause`;
+- `ads.report`.
+
+High-value/risk actions such as first publication, material budget increase, reactivation after policy rejection or spend above a configured threshold should support dual approval / four-eyes control. The approval actor, prior/new values, reason, timestamp and resulting job/platform response must be auditable.
+
+**Wantok Technical Control** (`apps/wantok_tech`) remains separate: it may configure secret references, OAuth/ad-account integrations, adapter health, callbacks/webhooks and technical diagnostics, but it must not grant itself campaign approval or customer-commercial authority merely because it controls an integration.
+
 ### Platform integration and security
 
 - Integrate through official advertising APIs/authorised ad-account access where available; never collect customer social-media passwords.

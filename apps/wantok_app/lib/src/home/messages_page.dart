@@ -5,197 +5,547 @@ import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
 import 'png_visuals.dart';
+import 'wantok_agent_page.dart';
 
 class MessagesPage extends StatefulWidget {
-  const MessagesPage({super.key});
+  const MessagesPage({this.loadThreads, this.loadSupportRequests, super.key});
+
+  final Future<List<Map<String, dynamic>>> Function()? loadThreads;
+  final Future<List<Map<String, dynamic>>> Function()? loadSupportRequests;
 
   @override
   State<MessagesPage> createState() => _MessagesPageState();
 }
 
+enum InboxCategory { services, support }
+
 class _MessagesPageState extends State<MessagesPage> {
   static const _repository = MessagingRepository();
-  late Future<List<Map<String, dynamic>>> _future;
+  static const _supportRepository = WantokAiAgentRepository();
+
+  late Future<_InboxData> _future;
+  InboxCategory _category = InboxCategory.services;
 
   @override
   void initState() {
     super.initState();
-    _future = _repository.loadThreads();
+    _future = _loadInbox();
+  }
+
+  Future<_InboxData> _loadInbox() async {
+    var threads = const <Map<String, dynamic>>[];
+    var supportRequests = const <Map<String, dynamic>>[];
+    Object? threadsError;
+    Object? supportError;
+
+    try {
+      threads = await (widget.loadThreads ?? _repository.loadThreads)();
+    } catch (error) {
+      threadsError = error;
+    }
+
+    try {
+      supportRequests =
+          await (widget.loadSupportRequests ??
+              _supportRepository.loadMyHandoffs)();
+    } catch (error) {
+      supportError = error;
+    }
+
+    return _InboxData(
+      threads: threads,
+      supportRequests: supportRequests,
+      threadsError: threadsError,
+      supportError: supportError,
+    );
   }
 
   Future<void> _reload() async {
-    final next = _repository.loadThreads();
+    final next = _loadInbox();
     setState(() {
       _future = next;
     });
-    try {
-      await next;
-    } catch (_) {
-      // The FutureBuilder presents the retryable error state.
-    }
+    await next;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return RefreshIndicator(
-      onRefresh: _reload,
-      child: FutureBuilder<List<Map<String, dynamic>>>(
-        future: _future,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return const Center(child: CircularProgressIndicator());
-          }
+  Future<void> _openServiceConversation(Map<String, dynamic> row) async {
+    final title = row['other_display_name'] as String? ?? 'Wantok user';
+    final category = row['category_name'] as String? ?? 'Service';
+    final status = row['booking_status'] as String? ?? 'booking';
 
-          if (snapshot.hasError) {
-            return ListView(
-              padding: const EdgeInsets.all(20),
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) => ConversationPage(
+          threadId: row['thread_id'] as String,
+          title: title,
+          subtitle: '$category | ${status.replaceAll('_', ' ')}',
+        ),
+      ),
+    );
+
+    if (mounted) await _reload();
+  }
+
+  void _openSupportRequest(Map<String, dynamic> row) {
+    final status = row['status']?.toString() ?? 'open';
+    final summary = row['summary']?.toString() ?? '';
+    final resolution = row['resolution_note']?.toString().trim();
+    final createdAt = _formatInboxDateTime(row['created_at']);
+
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      showDragHandle: true,
+      builder: (context) {
+        return SafeArea(
+          top: false,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Card(
-                  child: ListTile(
-                    leading: const Icon(
-                      Icons.error_outline,
-                      color: WantokColors.coral,
+                Row(
+                  children: [
+                    const CircleAvatar(
+                      backgroundColor: Color(0xFFF0E8F7),
+                      child: Icon(
+                        Icons.support_agent_rounded,
+                        color: WantokColors.purplePay,
+                      ),
                     ),
-                    title: const Text('Could not load messages'),
-                    subtitle: const Text(
-                      'Check your connection and try again.',
+                    const SizedBox(width: 12),
+                    const Expanded(
+                      child: Text(
+                        'Wantok help request',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
                     ),
-                    trailing: IconButton(
-                      tooltip: 'Retry messages',
-                      onPressed: _reload,
-                      icon: const Icon(Icons.refresh),
+                    _SupportStatusChip(status: status),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  summary,
+                  style: const TextStyle(fontSize: 14, height: 1.35),
+                ),
+                if (createdAt.isNotEmpty) ...[
+                  const SizedBox(height: 12),
+                  Text(
+                    'Submitted $createdAt',
+                    style: const TextStyle(
+                      color: WantokColors.muted,
+                      fontSize: 12,
                     ),
                   ),
-                ),
-              ],
-            );
-          }
-
-          final rows = snapshot.data ?? const <Map<String, dynamic>>[];
-          if (rows.isEmpty) {
-            return ListView(
-              padding: const EdgeInsets.fromLTRB(14, 10, 14, 28),
-              children: const [
-                _InboxHeader(),
-                SizedBox(height: 18),
-                Card(
+                ],
+                if (resolution != null && resolution.isNotEmpty) ...[
+                  const SizedBox(height: 18),
+                  const Text(
+                    'Response',
+                    style: TextStyle(fontWeight: FontWeight.w900),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(resolution),
+                ],
+                const SizedBox(height: 18),
+                const Card(
+                  color: Color(0xFFF7FAF8),
                   child: Padding(
-                    padding: EdgeInsets.all(24),
-                    child: Column(
+                    padding: EdgeInsets.all(14),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Icon(
-                          Icons.forum_outlined,
-                          size: 50,
-                          color: WantokColors.primary,
+                          Icons.info_outline_rounded,
+                          color: WantokColors.primaryDark,
                         ),
-                        SizedBox(height: 12),
-                        Text(
-                          'No conversations yet',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w900,
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            'Live human chat is not enabled yet. This request remains owner-private and can be handled by authorised Wantok support or operations staff.',
                           ),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          'When a provider is assigned to a booking, the conversation will appear here.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: WantokColors.muted),
                         ),
                       ],
                     ),
                   ),
                 ),
               ],
-            );
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _openAgent() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (context) => const WantokAgentPage()),
+    );
+    if (mounted) await _reload();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RefreshIndicator(
+      onRefresh: _reload,
+      child: FutureBuilder<_InboxData>(
+        future: _future,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState != ConnectionState.done &&
+              !snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
           }
 
-          return ListView.separated(
-            padding: const EdgeInsets.fromLTRB(14, 10, 14, 28),
-            itemCount: rows.length + 1,
-            separatorBuilder: (_, _) => const SizedBox(height: 8),
-            itemBuilder: (context, index) {
-              if (index == 0) return const _InboxHeader();
-              final row = rows[index - 1];
-              final unread = _toInt(row['unread_count']);
-              final title =
-                  row['other_display_name'] as String? ?? 'Wantok user';
-              final category = row['category_name'] as String? ?? 'Service';
-              final status = row['booking_status'] as String? ?? 'booking';
-              final lastMessage = row['last_message'] as String?;
+          final data = snapshot.data ?? const _InboxData();
+          final showingServices = _category == InboxCategory.services;
+          final error = showingServices ? data.threadsError : data.supportError;
 
-              return Card(
-                child: ListTile(
-                  onTap: () async {
-                    await Navigator.of(context).push(
-                      MaterialPageRoute<void>(
-                        builder: (context) => ConversationPage(
-                          threadId: row['thread_id'] as String,
-                          title: title,
-                          subtitle:
-                              '$category • ${status.replaceAll('_', ' ')}',
-                        ),
-                      ),
-                    );
-                    if (mounted) await _reload();
-                  },
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
+          return ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.fromLTRB(14, 10, 14, 28),
+            children: [
+              const _InboxHeader(),
+              const SizedBox(height: 14),
+              _InboxCategorySelector(
+                selected: _category,
+                serviceCount: data.threads.length,
+                supportCount: data.supportRequests.length,
+                onSelected: (value) => setState(() => _category = value),
+              ),
+              const SizedBox(height: 14),
+              if (error != null)
+                _InboxStateCard(
+                  icon: Icons.cloud_off_outlined,
+                  title: showingServices
+                      ? 'Could not load service conversations'
+                      : 'Could not load help requests',
+                  body: 'This Inbox section is temporarily unavailable. Other Inbox categories can still be used.',
+                  actionLabel: 'Retry',
+                  onAction: _reload,
+                )
+              else if (showingServices && data.threads.isEmpty)
+                const _InboxStateCard(
+                  icon: Icons.forum_outlined,
+                  title: 'No service conversations yet',
+                  body: 'When a provider is assigned to a booking, that booking-linked conversation will appear here.',
+                )
+              else if (!showingServices && data.supportRequests.isEmpty)
+                _InboxStateCard(
+                  icon: Icons.support_agent_outlined,
+                  title: 'No help requests',
+                  body: 'Use Wantok Agent when normal search cannot solve a problem or when you want human follow-up.',
+                  actionLabel: 'Open Wantok Agent',
+                  onAction: _openAgent,
+                )
+              else if (showingServices) ...[
+                for (var index = 0; index < data.threads.length; index++) ...[
+                  _ServiceThreadCard(
+                    row: data.threads[index],
+                    onTap: () => _openServiceConversation(data.threads[index]),
                   ),
-                  leading: const CircleAvatar(
-                    backgroundColor: Color(0xFFE7F4ED),
-                    child: Icon(
-                      Icons.person_outline,
-                      color: WantokColors.primaryDark,
-                    ),
+                  if (index != data.threads.length - 1)
+                    const SizedBox(height: 8),
+                ],
+              ] else ...[
+                for (
+                  var index = 0;
+                  index < data.supportRequests.length;
+                  index++
+                ) ...[
+                  _SupportRequestCard(
+                    row: data.supportRequests[index],
+                    onTap: () =>
+                        _openSupportRequest(data.supportRequests[index]),
                   ),
-                  title: Text(
-                    title,
-                    style: TextStyle(
-                      fontWeight: unread > 0
-                          ? FontWeight.w900
-                          : FontWeight.w700,
-                    ),
-                  ),
-                  subtitle: Padding(
-                    padding: const EdgeInsets.only(top: 4),
-                    child: Text(
-                      lastMessage?.trim().isNotEmpty == true
-                          ? '$category · $lastMessage'
-                          : '$category · No messages yet',
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ),
-                  trailing: unread > 0
-                      ? Container(
-                          constraints: const BoxConstraints(minWidth: 26),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            color: WantokColors.primary,
-                            borderRadius: BorderRadius.circular(999),
-                          ),
-                          child: Text(
-                            unread > 99 ? '99+' : '$unread',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 11,
-                              fontWeight: FontWeight.w900,
-                            ),
-                          ),
-                        )
-                      : const Icon(Icons.chevron_right),
-                ),
-              );
-            },
+                  if (index != data.supportRequests.length - 1)
+                    const SizedBox(height: 8),
+                ],
+              ],
+            ],
           );
         },
+      ),
+    );
+  }
+}
+
+class _InboxData {
+  const _InboxData({
+    this.threads = const <Map<String, dynamic>>[],
+    this.supportRequests = const <Map<String, dynamic>>[],
+    this.threadsError,
+    this.supportError,
+  });
+
+  final List<Map<String, dynamic>> threads;
+  final List<Map<String, dynamic>> supportRequests;
+  final Object? threadsError;
+  final Object? supportError;
+}
+
+class _InboxCategorySelector extends StatelessWidget {
+  const _InboxCategorySelector({
+    required this.selected,
+    required this.serviceCount,
+    required this.supportCount,
+    required this.onSelected,
+  });
+
+  final InboxCategory selected;
+  final int serviceCount;
+  final int supportCount;
+  final ValueChanged<InboxCategory> onSelected;
+
+  @override
+  Widget build(BuildContext context) {
+    final textScale = MediaQuery.textScalerOf(context).scale(1);
+    final compact = MediaQuery.sizeOf(context).width < 420 || textScale > 1.2;
+
+    Widget chip({
+      required InboxCategory value,
+      required String label,
+      required IconData icon,
+    }) {
+      return SizedBox(
+        width: double.infinity,
+        child: ChoiceChip(
+          label: Text(label, maxLines: 1, overflow: TextOverflow.ellipsis),
+          avatar: Icon(icon, size: 18),
+          selected: selected == value,
+          showCheckmark: false,
+          onSelected: (_) => onSelected(value),
+        ),
+      );
+    }
+
+    final services = chip(
+      value: InboxCategory.services,
+      label: 'Services ($serviceCount)',
+      icon: Icons.forum_outlined,
+    );
+    final support = chip(
+      value: InboxCategory.support,
+      label: 'Help & support ($supportCount)',
+      icon: Icons.support_agent_outlined,
+    );
+
+    if (compact) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [services, const SizedBox(height: 7), support],
+      );
+    }
+
+    return Row(
+      children: [
+        Expanded(child: services),
+        const SizedBox(width: 8),
+        Expanded(child: support),
+      ],
+    );
+  }
+}
+
+class _ServiceThreadCard extends StatelessWidget {
+  const _ServiceThreadCard({required this.row, required this.onTap});
+
+  final Map<String, dynamic> row;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final unread = _toInt(row['unread_count']);
+    final title = row['other_display_name'] as String? ?? 'Wantok user';
+    final category = row['category_name'] as String? ?? 'Service';
+    final status = row['booking_status'] as String? ?? 'booking';
+    final lastMessage = row['last_message'] as String?;
+
+    return Card(
+      child: ListTile(
+        onTap: onTap,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        leading: const CircleAvatar(
+          backgroundColor: Color(0xFFE7F4ED),
+          child: Icon(
+            Icons.chat_bubble_outline,
+            color: WantokColors.primaryDark,
+          ),
+        ),
+        title: Text(
+          title,
+          style: TextStyle(
+            fontWeight: unread > 0 ? FontWeight.w900 : FontWeight.w700,
+          ),
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 4),
+          child: Text(
+            lastMessage?.trim().isNotEmpty == true
+                ? '$category · $lastMessage'
+                : '$category · ${status.replaceAll('_', ' ')}',
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+        ),
+        trailing: unread > 0
+            ? Container(
+                constraints: const BoxConstraints(minWidth: 26),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: WantokColors.primary,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Text(
+                  unread > 99 ? '99+' : '$unread',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              )
+            : const Icon(Icons.chevron_right_rounded),
+      ),
+    );
+  }
+}
+
+class _SupportRequestCard extends StatelessWidget {
+  const _SupportRequestCard({required this.row, required this.onTap});
+
+  final Map<String, dynamic> row;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final summary = row['summary']?.toString() ?? 'Wantok help request';
+    final status = row['status']?.toString() ?? 'open';
+    final createdAt = _formatInboxDateTime(row['created_at']);
+
+    return Card(
+      child: ListTile(
+        onTap: onTap,
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 10,
+        ),
+        leading: const CircleAvatar(
+          backgroundColor: Color(0xFFF0E8F7),
+          child: Icon(
+            Icons.support_agent_rounded,
+            color: WantokColors.purplePay,
+          ),
+        ),
+        title: const Text(
+          'Wantok help request',
+          style: TextStyle(fontWeight: FontWeight.w900),
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(summary, maxLines: 2, overflow: TextOverflow.ellipsis),
+              if (createdAt.isNotEmpty) ...[
+                const SizedBox(height: 4),
+                Text(
+                  createdAt,
+                  style: const TextStyle(
+                    color: WantokColors.muted,
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+            ],
+          ),
+        ),
+        trailing: _SupportStatusChip(status: status),
+      ),
+    );
+  }
+}
+
+class _SupportStatusChip extends StatelessWidget {
+  const _SupportStatusChip({required this.status});
+
+  final String status;
+
+  @override
+  Widget build(BuildContext context) {
+    final normalised = status.toLowerCase();
+    final (background, foreground) = switch (normalised) {
+      'resolved' ||
+      'closed' => (const Color(0xFFDFF2E7), WantokColors.primaryDark),
+      'assigned' => (const Color(0xFFE7F0FF), const Color(0xFF2456A6)),
+      _ => (const Color(0xFFFFF2D2), const Color(0xFF7A5400)),
+    };
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+      decoration: BoxDecoration(
+        color: background,
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Text(
+        normalised.replaceAll('_', ' ').toUpperCase(),
+        style: TextStyle(
+          color: foreground,
+          fontSize: 9.5,
+          fontWeight: FontWeight.w900,
+        ),
+      ),
+    );
+  }
+}
+
+class _InboxStateCard extends StatelessWidget {
+  const _InboxStateCard({
+    required this.icon,
+    required this.title,
+    required this.body,
+    this.actionLabel,
+    this.onAction,
+  });
+
+  final IconData icon;
+  final String title;
+  final String body;
+  final String? actionLabel;
+  final FutureOr<void> Function()? onAction;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(22),
+        child: Column(
+          children: [
+            Icon(icon, size: 44, color: WantokColors.primary),
+            const SizedBox(height: 10),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
+            ),
+            const SizedBox(height: 7),
+            Text(
+              body,
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: WantokColors.muted),
+            ),
+            if (actionLabel != null && onAction != null) ...[
+              const SizedBox(height: 14),
+              OutlinedButton(
+                onPressed: () => onAction!(),
+                child: Text(actionLabel!),
+              ),
+            ],
+          ],
+        ),
       ),
     );
   }
@@ -207,7 +557,7 @@ class _InboxHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PngScenicBackdrop(
-      height: 136,
+      minHeight: 150,
       colors: const [Color(0xFF075C3A), Color(0xFF087A4B), Color(0xFF5A3421)],
       child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,7 +574,7 @@ class _InboxHeader extends StatelessWidget {
           ),
           SizedBox(height: 6),
           Text(
-            'Talk with providers about active Wantok bookings.',
+            'Service conversations and Wantok help in one place.',
             style: TextStyle(color: Color(0xFFE4F6EE), fontSize: 12.5),
           ),
           SizedBox(height: 11),
@@ -236,12 +586,16 @@ class _InboxHeader extends StatelessWidget {
                 size: 17,
               ),
               SizedBox(width: 6),
-              Text(
-                'Booking-linked conversations',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 10.5,
-                  fontWeight: FontWeight.w800,
+              Expanded(
+                child: Text(
+                  'Booking-linked and owner-private support',
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 10.5,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ),
             ],
@@ -536,6 +890,16 @@ class _MessageBubble extends StatelessWidget {
 int _toInt(dynamic value) {
   if (value is int) return value;
   return int.tryParse(value?.toString() ?? '') ?? 0;
+}
+
+String _formatInboxDateTime(dynamic value) {
+  final parsed = DateTime.tryParse(value?.toString() ?? '')?.toLocal();
+  if (parsed == null) return '';
+  final day = parsed.day.toString().padLeft(2, '0');
+  final month = parsed.month.toString().padLeft(2, '0');
+  final hour = parsed.hour.toString().padLeft(2, '0');
+  final minute = parsed.minute.toString().padLeft(2, '0');
+  return '$day/$month/${parsed.year} $hour:$minute';
 }
 
 String _formatMessageTime(dynamic value) {

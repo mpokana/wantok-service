@@ -6,7 +6,7 @@
 
 ## Resume here
 
-The current working phase is **CX1 client-experience completion**; the **CX1 gate remains open before T2.4**. Delegated booking is checkpointed across every currently implemented client service family. The active CX1 extensions now include **CX1F provider/service discovery with ratings** and the **CX1I Wantok Agent capability/human-handoff foundation**. General Marketplace/fulfilment (CX1G), sponsored promotion (CX1H) and model-backed AI/tool execution (remaining CX1I) are still planned. A separate future first-party **ADS1 Wantok Ads** module is now approved for managed external social/video advertising; it is distinct from CX1H and is not part of the current CX1 completion gate. Run:
+The current working phase is **CX1 client-experience completion**; the **CX1 gate remains open before T2.4**. Delegated booking is checkpointed across every currently implemented client service family. The active CX1 extensions now include **CX1F provider/service discovery with ratings** and the **CX1I Wantok Agent capability/human-handoff foundation**. General Marketplace/fulfilment (CX1G), sponsored promotion (CX1H) and model-backed AI/tool execution (remaining CX1I) are still planned. A separate future first-party **ADS1 Wantok Ads** module is approved for managed external social/video advertising; it is distinct from CX1H and is not part of the current CX1 completion gate. **Wantok Operations Admin is the future ADS1 commercial/approval/campaign authority; Wantok Technical Control owns only integration credentials/health and does not inherit campaign approval authority.** Run:
 
 `git log -1 --oneline`
 
@@ -130,8 +130,8 @@ Checkpointed platform includes:
 - Wallet remains preview-only but now frames Top up/Scan/Send/Receive, verification, PNG-oriented planned services and future transaction history. No money movement exists.
 - The user-facing assistant is **Wantok Agent**. It is a compact client-header action rather than a large Home card and still does not add a sixth bottom-navigation tab. Home is intentionally shortcut-first and currently limits its service grid to six high-frequency entries with **See all** routing to Services. The authenticated capability API reports model/chat/handoff state; model chat is deliberately disabled until a controlled gateway is configured. The Agent surface can use real provider-search fallback and create owner-private human-help requests. Support/Operations/Admin can later triage those requests; live human chat and support triage UI are not yet implemented. Internal compatibility identifiers such as `WantokAiAgentRepository` and `wantok_ai_agent` remain unchanged.
 - retry failures stay in the view rather than escaping callbacks; Events/departures/order/registration/water-trip failures do not masquerade as empty records.
-- 39 focused client regressions plus the configuration smoke total **40 app tests**; they use in-memory/unconfigured backends and do not replace local account data.
-- entry/back navigation coverage includes 11 categories; Taxi map/location/runtime behaviour and the new CX1A surfaces still require live QA.
+- 41 focused client regressions plus the configuration smoke total **42 app tests**; they use in-memory/unconfigured backends and do not replace local account data.
+- entry/back navigation coverage includes 11 categories. Signed-in Account read-only surfaces and categorised Inbox/support are now live-verified; Taxi map/location/runtime behaviour and Account mutation paths still require live QA.
 - do not call CX1 complete from widget/database tests alone; see its evidence document.
 
 ## Android continuation evidence — 2026-10-07
@@ -164,17 +164,26 @@ Checkpointed platform includes:
 - Track records are grouped into **Ongoing · Scheduled · Completed** sections. Future non-terminal bookings are Scheduled, already-due/in-progress/non-scheduled active work is Ongoing, and completed/cancelled/rejected/expired records are retained under Completed history. Live Android QA with the retained plumbing QA booking verifies the Completed (1) section, provider/location details, messaging and Edit review action without creating new bookings.
 - Fresh full checkpoint PASS: all seven Flutter analysis targets, **40 Wantok app tests**, Operations Admin smoke, Technical Control smoke, and **27 files / 598 pgTAP tests**.
 
+## Account and Inbox continuation — 2026-10-07
+
+- Signed-in Android Account read-only QA now covers the Account shell, **Privacy & sharing**, **Linked accounts**, **Saved**, **Trusted people** and **My reviews**. Privacy renders the current Private profile/Public review defaults plus saved privacy, recommendations and profile-sharing controls; mutation/save remains pending.
+- Linked accounts shows Email & password Connected with Google/Facebook Connect actions. Live provider OAuth linking remains pending.
+- Account Saved renders the retained Wantok QA Plumbing Services provider; Trusted people renders the clean empty/Add-person path; My reviews renders the retained 5-star public QA review. Trusted-person CRUD, review editing and managed-media mutation remain pending.
+- Inbox now separates **Services** booking-linked provider conversations from **Help & support** owner-private Wantok Agent handoff requests. The two sources load independently so a service-messaging failure does not suppress support requests, and support failure does not remove service conversations.
+- Signed-in Android Inbox QA PASS with retained data: **Services (0)**, **Help & support (1)**, persisted owner QA request, OPEN status and detail sheet. The detail explicitly states live human chat is not enabled and that authorised Support/Operations staff may handle the request.
+- Responsive Inbox regressions cover compact/enlarged-text layouts plus source fault isolation. Full Flutter checkpoint PASS is now **42 Wantok app tests**; database remains **27 files / 598 pgTAP tests PASS**. Final debug APK was rebuilt and installed in-place with `adb install -r`; account/session/AVD/Supabase data were preserved.
+
 ## Validation baseline
 
 At this checkpoint:
 
 - all shared Flutter packages: analysis PASS
-- Wantok app: analysis + **40 tests PASS** (39 client regressions + configuration smoke)
+- Wantok app: analysis + **42 tests PASS** (41 client regressions + configuration smoke)
 - required `scripts/flutter/check.ps1`: PASS; Desktop Commander shells on EAGLT02 currently need the standard `PROGRAMFILES(X86)=C:\Program Files (x86)` supplied per process for `flutter test`
 - Wantok Operations Admin: analysis + smoke test PASS
 - Wantok Technical Control: analysis + smoke test PASS
 - database: **27 files / 598 pgTAP tests PASS** (all fixtures roll back), including confidence-aware provider discovery and Wantok AI capability/handoff security coverage
-- fresh Android signed-in QA on 2026-10-07 confirms **Client → Services** renders the PNG-rich discovery shell and locked **Home · Services · Track · Wallet · Inbox** navigation without visible overflow; populated CX1F provider search/filter/rating/save/detail is now PASS. Recommendation/Explore PNG live data, broader Account/Track/Wallet evidence and Web evidence remain open
+- fresh Android signed-in QA on 2026-10-07 confirms locked **Home · Services · Track · Wallet · Inbox** navigation without visible overflow; populated CX1F provider discovery, Track Completed history, Account privacy/linked/saved/trusted/reviews and categorised Inbox/support-detail are PASS within the evidence limits. Taxi runtime, Account mutations/media, Services recommendation/Explore PNG interactions, Wallet live preview and Web evidence remain open
 - production Docker Compose parse PASS was recorded at T2.2; deployment files unchanged
 - `git diff --check`: PASS
 

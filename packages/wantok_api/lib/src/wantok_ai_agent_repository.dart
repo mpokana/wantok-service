@@ -52,6 +52,23 @@ class WantokAiAgentRepository {
     );
     return result.toString();
   }
+
+  Future<List<Map<String, dynamic>>> loadMyHandoffs() async {
+    final user = WantokBackend.client.auth.currentUser;
+    if (user == null) {
+      throw StateError('Authentication required.');
+    }
+
+    final rows = await WantokBackend.client
+        .from('ai_agent_handoff_requests')
+        .select(
+          'id, summary, status, resolution_note, created_at, updated_at, resolved_at',
+        )
+        .eq('user_id', user.id)
+        .order('created_at', ascending: false);
+
+    return (rows as List<dynamic>).cast<Map<String, dynamic>>();
+  }
 }
 
 Map<String, dynamic> _mapValue(dynamic value) {
