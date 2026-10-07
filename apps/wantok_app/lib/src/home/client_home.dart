@@ -13,6 +13,7 @@ import 'png_visuals.dart';
 import 'provider_discovery_page.dart';
 import 'service_catalog_taxonomy.dart';
 import 'services_hub_page.dart';
+import 'wantok_pay_preview_page.dart';
 
 class ClientHome extends StatefulWidget {
   const ClientHome({
@@ -97,6 +98,34 @@ class _ClientHomeState extends State<ClientHome> {
     if (callback != null) callback();
   }
 
+  void _openPlannedGlobalService(String label) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          '$label is part of Wantok global travel and is being connected.',
+        ),
+      ),
+    );
+  }
+
+  void _openWantokPay() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (context) => const WantokPayPreviewPage(),
+      ),
+    );
+  }
+
+  void _showPlannedPaymentRail(String label) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          '$label is planned for Wantok payments and is not active yet.',
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
@@ -112,17 +141,17 @@ class _ClientHomeState extends State<ClientHome> {
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(14, 12, 14, 24),
             children: [
-              _MarketplaceHero(onSearchTap: _openServices),
+              _MarketplaceHero(
+                onSearchTap: _openServices,
+                onAgentTap: widget.onAgentTap == null ? null : _openAgent,
+              ),
               if (quickServices.isNotEmpty || widget.onAgentTap != null) ...[
                 const SizedBox(height: 12),
                 SizedBox(
                   height: 42,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
-                    itemCount:
-                        quickServices.length +
-                        1 +
-                        (widget.onAgentTap == null ? 0 : 1),
+                    itemCount: quickServices.length + 4,
                     separatorBuilder: (_, _) => const SizedBox(width: 8),
                     itemBuilder: (context, index) {
                       if (index == 0) {
@@ -145,14 +174,46 @@ class _ClientHomeState extends State<ClientHome> {
                           onPressed: () => _openService(service),
                         );
                       }
+
+                      final extraIndex = index - quickServices.length - 1;
+                      if (extraIndex == 0) {
+                        return ActionChip(
+                          avatar: const Icon(
+                            Icons.flight_rounded,
+                            color: Color(0xFF5B55E8),
+                            size: 17,
+                          ),
+                          label: const Text('Travel & Flights'),
+                          onPressed: () =>
+                              _openPlannedGlobalService('Travel & Flights'),
+                        );
+                      }
+                      if (extraIndex == 1) {
+                        return ActionChip(
+                          avatar: const Icon(
+                            Icons.apartment_rounded,
+                            color: Color(0xFFE23D5F),
+                            size: 17,
+                          ),
+                          label: const Text('Hotels'),
+                          onPressed: () => _openPlannedGlobalService('Hotels'),
+                        );
+                      }
+                      if (extraIndex == 2) {
+                        return ActionChip(
+                          avatar: const Icon(
+                            Icons.more_horiz_rounded,
+                            size: 17,
+                          ),
+                          label: const Text('More'),
+                          onPressed: _openServices,
+                        );
+                      }
+
                       return ActionChip(
-                        avatar: const Icon(
-                          Icons.auto_awesome_rounded,
-                          color: WantokColors.primaryDark,
-                          size: 17,
-                        ),
-                        label: const Text('Ask Wantok'),
-                        onPressed: _openAgent,
+                        avatar: const Icon(Icons.more_horiz_rounded, size: 17),
+                        label: const Text('More'),
+                        onPressed: _openServices,
                       );
                     },
                   ),
@@ -214,11 +275,15 @@ class _ClientHomeState extends State<ClientHome> {
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       final columns =
-                          (constraints.maxWidth / (88 * textScale.clamp(1, 2)))
-                              .floor()
-                              .clamp(2, 6);
+                          constraints.maxWidth >= 520 && textScale <= 1.1
+                          ? 8
+                          : (constraints.maxWidth /
+                                    (88 * textScale.clamp(1, 2)))
+                                .floor()
+                                .clamp(2, 6);
+                      final categoryCount = quickServices.length + 2;
                       return GridView.builder(
-                        itemCount: quickServices.length,
+                        itemCount: categoryCount,
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -231,15 +296,36 @@ class _ClientHomeState extends State<ClientHome> {
                           mainAxisSpacing: 3,
                         ),
                         itemBuilder: (context, index) {
-                          final service = quickServices[index];
-                          final visual = _visualFor(service.slug);
+                          if (index < quickServices.length) {
+                            final service = quickServices[index];
+                            final visual = _visualFor(service.slug);
+                            return WantokServiceTile(
+                              label: _shortLabel(service),
+                              icon: visual.icon,
+                              accentColor: visual.accent,
+                              surfaceColor: visual.surface,
+                              badge: _badgeFor(service.slug),
+                              onTap: () => _openService(service),
+                            );
+                          }
+
+                          if (index == quickServices.length) {
+                            return WantokServiceTile(
+                              label: 'Travel & Flights',
+                              icon: Icons.flight_rounded,
+                              accentColor: const Color(0xFF326FE5),
+                              surfaceColor: const Color(0xFFE2EEFF),
+                              onTap: () =>
+                                  _openPlannedGlobalService('Travel & Flights'),
+                            );
+                          }
+
                           return WantokServiceTile(
-                            label: service.name,
-                            icon: visual.icon,
-                            accentColor: visual.accent,
-                            surfaceColor: visual.surface,
-                            badge: _badgeFor(service.slug),
-                            onTap: () => _openService(service),
+                            label: 'Hotels',
+                            icon: Icons.apartment_rounded,
+                            accentColor: const Color(0xFFD43C5D),
+                            surfaceColor: const Color(0xFFFFE5EB),
+                            onTap: () => _openPlannedGlobalService('Hotels'),
                           );
                         },
                       );
@@ -250,7 +336,6 @@ class _ClientHomeState extends State<ClientHome> {
                 const SizedBox(height: 22),
                 PngSectionTitle(
                   title: 'Top providers',
-                  subtitle: 'Verified providers with real Wantok ratings.',
                   trailing: TextButton(
                     onPressed: _openProviderSearch,
                     child: const Text('See all'),
@@ -291,6 +376,20 @@ class _ClientHomeState extends State<ClientHome> {
                       ),
                     );
                   },
+                ),
+                const SizedBox(height: 24),
+                PngSectionTitle(
+                  title: 'Pay your way',
+                  subtitle: 'Secure and convenient payments.',
+                  trailing: TextButton(
+                    onPressed: _openWantokPay,
+                    child: const Text('See all'),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                _PaymentRailStrip(
+                  onWantokPayTap: _openWantokPay,
+                  onPlannedRailTap: _showPlannedPaymentRail,
                 ),
               ],
               if (services.isNotEmpty) ...[
@@ -559,9 +658,10 @@ class _ServiceVisual {
 }
 
 class _MarketplaceHero extends StatelessWidget {
-  const _MarketplaceHero({required this.onSearchTap});
+  const _MarketplaceHero({required this.onSearchTap, this.onAgentTap});
 
   final VoidCallback onSearchTap;
+  final VoidCallback? onAgentTap;
 
   @override
   Widget build(BuildContext context) {
@@ -614,7 +714,7 @@ class _MarketplaceHero extends StatelessWidget {
               ),
               const SizedBox(height: 7),
               const Text(
-                'Find trusted providers for everyday needs wherever you are.',
+                'Find trusted providers for everyday needs across Papua New Guinea and worldwide.',
                 style: TextStyle(
                   color: WantokColors.muted,
                   fontSize: 13.5,
@@ -653,7 +753,17 @@ class _MarketplaceHero extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 2),
+                        if (onAgentTap != null) ...[
+                          IconButton(
+                            tooltip: 'Ask Wantok',
+                            onPressed: onAgentTap,
+                            icon: const Icon(
+                              Icons.auto_awesome_rounded,
+                              color: WantokColors.primaryDark,
+                            ),
+                          ),
+                          const SizedBox(width: 2),
+                        ],
                         Container(
                           decoration: BoxDecoration(
                             color: WantokColors.primaryDark,
@@ -689,88 +799,428 @@ class _MarketplacePromo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: const BoxConstraints(minHeight: 152),
+      constraints: const BoxConstraints(minHeight: 164),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(26),
-        gradient: const LinearGradient(
-          colors: [Color(0xFF075C3A), Color(0xFF0A7D50)],
-        ),
+        color: const Color(0xFF075C3A),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(26),
         child: Stack(
           children: [
-            Positioned(
-              right: -22,
-              bottom: -20,
-              child: Icon(
-                Icons.shopping_bag_rounded,
-                color: Colors.white.withValues(alpha: 0.12),
-                size: 160,
-              ),
-            ),
-            Positioned(
-              right: 26,
-              top: 22,
-              child: CircleAvatar(
-                radius: 37,
-                backgroundColor: Colors.white.withValues(alpha: 0.16),
-                child: const Icon(
-                  Icons.handshake_rounded,
-                  size: 38,
-                  color: WantokColors.gold,
+            Positioned.fill(
+              child: Align(
+                alignment: Alignment.centerRight,
+                child: FractionallySizedBox(
+                  widthFactor: 0.54,
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Image.asset(
+                        'assets/images/vanessa_local_provider.jpg',
+                        fit: BoxFit.cover,
+                        alignment: const Alignment(0.45, -0.2),
+                        filterQuality: FilterQuality.medium,
+                      ),
+                      Align(
+                        alignment: const Alignment(0.42, -0.58),
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            const Icon(
+                              Icons.filter_vintage_rounded,
+                              color: Color(0xFFE42F46),
+                              size: 32,
+                            ),
+                            Container(
+                              width: 7,
+                              height: 7,
+                              decoration: const BoxDecoration(
+                                color: WantokColors.gold,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(18, 17, 120, 17),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'LOCAL PROVIDERS',
-                    style: TextStyle(
-                      color: WantokColors.gold,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w900,
-                      letterSpacing: 1.3,
-                    ),
+            Positioned.fill(
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    stops: const [0, 0.48, 0.7, 1],
+                    colors: [
+                      const Color(0xFF075C3A),
+                      const Color(0xFF075C3A).withValues(alpha: 0.96),
+                      const Color(0xFF075C3A).withValues(alpha: 0.34),
+                      Colors.transparent,
+                    ],
                   ),
-                  const SizedBox(height: 6),
-                  const Text(
-                    'Services for everyday life',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 22,
-                      height: 1.05,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  const Text(
-                    'Great providers. Real people.',
-                    style: TextStyle(color: Color(0xFFE0F1E8), fontSize: 12.5),
-                  ),
-                  const SizedBox(height: 12),
-                  FilledButton.icon(
-                    onPressed: onTap,
-                    style: FilledButton.styleFrom(
-                      backgroundColor: WantokColors.gold,
-                      foregroundColor: const Color(0xFF2D1B05),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 9,
+                ),
+              ),
+            ),
+            FractionallySizedBox(
+              widthFactor: 0.58,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(18, 17, 8, 17),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'LOCAL PROVIDERS',
+                      style: TextStyle(
+                        color: WantokColors.gold,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.3,
                       ),
                     ),
-                    icon: const Icon(Icons.arrow_forward_rounded, size: 17),
-                    label: const Text('Explore services'),
+                    const SizedBox(height: 6),
+                    const Text(
+                      'Services for everyday life',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 22,
+                        height: 1.05,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    const Text(
+                      'Great providers. Real people.',
+                      style: TextStyle(
+                        color: Color(0xFFE0F1E8),
+                        fontSize: 12.5,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    FilledButton.icon(
+                      onPressed: onTap,
+                      style: FilledButton.styleFrom(
+                        backgroundColor: WantokColors.gold,
+                        foregroundColor: const Color(0xFF2D1B05),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 9,
+                        ),
+                      ),
+                      icon: const Icon(Icons.arrow_forward_rounded, size: 17),
+                      label: const Text('Explore services'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              right: 12,
+              bottom: 12,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: const Color(0xFF163D31).withValues(alpha: 0.82),
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _PromoDot(active: true),
+                      SizedBox(width: 6),
+                      _PromoDot(),
+                      SizedBox(width: 6),
+                      _PromoDot(),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _PromoDot extends StatelessWidget {
+  const _PromoDot({this.active = false});
+
+  final bool active;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 8,
+      height: 8,
+      decoration: BoxDecoration(
+        color: active
+            ? WantokColors.gold
+            : Colors.white.withValues(alpha: 0.55),
+        shape: BoxShape.circle,
+      ),
+    );
+  }
+}
+
+class _PaymentRailStrip extends StatelessWidget {
+  const _PaymentRailStrip({
+    required this.onWantokPayTap,
+    required this.onPlannedRailTap,
+  });
+
+  final VoidCallback onWantokPayTap;
+  final ValueChanged<String> onPlannedRailTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 76,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          _PaymentBrandTile(
+            width: 164,
+            onTap: onWantokPayTap,
+            child: const Row(
+              children: [
+                _PaymentIconBox(
+                  icon: Icons.account_balance_wallet_rounded,
+                  foreground: Colors.white,
+                  background: Color(0xFF6C35D7),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Wantok Pay',
+                        maxLines: 1,
+                        style: TextStyle(
+                          color: WantokColors.ink,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      SizedBox(height: 2),
+                      Text(
+                        'Kina wallet',
+                        style: TextStyle(
+                          color: WantokColors.muted,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          _PaymentBrandTile(
+            onTap: () => onPlannedRailTap('Visa'),
+            child: const Center(
+              child: Text(
+                'VISA',
+                style: TextStyle(
+                  color: Color(0xFF1A2A7A),
+                  fontSize: 20,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: -1.2,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          _PaymentBrandTile(
+            onTap: () => onPlannedRailTap('Mastercard'),
+            child: Center(
+              child: SizedBox(
+                width: 54,
+                height: 30,
+                child: Stack(
+                  children: [
+                    Positioned(
+                      left: 6,
+                      top: 3,
+                      child: Container(
+                        width: 27,
+                        height: 27,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFEB001B),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: 6,
+                      top: 3,
+                      child: Container(
+                        width: 27,
+                        height: 27,
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFF79E1B),
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          _PaymentBrandTile(
+            onTap: () => onPlannedRailTap('PayPal'),
+            child: const Center(
+              child: Text(
+                'PayPal',
+                style: TextStyle(
+                  color: Color(0xFF003087),
+                  fontSize: 17,
+                  fontStyle: FontStyle.italic,
+                  fontWeight: FontWeight.w900,
+                  letterSpacing: -0.8,
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          _PaymentBrandTile(
+            onTap: () => onPlannedRailTap('Google Pay'),
+            child: const Center(
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: 'G',
+                      style: TextStyle(
+                        color: Color(0xFF4285F4),
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    TextSpan(
+                      text: ' Pay',
+                      style: TextStyle(
+                        color: WantokColors.ink,
+                        fontWeight: FontWeight.w800,
+                      ),
+                    ),
+                  ],
+                ),
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          _PaymentBrandTile(
+            width: 118,
+            onTap: () => onPlannedRailTap('Bank Transfer'),
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.account_balance_rounded,
+                  color: Color(0xFF7547CE),
+                  size: 25,
+                ),
+                SizedBox(width: 6),
+                Flexible(
+                  child: Text(
+                    'Bank\nTransfer',
+                    style: TextStyle(
+                      color: Color(0xFF7547CE),
+                      height: 1.05,
+                      fontSize: 10.5,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          _PaymentBrandTile(
+            width: 54,
+            onTap: onWantokPayTap,
+            child: const Center(
+              child: Icon(
+                Icons.chevron_right_rounded,
+                color: WantokColors.primaryDark,
+                size: 28,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _PaymentBrandTile extends StatelessWidget {
+  const _PaymentBrandTile({
+    required this.onTap,
+    required this.child,
+    this.width = 94,
+  });
+
+  final VoidCallback onTap;
+  final Widget child;
+  final double width;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      child: Material(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(18),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(18),
+              border: Border.all(color: const Color(0xFFE3EAE6)),
+            ),
+            child: child,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PaymentIconBox extends StatelessWidget {
+  const _PaymentIconBox({
+    required this.icon,
+    required this.foreground,
+    required this.background,
+  });
+
+  final IconData icon;
+  final Color foreground;
+  final Color background;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 42,
+      height: 42,
+      decoration: BoxDecoration(
+        color: background,
+        borderRadius: BorderRadius.circular(13),
+      ),
+      alignment: Alignment.center,
+      child: Icon(icon, color: foreground, size: 23),
     );
   }
 }

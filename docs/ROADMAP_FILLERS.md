@@ -404,3 +404,69 @@ Store authoritative external references, offer expiry/revalidation state, suppli
 ### Architecture reference
 
 Detailed design: `docs/GLOBAL_TRAVEL_ARCHITECTURE.md`.
+
+---
+
+## FILLER-2026-10-07-08 - Enterprise Home Dashboard + Payment/Travel Discovery
+
+**Status:** APPROVED and implemented as the current client visual baseline. This is a presentation/discovery layer only; it does not activate unapproved payment or travel transaction rails.
+
+### Canonical Home dashboard
+
+The approved Wantok Services Home/dashboard style is the enterprise marketplace layout now implemented in `ClientHome`:
+
+1. restrained Wantok Services header with the conventional profile/avatar position at top-right;
+2. **Explore services and goods** hero with prominent search;
+3. compact horizontal discovery chips;
+4. **Local Providers / Services for everyday life** promotion;
+5. **Popular categories**;
+6. **Top providers** using real provider/rating data;
+7. **Pay your way** payment-method preview;
+8. locked bottom navigation **Home · Services · Track · Wallet · Inbox**.
+
+The dashboard must remain service/goods-first. Account/profile, mode switching and Wantok Agent must not crowd the primary discovery area.
+
+### Vanessa promotional asset
+
+The Local Providers promotion uses the approved Vanessa image asset already bundled at:
+
+`apps/wantok_app/assets/images/vanessa_local_provider.jpg`
+
+Keep that asset as the current promotional image unless Mansfield explicitly requests a replacement. The flower treatment remains a visual overlay; do not regenerate or replace the source photo as part of ordinary dashboard work.
+
+### Global discovery entry points
+
+The dashboard may expose **Travel & Flights** and **Hotels** as global discovery/planning entry points before supplier integrations are live.
+
+Until TRV1 supplier adapters and explicit approval/payment workflows exist:
+- these entries must be presented as planned/being connected;
+- do not show fabricated live fares, availability or booking confirmation;
+- Wantok Agent may later orchestrate travel through controlled tools under `docs/GLOBAL_TRAVEL_ARCHITECTURE.md`.
+
+### Payment preview
+
+The approved Home payment strip includes:
+- Wantok Pay;
+- Visa;
+- Mastercard;
+- PayPal;
+- Google Pay;
+- Bank Transfer.
+
+These are product/rail previews only until their respective integrations, compliance, settlement and market decisions are approved.
+
+Rules:
+- Wantok Pay may open the safe Wallet preview;
+- inactive rails must clearly say they are planned/not active;
+- no card/wallet/bank payment movement is enabled by this UI;
+- payment methods remain market-configurable for the future global platform;
+- supplier funds, taxes/fees and Wantok fees remain separately auditable when payment movement is eventually enabled.
+
+### Services and Taxi alignment
+
+Services follows the approved enterprise hierarchy:
+**hero/search → local-provider promotion → Popular categories → Top providers → Recommended for you → deeper catalogue/discovery**.
+
+Taxi/Ride follows a map-first pickup/destination planning pattern while keeping Wantok-owned dispatch, delegated-beneficiary rules, explicit Request ride authority and history intact.
+
+This visual direction may take interaction inspiration from leading super-app patterns, but Wantok must keep its own branding, data authority, workflows and product architecture.

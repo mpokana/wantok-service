@@ -85,7 +85,7 @@ const wantokHomeQuickAccessOrder = <String>[
   'taxi-ride',
   'food',
   'delivery',
-  'vehicle-hire',
-  'specialist-services',
   'groceries',
+  'specialist-services',
+  'vehicle-hire',
 ];

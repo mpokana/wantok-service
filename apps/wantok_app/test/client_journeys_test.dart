@@ -79,8 +79,9 @@ void main() {
       bookingMode: 'commerce',
     );
     await showPage(tester, ClientHome(loadServices: () async => [category]));
-    await tester.ensureVisible(find.byType(WantokServiceTile));
-    await tester.tap(find.byType(WantokServiceTile));
+    final foodTile = find.widgetWithText(WantokServiceTile, 'Food');
+    await tester.ensureVisible(foodTile);
+    await tester.tap(foodTile);
     await tester.pumpAndSettle();
     expect(find.byType(CommerceBrowsePage), findsOneWidget);
     await tester.tap(find.byType(BackButton));

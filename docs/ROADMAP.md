@@ -180,12 +180,18 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 - [x] keep the locked **Home · Services · Track · Wallet · Inbox** primary navigation
 - [x] enterprise marketplace visual baseline: Home/Services prioritise **services and goods** with prominent search, compact category discovery, local-provider promotion, real top-provider surfaces and the locked five-tab navigation
 - [x] conventional profile placement: one compact profile circle in the top-right app header; Client/Vendor mode switching moved inside Account so non-service controls no longer dominate the client header
-- [x] remove duplicate Wantok Pay promotion from Home; Wallet is the authoritative Wantok Pay surface
+- [x] remove the old standalone Wantok Pay promo card from Home; Wallet remains the authoritative Wantok Pay surface while Home may show the compact **Pay your way** rail-preview strip
 - [x] expose the user-facing **Wantok Agent** as a compact **Ask Wantok** discovery shortcut rather than a permanent header control or large Home card
 - [x] centralise client service taxonomy as **Move & travel · Food & shopping · Send & errands · People & skills · Book & events**
 - [x] use the same taxonomy for Services filters and the grouped full catalogue
+- [x] align Services to the approved service-first hierarchy: hero/search → local-provider promotion → **Popular categories → Top providers → Recommended for you**, while keeping deeper discovery/Explore/catalogue below
+- [x] **See all** from Popular categories opens a real grouped **All Wantok Services** catalogue and routes each tile into its existing transaction module
+- [x] upgrade Taxi/Ride to a map-first pickup/destination planning surface with current-location control while preserving dispatch, delegated-beneficiary and explicit Request ride authority
 - [x] preserve backend service-category independence so new services can be mapped into client families without changing transaction modules
-- [x] live Android visual QA confirms the enterprise marketplace Home/Services baseline, conventional top-right profile placement, Ask Wantok discovery action and locked navigation without visible overflow
+- [x] live Android visual QA confirms the enterprise marketplace Home/Services baseline, conventional top-right profile placement, Ask Wantok discovery action, map-first Taxi planning and locked navigation without visible overflow
+- [x] canonical Home dashboard includes real Popular categories/Top providers plus clearly planned **Travel & Flights** and **Hotels** entry points without fabricating live travel inventory
+- [x] canonical Home **Pay your way** strip previews Wantok Pay, Visa, Mastercard, PayPal, Google Pay and Bank Transfer; inactive rails remain non-transactional and clearly planned
+- [x] Local Providers promotion retains the approved `assets/images/vanessa_local_provider.jpg` asset; ordinary dashboard work must not replace it
 
 ### CX1G — General Goods Marketplace + Fulfilment — PLANNED
 

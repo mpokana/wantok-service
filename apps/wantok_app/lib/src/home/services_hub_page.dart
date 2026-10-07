@@ -20,6 +20,7 @@ class ServicesHubPage extends StatefulWidget {
     this.loadServices,
     this.loadRecommendations,
     this.loadPlaces,
+    this.showMarketplaceLandingWhenInjected = false,
     super.key,
   });
 
@@ -27,6 +28,7 @@ class ServicesHubPage extends StatefulWidget {
   final Future<List<ClientServiceRecommendation>> Function()?
   loadRecommendations;
   final Future<List<ClientServicePlace>> Function()? loadPlaces;
+  final bool showMarketplaceLandingWhenInjected;
 
   @override
   State<ServicesHubPage> createState() => _ServicesHubPageState();
@@ -223,6 +225,162 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
       MaterialPageRoute<void>(builder: (context) => const SavedItemsPage()),
     );
     if (mounted) await _loadSavedItems();
+  }
+
+  Future<void> _openAllServices(List<WantokServiceCategory> services) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: const Color(0xFFF7F9F8),
+      builder: (sheetContext) {
+        final textScale = MediaQuery.textScalerOf(sheetContext).scale(1);
+        return DraggableScrollableSheet(
+          expand: false,
+          initialChildSize: 0.9,
+          minChildSize: 0.62,
+          maxChildSize: 0.96,
+          builder: (context, controller) => ListView(
+            controller: controller,
+            padding: const EdgeInsets.fromLTRB(18, 6, 18, 26),
+            children: [
+              Row(
+                children: [
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'All Wantok Services',
+                          style: TextStyle(
+                            color: WantokColors.ink,
+                            fontSize: 25,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: -0.6,
+                          ),
+                        ),
+                        SizedBox(height: 3),
+                        Text(
+                          'Move, eat, shop, send, book and find trusted help.',
+                          style: TextStyle(
+                            color: WantokColors.muted,
+                            fontSize: 12.5,
+                            height: 1.35,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    tooltip: 'Close',
+                    onPressed: () => Navigator.of(sheetContext).pop(),
+                    icon: const Icon(Icons.close_rounded),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              for (final family in WantokServiceFamily.catalogueFamilies) ...[
+                Builder(
+                  builder: (context) {
+                    final matches = services
+                        .where((service) => family.matches(service.slug))
+                        .toList(growable: false);
+                    if (matches.isEmpty) return const SizedBox.shrink();
+
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 18),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 18,
+                                backgroundColor: WantokColors.primaryDark
+                                    .withValues(alpha: 0.08),
+                                child: Icon(
+                                  family.icon,
+                                  size: 19,
+                                  color: WantokColors.primaryDark,
+                                ),
+                              ),
+                              const SizedBox(width: 9),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      family.label,
+                                      style: const TextStyle(
+                                        color: WantokColors.ink,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                    ),
+                                    Text(
+                                      family.subtitle,
+                                      style: const TextStyle(
+                                        color: WantokColors.muted,
+                                        fontSize: 11.5,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              final columns =
+                                  (constraints.maxWidth /
+                                          (94 * textScale.clamp(1, 1.8)))
+                                      .floor()
+                                      .clamp(3, 5);
+                              return GridView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: matches.length,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: columns,
+                                      mainAxisExtent:
+                                          104 +
+                                          ((textScale - 1).clamp(0, 1) * 20),
+                                      crossAxisSpacing: 8,
+                                      mainAxisSpacing: 8,
+                                    ),
+                                itemBuilder: (context, index) {
+                                  final service = matches[index];
+                                  final visual = _visualFor(service.slug);
+                                  return _AllServicesTile(
+                                    service: service,
+                                    icon: visual.icon,
+                                    accent: visual.accent,
+                                    surface: visual.surface,
+                                    onTap: () {
+                                      Navigator.of(sheetContext).pop();
+                                      Future<void>.delayed(
+                                        Duration.zero,
+                                        () => _openService(service),
+                                      );
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ],
+          ),
+        );
+      },
+    );
   }
 
   Future<void> _openPlace(
@@ -446,19 +604,30 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
                   },
                 ),
               ),
-              if (widget.loadServices == null &&
+              if ((widget.loadServices == null ||
+                      widget.showMarketplaceLandingWhenInjected) &&
                   query.isEmpty &&
                   _family == WantokServiceFamily.all) ...[
                 const SizedBox(height: 18),
                 _ServicesMarketplacePromo(onTap: _openProviderSearch),
                 const SizedBox(height: 22),
                 PngSectionTitle(
-                  title: 'Find providers',
-                  subtitle: 'Search approved people and businesses by provider, service or category.',
-                  trailing: TextButton.icon(
+                  title: 'Popular categories',
+                  subtitle: 'Jump straight into everyday services and goods.',
+                  trailing: TextButton(
+                    onPressed: () => _openAllServices(services),
+                    child: const Text('See all'),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                _buildPopularCategories(services, textScale: textScale),
+                const SizedBox(height: 22),
+                PngSectionTitle(
+                  title: 'Top providers',
+                  subtitle: 'Verified providers ranked organically from real service signals.',
+                  trailing: TextButton(
                     onPressed: _openProviderSearch,
-                    icon: const Icon(Icons.manage_search_rounded),
-                    label: const Text('Search'),
+                    child: const Text('See all'),
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -483,12 +652,7 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
                       onTap: _openProviderSearch,
                     ),
                   )
-                else ...[
-                  const PngSectionTitle(
-                    title: 'Top providers',
-                    subtitle: 'Verified providers ranked organically from real service signals.',
-                  ),
-                  const SizedBox(height: 10),
+                else
                   SizedBox(
                     height: 142 + ((textScale - 1).clamp(0, 1) * 22),
                     child: ListView.separated(
@@ -504,14 +668,13 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
                       },
                     ),
                   ),
-                ],
               ],
               if (query.isEmpty &&
                   _family == WantokServiceFamily.all &&
                   _recommendations.isNotEmpty) ...[
                 const SizedBox(height: 20),
                 const PngSectionTitle(
-                  title: 'For you',
+                  title: 'Recommended for you',
                   subtitle: 'From saved items, recent activity and services available around you.',
                 ),
                 const SizedBox(height: 10),
@@ -637,6 +800,99 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
           );
         },
       ),
+    );
+  }
+
+  Widget _buildPopularCategories(
+    List<WantokServiceCategory> services, {
+    required double textScale,
+  }) {
+    const preferredSlugs = <String>[
+      'taxi-ride',
+      'food',
+      'delivery',
+      'groceries',
+      'specialist-services',
+      'vehicle-hire',
+    ];
+
+    final bySlug = <String, WantokServiceCategory>{
+      for (final service in services) service.slug: service,
+    };
+    final popular = <WantokServiceCategory>[
+      for (final slug in preferredSlugs)
+        if (bySlug[slug] != null) bySlug[slug]!,
+    ];
+
+    if (popular.isEmpty) {
+      popular.addAll(services.take(6));
+    }
+
+    Widget item(WantokServiceCategory service) {
+      final visual = _visualFor(service.slug);
+      return InkWell(
+        onTap: () => _openService(service),
+        borderRadius: BorderRadius.circular(18),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 3),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 58,
+                height: 58,
+                decoration: BoxDecoration(
+                  color: visual.surface,
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                alignment: Alignment.center,
+                child: Icon(visual.icon, color: visual.accent, size: 27),
+              ),
+              const SizedBox(height: 7),
+              Text(
+                service.name,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: WantokColors.ink,
+                  fontSize: 10.5,
+                  height: 1.08,
+                  fontWeight: FontWeight.w800,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final compact = constraints.maxWidth >= 360 && textScale <= 1.18;
+        if (compact && popular.length <= 6) {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              for (var index = 0; index < popular.length; index++) ...[
+                Expanded(child: item(popular[index])),
+                if (index != popular.length - 1) const SizedBox(width: 4),
+              ],
+            ],
+          );
+        }
+
+        return SizedBox(
+          height: 102 + ((textScale - 1).clamp(0, 1) * 20),
+          child: ListView.separated(
+            scrollDirection: Axis.horizontal,
+            itemCount: popular.length,
+            separatorBuilder: (_, _) => const SizedBox(width: 8),
+            itemBuilder: (context, index) =>
+                SizedBox(width: 82, child: item(popular[index])),
+          ),
+        );
+      },
     );
   }
 
@@ -1117,6 +1373,66 @@ class _TopProviderCard extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _AllServicesTile extends StatelessWidget {
+  const _AllServicesTile({
+    required this.service,
+    required this.icon,
+    required this.accent,
+    required this.surface,
+    required this.onTap,
+  });
+
+  final WantokServiceCategory service;
+  final IconData icon;
+  final Color accent;
+  final Color surface;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(18),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(18),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(8, 9, 8, 8),
+          child: Column(
+            children: [
+              Container(
+                width: 48,
+                height: 48,
+                decoration: BoxDecoration(
+                  color: surface,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                alignment: Alignment.center,
+                child: Icon(icon, color: accent, size: 24),
+              ),
+              const SizedBox(height: 7),
+              Expanded(
+                child: Text(
+                  service.name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: WantokColors.ink,
+                    fontSize: 10.5,
+                    height: 1.08,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

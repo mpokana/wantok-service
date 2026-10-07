@@ -25,7 +25,7 @@ class WantokPayPreviewPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'A preview of everyday payments for PNG.',
+                'A preview of everyday payments across Wantok markets.',
                 style: TextStyle(
                   color: Color(0xFFEDE4FF),
                   fontSize: 16,
@@ -146,8 +146,57 @@ class WantokPayPreviewPage extends StatelessWidget {
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 18),
           child: PngSectionTitle(
+            title: 'Planned payment methods',
+            subtitle:
+                'Visible for product planning only. No rail is active yet.',
+          ),
+        ),
+        const SizedBox(height: 12),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 18),
+          child: Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: [
+              _PaymentMethodPreview(
+                icon: Icons.credit_card_rounded,
+                label: 'Visa',
+                note: 'Planned card rail',
+              ),
+              _PaymentMethodPreview(
+                icon: Icons.credit_card_rounded,
+                label: 'Mastercard',
+                note: 'Planned card rail',
+              ),
+              _PaymentMethodPreview(
+                icon: Icons.account_balance_wallet_rounded,
+                label: 'Google Pay',
+                note: 'Planned wallet rail',
+              ),
+              _PaymentMethodPreview(
+                icon: Icons.payments_rounded,
+                label: 'PayPal',
+                note: 'Planned online rail',
+              ),
+              _PaymentMethodPreview(
+                icon: Icons.account_balance_rounded,
+                label: 'Bank Transfer',
+                note: 'Market-specific bank rails',
+              ),
+              _PaymentMethodPreview(
+                icon: Icons.phone_android_rounded,
+                label: 'Mobile money',
+                note: 'Market-specific wallet rails',
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 22),
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 18),
+          child: PngSectionTitle(
             title: 'Planned services',
-            subtitle: 'Designed for Papua New Guinea payment needs.',
+            subtitle: 'Designed for local and international payment needs.',
           ),
         ),
         const SizedBox(height: 12),
@@ -259,6 +308,66 @@ class _PayAction extends StatelessWidget {
           Icon(icon, color: WantokColors.purplePay, size: 26),
           const SizedBox(height: 7),
           Text(label, style: const TextStyle(fontWeight: FontWeight.w800)),
+        ],
+      ),
+    );
+  }
+}
+
+class _PaymentMethodPreview extends StatelessWidget {
+  const _PaymentMethodPreview({
+    required this.icon,
+    required this.label,
+    required this.note,
+  });
+
+  final IconData icon;
+  final String label;
+  final String note;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 164,
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: const Color(0xFFE7E0F1)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CircleAvatar(
+            radius: 18,
+            backgroundColor: const Color(0xFFF0E9FC),
+            child: Icon(icon, color: WantokColors.purplePay, size: 19),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  label,
+                  style: const TextStyle(
+                    color: WantokColors.ink,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 12.5,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  note,
+                  style: const TextStyle(
+                    color: WantokColors.muted,
+                    fontSize: 9.5,
+                    height: 1.2,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );

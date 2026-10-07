@@ -103,7 +103,7 @@ void main() {
       ),
     );
     await tester.tap(find.text('Search services, goods or providers'));
-    await tester.tap(find.widgetWithText(ActionChip, 'Ask Wantok'));
+    await tester.tap(find.byTooltip('Ask Wantok'));
     expect(searches, 1);
     expect(agentOpens, 1);
     expect(find.text('Popular categories'), findsOneWidget);
@@ -142,6 +142,32 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('See all opens the grouped Wantok service catalogue', (
+    tester,
+  ) async {
+    await showPage(
+      tester,
+      ServicesHubPage(
+        loadServices: () async => services,
+        showMarketplaceLandingWhenInjected: true,
+      ),
+    );
+
+    expect(find.text('Popular categories'), findsOneWidget);
+    await tester.tap(find.text('See all').first);
+    await tester.pumpAndSettle();
+
+    expect(find.text('All Wantok Services'), findsOneWidget);
+    expect(find.text('Move & travel'), findsOneWidget);
+    expect(find.text('Food & shopping'), findsOneWidget);
+    expect(find.text('People & skills'), findsOneWidget);
+    expect(find.text('Taxi'), findsWidgets);
+    expect(find.text('Food'), findsWidgets);
+    expect(find.text('Groceries'), findsWidgets);
+    expect(find.text('Specialists'), findsWidgets);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets(
     'recommendations use injected real-signal results and hide while filtering',
     (tester) async {
@@ -153,17 +179,17 @@ void main() {
         ),
       );
 
-      expect(find.text('For you'), findsOneWidget);
+      expect(find.text('Recommended for you'), findsOneWidget);
       expect(find.text('Saved by you'), findsOneWidget);
       expect(find.text('1.2 km away'), findsOneWidget);
 
       await tester.enterText(find.byType(TextField), 'taxi');
       await tester.pumpAndSettle();
-      expect(find.text('For you'), findsNothing);
+      expect(find.text('Recommended for you'), findsNothing);
 
       await tester.tap(find.byTooltip('Clear search'));
       await tester.pumpAndSettle();
-      expect(find.text('For you'), findsOneWidget);
+      expect(find.text('Recommended for you'), findsOneWidget);
       expect(tester.takeException(), isNull);
     },
   );
@@ -281,10 +307,10 @@ void main() {
 
   testWidgets('Wantok Agent is a compact discovery action', (tester) async {
     await showPage(tester, const HomeShell(roles: {'customer'}, email: null));
-    expect(find.widgetWithText(ActionChip, 'Ask Wantok'), findsOneWidget);
+    expect(find.byTooltip('Ask Wantok'), findsOneWidget);
     expect(find.text('Wantok AI Agent'), findsNothing);
 
-    await tester.tap(find.widgetWithText(ActionChip, 'Ask Wantok'));
+    await tester.tap(find.byTooltip('Ask Wantok'));
     await tester.pumpAndSettle();
     expect(find.text('Wantok Agent'), findsOneWidget);
     expect(find.text('Your Wantok guide'), findsOneWidget);
@@ -372,6 +398,16 @@ void main() {
       find.text('Preview only - payment rails are not active yet.'),
       findsOneWidget,
     );
+    await tester.dragUntilVisible(
+      find.text('Google Pay'),
+      find.byType(ListView).first,
+      const Offset(0, -320),
+    );
+    await tester.pumpAndSettle();
+    expect(find.text('Visa'), findsOneWidget);
+    expect(find.text('Mastercard'), findsOneWidget);
+    expect(find.text('Google Pay'), findsOneWidget);
+    expect(find.text('PayPal'), findsOneWidget);
     expect(find.byType(FilledButton), findsNothing);
     expect(find.byType(TextField), findsNothing);
     expect(tester.takeException(), isNull);
