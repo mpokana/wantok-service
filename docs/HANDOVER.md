@@ -6,7 +6,7 @@
 
 ## Resume here
 
-The current working phase is **CX1 client-experience completion**; the **CX1 gate remains open before T2.4**. Delegated booking is checkpointed across every currently implemented client service family. The active CX1 extensions now include **CX1F provider/service discovery with ratings** and the **CX1I Wantok AI Agent capability/human-handoff foundation**. General Marketplace/fulfilment (CX1G), sponsored promotion (CX1H) and model-backed AI/tool execution (remaining CX1I) are still planned. Run:
+The current working phase is **CX1 client-experience completion**; the **CX1 gate remains open before T2.4**. Delegated booking is checkpointed across every currently implemented client service family. The active CX1 extensions now include **CX1F provider/service discovery with ratings** and the **CX1I Wantok Agent capability/human-handoff foundation**. General Marketplace/fulfilment (CX1G), sponsored promotion (CX1H) and model-backed AI/tool execution (remaining CX1I) are still planned. Run:
 
 `git log -1 --oneline`
 
@@ -44,7 +44,7 @@ Checkpointed platform includes:
 - T2.2 versioned typed module configuration and Technical Control editor
 - T2.2 PNG-rich client experience polish across Home, Food/Groceries, Track, Inbox and Wantok Pay preview
 - T2.3 module health/dependency reporting, scoped probe execution and impact previews
-- CX1 reliability/discovery baseline plus richer client account/privacy, delegated booking, Saved/media/recommendations/Explore PNG, provider/service search with ratings, Top Wantoks organic discovery, and Wantok AI Agent placeholder/handoff foundation (gate open)
+- CX1 reliability/discovery baseline plus richer client account/privacy, delegated booking, Saved/media/recommendations/Explore PNG, provider/service search with ratings, Top Wantoks organic discovery, and Wantok Agent capability/handoff foundation (gate open)
 
 ### Technical Control T1
 
@@ -92,7 +92,7 @@ Checkpointed platform includes:
 - PNG scenic visual language implemented with lightweight custom Flutter painters: mountain forms, tropical accents and abstract bird-of-paradise treatment
 - bilum-inspired custom bottom navigation replaces Material/Grab-like navigation
 - original four-tab layout was superseded by **Home · Services · Track · Wallet · Inbox**
-- richer Home hierarchy with scenic hero, service discovery, Wantok Pay preview strip, service spotlights and PNG purpose banner
+- richer Home hierarchy with scenic hero, compact **Quick access** shortcuts, service spotlights and PNG purpose banner; Wantok Pay is kept in the dedicated Wallet tab instead of duplicating Home
 - Food/Groceries now use scenic commerce heroes, search/filter surfaces and richer local-vendor discovery cards
 - Track and Inbox have dedicated scenic headers and polished empty states
 - Wantok Pay remains a visual preview only with **Kina (K)** display; no payment movement is enabled
@@ -120,7 +120,7 @@ Checkpointed platform includes:
 
 - **Client navigation is locked as Home · Services · Track · Wallet · Inbox.** Do not rename it to Grab-style Discover/Activity/Payment/Messages.
 - Home search selects Services; profile route has an app bar/back button.
-- Services owns rich discovery: family filters/search/clear, safe loading/error/empty states, Saved controls, **For you**, **Explore PNG**, **Find providers**, and **Top Wantoks**. Provider discovery searches active verified providers through approved active services, shows real 1–5 star rating/review counts, exposes approved services on provider detail, supports saving providers, and exposes category/province/town client filters backed by structured server-side coverage. Organic ranking is confidence-aware so a 5.0/1-review provider does not automatically outrank an established high-quality provider. Top Wantoks is a daily rotating subset from the qualified organic pool; paid placement is not mixed into the score.
+- Services owns the complete enterprise catalogue and rich discovery: search/clear, Saved controls, **For you**, **Explore PNG**, **Find providers**, and **Top Wantoks**. Client-facing services are organised through a shared taxonomy: **Move & travel · Food & shopping · Send & errands · People & skills · Book & events**. The default catalogue groups services under those families; compact filters reuse the same taxonomy. Provider discovery searches active verified providers through approved active services, shows real 1–5 star rating/review counts, exposes approved services on provider detail, supports saving providers, and exposes category/province/town client filters backed by structured server-side coverage. Organic ranking is confidence-aware so a 5.0/1-review provider does not automatically outrank an established high-quality provider. Top Wantoks is a daily rotating subset from the qualified organic pool; paid placement is not mixed into the score.
 - Account/Profile now includes bio/avatar URL foundation, privacy/share controls, linked-account management, Saved, Trusted people, My reviews and separate Business/Vendor profile presentation under one login.
 - Supabase identity linking is used for Google/Facebook; no parallel customer account is created by UI design.
 - owner-scoped `client_saved_items` and secured bookmark RPC validate that only discoverable entities can be saved.
@@ -128,9 +128,9 @@ Checkpointed platform includes:
 - existing `service_reviews` is extended with title/photo URL/visibility fields; review writes use a secured RPC limited to completed customer bookings; provider rating aggregation remains the existing trigger.
 - Track offers Review/Edit review for eligible completed generic service bookings and retains specialised ride/order/event/water shortcuts.
 - Wallet remains preview-only but now frames Top up/Scan/Send/Receive, verification, PNG-oriented planned services and future transaction history. No money movement exists.
-- Home now exposes a **Wantok AI Agent** entry without adding a sixth bottom-navigation tab. The authenticated capability API reports model/chat/handoff state; model chat is deliberately disabled until a controlled gateway is configured. The Agent surface can use real provider-search fallback and can create owner-private human-help requests. Support/Operations/Admin can later triage those requests; live human chat and support triage UI are not yet implemented.
+- The user-facing assistant is **Wantok Agent**. It is a compact client-header action rather than a large Home card and still does not add a sixth bottom-navigation tab. Home is intentionally shortcut-first and currently limits its service grid to six high-frequency entries with **See all** routing to Services. The authenticated capability API reports model/chat/handoff state; model chat is deliberately disabled until a controlled gateway is configured. The Agent surface can use real provider-search fallback and create owner-private human-help requests. Support/Operations/Admin can later triage those requests; live human chat and support triage UI are not yet implemented. Internal compatibility identifiers such as `WantokAiAgentRepository` and `wantok_ai_agent` remain unchanged.
 - retry failures stay in the view rather than escaping callbacks; Events/departures/order/registration/water-trip failures do not masquerade as empty records.
-- 33 focused client regressions plus the configuration smoke total 34 app tests; they use in-memory/unconfigured backends and do not replace local account data.
+- 34 focused client regressions plus the configuration smoke total **35 app tests**; they use in-memory/unconfigured backends and do not replace local account data.
 - entry/back navigation coverage includes 11 categories; Taxi map/location/runtime behaviour and the new CX1A surfaces still require live QA.
 - do not call CX1 complete from widget/database tests alone; see its evidence document.
 
@@ -138,7 +138,7 @@ Checkpointed platform includes:
 
 - Resumed clean `feature/flutter-platform-v1` at `b69656b`. Prior debug APK build confirmed complete by Gradle daemon Success at 08:32:04 PGT and matching APK/SHA-1 artifacts. Installed it with `adb install -r` on the preserved emulator; Success, unchanged first-install timestamp and existing Mansfield sign-in. New rebuild attempts with `.wantok/local-android.json` failed with Java loopback IOException, including the IPv4 retry; do not report those attempts as PASS.
 - Home/Services retain locked five-tab navigation. Services → Find providers, Agent → plumber search, clear/Top Wantoks empty state and category/province menus verified. Local DB has **0 provider profiles / 0 provider services**; menus contain only All, town disabled. Populated filter/rating/save/detail evidence remains open and needs real approved service coverage; no fixtures/approvals were created.
-- Wantok AI Agent capability status and disabled model input verified. Android Talk to a person submission showed success and created one `open` request owned by the existing Mansfield profile, ID `640eded2-0367-402a-8555-1252b306acb0`, with `source=wantok_ai_agent`, `chat_enabled=false`. It is explicitly labelled QA with no operational assistance required; retained for evidence. Staff response/live human chat and Web handoff remain unverified.
+- Wantok Agent capability status and disabled model input verified. Android Talk to a person submission showed success and created one `open` request owned by the existing Mansfield profile, ID `640eded2-0367-402a-8555-1252b306acb0`, with internal source `wantok_ai_agent` and `chat_enabled=false`. It is explicitly labelled QA with no operational assistance required; retained for evidence. Staff response/live human chat and Web handoff remain unverified.
 - Existing Auth/Profile counts remain **2/2**. No app/Supabase/AVD reset or role changes. Screenshots/XML and fresh build/check logs are retained locally under ignored `.wantok/`; full evidence and APK hash are in `docs/CX1_CLIENT_EXPERIENCE_GATE.md`.
 - Fresh full Flutter checkpoint PASS: seven analysis targets, 34 app tests, Admin/Technical smoke tests. Database PASS: 27 files / 598 tests. CX1 remains open, T2.4 deferred, CX1G not started. Resolve the documentation checkpoint hash with `git log -1 --oneline`.
 
@@ -153,12 +153,21 @@ Checkpointed platform includes:
 - Fresh Flutter checkpoint remains PASS: seven analysis targets, **34 app tests**, Operations Admin smoke and Technical Control smoke.
 - Android CX1F is now PASS; **Web CX1F remains open**. CX1 overall remains open, T2.4 stays deferred and CX1G has not started.
 
+## Enterprise client hierarchy continuation — 2026-10-07
+
+- The public assistant is now **Wantok Agent**. The previous large Agent card was removed from Home and replaced by a compact sparkle action in the client app bar, available across client tabs without creating a sixth primary destination. Internal API/database identifiers remain unchanged for compatibility.
+- Home is now intentionally shortcut-first: scenic search hero, six high-frequency **Quick access** services, **See all** into Services, then lightweight service spotlights. The duplicate Wantok Pay Home card was removed; **Wallet** is the authoritative Wantok Pay surface.
+- `service_catalog_taxonomy.dart` centralises the client-facing service families as **Move & travel · Food & shopping · Send & errands · People & skills · Book & events**. Services uses the same taxonomy for horizontal filters and grouped full-catalogue panels while individual backend service categories remain independently managed.
+- Fresh debug APK built successfully after resolving the known generated `cleanMergeDebugAssets` lock by stopping Gradle and clearing only `apps/wantok_app/build`. The APK was installed in-place with `adb install -r`; existing sign-in, Supabase data and AVD userdata were preserved.
+- Live Android visual QA PASS: simplified Home, grouped Services catalogue, Top Wantoks/provider discovery, locked five-tab navigation and renamed Wantok Agent page render without visible overflow. Evidence is retained under ignored `.wantok/`.
+- Fresh full checkpoint PASS: all seven Flutter analysis targets, **35 Wantok app tests**, Operations Admin smoke, Technical Control smoke, and **27 files / 598 pgTAP tests**.
+
 ## Validation baseline
 
 At this checkpoint:
 
 - all shared Flutter packages: analysis PASS
-- Wantok app: analysis + **34 tests PASS** (33 client regressions + configuration smoke)
+- Wantok app: analysis + **35 tests PASS** (34 client regressions + configuration smoke)
 - required `scripts/flutter/check.ps1`: PASS; Desktop Commander shells on EAGLT02 currently need the standard `PROGRAMFILES(X86)=C:\Program Files (x86)` supplied per process for `flutter test`
 - Wantok Operations Admin: analysis + smoke test PASS
 - Wantok Technical Control: analysis + smoke test PASS
@@ -210,7 +219,7 @@ Technical Control development server may be run on:
 
 T2.3 checkpoint: **`46d6208`**; prior CX1 reliability/discovery checkpoint: **`0c33a37`**. Required sequence: **finish CX1A/CX1 evidence → T2.4 diagnostics/logs/jobs**.
 
-CX1 now covers reliability, richer client account/profile features, delegated booking across every implemented service family, Saved/media/recommendations/PNG discovery, provider/service search with ratings and Top Wantoks organic discovery, plus the Wantok AI Agent placeholder/capability/handoff foundation. The navigation remains **Home · Services · Track · Wallet · Inbox**. Next product additions captured in `docs/ROADMAP_FILLERS.md` are **CX1G General Marketplace + logistics fulfilment**, **CX1H organic/sponsored ranking**, and remaining **CX1I model gateway/tool execution/support triage**. Fresh signed-in Android/Web evidence is still required before CX1 closes.
+CX1 now covers reliability, richer client account/profile features, delegated booking across every implemented service family, Saved/media/recommendations/PNG discovery, provider/service search with ratings and Top Wantoks organic discovery, plus the Wantok Agent capability/handoff foundation. The navigation remains **Home · Services · Track · Wallet · Inbox**. Next product additions captured in `docs/ROADMAP_FILLERS.md` are **CX1G General Marketplace + logistics fulfilment**, **CX1H organic/sponsored ranking**, and remaining **CX1I model gateway/tool execution/support triage**. Fresh signed-in Android/Web evidence is still required before CX1 closes.
 
 Preserve the local development accounts, roles and data. Do not reset/reseed Supabase or replace working modules/configuration. At resume there are two local auth users/profiles and one local `tech_platform_admin` grant.
 

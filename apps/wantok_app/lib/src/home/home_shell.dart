@@ -17,6 +17,7 @@ import 'messages_page.dart';
 import 'png_visuals.dart';
 import 'services_hub_page.dart';
 import 'vendor_home.dart';
+import 'wantok_agent_page.dart';
 import 'wantok_pay_preview_page.dart';
 
 class HomeShell extends StatefulWidget {
@@ -98,6 +99,12 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
           body: AccountPage(roles: _roles, onSignOut: _auth.signOut),
         ),
       ),
+    );
+  }
+
+  void _openAgent() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (context) => const WantokAgentPage()),
     );
   }
 
@@ -274,6 +281,12 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
         ],
       ),
       actions: [
+        if (client)
+          IconButton(
+            tooltip: 'Wantok Agent',
+            onPressed: _openAgent,
+            icon: const Icon(Icons.auto_awesome_rounded),
+          ),
         Padding(
           padding: const EdgeInsets.only(right: 12),
           child:

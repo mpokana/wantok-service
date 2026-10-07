@@ -395,7 +395,7 @@ class _ProviderDiscoveryPageState extends State<ProviderDiscoveryPage> {
                   return _StateCard(
                     icon: Icons.search_off_rounded,
                     title: 'No matching providers',
-                    body: 'Try another provider name, service or category. Wantok AI Agent will later help when normal search cannot find a match.',
+                    body: 'Try another provider name, service or category. Wantok Agent can guide the next step when normal search cannot find a match.',
                     actionLabel: _hasFilters ? 'Clear filters' : 'Clear search',
                     onAction: _clearAll,
                   );

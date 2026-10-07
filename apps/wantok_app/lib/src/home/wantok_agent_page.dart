@@ -4,14 +4,14 @@ import 'package:wantok_ui/wantok_ui.dart';
 
 import 'provider_discovery_page.dart';
 
-class WantokAiAgentPage extends StatefulWidget {
-  const WantokAiAgentPage({super.key});
+class WantokAgentPage extends StatefulWidget {
+  const WantokAgentPage({super.key});
 
   @override
-  State<WantokAiAgentPage> createState() => _WantokAiAgentPageState();
+  State<WantokAgentPage> createState() => _WantokAgentPageState();
 }
 
-class _WantokAiAgentPageState extends State<WantokAiAgentPage> {
+class _WantokAgentPageState extends State<WantokAgentPage> {
   static const _repository = WantokAiAgentRepository();
 
   late Future<WantokAiAgentCapabilities> _capabilities;
@@ -81,7 +81,7 @@ class _WantokAiAgentPageState extends State<WantokAiAgentPage> {
       backgroundColor: const Color(0xFFF7F9F8),
       appBar: AppBar(
         title: const Text(
-          'Wantok AI Agent',
+          'Wantok Agent',
           style: TextStyle(fontWeight: FontWeight.w900),
         ),
         actions: [
@@ -266,7 +266,7 @@ class _WantokAiAgentPageState extends State<WantokAiAgentPage> {
                 minLines: 2,
                 maxLines: 4,
                 decoration: InputDecoration(
-                  labelText: 'Ask Wantok AI Agent',
+                  labelText: 'Ask Wantok Agent',
                   hintText: capabilities?.chatEnabled == true
                       ? 'What can I help you find?'
                       : 'AI chat is not enabled yet.',
@@ -278,7 +278,7 @@ class _WantokAiAgentPageState extends State<WantokAiAgentPage> {
               ),
               const SizedBox(height: 8),
               const Text(
-                'Wantok AI Agent will only use controlled Wantok APIs. It will not approve providers, move money, grant privileged roles or bypass workflow approvals.',
+                'Wantok Agent uses controlled Wantok APIs. It cannot approve providers, move money, grant privileged roles or bypass workflow approvals.',
                 style: TextStyle(
                   color: WantokColors.muted,
                   fontSize: 12,

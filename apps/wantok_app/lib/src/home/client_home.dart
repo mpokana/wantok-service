@@ -10,9 +10,8 @@ import '../services/reservation_browse_page.dart';
 import '../services/taxi_ride_page.dart';
 import '../services/water_transport_page.dart';
 import 'png_visuals.dart';
+import 'service_catalog_taxonomy.dart';
 import 'services_hub_page.dart';
-import 'wantok_ai_agent_page.dart';
-import 'wantok_pay_preview_page.dart';
 
 class ClientHome extends StatefulWidget {
   const ClientHome({
@@ -78,6 +77,7 @@ class _ClientHomeState extends State<ClientHome> {
         future: _services,
         builder: (context, snapshot) {
           final services = snapshot.data ?? const <WantokServiceCategory>[];
+          final quickServices = _quickAccessServices(services);
           final textScale = MediaQuery.textScalerOf(context).scale(1);
 
           return ListView(
@@ -88,26 +88,15 @@ class _ClientHomeState extends State<ClientHome> {
                 onAccountTap: widget.onAccountTap,
                 onServicesTap: _openServices,
               ),
-              const SizedBox(height: 14),
-              _WantokPayStrip(
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (context) => const WantokPayPreviewPage(),
-                  ),
+              const SizedBox(height: 18),
+              PngSectionTitle(
+                title: 'Quick access',
+                subtitle: 'Your everyday shortcuts. Browse Services for the complete catalogue.',
+                trailing: TextButton.icon(
+                  onPressed: _openServices,
+                  icon: const Icon(Icons.apps_rounded, size: 18),
+                  label: const Text('See all'),
                 ),
-              ),
-              const SizedBox(height: 12),
-              _WantokAiStrip(
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                    builder: (context) => const WantokAiAgentPage(),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 22),
-              const PngSectionTitle(
-                title: 'What do you need today?',
-                subtitle: 'Local transport, food, delivery, people and places — one Wantok account.',
               ),
               const SizedBox(height: 12),
               if (snapshot.connectionState != ConnectionState.done)
@@ -166,7 +155,7 @@ class _ClientHomeState extends State<ClientHome> {
                               .floor()
                               .clamp(2, 6);
                       return GridView.builder(
-                        itemCount: services.length,
+                        itemCount: quickServices.length,
                         shrinkWrap: true,
                         physics: const NeverScrollableScrollPhysics(),
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -179,7 +168,7 @@ class _ClientHomeState extends State<ClientHome> {
                           mainAxisSpacing: 3,
                         ),
                         itemBuilder: (context, index) {
-                          final service = services[index];
+                          final service = quickServices[index];
                           final visual = _visualFor(service.slug);
                           return WantokServiceTile(
                             label: service.name,
@@ -222,6 +211,29 @@ class _ClientHomeState extends State<ClientHome> {
         },
       ),
     );
+  }
+
+  List<WantokServiceCategory> _quickAccessServices(
+    List<WantokServiceCategory> services,
+  ) {
+    final bySlug = <String, WantokServiceCategory>{
+      for (final service in services) service.slug: service,
+    };
+    final selected = wantokHomeQuickAccessOrder
+        .map((slug) => bySlug[slug])
+        .whereType<WantokServiceCategory>()
+        .toList();
+
+    if (selected.length >= 6 || selected.length == services.length) {
+      return selected;
+    }
+
+    for (final service in services) {
+      if (selected.any((item) => item.id == service.id)) continue;
+      selected.add(service);
+      if (selected.length == 6) break;
+    }
+    return selected;
   }
 
   List<Widget> _spotlights(List<WantokServiceCategory> services) {
@@ -517,73 +529,6 @@ class _PngHomeHero extends StatelessWidget {
   }
 }
 
-class _WantokPayStrip extends StatelessWidget {
-  const _WantokPayStrip({required this.onTap});
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(22),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(22),
-        child: Container(
-          padding: const EdgeInsets.all(15),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(22),
-            border: Border.all(color: const Color(0xFFE5E7E5)),
-          ),
-          child: Row(
-            children: [
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF5123B2), Color(0xFF7B35D8)],
-                  ),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: const Icon(
-                  Icons.account_balance_wallet_rounded,
-                  color: Colors.white,
-                ),
-              ),
-              const SizedBox(width: 12),
-              const Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Wantok Pay',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w900,
-                        fontSize: 15,
-                      ),
-                    ),
-                    SizedBox(height: 2),
-                    Text(
-                      'Kina wallet preview • payment rails coming later',
-                      style: TextStyle(
-                        color: WantokColors.muted,
-                        fontSize: 11.5,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(Icons.chevron_right_rounded),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _ServiceSpotlight extends StatelessWidget {
   const _ServiceSpotlight({
     required this.title,
@@ -655,62 +600,6 @@ class _ServiceSpotlight extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _WantokAiStrip extends StatelessWidget {
-  const _WantokAiStrip({required this.onTap});
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: const Color(0xFFF4EFF8),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(20),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(15, 13, 12, 13),
-          child: Row(
-            children: [
-              const CircleAvatar(
-                backgroundColor: Color(0xFFE7DAF0),
-                child: Icon(
-                  Icons.auto_awesome_rounded,
-                  color: WantokColors.purplePay,
-                ),
-              ),
-              const SizedBox(width: 11),
-              const Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Wantok AI Agent',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w900,
-                        fontSize: 16,
-                      ),
-                    ),
-                    SizedBox(height: 3),
-                    Text(
-                      'Find services, providers and help — AI chat is being prepared.',
-                      style: TextStyle(color: WantokColors.muted, fontSize: 12),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 8),
-              const Icon(
-                Icons.chevron_right_rounded,
-                color: WantokColors.purplePay,
-              ),
-            ],
           ),
         ),
       ),

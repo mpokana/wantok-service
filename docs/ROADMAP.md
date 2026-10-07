@@ -174,6 +174,17 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 - [x] populated signed-in Android provider QA: `plumber` search, Specialist Services → Morobe → Lae filters, 5.0 (1) rating card, Saved persistence and approved-service storefront/detail verified on 2026-10-07 using one clearly labelled non-commercial local QA provider created through the normal application/approval/service-review lifecycle
 - [ ] Web provider search/filter/rating/save/detail QA
 
+### CX1 client information architecture — IMPLEMENTED
+
+- [x] keep the locked **Home · Services · Track · Wallet · Inbox** primary navigation
+- [x] keep Home focused on a scenic search hero, six high-frequency **Quick access** shortcuts and lightweight service spotlights
+- [x] remove duplicate Wantok Pay promotion from Home; Wallet is the authoritative Wantok Pay surface
+- [x] expose the user-facing **Wantok Agent** as a compact client-header action rather than a large Home card
+- [x] centralise client service taxonomy as **Move & travel · Food & shopping · Send & errands · People & skills · Book & events**
+- [x] use the same taxonomy for Services filters and the grouped full catalogue
+- [x] preserve backend service-category independence so new services can be mapped into client families without changing transaction modules
+- [x] live Android visual QA confirms the new Home, grouped Services catalogue and Wantok Agent surfaces without visible overflow
+
 ### CX1G — General Goods Marketplace + Fulfilment — PLANNED
 
 - [ ] activate a general **Marketplace / Products** commerce category beyond Food/Groceries
@@ -196,15 +207,15 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 - [ ] sponsored placement never changes stored organic ratings or bypasses provider/listing approval
 - [ ] audit campaign activation/status and keep future billing references separate from Wantok Pay transaction movement
 
-### CX1I — Wantok AI Agent Foundation — IN PROGRESS
+### CX1I — Wantok Agent Foundation — IN PROGRESS
 
-- [x] client placeholder/entry point for **Wantok AI Agent** on Home without adding a sixth bottom-navigation tab
+- [x] user-facing **Wantok Agent** entry is a compact global client-header action without adding a sixth bottom-navigation tab; the former large Home card is removed
 - [x] authenticated backend capability contract reports model/chat/handoff state and allowed/restricted tool classes
 - [x] model-backed chat remains disabled until an approved provider/gateway is configured
 - [x] provider-search fallback from Agent examples uses the real CX1F discovery API
 - [x] secured owner-private human-help handoff queue with Support/Operations/Admin visibility/update rights
 - [x] client **Talk to a person** form creates a concise human-follow-up request
-- [x] signed-in Android capability/model-disabled status, real plumber-search fallback and human-handoff capture verified on 2026-10-07; success snackbar plus one owner-linked persisted QA request confirmed
+- [x] signed-in Android capability/model-disabled status, real plumber-search fallback and human-handoff capture verified on 2026-10-07; compact header entry and renamed **Wantok Agent** page also verified live; success snackbar plus one owner-linked persisted QA request confirmed
 - [ ] Web handoff QA and staff response/live human chat evidence
 - [ ] provider-agnostic model gateway/Edge Function with replaceable provider/model configuration
 - [ ] controlled AI tools for service/provider/product search and authorised booking/order/status lookup
@@ -221,7 +232,7 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 
 ### Remaining CX1 gate evidence
 
-- [x] fresh signed-in Android **Client → Services** shell/navigation visual QA on the existing development session; locked Home / Services / Track / Wallet / Inbox layout renders without visible overflow
+- [x] fresh signed-in Android **Client → Services** shell/navigation visual QA on the existing development session; locked Home / Services / Track / Wallet / Inbox layout renders without visible overflow, Home is shortcut-first, and Wantok Agent is accessible from the client header
 - [ ] remaining signed-in Android/Web visual QA using existing development sessions/accounts
 - [ ] live read-only journey checks, especially Taxi map/location/history and populated Track/Inbox/account records
 - [ ] live QA of Account privacy/linked/saved/trusted/review pages, Services bookmark interaction/recommendations/Explore PNG live data, Track reviews and Wallet preview

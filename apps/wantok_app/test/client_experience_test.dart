@@ -104,6 +104,9 @@ void main() {
     await tester.tap(find.byTooltip('Account and profile'));
     expect(searches, 1);
     expect(profiles, 1);
+    expect(find.text('Quick access'), findsOneWidget);
+    expect(find.text('Wantok Pay'), findsNothing);
+    expect(find.text('Wantok AI Agent'), findsNothing);
     expect(
       find.text('No services available yet. Please check back soon.'),
       findsOneWidget,
@@ -115,6 +118,9 @@ void main() {
     tester,
   ) async {
     await showPage(tester, ServicesHubPage(loadServices: () async => services));
+    expect(find.text('Move & travel'), findsOneWidget);
+    expect(find.text('Food & shopping'), findsOneWidget);
+    expect(find.text('People & skills'), findsOneWidget);
     await tester.tap(find.widgetWithText(ChoiceChip, 'Eat & shop'));
     await tester.pumpAndSettle();
     expect(find.text('Food'), findsOneWidget);
@@ -160,30 +166,34 @@ void main() {
     },
   );
 
-  testWidgets('Explore PNG uses covered places and opens available service types', (
-    tester,
-  ) async {
-    await showPage(
-      tester,
-      ServicesHubPage(
-        loadServices: () async => services,
-        loadPlaces: () async => places,
-      ),
-    );
+  testWidgets(
+    'Explore PNG uses covered places and opens available service types',
+    (tester) async {
+      await showPage(
+        tester,
+        ServicesHubPage(
+          loadServices: () async => services,
+          loadPlaces: () async => places,
+        ),
+      );
 
-    expect(find.text('Explore PNG'), findsOneWidget);
-    expect(find.text('Lae'), findsOneWidget);
-    expect(find.text('Morobe Province'), findsOneWidget);
+      expect(find.text('Explore PNG'), findsOneWidget);
+      expect(find.text('Lae'), findsOneWidget);
+      expect(find.text('Morobe Province'), findsOneWidget);
 
-    await tester.tap(find.text('Lae'));
-    await tester.pumpAndSettle();
+      await tester.tap(find.text('Lae'));
+      await tester.pumpAndSettle();
 
-    expect(find.text('Lae, Morobe Province'), findsOneWidget);
-    expect(find.text('4 active coverage points across 2 service types.'), findsOneWidget);
-    expect(find.text('Food'), findsWidgets);
-    expect(find.text('Taxi'), findsWidgets);
-    expect(tester.takeException(), isNull);
-  });
+      expect(find.text('Lae, Morobe Province'), findsOneWidget);
+      expect(
+        find.text('4 active coverage points across 2 service types.'),
+        findsOneWidget,
+      );
+      expect(find.text('Food'), findsWidgets);
+      expect(find.text('Taxi'), findsWidgets);
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   testWidgets('catalogue failure has a safe error and working retry', (
     tester,
@@ -266,6 +276,22 @@ void main() {
       expect(find.text('Home'), findsOneWidget);
     },
   );
+
+  testWidgets('Wantok Agent is a compact client header action', (tester) async {
+    await showPage(tester, const HomeShell(roles: {'customer'}, email: null));
+    expect(find.byTooltip('Wantok Agent'), findsOneWidget);
+    expect(find.text('Wantok AI Agent'), findsNothing);
+
+    await tester.tap(find.byTooltip('Wantok Agent'));
+    await tester.pumpAndSettle();
+    expect(find.text('Wantok Agent'), findsOneWidget);
+    expect(find.text('Your Wantok guide'), findsOneWidget);
+
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    expect(find.byKey(const ValueKey('wantok-nav-Home')), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
 
   testWidgets('Client/Vendor switch does not grant provider or admin access', (
     tester,

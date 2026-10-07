@@ -148,13 +148,13 @@ Do not silently mix paid ranking into organic rating scores.
 
 ---
 
-## FILLER-2026-10-07-05 — Wantok AI Agent
+## FILLER-2026-10-07-05 — Wantok Agent
 
 **Status:** CX1I FOUNDATION IMPLEMENTED; model gateway/tool execution/support triage remain.
 
 ### Client role
 
-Add a visible **Wantok AI Agent** entry point without adding another permanent bottom-navigation tab.
+Expose a visible **Wantok Agent** entry point without adding another permanent bottom-navigation tab. The implemented client UX uses a compact global header action so the Agent remains easy to reach without consuming Home content space.
 
 The Agent should help customers:
 - find a service/provider/product;
@@ -192,7 +192,7 @@ Prepare a provider-agnostic AI API contract:
 
 ### Initial placeholder
 
-Frontend should expose a tasteful **Wantok AI Agent** placeholder/preview with examples such as:
+Frontend exposes a tasteful **Wantok Agent** guide with examples such as:
 - “Find a plumber in Lae.”
 - “Show top-rated vehicle hire near me.”
 - “Help me list a product.”
