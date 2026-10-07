@@ -230,6 +230,28 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 - [ ] optional achievements/rewards after core consumer workflows are stable
 - [ ] social follow/follower metrics only after privacy/moderation design is approved
 
+## ADS1 — Wantok Ads / Managed Social Advertising — PLANNED
+
+**Sequencing:** future first-party Wantok Services product module. It is not part of the current CX1 completion gate and does not replace CX1H in-app Sponsored/Promoted placement.
+
+- [ ] first-party Wantok Ads customer campaign brief for legitimate products/services/businesses/events
+- [ ] supported external networks through official adapters, initially Meta/Facebook/Instagram, TikTok and Google/YouTube where approved
+- [ ] creative service catalogue for copy/text, static images, short social video, produced video and configurable add-ons/revisions
+- [ ] configurable campaign-duration/service tiers without hard-coded PGK pricing in the client
+- [ ] separate creative/production fee, campaign-management fee and external media/ad-spend accounting
+- [ ] Operations-managed package catalogue, quote/approval workflow and campaign queue
+- [ ] customer approval of final creative before platform submission
+- [ ] compliance/product/platform-policy review and auditable rejection/resubmission states
+- [ ] campaign lifecycle: draft, waiting customer, waiting platform, scheduled, live, paused, rejected, completed/cancelled
+- [ ] official OAuth/ad-account access; never collect social-media passwords
+- [ ] secret references and platform credentials remain behind Technical Control/integration boundaries
+- [ ] platform metrics ingestion with source/time/ad identifiers, spend, reach/impressions, views, clicks and authorised results/conversions
+- [ ] customer campaign reporting and Operations reconciliation/audit
+- [ ] Wantok Agent may help draft campaign briefs/copy later but cannot autonomously publish ads or spend money
+- [ ] keep external media spend separate from Wantok organic ranking, CX1H in-app promotion and future Wantok Pay settlement
+
+Detailed product rules: `docs/ROADMAP_FILLERS.md`, FILLER-2026-10-07-06.
+
 ### Remaining CX1 gate evidence
 
 - [x] fresh signed-in Android **Client → Services** shell/navigation visual QA on the existing development session; locked Home / Services / Track / Wallet / Inbox layout renders without visible overflow, Home is shortcut-first, and Wantok Agent is accessible from the client header

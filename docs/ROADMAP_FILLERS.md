@@ -200,3 +200,96 @@ Frontend exposes a tasteful **Wantok Agent** guide with examples such as:
 - “Talk to a person.”
 
 Actual model-backed chat should remain disabled until the AI gateway, safety/permissions, logging, privacy and human-handoff contract are implemented and tested.
+
+---
+
+## FILLER-2026-10-07-06 — Wantok Ads / Managed Social Advertising
+
+**Status:** APPROVED — map to a separate future **ADS1** module. This is not part of the current CX1 completion gate and is distinct from CX1H in-app Sponsored/Promoted placement.
+
+### Product intent
+
+Add a first-party **Wantok Ads** service operated by Wantok Services. Customers can pay Wantok Services to prepare and manage advertising campaigns for their legitimate products, services, events or businesses across supported social/video advertising platforms such as:
+- Facebook and Instagram through official Meta advertising channels;
+- TikTok through official TikTok advertising channels;
+- YouTube through official Google/YouTube advertising channels;
+- additional approved platforms later through the same adapter boundary.
+
+Wantok Ads is **not** an ordinary third-party provider listing. Campaign operations, approvals, billing references, platform integrations and reporting remain controlled by Wantok Services.
+
+### Customer campaign brief
+
+A customer should be able to provide:
+- product/service/business being advertised;
+- campaign objective such as awareness, traffic, messages, leads or sales where supported;
+- target audience/location and optional age/interests where platform policy allows;
+- supported platforms and placements;
+- campaign start/end dates or duration;
+- destination/link/contact action;
+- supplied text, images and/or video assets;
+- whether Wantok Services must create or edit the advertising creative.
+
+### Creative and service levels
+
+Pricing must be package/configuration driven rather than hard-coded into the client. The commercial model should support different service levels based on creative work and campaign duration, for example:
+- **Copy/Text** — advertising copy/caption using customer-supplied product assets;
+- **Static Image** — copy plus one or more prepared images/graphics;
+- **Short Video** — vertical/social video creative for Reels/Shorts/TikTok-style placements;
+- **Produced Video** — higher-effort edited video, narration, motion graphics or multiple versions;
+- optional carousel/multi-image, resizing/reformatting, extra revisions and expedited-production add-ons.
+
+Campaign-management duration may use configurable tiers such as short, weekly, fortnightly and monthly campaigns. Exact PGK prices, included revisions, platform limits and deliverables must be controlled in an Operations-managed package catalogue rather than embedded in app code.
+
+### Pricing boundary
+
+Keep the customer charge auditable as separate components:
+1. **creative/production fee** — text, image, video and editing work;
+2. **campaign-management fee** — setup, targeting, scheduling, optimisation and reporting;
+3. **media/ad spend** — money allocated to the external platform advertising account;
+4. optional approved add-ons such as extra creatives, revisions, rush work or extended reporting.
+
+External media spend must not be silently treated as Wantok revenue. Platform spend, Wantok service fees, credits/refunds and campaign billing references need separate ledger/reconciliation treatment when payment movement is eventually enabled. Until the Wantok Pay design gate is approved, only quote/invoice/reference foundations may be implemented.
+
+### Enterprise workflow
+
+Campaign lifecycle should support:
+- draft brief;
+- advertiser identity/product/service eligibility review;
+- creative preparation;
+- customer approval of final copy/assets;
+- compliance/platform-policy review;
+- campaign build and platform submission;
+- platform review/accepted/rejected state;
+- scheduled/live/paused/completed/cancelled state;
+- revision/resubmission where allowed;
+- close-out performance report and retained audit history.
+
+Operations staff need a controlled workspace for campaign queue, creative approvals, platform status, spend references, customer approvals, incidents and reporting. Customer-facing status should clearly distinguish **Waiting for Wantok**, **Waiting for customer**, **Waiting for platform review**, **Scheduled**, **Live**, **Paused**, **Rejected** and **Completed**.
+
+### Platform integration and security
+
+- Integrate through official advertising APIs/authorised ad-account access where available; never collect customer social-media passwords.
+- OAuth/access tokens and advertising-account credentials are secret references only and belong behind the Technical Control/integration boundary.
+- Use replaceable platform adapters so Meta, TikTok, Google/YouTube and future networks do not leak provider-specific logic through the product core.
+- Preserve customer consent and rights to supplied images/video/music/copy.
+- Apply prohibited-product/content, misleading-claim, age-restriction and platform-policy checks before submission.
+- A platform rejection must not be represented as a successful placement; reason/status must remain auditable.
+
+### Reporting
+
+Where supported by the platform adapter, report campaign metrics such as:
+- campaign spend;
+- impressions and reach;
+- video views/watch metrics;
+- clicks/CTR;
+- messages, leads or conversions where authorised and available;
+- cost-per-result and remaining budget;
+- platform status/rejection reasons.
+
+Metrics from external platforms are reported data, not Wantok-generated performance claims. Store source, retrieval time and campaign/ad identifiers for auditability.
+
+### Architecture boundary
+
+**CX1H** remains advertising **inside Wantok Services** (Sponsored/Promoted discovery). **ADS1 Wantok Ads** is a managed service that publishes campaigns to external social/video advertising networks. The two may later share campaign, creative, approval, billing-reference and reporting primitives, but paid external media spend must remain separate from organic Wantok ranking and from in-app sponsored placement.
+
+Wantok Agent may later help customers prepare a campaign brief or draft copy, but it must not publish ads, spend money or bypass customer/Operations approval autonomously.
