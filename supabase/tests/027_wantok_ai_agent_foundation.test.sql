@@ -151,24 +151,27 @@ select is(
     select count(*)::integer
     from public.ai_agent_handoff_requests
     where status = 'open'
+      and user_id = 'f2700000-0000-0000-0000-000000000001'::uuid
   ),
   1,
-  'support staff can read open handoff requests'
+  'support staff can read the fixture owner handoff request'
 );
 
 update public.ai_agent_handoff_requests
 set status = 'assigned',
     assigned_to = auth.uid()
-where status = 'open';
+where status = 'open'
+  and user_id = 'f2700000-0000-0000-0000-000000000001'::uuid;
 
 select is(
   (
     select status
     from public.ai_agent_handoff_requests
+    where user_id = 'f2700000-0000-0000-0000-000000000001'::uuid
     limit 1
   ),
   'assigned',
-  'support staff can assign a handoff request'
+  'support staff can assign the fixture handoff request'
 );
 
 select * from finish();

@@ -200,7 +200,11 @@ select set_config(
 );
 
 select is(
-  (select count(*)::integer from public.search_client_providers(null, null, null, null, 30)),
+  (
+    select count(*)::integer
+    from public.search_client_providers(null, null, null, null, 30)
+    where provider_id::text like 'f2600000-%'
+  ),
   3,
   'only active verified providers with active services are discoverable'
 );
@@ -227,6 +231,7 @@ select is(
   (
     select count(*)::integer
     from public.search_client_providers('Plumbing', null, null, null, 30)
+    where provider_id::text like 'f2600000-%'
   ),
   2,
   'category-name search finds matching providers'
@@ -251,6 +256,7 @@ select is(
   (
     select count(*)::integer
     from public.search_client_providers(null, null, 'Morobe', null, 30)
+    where provider_id::text like 'f2600000-%'
   ),
   2,
   'province filter uses structured service coverage'
@@ -260,6 +266,7 @@ select is(
   (
     select count(*)::integer
     from public.search_client_providers(null, null, 'Morobe', 'Lae', 30)
+    where provider_id::text like 'f2600000-%'
   ),
   2,
   'town filter uses structured service coverage'

@@ -142,6 +142,17 @@ Checkpointed platform includes:
 - Existing Auth/Profile counts remain **2/2**. No app/Supabase/AVD reset or role changes. Screenshots/XML and fresh build/check logs are retained locally under ignored `.wantok/`; full evidence and APK hash are in `docs/CX1_CLIENT_EXPERIENCE_GATE.md`.
 - Fresh full Flutter checkpoint PASS: seven analysis targets, 34 app tests, Admin/Technical smoke tests. Database PASS: 27 files / 598 tests. CX1 remains open, T2.4 deferred, CX1G not started. Resolve the documentation checkpoint hash with `git log -1 --oneline`.
 
+## Populated provider continuation — 2026-10-07
+
+- The zero-provider state above is historical evidence from `4fe0a34`. One deliberately labelled **non-commercial local QA provider** now exists so CX1F can be exercised with real lifecycle data. It was created through the normal authenticated provider application → Admin approval → provider listing → review submission → Admin activation flow; Mansfield was not granted Operations/Admin authority and no verified-provider row was inserted directly.
+- **Wantok QA Plumbing Services** is verified/active with active **QA Plumber & Maintenance**, category **Specialist Services**, structured coverage **Morobe / Lae**. One non-commercial QA booking was completed through the normal provider transition RPCs and reviewed through `submit_service_review`, producing **5.0 (1 review)** without payment movement.
+- Signed-in Android CX1F populated evidence PASS: `plumber` search, **Specialist Services → Morobe → Lae** filters, rating card, provider Saved persistence (live control changes to **Remove from saved**) and provider storefront/approved-service detail.
+- Local ignored evidence includes `cx1-populated-provider-workflow.sql/.log`, populated search/filter captures, Saved-state evidence and provider-detail captures under `.wantok/`.
+- Emulator crash investigation isolated the prior unstable path to a software-rendered/audio-enabled run that later reported Windows layered-window and DirectSound failures. The replacement visible run with host GPU, `-no-audio`, cold boot and snapshots disabled remained responsive throughout populated QA and the full Flutter checkpoint. AVD defaults now use cold boot, Fast Boot off, 4 cores, host GPU and audio input off; `.wantok/start-wantok-emulator.ps1` carries the stable launch flags. Userdata, installed app and sign-in were preserved.
+- Retaining the QA provider and prior AI handoff exposed fixture-isolation assumptions in pgTAP tests 025–027. Their affected counts/updates are now scoped to deterministic fixture rows so ordinary preserved local data does not invalidate the suite. Fresh database result: **27 files / 598 tests PASS**.
+- Fresh Flutter checkpoint remains PASS: seven analysis targets, **34 app tests**, Operations Admin smoke and Technical Control smoke.
+- Android CX1F is now PASS; **Web CX1F remains open**. CX1 overall remains open, T2.4 stays deferred and CX1G has not started.
+
 ## Validation baseline
 
 At this checkpoint:
@@ -152,7 +163,7 @@ At this checkpoint:
 - Wantok Operations Admin: analysis + smoke test PASS
 - Wantok Technical Control: analysis + smoke test PASS
 - database: **27 files / 598 pgTAP tests PASS** (all fixtures roll back), including confidence-aware provider discovery and Wantok AI capability/handoff security coverage
-- fresh Android signed-in QA on 2026-10-07 confirms **Client → Services** renders the PNG-rich discovery shell, bookmark controls and locked **Home · Services · Track · Wallet · Inbox** navigation without visible overflow; bookmark interaction, recommendation/Explore PNG live data, Account, Track, Wallet and Web evidence remain open
+- fresh Android signed-in QA on 2026-10-07 confirms **Client → Services** renders the PNG-rich discovery shell and locked **Home · Services · Track · Wallet · Inbox** navigation without visible overflow; populated CX1F provider search/filter/rating/save/detail is now PASS. Recommendation/Explore PNG live data, broader Account/Track/Wallet evidence and Web evidence remain open
 - production Docker Compose parse PASS was recorded at T2.2; deployment files unchanged
 - `git diff --check`: PASS
 
@@ -169,6 +180,8 @@ Android emulator uses ignored:
 `.wantok/local-android.json`
 
 and reaches the host through `10.0.2.2:54321`. Do not replace browser/web configuration with the emulator bridge address.
+
+For the current EAGLT02 AVD, use ignored `.wantok/start-wantok-emulator.ps1` if a manual restart is needed. It cold-boots `Medium_Phone_API_36.1` with snapshots disabled, host GPU and audio disabled; the AVD defaults also keep Fast Boot off, 4 CPU cores, host GPU and audio input off. These settings preserve userdata and replace the software-rendered/audio path that crashed during 2026-10-07 QA.
 
 The local Mansfield development account has `tech_platform_admin` only in the local database. This is not seeded by migration and must not be assumed in production.
 

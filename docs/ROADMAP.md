@@ -171,7 +171,8 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 - [x] keep paid placement out of organic rating scores
 - [x] Services hub exposes **Find providers** and a compact **Top Wantoks** organic surface
 - [x] signed-in Android Services/Agent provider-search entries, plumber-query empty state, clear/Top Wantoks empty state and filter-menu presentation verified on 2026-10-07
-- [ ] populated Android category/province/town filters, rating cards, provider saving/details and Web QA; local DB currently has 0 provider profiles / 0 provider services, so only All filter choices are available and town is disabled
+- [x] populated signed-in Android provider QA: `plumber` search, Specialist Services → Morobe → Lae filters, 5.0 (1) rating card, Saved persistence and approved-service storefront/detail verified on 2026-10-07 using one clearly labelled non-commercial local QA provider created through the normal application/approval/service-review lifecycle
+- [ ] Web provider search/filter/rating/save/detail QA
 
 ### CX1G — General Goods Marketplace + Fulfilment — PLANNED
 
@@ -228,7 +229,9 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 
 Acceptance evidence and initial findings: `docs/CX1_CLIENT_EXPERIENCE_GATE.md`.
 
-2026-10-07 Android continuation from `b69656b`: prior debug APK build verified complete and installed in-place with `adb install -r`; existing sign-in/app/AVD/Supabase data preserved. New normal/IPv4 rebuild attempts failed with Java loopback IOException. Full Flutter checkpoint and 27-file/598-test database suite PASS. Local captures/logs remain in ignored `.wantok/`. Provider populated-data evidence remains open; CX1G has not started and T2.4 remains deferred.
+2026-10-07 Android continuation from `b69656b`: prior debug APK build verified complete and installed in-place with `adb install -r`; existing sign-in/app/AVD/Supabase data preserved. New normal/IPv4 rebuild attempts failed with Java loopback IOException. Full Flutter checkpoint and 27-file/598-test database suite PASS. Local captures/logs remain in ignored `.wantok/`.
+
+2026-10-07 populated-provider continuation after `4fe0a34`: one deliberately labelled **non-commercial local QA provider** was created through the existing authenticated application → admin approval → provider listing → review submission → admin activation workflow. One QA booking was accepted, advanced to completed and reviewed through existing secured RPCs solely to exercise rating aggregation; no payment or real service occurred. Signed-in Android now verifies populated `plumber` search, **Specialist Services → Morobe → Lae** filters, **5.0 (1)** rating, provider Saved persistence and provider storefront/approved-service detail. Android provider-discovery evidence is complete; Web evidence remains open. CX1 remains open overall; CX1G has not started and T2.4 remains deferred.
 
 Use existing local development accounts/data. No Supabase reset, reseed, account replacement or payment movement is part of CX1.
 

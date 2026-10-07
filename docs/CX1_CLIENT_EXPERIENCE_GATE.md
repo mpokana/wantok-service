@@ -25,20 +25,20 @@ This is intentional and must not be renamed to Grab-style Discover / Activity / 
 | --- | --- | --- |
 | Client shell | Five Wantok tabs, Home search/profile/back; selected-tab semantics | Automated PASS; live QA pending |
 | Services discovery | Search/family filters; errors/empty states; Saved controls; privacy-aware **For you** recommendations; **Explore PNG** places generated only from structured active verified service coverage | Automated PASS; fresh Android Services shell/navigation visual PASS; live bookmark/recommendation/place interaction QA pending |
-| Provider discovery | Signed-in Android Services entry, Top Wantoks empty state, Agent plumber-search fallback and clear control verified; category/province menus contain only All, town disabled. Local database has zero provider profiles/services. | PARTIAL Android PASS; populated search/filter/rating/save/detail and Web QA pending |
+| Provider discovery | Empty-state evidence was followed by one deliberately labelled non-commercial local QA provider created through the normal approval workflow. Signed-in Android now verifies populated `plumber` search, Specialist Services → Morobe → Lae filters, 5.0 (1) rating, Saved persistence and approved-service storefront/detail. | Android PASS; Web QA pending |
 | Wantok AI Agent | Signed-in Android Home entry, capability status, plumber-search fallback, disabled model input and Talk to a person submission verified; success snackbar and one persisted request owned by existing Mansfield profile confirmed. | Android handoff capture PASS; staff triage/live human chat/model gateway and Web remain |
 | Profile & identity | Personal profile, bio, managed private avatar upload, separate Business/Vendor profile | Implemented; signed-in visual/media QA pending |
 | Linked accounts | Google/Facebook Supabase identity-linking UI; email sign-in remains visible | Implemented; provider OAuth configuration/live flow pending |
 | Privacy | Profile/review visibility, saved privacy, recommendation opt-out and profile-sharing settings; recommendation opt-out enforced in the RPC | Database/API/UI implemented; live QA pending |
-| Saved | Owner-scoped saved-entity store, secured validation RPC, Saved screen, category/provider/resource/event Save controls | pgTAP PASS; live interaction QA pending |
+| Saved | Owner-scoped saved-entity store, secured validation RPC, Saved screen, category/provider/resource/event Save controls | pgTAP PASS; Android provider Save persistence PASS; other live Saved interactions pending |
 | Trusted people / delegated booking | Owner-scoped family/relative/staff records; shared beneficiary selector and snapshot contracts | PASS across generic reservations/open requests, Taxi/Ride, Events, Commerce and scheduled Water transport |
-| Reviews | Existing booking-linked review model extended with title/managed review photos/visibility; secured completed-booking RPC; Track Review/Edit action | pgTAP PASS; live completed-booking/media QA pending |
+| Reviews | Existing booking-linked review model extended with title/managed review photos/visibility; secured completed-booking RPC; Track Review/Edit action | pgTAP PASS; QA completed booking/review verified provider rating aggregation; live Track review/media UI pending |
 | Activity/Track | Existing specialised ride/order/event/water links plus generic booking review path | Automated baseline PASS; populated live records pending |
 | Wallet | Kina K; Top up/Scan/Send/Receive preview, verification, PNG planned services, recent-activity framing | Automated PASS; no transaction movement |
 | Role boundary | Client/Vendor switch does not grant provider or technical authority | Automated PASS; pgTAP baseline retained |
 | Database | CX1 through CX1I foundation migrations and security tests | 27 files / 598 pgTAP tests PASS |
 | Flutter client | Analysis plus existing regression suite | 34 tests PASS |
-| Visual evidence | Fresh signed-in Android Client → Services visual QA on 2026-10-07 confirms PNG-rich Services shell and locked five-button Wantok navigation without visible overflow; remaining CX1A surfaces and Web still require evidence | PARTIAL PASS |
+| Visual evidence | Fresh signed-in Android Client → Services plus populated provider discovery/filter/save/detail QA on 2026-10-07 confirms the locked five-button Wantok navigation and CX1F client surfaces; remaining CX1 surfaces and Web still require evidence | PARTIAL PASS |
 
 ## CX1 implemented changes
 
@@ -69,12 +69,26 @@ This is intentional and must not be renamed to Grab-style Discover / Activity / 
 - Local evidence is retained in ignored `.wantok/`: `cx1-home.png`, `cx1-services-current.png`, `cx1-provider-plumber.png`, `cx1-provider-top-empty.png`, category/province option PNG/XML captures, `cx1-agent-ready.png`, `cx1-human-entry.png`, `cx1-handoff-form.png`, `cx1-handoff-filled.png`, `cx1-handoff-result.png`, `cx1-account-confirmed.png`; build attempt logs and `cx1-flutter-check-20261007.log` / `cx1-db-test-20261007.log`. Captures are local artifacts, not tracked Git files.
 - Fresh full checkpoint checks: `scripts/flutter/check.ps1` PASS (seven analysis targets, Wantok app 34 tests, Admin/Technical one smoke test each); `npm run db:test` PASS (27 files / 598 tests). Standard process-only `PROGRAMFILES(X86)` value supplied. CX1 remains open; T2.4 deferred; CX1G not started.
 
+## Populated provider Android evidence — 2026-10-07 after 4fe0a34
+
+- The earlier **0 provider profiles / 0 provider services** state above is retained as historical evidence. To close the populated Android CX1F gap without bypassing verification, one clearly labelled **non-commercial local QA provider** was created using the existing authenticated workflow: provider application → Operations/Admin approval → provider-owned listing update → provider service review submission → Admin activation. No Mansfield role change, direct verified-provider insert, Supabase reset/reseed or payment movement was used.
+- Local QA provider **Wantok QA Plumbing Services** is a verified active business provider. Active service **QA Plumber & Maintenance** is in **Specialist Services**, with structured coverage **Morobe / Lae** and QA metadata stating it is non-commercial.
+- A single QA service booking owned by the existing Mansfield account was accepted by the provider, advanced through `in_progress` to `completed`, then reviewed through secured `submit_service_review`. This produced a real provider aggregate of **5.0 (1 review)**. The booking/review explicitly states that no commercial service was rendered.
+- Signed-in Android populated discovery PASS: Top Wantoks/rating card rendered; `plumber` search returned the provider; **Specialist Services → Morobe → Lae** filters selected successfully and retained the correct result.
+- Android provider Saved interaction PASS: tapping **Save provider** created the owner-scoped `client_saved_items` provider bookmark for Mansfield and the live control changed to **Remove from saved**.
+- Android storefront/detail PASS: provider detail showed **Business**, **5.0 (1)**, Morobe coverage, and the active approved **QA Plumber & Maintenance — Specialist Services — Lae, Morobe — Quote** listing.
+- Evidence is retained only under ignored `.wantok/`, including the QA workflow/log, populated-filter/search XML/PNG captures, Saved-state capture and provider-detail capture.
+- Emulator stability investigation found the first software-rendered/audio-enabled cold run later exited after repeated Windows `UpdateLayeredWindowIndirect` failures plus DirectSound startup failure. The replacement visible run using host GPU plus `-no-audio`, cold boot and snapshots disabled booted successfully and remained responsive through the populated QA and full Flutter checkpoint. Persistent AVD defaults were changed without wiping userdata to cold boot, Fast Boot off, 4 CPU cores, host GPU and audio input off; ignored `.wantok/start-wantok-emulator.ps1` preserves the working launch flags.
+- Retaining the new QA provider and earlier AI handoff correctly exposed three pgTAP files that assumed an otherwise empty local database. Tests 025–027 were hardened so place/provider counts and support handoff updates are scoped to their own deterministic fixture rows. The full suite now passes with preserved development data: **27 files / 598 tests PASS**.
+- Fresh full Flutter checkpoint after the populated QA remains PASS: all seven analysis targets, **34 Wantok app tests**, Operations Admin smoke and Technical Control smoke.
+- **Android CX1F provider-discovery evidence is now PASS. Web CX1F QA remains open.** CX1 overall remains open; T2.4 remains deferred and CX1G has not started.
+
 ## Coverage limits and remaining CX1 work
 
 1. Delegated booking is complete across every currently implemented client service family: Vehicle Hire, Boat Hire, Venue Booking, Delivery, Errands/Pabili, Specialist Services, General Labour, Taxi/Ride, Events/ticketing, Food/Groceries commerce and scheduled Boat/Ship passenger transport. The signed-in customer remains the payer/requesting account; beneficiary identity must not confer account access. Future accommodation/flights modules should explicitly adopt or reject this shared contract during their design phase.
 2. Add achievements/rewards only after core consumer workflows are stable.
 3. Defer follow/follower/social metrics until privacy, abuse/moderation and notification design are approved.
-4. Continue fresh signed-in Android/Web QA on Account tools, avatar/review-photo upload, Services bookmark interaction/recommendations/Explore PNG live data, populated provider search/filter/save/detail, Web Wantok AI human handoff, Track reviews and Wallet; Android Client → Services shell/navigation and Android AI handoff capture are PASS within the evidence limits above.
+4. Continue fresh signed-in Android/Web QA on Account tools, avatar/review-photo upload, Services bookmark interaction/recommendations/Explore PNG live data, **Web** provider search/filter/save/detail, Web Wantok AI human handoff, Track reviews and Wallet; Android Client → Services shell/navigation, Android CX1F populated provider discovery and Android AI handoff capture are PASS within the evidence limits above.
 5. Verify Taxi map/location permission handling and populated Track/Inbox/account records without creating destructive test data.
 6. Run the final CX1 evidence review and keep T2.4 deferred until the client gate is complete.
 

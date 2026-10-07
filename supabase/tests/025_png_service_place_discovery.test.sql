@@ -279,9 +279,14 @@ select is(
   (
     select count(*)::integer
     from public.list_client_service_places(30)
+    where category_ids && array[
+      'c2500000-0000-0000-0000-000000000010'::uuid,
+      'c2500000-0000-0000-0000-000000000020'::uuid,
+      'c2500000-0000-0000-0000-000000000030'::uuid
+    ]
   ),
   2,
-  'only places with active verified structured coverage are returned'
+  'only fixture places with active verified structured coverage are returned'
 );
 
 select is(
