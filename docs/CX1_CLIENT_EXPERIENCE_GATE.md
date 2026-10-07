@@ -33,11 +33,11 @@ This is intentional and must not be renamed to Grab-style Discover / Activity / 
 | Saved | Owner-scoped saved-entity store, secured validation RPC, Saved screen, category/provider/resource/event Save controls | pgTAP PASS; Android provider Save persistence PASS; other live Saved interactions pending |
 | Trusted people / delegated booking | Owner-scoped family/relative/staff records; shared beneficiary selector and snapshot contracts | PASS across generic reservations/open requests, Taxi/Ride, Events, Commerce and scheduled Water transport |
 | Reviews | Existing booking-linked review model extended with title/managed review photos/visibility; secured completed-booking RPC; Track Review/Edit action | pgTAP PASS; QA completed booking/review verified provider rating aggregation; live Track review/media UI pending |
-| Activity/Track | Existing specialised ride/order/event/water links plus generic booking review path; PostgREST embedded to-one/to-many quote/review rows are normalised before rendering | Automated baseline + embedded-relation regression PASS; populated live records pending |
+| Activity/Track | Existing specialised ride/order/event/water links plus generic booking review path; PostgREST embedded to-one/to-many quote/review rows are normalised; records are grouped as Ongoing / Scheduled / Completed | Automated grouping + embedded-relation regressions PASS; retained completed booking live Android PASS; other populated live states pending |
 | Wallet | Kina K; Top up/Scan/Send/Receive preview, verification, PNG planned services, recent-activity framing | Automated PASS; no transaction movement |
 | Role boundary | Client/Vendor switch does not grant provider or technical authority | Automated PASS; pgTAP baseline retained |
 | Database | CX1 through CX1I foundation migrations and security tests | 27 files / 598 pgTAP tests PASS |
-| Flutter client | Analysis plus existing regression suite including compact Wantok Agent header action, enterprise service taxonomy and Track embedded-relation normalisation | **36 tests PASS** |
+| Flutter client | Analysis plus existing regression suite including compact Wantok Agent header action, enterprise service taxonomy and Track relation/grouping logic | **40 tests PASS** |
 | Visual evidence | Fresh signed-in Android Client → Services plus populated provider discovery/filter/save/detail QA on 2026-10-07 confirms the locked five-button Wantok navigation and CX1F client surfaces; remaining CX1 surfaces and Web still require evidence | PARTIAL PASS |
 
 ## CX1 implemented changes
@@ -92,7 +92,8 @@ This is intentional and must not be renamed to Grab-style Discover / Activity / 
 - Fresh debug APK built and installed in place with `adb install -r`; existing sign-in, Supabase data and AVD userdata were preserved. Live Android captures under ignored `.wantok/` confirm the simplified Home, grouped Services catalogue and renamed Wantok Agent without visible overflow.
 - The initial build attempt hit the known generated `cleanMergeDebugAssets` file lock. Stopping the Gradle daemon and clearing only generated `apps/wantok_app/build` resolved it; the retry produced `app-debug.apk` successfully.
 - Track continuation normalises PostgREST embedded quote/review relationships whether returned as a single object or list, with a dedicated regression test.
-- Fresh full checkpoint after this hierarchy change PASS: all seven Flutter analysis targets, **36 Wantok app tests**, Operations Admin smoke, Technical Control smoke, and **27 files / 598 pgTAP tests**.
+- Track now groups shared service records into **Ongoing · Scheduled · Completed** sections with tested status/time classification. Fresh signed-in Android QA against the retained completed plumbing QA booking shows **Completed (1)** with provider, location, Message provider and Edit review controls; no new booking data was created for this evidence.
+- Fresh full checkpoint after this hierarchy change PASS: all seven Flutter analysis targets, **40 Wantok app tests**, Operations Admin smoke, Technical Control smoke, and **27 files / 598 pgTAP tests**.
 
 ## Coverage limits and remaining CX1 work
 

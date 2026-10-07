@@ -247,14 +247,25 @@ class _ActivityPageState extends State<ActivityPage> {
             );
           }
 
+          final entries = _buildTrackDisplayEntries(rows);
+
           return ListView.separated(
             padding: const EdgeInsets.fromLTRB(18, 10, 18, 28),
-            itemCount: rows.length + 2,
+            itemCount: entries.length + 2,
             separatorBuilder: (_, _) => const SizedBox(height: 11),
             itemBuilder: (context, index) {
               if (index == 0) return const _TrackHeader();
               if (index == 1) return const _TrackJourneyLinks();
-              final row = rows[index - 2];
+
+              final entry = entries[index - 2];
+              if (entry.row == null) {
+                return _TrackSectionHeader(
+                  group: entry.group,
+                  count: entry.count,
+                );
+              }
+
+              final row = entry.row!;
               final id = row['id'] as String;
               final status = row['status'] as String? ?? 'unknown';
               final category = _asMap(row['service_categories']);
@@ -717,6 +728,206 @@ class _ReviewDraft {
   final String? visibility;
   final List<XFile> photos;
   final bool replacePhotos;
+}
+
+enum TrackActivityGroup { ongoing, scheduled, completed }
+
+@visibleForTesting
+TrackActivityGroup trackActivityGroupForBooking(
+  Map<String, dynamic> row, {
+  DateTime? now,
+}) {
+  final status = row['status']?.toString().toLowerCase() ?? 'unknown';
+  if (const {
+    'completed',
+    'cancelled',
+    'rejected',
+    'expired',
+  }.contains(status)) {
+    return TrackActivityGroup.completed;
+  }
+
+  if (status != 'in_progress') {
+    final scheduledStart = DateTime.tryParse(
+      row['scheduled_start']?.toString() ?? '',
+    )?.toLocal();
+    final reference = now ?? DateTime.now();
+    if (scheduledStart != null && scheduledStart.isAfter(reference)) {
+      return TrackActivityGroup.scheduled;
+    }
+  }
+
+  return TrackActivityGroup.ongoing;
+}
+
+class _TrackDisplayEntry {
+  const _TrackDisplayEntry.section(this.group, this.count) : row = null;
+
+  const _TrackDisplayEntry.booking(this.group, this.row) : count = 0;
+
+  final TrackActivityGroup group;
+  final int count;
+  final Map<String, dynamic>? row;
+}
+
+List<_TrackDisplayEntry> _buildTrackDisplayEntries(
+  List<Map<String, dynamic>> rows,
+) {
+  final now = DateTime.now();
+  final grouped = <TrackActivityGroup, List<Map<String, dynamic>>>{
+    for (final group in TrackActivityGroup.values)
+      group: <Map<String, dynamic>>[],
+  };
+
+  for (final row in rows) {
+    grouped[trackActivityGroupForBooking(row, now: now)]!.add(row);
+  }
+
+  int compareDescending(
+    Map<String, dynamic> a,
+    Map<String, dynamic> b,
+    List<String> keys,
+  ) {
+    DateTime? valueFor(Map<String, dynamic> row) {
+      for (final key in keys) {
+        final value = DateTime.tryParse(row[key]?.toString() ?? '')?.toLocal();
+        if (value != null) return value;
+      }
+      return null;
+    }
+
+    final left = valueFor(a);
+    final right = valueFor(b);
+    if (left == null && right == null) return 0;
+    if (left == null) return 1;
+    if (right == null) return -1;
+    return right.compareTo(left);
+  }
+
+  grouped[TrackActivityGroup.ongoing]!.sort(
+    (a, b) => compareDescending(a, b, const ['updated_at', 'created_at']),
+  );
+  grouped[TrackActivityGroup.scheduled]!.sort((a, b) {
+    final left = DateTime.tryParse(a['scheduled_start']?.toString() ?? '')
+        ?.toLocal();
+    final right = DateTime.tryParse(b['scheduled_start']?.toString() ?? '')
+        ?.toLocal();
+    if (left == null && right == null) return 0;
+    if (left == null) return 1;
+    if (right == null) return -1;
+    return left.compareTo(right);
+  });
+  grouped[TrackActivityGroup.completed]!.sort(
+    (a, b) => compareDescending(a, b, const [
+      'completed_at',
+      'cancelled_at',
+      'updated_at',
+      'created_at',
+    ]),
+  );
+
+  final entries = <_TrackDisplayEntry>[];
+  for (final group in TrackActivityGroup.values) {
+    final groupRows = grouped[group]!;
+    if (groupRows.isEmpty) continue;
+    entries.add(_TrackDisplayEntry.section(group, groupRows.length));
+    entries.addAll(
+      groupRows.map((row) => _TrackDisplayEntry.booking(group, row)),
+    );
+  }
+  return entries;
+}
+
+class _TrackSectionHeader extends StatelessWidget {
+  const _TrackSectionHeader({required this.group, required this.count});
+
+  final TrackActivityGroup group;
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    final (title, subtitle, icon, accent) = switch (group) {
+      TrackActivityGroup.ongoing => (
+        'Ongoing',
+        'Requests, quotes and services currently in progress.',
+        Icons.bolt_rounded,
+        const Color(0xFFC85536),
+      ),
+      TrackActivityGroup.scheduled => (
+        'Scheduled',
+        'Upcoming bookings and services with a future time.',
+        Icons.event_available_rounded,
+        const Color(0xFF0B79A8),
+      ),
+      TrackActivityGroup.completed => (
+        'Completed',
+        'Finished and closed records, including cancelled or expired requests.',
+        Icons.task_alt_rounded,
+        WantokColors.primary,
+      ),
+    };
+
+    return Padding(
+      padding: const EdgeInsets.only(top: 7, bottom: 1),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          CircleAvatar(
+            radius: 19,
+            backgroundColor: accent.withValues(alpha: 0.11),
+            child: Icon(icon, color: accent, size: 20),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 9,
+                        vertical: 4,
+                      ),
+                      decoration: BoxDecoration(
+                        color: accent.withValues(alpha: 0.09),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Text(
+                        '$count',
+                        style: TextStyle(
+                          color: accent,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: const TextStyle(
+                    color: WantokColors.muted,
+                    fontSize: 11.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 }
 
 class _TrackHeader extends StatelessWidget {

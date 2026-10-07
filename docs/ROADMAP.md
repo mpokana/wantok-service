@@ -129,6 +129,7 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 - [x] review title/photos/visibility foundation on the existing booking-linked review model
 - [x] secured review RPC restricted to completed customer bookings
 - [x] Review/Edit review action from Track for completed generic service bookings
+- [x] group Track records into **Ongoing · Scheduled · Completed** sections with deterministic status/time classification and live retained-data verification of the Completed path
 - [x] privacy controls for profile visibility, review visibility, saved-items privacy, recommendations and profile sharing
 - [x] owner-scoped Trusted people model and Account CRUD for family/relative/staff beneficiaries
 - [x] richer Wantok Pay preview including planned actions, verification, PNG services and recent-activity framing
@@ -256,8 +257,8 @@ Detailed product rules: `docs/ROADMAP_FILLERS.md`, FILLER-2026-10-07-06.
 
 - [x] fresh signed-in Android **Client → Services** shell/navigation visual QA on the existing development session; locked Home / Services / Track / Wallet / Inbox layout renders without visible overflow, Home is shortcut-first, and Wantok Agent is accessible from the client header
 - [ ] remaining signed-in Android/Web visual QA using existing development sessions/accounts
-- [ ] live read-only journey checks, especially Taxi map/location/history and populated Track/Inbox/account records
-- [ ] live QA of Account privacy/linked/saved/trusted/review pages, Services bookmark interaction/recommendations/Explore PNG live data, Track reviews and Wallet preview
+- [ ] live read-only journey checks, especially Taxi map/location/history and populated Inbox/account records; retained populated Track Completed history is now verified
+- [ ] live QA of Account privacy/linked/saved/trusted/review pages, Services bookmark interaction/recommendations/Explore PNG live data, Track review editing and Wallet preview
 - [ ] complete gate evidence review and full checkpoint before T2.4
 
 Acceptance evidence and initial findings: `docs/CX1_CLIENT_EXPERIENCE_GATE.md`.
