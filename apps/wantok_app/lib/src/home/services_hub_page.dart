@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'smoke_data.dart';
 import 'reference_services_gallery.dart';
+import 'category_information_page.dart';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:wantok_api/wantok_api.dart';
@@ -18,6 +19,7 @@ import 'client_account_tools.dart';
 import 'png_visuals.dart';
 import 'provider_discovery_page.dart';
 import 'service_catalog_taxonomy.dart';
+import 'wantok_category_ui.dart';
 
 class ServicesHubPage extends StatefulWidget {
   const ServicesHubPage({
@@ -162,6 +164,23 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
     }
   }
 
+  void _openCategoryInformation(
+    WantokCategoryStyle style,
+    String? description,
+  ) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => CategoryInformationPage(
+          style: style,
+          description:
+              description ??
+              'This category is being prepared for verified Wantok providers '
+                  'across Papua New Guinea.',
+        ),
+      ),
+    );
+  }
+
   void _openReferenceCategory(
     ReferenceCategorySpec spec,
     List<WantokServiceCategory> services,
@@ -176,34 +195,9 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
         return;
       }
     }
-    if (!WantokSmokeData.enabled) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('${spec.title.replaceAll('\n', ' ')} is coming soon.'),
-        ),
-      );
-      return;
-    }
-    final asset = switch (spec.sampleScene) {
-      SmokeScene.food => 'assets/images/hero_food.png',
-      SmokeScene.groceries => 'assets/images/hero_groceries.png',
-      SmokeScene.travel => 'assets/images/hero_water.png',
-      SmokeScene.events => 'assets/images/hero_events.png',
-      SmokeScene.trades => 'assets/images/hero_trades.png',
-      _ => 'assets/images/hero_delivery.png',
-    };
-    Navigator.of(context).push(
-      MaterialPageRoute<void>(
-        builder: (_) => ReferenceSampleScenePage(
-          item: ReferenceScreenSpec(
-            ReferenceScene.services,
-            spec.title.replaceAll('\n', ' '),
-            asset,
-            spec.icon,
-          ),
-        ),
-      ),
-    );
+    // Do not invent a provider or show unmarked demonstration bookings when
+    // a category is not yet available in the currently connected backend.
+    _openCategoryInformation(spec.style, null);
   }
 
   void _openProviderSearch() {
@@ -1084,14 +1078,13 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
           ),
           itemBuilder: (context, index) {
             final service = services[index];
-            final visual = _visualFor(service.slug);
-            return WantokServiceTile(
+            return WantokCategoryTile(
+              key: ValueKey('catalogue-category-${service.slug}'),
+              compact: true,
               label: service.name,
-              icon: visual.icon,
-              accentColor: visual.accent,
-              surfaceColor: visual.surface,
+              style: WantokCategoryStyles.bySlug(service.slug),
               badge: _badgeFor(service.slug),
-              isSaved: _savedCategoryIds.contains(service.id),
+              saved: _savedCategoryIds.contains(service.id),
               onSavedToggle: () => _toggleSaved(service),
               onTap: () => _openService(service),
             );
@@ -1102,6 +1095,14 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
   }
 
   void _openService(WantokServiceCategory service) {
+    if (service.bookingMode == 'information') {
+      _openCategoryInformation(
+        WantokCategoryStyles.bySlug(service.slug),
+        service.description,
+      );
+      return;
+    }
+
     if (service.slug == 'taxi-ride') {
       Navigator.of(context).push(
         MaterialPageRoute<void>(builder: (context) => const TaxiRidePage()),
@@ -1166,73 +1167,10 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
     );
   }
 
-  _ServiceVisual _visualFor(String slug) => switch (slug) {
-    'taxi-ride' => const _ServiceVisual(
-      Icons.local_taxi_rounded,
-      Color(0xFF007A50),
-      Color(0xFFDDF5E9),
-    ),
-    'vehicle-hire' => const _ServiceVisual(
-      Icons.directions_car_rounded,
-      Color(0xFF2864DC),
-      Color(0xFFE3EDFF),
-    ),
-    'boat-hire' => const _ServiceVisual(
-      Icons.directions_boat_rounded,
-      Color(0xFF087F8C),
-      Color(0xFFDDF6F8),
-    ),
-    'boat-ship-rides' => const _ServiceVisual(
-      Icons.sailing_rounded,
-      Color(0xFF006C7C),
-      Color(0xFFDDF3F5),
-    ),
-    'specialist-services' => const _ServiceVisual(
-      Icons.handyman_rounded,
-      Color(0xFFD86020),
-      Color(0xFFFFE9DB),
-    ),
-    'general-labour' => const _ServiceVisual(
-      Icons.groups_rounded,
-      Color(0xFF744AC7),
-      Color(0xFFEEE6FF),
-    ),
-    'venue-booking' => const _ServiceVisual(
-      Icons.apartment_rounded,
-      Color(0xFF8A4CA6),
-      Color(0xFFF4E6F7),
-    ),
-    'events' => const _ServiceVisual(
-      Icons.event_rounded,
-      Color(0xFFD84A6A),
-      Color(0xFFFFE4EA),
-    ),
-    'delivery' => const _ServiceVisual(
-      Icons.local_shipping_rounded,
-      Color(0xFF1585C1),
-      Color(0xFFE0F2FF),
-    ),
-    'errands' => const _ServiceVisual(
-      Icons.shopping_bag_rounded,
-      Color(0xFFB66A00),
-      Color(0xFFFFF0D8),
-    ),
-    'food' => const _ServiceVisual(
-      Icons.restaurant_rounded,
-      Color(0xFFE24B2D),
-      Color(0xFFFFE5DE),
-    ),
-    'groceries' => const _ServiceVisual(
-      Icons.local_grocery_store_rounded,
-      Color(0xFF2E8B57),
-      Color(0xFFE1F4E7),
-    ),
-    _ => const _ServiceVisual(
-      Icons.apps_rounded,
-      WantokColors.primaryDark,
-      Color(0xFFE7F4ED),
-    ),
-  };
+  _ServiceVisual _visualFor(String slug) {
+    final style = WantokCategoryStyles.bySlug(slug);
+    return _ServiceVisual(style.icon, style.accent, style.surface);
+  }
 
   String? _badgeFor(String slug) => switch (slug) {
     'taxi-ride' || 'delivery' => 'FAST',

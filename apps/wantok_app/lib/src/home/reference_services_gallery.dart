@@ -3,123 +3,108 @@ import 'package:wantok_ui/wantok_ui.dart';
 
 import 'smoke_data.dart';
 import 'reference_scene_details.dart';
+import 'wantok_category_ui.dart';
 
 /// Twelve-category front door from the approved reference. The explicit
 /// categories always render, including before providers are onboarded.
 /// Missing backend categories may ONLY open non-transactional sample previews.
 class ReferenceCategorySpec {
-  const ReferenceCategorySpec(
-    this.title,
-    this.icon,
-    this.colour,
-    this.surface,
-    this.slug,
-    this.sampleScene,
-  );
-
-  final String title;
-  final IconData icon;
-  final Color colour;
-  final Color surface;
+  const ReferenceCategorySpec(this.style, this.slug, this.sampleScene);
+  final WantokCategoryStyle style;
   final String? slug;
   final SmokeScene sampleScene;
+
+  String get title => style.title;
+  IconData get icon => style.icon;
+  Color get colour => style.accent;
+  Color get surface => style.surface;
 }
 
 abstract final class ReferenceServiceCategories {
   static const items = <ReferenceCategorySpec>[
     ReferenceCategorySpec(
-      'Taxi &\nTransport',
-      Icons.local_taxi_rounded,
-      Color(0xFFF2AF08),
-      Color(0xFFFFFAE8),
+      WantokCategoryStyles.taxi,
       'taxi-ride',
       SmokeScene.bookings,
     ),
+    ReferenceCategorySpec(WantokCategoryStyles.food, 'food', SmokeScene.food),
     ReferenceCategorySpec(
-      'Food &\nRestaurants',
-      Icons.restaurant_rounded,
-      Color(0xFFFF6532),
-      Color(0xFFFFEEE8),
-      'food',
-      SmokeScene.food,
-    ),
-    ReferenceCategorySpec(
-      'Groceries &\nEssentials',
-      Icons.shopping_basket_rounded,
-      Color(0xFF10B467),
-      Color(0xFFE8FAEF),
+      WantokCategoryStyles.groceries,
       'groceries',
       SmokeScene.groceries,
     ),
     ReferenceCategorySpec(
-      'Shopping\n& Retail',
-      Icons.shopping_bag_rounded,
-      Color(0xFF9837F5),
-      Color(0xFFF6ECFF),
-      null,
+      WantokCategoryStyles.shopping,
+      'shopping-retail',
       SmokeScene.groceries,
     ),
     ReferenceCategorySpec(
-      'Home\nServices',
-      Icons.home_rounded,
-      Color(0xFF1677F4),
-      Color(0xFFEAF3FF),
+      WantokCategoryStyles.home,
       'specialist-services',
       SmokeScene.trades,
     ),
     ReferenceCategorySpec(
-      'Beauty\n& Wellness',
-      Icons.spa_rounded,
-      Color(0xFFEF40B2),
-      Color(0xFFFFF0FA),
-      null,
+      WantokCategoryStyles.beauty,
+      'beauty-wellness',
       SmokeScene.trades,
     ),
     ReferenceCategorySpec(
-      'Health\n& Medical',
-      Icons.favorite_rounded,
-      Color(0xFF12B7A3),
-      Color(0xFFE8FCF8),
-      null,
+      WantokCategoryStyles.health,
+      'health-medical',
       SmokeScene.trades,
     ),
     ReferenceCategorySpec(
-      'Travel\n& Flights',
-      Icons.flight_rounded,
-      Color(0xFF166DF6),
-      Color(0xFFEAF4FF),
-      null,
+      WantokCategoryStyles.travel,
+      'travel-flights',
       SmokeScene.travel,
     ),
     ReferenceCategorySpec(
-      'Events\n& Tickets',
-      Icons.event_rounded,
-      Color(0xFFFF4E99),
-      Color(0xFFFFEFF6),
+      WantokCategoryStyles.events,
       'events',
       SmokeScene.events,
     ),
     ReferenceCategorySpec(
-      'Professional\nServices',
-      Icons.build_rounded,
-      Color(0xFF296CF2),
-      Color(0xFFECF0FF),
+      WantokCategoryStyles.professional,
       'specialist-services',
       SmokeScene.trades,
     ),
     ReferenceCategorySpec(
-      'Automotive',
-      Icons.directions_car_rounded,
-      Color(0xFF2775DF),
-      Color(0xFFEDF3FF),
+      WantokCategoryStyles.automotive,
       'vehicle-hire',
       SmokeScene.bookings,
     ),
     ReferenceCategorySpec(
-      'More',
-      Icons.more_horiz_rounded,
-      Color(0xFF2059BA),
-      Color(0xFFEEF2F9),
+      WantokCategoryStyles.delivery,
+      'delivery',
+      SmokeScene.bookings,
+    ),
+    ReferenceCategorySpec(
+      WantokCategoryStyles.hotels,
+      'accommodation',
+      SmokeScene.travel,
+    ),
+    ReferenceCategorySpec(
+      WantokCategoryStyles.education,
+      'education-training',
+      SmokeScene.trades,
+    ),
+    ReferenceCategorySpec(
+      WantokCategoryStyles.financial,
+      'financial-services',
+      SmokeScene.providers,
+    ),
+    ReferenceCategorySpec(
+      WantokCategoryStyles.waterRides,
+      'boat-ship-rides',
+      SmokeScene.travel,
+    ),
+    ReferenceCategorySpec(
+      WantokCategoryStyles.labour,
+      'general-labour',
+      SmokeScene.trades,
+    ),
+    ReferenceCategorySpec(
+      WantokCategoryStyles.more,
       null,
       SmokeScene.providers,
     ),
@@ -187,7 +172,7 @@ abstract final class ReferenceScreenGallery {
       ReferenceScene.restaurantDetail,
       'Restaurant Detail',
       'assets/images/hero_food.png',
-      Icons.menu_book_rounded,
+      Icons.restaurant_rounded,
     ),
     ReferenceScreenSpec(
       ReferenceScene.taxi,
@@ -248,6 +233,39 @@ class ReferenceServicesLanding extends StatelessWidget {
       key: const ValueKey('reference-services-landing'),
       padding: const EdgeInsets.fromLTRB(13, 8, 13, 26),
       children: [
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+
+              children: [
+                Text(
+                  'All Services',
+                  style: TextStyle(
+                    fontSize: 25,
+                    fontWeight: FontWeight.w900,
+                    color: WantokColors.ink,
+                  ),
+                ),
+                SizedBox(height: 3),
+                Text(
+                  'Find trusted services and providers across Papua New Guinea.',
+                  style: TextStyle(fontSize: 11.5, color: WantokColors.muted),
+                ),
+              ],
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton(
+                key: const ValueKey('reference-all-services'),
+                onPressed: onAllServices,
+                child: const Text('Browse providers'),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
         Material(
           color: Colors.white,
           borderRadius: BorderRadius.circular(19),
@@ -267,43 +285,6 @@ class ReferenceServicesLanding extends StatelessWidget {
               ),
             ),
           ),
-        ),
-        const SizedBox(height: 15),
-        Row(
-          children: [
-            Expanded(
-              child: Container(
-                decoration: const BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: WantokColors.primary, width: 2.5),
-                  ),
-                ),
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: Center(
-                    child: Text(
-                      'Categories',
-                      style: TextStyle(
-                        color: WantokColors.primary,
-                        fontWeight: FontWeight.w800,
-                        fontSize: 13,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Expanded(
-              child: TextButton(
-                key: const ValueKey('reference-all-services'),
-                onPressed: onAllServices,
-                child: const Text(
-                  'All Services',
-                  style: TextStyle(color: WantokColors.muted, fontSize: 13),
-                ),
-              ),
-            ),
-          ],
         ),
         const SizedBox(height: 12),
         LayoutBuilder(
@@ -325,39 +306,10 @@ class ReferenceServicesLanding extends StatelessWidget {
               ),
               itemBuilder: (context, index) {
                 final cat = ReferenceServiceCategories.items[index];
-                return Material(
-                  color: cat.surface,
-                  borderRadius: BorderRadius.circular(17),
-                  child: InkWell(
-                    key: ValueKey('reference-category-${cat.title}'),
-                    onTap: () => onCategory(cat),
-                    borderRadius: BorderRadius.circular(17),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 5,
-                        vertical: 7,
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(cat.icon, size: 31, color: cat.colour),
-                          const SizedBox(height: 10),
-                          Text(
-                            cat.title,
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w800,
-                              height: 1.16,
-                              color: WantokColors.ink,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+                return WantokCategoryTile(
+                  key: ValueKey('reference-category-${cat.title}'),
+                  style: cat.style,
+                  onTap: () => onCategory(cat),
                 );
               },
             );

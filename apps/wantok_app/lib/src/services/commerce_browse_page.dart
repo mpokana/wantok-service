@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../home/smoke_data.dart';
+import '../home/wantok_category_ui.dart';
 
 import '../home/wantok_photo_hero.dart';
 
@@ -61,9 +62,23 @@ class _CommerceBrowsePageState extends State<CommerceBrowsePage> {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F8F7),
       appBar: AppBar(
-        title: Text(
-          isFood ? 'Food' : 'Groceries & Shops',
-          style: const TextStyle(fontWeight: FontWeight.w900),
+        title: Row(
+          children: [
+            WantokCategoryBadge(
+              style: isFood
+                  ? WantokCategoryStyles.food
+                  : WantokCategoryStyles.groceries,
+              size: 33,
+              iconSize: 18,
+            ),
+            const SizedBox(width: 9),
+            Flexible(
+              child: Text(
+                isFood ? 'Food' : 'Groceries & Shops',
+                style: const TextStyle(fontWeight: FontWeight.w900),
+              ),
+            ),
+          ],
         ),
         actions: [
           IconButton(

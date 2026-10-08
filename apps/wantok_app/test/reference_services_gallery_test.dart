@@ -4,33 +4,45 @@ import 'package:wantok_app/src/home/reference_services_gallery.dart';
 import 'package:wantok_app/src/home/smoke_data.dart';
 
 void main() {
-  test('Reference includes exactly twelve screenshot-aligned categories', () {
-    expect(ReferenceServiceCategories.items.length, 12);
-    expect(
-      ReferenceServiceCategories.items
-          .map((item) => item.title.replaceAll('\n', ' '))
-          .toList(),
-      [
-        'Taxi & Transport',
-        'Food & Restaurants',
-        'Groceries & Essentials',
-        'Shopping & Retail',
-        'Home Services',
-        'Beauty & Wellness',
-        'Health & Medical',
-        'Travel & Flights',
-        'Events & Tickets',
-        'Professional Services',
-        'Automotive',
-        'More',
-      ],
-    );
-    expect(ReferenceScreenGallery.items.length, 12);
-    expect(
-      ReferenceScreenGallery.items.map((screen) => screen.scene).toSet().length,
-      12,
-    );
-  });
+  test(
+    'Catalogue includes original reference and six extended service categories',
+    () {
+      expect(ReferenceServiceCategories.items.length, 18);
+      expect(
+        ReferenceServiceCategories.items
+            .map((item) => item.title.replaceAll('\n', ' '))
+            .toList(),
+        [
+          'Taxi & Transport',
+          'Food & Restaurants',
+          'Groceries & Essentials',
+          'Shopping & Retail',
+          'Home Services',
+          'Beauty & Wellness',
+          'Health & Medical',
+          'Travel & Flights',
+          'Events & Tickets',
+          'Professional Services',
+          'Automotive',
+          'Delivery',
+          'Hotels',
+          'Education & Training',
+          'Financial Services',
+          'Water Transport',
+          'General Labour',
+          'More',
+        ],
+      );
+      expect(ReferenceScreenGallery.items.length, 12);
+      expect(
+        ReferenceScreenGallery.items
+            .map((screen) => screen.scene)
+            .toSet()
+            .length,
+        12,
+      );
+    },
+  );
 
   Future<void> pumpLanding(
     WidgetTester tester, {
@@ -65,12 +77,26 @@ void main() {
         onAll: () => allServices = true,
       );
 
-      expect(find.text('Categories'), findsOneWidget);
-      expect(find.text('All Services'), findsOneWidget);
+      expect(find.text('Browse providers'), findsOneWidget);
       expect(find.byType(GridView), findsWidgets);
-      expect(find.byIcon(Icons.local_taxi_rounded), findsWidgets);
-      expect(find.byIcon(Icons.restaurant_rounded), findsWidgets);
-      expect(find.byIcon(Icons.shopping_basket_rounded), findsWidgets);
+      expect(
+        find.image(
+          const AssetImage('assets/images/categories/category_taxi.webp'),
+        ),
+        findsWidgets,
+      );
+      expect(
+        find.image(
+          const AssetImage('assets/images/categories/category_food.webp'),
+        ),
+        findsWidgets,
+      );
+      expect(
+        find.image(
+          const AssetImage('assets/images/categories/category_groceries.webp'),
+        ),
+        findsWidgets,
+      );
       await tester.tap(
         find.byKey(const ValueKey('reference-category-Food &\nRestaurants')),
       );

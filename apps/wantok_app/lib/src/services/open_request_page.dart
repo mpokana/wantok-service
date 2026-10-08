@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../home/wantok_category_ui.dart';
+
 import '../home/wantok_photo_hero.dart';
 
 import 'package:wantok_api/wantok_api.dart';
@@ -134,7 +136,19 @@ class _OpenRequestPageState extends State<OpenRequestPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.category.name)),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            WantokCategoryBadge(
+              style: WantokCategoryStyles.bySlug(widget.category.slug),
+              size: 33,
+              iconSize: 18,
+            ),
+            const SizedBox(width: 9),
+            Flexible(child: Text(widget.category.name)),
+          ],
+        ),
+      ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(18, 8, 18, 28),
         children: [

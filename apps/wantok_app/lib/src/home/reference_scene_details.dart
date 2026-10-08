@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
 import 'smoke_data.dart';
+import 'wantok_category_ui.dart';
 
 /// Additional preview-only layouts: no API clients, route dispatch or payments.
 class ReferenceSceneDetails extends StatelessWidget {
@@ -191,7 +192,8 @@ class _RestaurantRow extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    color: WantokColors.primary, fontSize: 8.5,
+                    color: WantokColors.primary,
+                    fontSize: 8.5,
                   ),
                 ),
               ],
@@ -613,29 +615,32 @@ class _HomeQuickLinks extends StatelessWidget {
         mainAxisSpacing: 7,
         childAspectRatio: 1.06,
         children: [
-          for (final item in const [
-            ('Taxi', Icons.local_taxi, Color(0xFFF4B41F)),
-            ('Food', Icons.restaurant, Color(0xFFFF643A)),
-            ('Groceries', Icons.shopping_basket, Color(0xFF17B96A)),
-            ('Shopping', Icons.shopping_bag, Color(0xFF904AF1)),
-            ('Services', Icons.build, Color(0xFF198CF8)),
-            ('Travel', Icons.flight, Color(0xFF476CF5)),
+          for (final style in const [
+            WantokCategoryStyles.taxi,
+            WantokCategoryStyles.food,
+            WantokCategoryStyles.groceries,
+            WantokCategoryStyles.shopping,
+            WantokCategoryStyles.home,
+            WantokCategoryStyles.travel,
           ])
             Container(
               decoration: BoxDecoration(
-                color: item.$3,
-                borderRadius: BorderRadius.circular(14),
+                color: style.accent,
+                borderRadius: BorderRadius.circular(15),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(item.$2, color: Colors.white),
-                  const SizedBox(height: 6),
+                  WantokCategoryBadge(style: style, size: 35, iconSize: 19),
+                  const SizedBox(height: 7),
                   Text(
-                    item.$1,
+                    style.title.replaceAll('\n', ' '),
+                    maxLines: 2,
+                    textAlign: TextAlign.center,
                     style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w800,
+                      fontSize: 10.5,
                     ),
                   ),
                   const SmokeMarker(),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../home/wantok_category_ui.dart';
+
 import '../home/wantok_photo_hero.dart';
 
 import 'package:wantok_api/wantok_api.dart';
@@ -96,7 +98,17 @@ class _EventBrowsePageState extends State<EventBrowsePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Events'),
+        title: const Row(
+          children: [
+            WantokCategoryBadge(
+              style: WantokCategoryStyles.events,
+              size: 33,
+              iconSize: 18,
+            ),
+            SizedBox(width: 9),
+            Text('Events'),
+          ],
+        ),
         actions: [
           IconButton(
             tooltip: 'My registrations',

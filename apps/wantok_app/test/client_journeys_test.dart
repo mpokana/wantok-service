@@ -57,8 +57,9 @@ void main() {
         tester,
         ServicesHubPage(loadServices: () async => [category]),
       );
-      await tester.ensureVisible(find.byType(WantokServiceTile));
-      await tester.tap(find.byType(WantokServiceTile));
+      final tile = find.byKey(ValueKey('catalogue-category-${entry.key}'));
+      await tester.ensureVisible(tile);
+      await tester.tap(tile);
       await tester.pumpAndSettle();
       expect(find.byType(entry.value), findsOneWidget);
       expect(tester.takeException(), isNull);
@@ -79,7 +80,7 @@ void main() {
       bookingMode: 'commerce',
     );
     await showPage(tester, ClientHome(loadServices: () async => [category]));
-    final foodTile = find.widgetWithText(WantokServiceTile, 'Food');
+    final foodTile = find.byKey(const ValueKey('home-category-food'));
     await tester.ensureVisible(foodTile);
     await tester.tap(foodTile);
     await tester.pumpAndSettle();

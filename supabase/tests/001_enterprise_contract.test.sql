@@ -17,14 +17,14 @@ select has_table('public', 'provider_time_off', 'provider time-off table exists'
 
 select is(
   (select count(*)::integer from public.service_categories),
-  15,
-  'service catalogue contains 15 seeded categories'
+  22,
+  'service catalogue includes 15 original and seven expanded categories'
 );
 
 select is(
   (select count(*)::integer from public.service_categories where is_active),
-  12,
-  '12 service categories are initially active'
+  19,
+  '12 original and seven information-only catalogue categories are active'
 );
 
 select is(

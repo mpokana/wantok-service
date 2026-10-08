@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../home/wantok_category_ui.dart';
+
 import '../home/wantok_photo_hero.dart';
 
 import 'package:wantok_api/wantok_api.dart';
@@ -131,7 +133,19 @@ class _ReservationBrowsePageState extends State<ReservationBrowsePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.category.name)),
+      appBar: AppBar(
+        title: Row(
+          children: [
+            WantokCategoryBadge(
+              style: WantokCategoryStyles.bySlug(widget.category.slug),
+              size: 33,
+              iconSize: 18,
+            ),
+            const SizedBox(width: 9),
+            Flexible(child: Text(widget.category.name)),
+          ],
+        ),
+      ),
       body: RefreshIndicator(
         onRefresh: _refresh,
         child: FutureBuilder<List<ReservableOffer>>(

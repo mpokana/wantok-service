@@ -15,6 +15,7 @@ import '../services/water_transport_page.dart';
 import 'png_visuals.dart';
 import 'provider_discovery_page.dart';
 import 'service_catalog_taxonomy.dart';
+import 'wantok_category_ui.dart';
 import 'services_hub_page.dart';
 import 'wantok_pay_preview_page.dart';
 
@@ -166,12 +167,10 @@ class _ClientHomeState extends State<ClientHome> {
                       }
                       if (index <= quickServices.length) {
                         final service = quickServices[index - 1];
-                        final visual = _visualFor(service.slug);
                         return ActionChip(
-                          avatar: Icon(
-                            visual.icon,
-                            color: visual.accent,
-                            size: 17,
+                          avatar: WantokCategoryBadge(
+                            style: WantokCategoryStyles.bySlug(service.slug),
+                            size: 24,
                           ),
                           label: Text(_shortLabel(service)),
                           onPressed: () => _openService(service),
@@ -181,10 +180,9 @@ class _ClientHomeState extends State<ClientHome> {
                       final extraIndex = index - quickServices.length - 1;
                       if (extraIndex == 0) {
                         return ActionChip(
-                          avatar: const Icon(
-                            Icons.flight_rounded,
-                            color: Color(0xFF5B55E8),
-                            size: 17,
+                          avatar: const WantokCategoryBadge(
+                            style: WantokCategoryStyles.travel,
+                            size: 24,
                           ),
                           label: const Text('Travel & Flights'),
                           onPressed: () =>
@@ -193,10 +191,9 @@ class _ClientHomeState extends State<ClientHome> {
                       }
                       if (extraIndex == 1) {
                         return ActionChip(
-                          avatar: const Icon(
-                            Icons.apartment_rounded,
-                            color: Color(0xFFE23D5F),
-                            size: 17,
+                          avatar: const WantokCategoryBadge(
+                            style: WantokCategoryStyles.hotels,
+                            size: 24,
                           ),
                           label: const Text('Hotels'),
                           onPressed: () => _openPlannedGlobalService('Hotels'),
@@ -204,9 +201,9 @@ class _ClientHomeState extends State<ClientHome> {
                       }
                       if (extraIndex == 2) {
                         return ActionChip(
-                          avatar: const Icon(
-                            Icons.more_horiz_rounded,
-                            size: 17,
+                          avatar: const WantokCategoryBadge(
+                            style: WantokCategoryStyles.more,
+                            size: 24,
                           ),
                           label: const Text('More'),
                           onPressed: _openServices,
@@ -214,7 +211,10 @@ class _ClientHomeState extends State<ClientHome> {
                       }
 
                       return ActionChip(
-                        avatar: const Icon(Icons.more_horiz_rounded, size: 17),
+                        avatar: const WantokCategoryBadge(
+                          style: WantokCategoryStyles.more,
+                          size: 24,
+                        ),
                         label: const Text('More'),
                         onPressed: _openServices,
                       );
@@ -299,36 +299,29 @@ class _ClientHomeState extends State<ClientHome> {
                         itemBuilder: (context, index) {
                           if (index < quickServices.length) {
                             final service = quickServices[index];
-                            final visual = _visualFor(service.slug);
-                            return WantokServiceTile(
-                              featureStyle: true,
+                            return WantokCategoryTile(
+                              key: ValueKey('home-category-${service.slug}'),
+                              compact: true,
+                              style: WantokCategoryStyles.bySlug(service.slug),
                               label: _shortLabel(service),
-                              icon: visual.icon,
-                              accentColor: visual.accent,
-                              surfaceColor: visual.surface,
                               badge: _badgeFor(service.slug),
                               onTap: () => _openService(service),
                             );
                           }
 
                           if (index == quickServices.length) {
-                            return WantokServiceTile(
-                              featureStyle: true,
+                            return WantokCategoryTile(
+                              compact: true,
+                              style: WantokCategoryStyles.travel,
                               label: 'Travel & Flights',
-                              icon: Icons.flight_rounded,
-                              accentColor: const Color(0xFF326FE5),
-                              surfaceColor: const Color(0xFFE2EEFF),
                               onTap: () =>
                                   _openPlannedGlobalService('Travel & Flights'),
                             );
                           }
 
-                          return WantokServiceTile(
-                            featureStyle: true,
-                            label: 'Hotels',
-                            icon: Icons.apartment_rounded,
-                            accentColor: const Color(0xFFD43C5D),
-                            surfaceColor: const Color(0xFFFFE5EB),
+                          return WantokCategoryTile(
+                            compact: true,
+                            style: WantokCategoryStyles.hotels,
                             onTap: () => _openPlannedGlobalService('Hotels'),
                           );
                         },
@@ -470,26 +463,19 @@ class _ClientHomeState extends State<ClientHome> {
   }
 
   List<Widget> _spotlights(List<WantokServiceCategory> services) {
-    final picks = <String, ({String title, String subtitle, IconData icon})>{
+    final picks = <String, ({String title, String subtitle})>{
       'taxi-ride': (
         title: 'Need a ride?',
         subtitle: 'Request a local taxi or driver.',
-        icon: Icons.local_taxi_rounded,
       ),
-      'food': (
-        title: 'Hungry?',
-        subtitle: 'Browse food from local vendors.',
-        icon: Icons.restaurant_rounded,
-      ),
+      'food': (title: 'Hungry?', subtitle: 'Browse food from local vendors.'),
       'delivery': (
         title: 'Send something',
         subtitle: 'Book a courier or delivery.',
-        icon: Icons.local_shipping_rounded,
       ),
       'specialist-services': (
         title: 'Find skilled help',
         subtitle: 'Trades, specialists and services.',
-        icon: Icons.handyman_rounded,
       ),
     };
 
@@ -500,14 +486,11 @@ class _ClientHomeState extends State<ClientHome> {
         orElse: () => null,
       );
       if (service == null) continue;
-      final visual = _visualFor(service.slug);
       widgets.add(
         _ServiceSpotlight(
           title: entry.value.title,
           subtitle: entry.value.subtitle,
-          icon: entry.value.icon,
-          accent: visual.accent,
-          surface: visual.surface,
+          style: WantokCategoryStyles.bySlug(service.slug),
           onTap: () => _openService(service),
         ),
       );
@@ -589,86 +572,10 @@ class _ClientHomeState extends State<ClientHome> {
     );
   }
 
-  _ServiceVisual _visualFor(String slug) => switch (slug) {
-    'taxi-ride' => const _ServiceVisual(
-      Icons.local_taxi_rounded,
-      Color(0xFF007A50),
-      Color(0xFFDDF5E9),
-    ),
-    'vehicle-hire' => const _ServiceVisual(
-      Icons.directions_car_rounded,
-      Color(0xFF2864DC),
-      Color(0xFFE3EDFF),
-    ),
-    'boat-hire' => const _ServiceVisual(
-      Icons.directions_boat_rounded,
-      Color(0xFF087F8C),
-      Color(0xFFDDF6F8),
-    ),
-    'boat-ship-rides' => const _ServiceVisual(
-      Icons.sailing_rounded,
-      Color(0xFF006C7C),
-      Color(0xFFDDF3F5),
-    ),
-    'specialist-services' => const _ServiceVisual(
-      Icons.handyman_rounded,
-      Color(0xFFD86020),
-      Color(0xFFFFE9DB),
-    ),
-    'general-labour' => const _ServiceVisual(
-      Icons.groups_rounded,
-      Color(0xFF744AC7),
-      Color(0xFFEEE6FF),
-    ),
-    'venue-booking' => const _ServiceVisual(
-      Icons.apartment_rounded,
-      Color(0xFF8A4CA6),
-      Color(0xFFF4E6F7),
-    ),
-    'events' => const _ServiceVisual(
-      Icons.event_rounded,
-      Color(0xFFD84A6A),
-      Color(0xFFFFE4EA),
-    ),
-    'delivery' => const _ServiceVisual(
-      Icons.local_shipping_rounded,
-      Color(0xFF1585C1),
-      Color(0xFFE0F2FF),
-    ),
-    'errands' => const _ServiceVisual(
-      Icons.shopping_bag_rounded,
-      Color(0xFFB66A00),
-      Color(0xFFFFF0D8),
-    ),
-    'food' => const _ServiceVisual(
-      Icons.restaurant_rounded,
-      Color(0xFFE24B2D),
-      Color(0xFFFFE5DE),
-    ),
-    'groceries' => const _ServiceVisual(
-      Icons.local_grocery_store_rounded,
-      Color(0xFF2E8B57),
-      Color(0xFFE1F4E7),
-    ),
-    _ => const _ServiceVisual(
-      Icons.apps_rounded,
-      WantokColors.primaryDark,
-      Color(0xFFE7F4ED),
-    ),
-  };
-
   String? _badgeFor(String slug) => switch (slug) {
     'taxi-ride' || 'delivery' => 'FAST',
     _ => null,
   };
-}
-
-class _ServiceVisual {
-  const _ServiceVisual(this.icon, this.accent, this.surface);
-
-  final IconData icon;
-  final Color accent;
-  final Color surface;
 }
 
 class _MarketplaceHero extends StatelessWidget {
@@ -1410,17 +1317,13 @@ class _ServiceSpotlight extends StatelessWidget {
   const _ServiceSpotlight({
     required this.title,
     required this.subtitle,
-    required this.icon,
-    required this.accent,
-    required this.surface,
+    required this.style,
     required this.onTap,
   });
 
   final String title;
   final String subtitle;
-  final IconData icon;
-  final Color accent;
-  final Color surface;
+  final WantokCategoryStyle style;
   final VoidCallback onTap;
 
   @override
@@ -1429,51 +1332,42 @@ class _ServiceSpotlight extends StatelessWidget {
       width: 188,
       margin: const EdgeInsets.only(right: 10),
       child: Material(
-        color: surface,
-        borderRadius: BorderRadius.circular(24),
+        color: style.surface,
+        borderRadius: BorderRadius.circular(20),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(24),
+          borderRadius: BorderRadius.circular(20),
           child: Padding(
-            padding: const EdgeInsets.all(15),
-            child: Stack(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Positioned(
-                  right: -8,
-                  bottom: -8,
-                  child: Icon(
-                    icon,
-                    color: accent.withValues(alpha: 0.13),
-                    size: 88,
+                Expanded(
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: WantokCategoryPicture(style: style),
                   ),
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CircleAvatar(
-                      radius: 22,
-                      backgroundColor: Colors.white.withValues(alpha: 0.92),
-                      child: Icon(icon, color: accent),
-                    ),
-                    const Spacer(),
-                    Text(
-                      title,
-                      style: const TextStyle(
-                        color: WantokColors.ink,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 3),
-                    Text(
-                      subtitle,
-                      maxLines: 2,
-                      style: const TextStyle(
-                        color: WantokColors.muted,
-                        fontSize: 11.5,
-                      ),
-                    ),
-                  ],
+                const SizedBox(height: 9),
+                Text(
+                  title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: WantokColors.ink,
+                    fontWeight: FontWeight.w900,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 3),
+                Text(
+                  subtitle,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    color: WantokColors.muted,
+                    fontSize: 11,
+                  ),
                 ),
               ],
             ),

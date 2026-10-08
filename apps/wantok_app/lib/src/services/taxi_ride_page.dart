@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+
+import '../home/wantok_category_ui.dart';
+
 import 'package:flutter_map/flutter_map.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
@@ -262,7 +265,19 @@ class _TaxiRidePageState extends State<TaxiRidePage> {
         : _latLng(ride['driver_lat'], ride['driver_lng']);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Taxi / Ride')),
+      appBar: AppBar(
+        title: const Row(
+          children: [
+            WantokCategoryBadge(
+              style: WantokCategoryStyles.taxi,
+              size: 33,
+              iconSize: 18,
+            ),
+            SizedBox(width: 9),
+            Text('Taxi / Ride'),
+          ],
+        ),
+      ),
       body: _busy && ride == null
           ? const Center(child: CircularProgressIndicator())
           : ListView(

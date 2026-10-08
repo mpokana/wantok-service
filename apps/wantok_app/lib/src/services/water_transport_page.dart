@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../home/wantok_category_ui.dart';
+
 import '../home/wantok_photo_hero.dart';
 
 import 'package:wantok_api/wantok_api.dart';
@@ -43,7 +45,23 @@ class _WaterTransportPageState extends State<WaterTransportPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Boat / Ship Rides'),
+        title: const Row(
+          children: [
+            WantokCategoryBadge(
+              style: WantokCategoryStyles.waterRides,
+              size: 33,
+              iconSize: 18,
+            ),
+            SizedBox(width: 9),
+            Expanded(
+              child: Text(
+                'Boat / Ship Rides',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
+          ],
+        ),
         actions: [
           IconButton(
             tooltip: 'My water trips',
