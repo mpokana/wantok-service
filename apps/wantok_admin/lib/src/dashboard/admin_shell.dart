@@ -5,6 +5,7 @@ import 'package:wantok_ui/wantok_ui.dart';
 
 import 'resource_review_page.dart';
 import 'provider_interest_queue_page.dart';
+import 'staged_provider_review_page.dart';
 
 class AdminShell extends StatefulWidget {
   const AdminShell({required this.roles, required this.email, super.key});
@@ -319,6 +320,16 @@ class _ProviderApplicationsPageState extends State<_ProviderApplicationsPage> {
       action: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
+          IconButton(
+            key: const ValueKey('admin-staged-onboarding-queue'),
+            tooltip: 'Preliminary onboarding applications',
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const StagedProviderReviewPage(),
+              ),
+            ),
+            icon: const Icon(Icons.assignment_outlined),
+          ),
           IconButton(
             key: const ValueKey('admin-provider-interest-queue'),
             tooltip: 'View provider interest queue',

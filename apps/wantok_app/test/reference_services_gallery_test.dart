@@ -33,6 +33,18 @@ void main() {
           'More',
         ],
       );
+      expect(
+        ReferenceServiceCategories.items
+            .singleWhere((item) => item.title == 'Home\nServices')
+            .slug,
+        'home-services',
+      );
+      expect(
+        ReferenceServiceCategories.items
+            .singleWhere((item) => item.title == 'Professional\nServices')
+            .slug,
+        'specialist-services',
+      );
       expect(ReferenceScreenGallery.items.length, 12);
       expect(
         ReferenceScreenGallery.items

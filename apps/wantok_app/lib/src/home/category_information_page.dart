@@ -3,6 +3,7 @@ import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
 import 'provider_discovery_page.dart';
+import 'staged_provider_application_page.dart';
 import 'wantok_category_ui.dart';
 
 /// Real catalogue detail: approved provider search plus an explicitly
@@ -15,6 +16,7 @@ class CategoryInformationPage extends StatefulWidget {
     this.categoryId,
     this.registerInterest,
     this.loadInterest,
+    this.loadOnboardingPolicy,
   });
 
   final WantokCategoryStyle style;
@@ -24,6 +26,8 @@ class CategoryInformationPage extends StatefulWidget {
   /// Injected only for deterministic widget tests.
   final Future<void> Function(String slug)? registerInterest;
   final Future<bool> Function(String categoryId)? loadInterest;
+  final Future<Map<String, dynamic>?> Function(String categoryId)?
+  loadOnboardingPolicy;
 
   @override
   State<CategoryInformationPage> createState() =>
@@ -32,6 +36,8 @@ class CategoryInformationPage extends StatefulWidget {
 
 class _CategoryInformationPageState extends State<CategoryInformationPage> {
   static const _interest = ProviderCategoryInterestRepository();
+  static const _onboarding = StagedOnboardingRepository();
+  Future<Map<String, dynamic>?>? _policyFuture;
   bool _registered = false;
   bool _loading = false;
   bool _submitting = false;
@@ -39,7 +45,21 @@ class _CategoryInformationPageState extends State<CategoryInformationPage> {
   @override
   void initState() {
     super.initState();
-    if (widget.categoryId != null) _loadStatus();
+    if (widget.categoryId != null) {
+      _loadStatus();
+      _policyFuture = _readPolicy(widget.categoryId!);
+    }
+  }
+
+  Future<Map<String, dynamic>?> _readPolicy(String categoryId) async {
+    try {
+      return await (widget.loadOnboardingPolicy ?? _onboarding.loadPolicy)(
+        categoryId,
+      );
+    } catch (_) {
+      // Missing migration or unavailable endpoint must not enable intake.
+      return null;
+    }
   }
 
   Future<void> _loadStatus() async {
@@ -224,6 +244,51 @@ class _CategoryInformationPageState extends State<CategoryInformationPage> {
               _registered ? 'Interest recorded' : 'Register provider interest',
             ),
           ),
+          if (_policyFuture != null)
+            FutureBuilder<Map<String, dynamic>?>(
+              future: _policyFuture,
+              builder: (context, snapshot) {
+                final policy = snapshot.data;
+                if (policy == null) return const SizedBox.shrink();
+                final staged = policy['intake_status'] == 'staged';
+                final requirements =
+                    (policy['requirements'] as List?)
+                        ?.map((item) => item.toString())
+                        .toList() ??
+                    <String>[];
+                return Padding(
+                  padding: const EdgeInsets.only(top: 14),
+                  child: staged
+                      ? OutlinedButton.icon(
+                          key: const ValueKey(
+                            'category-preliminary-application',
+                          ),
+                          onPressed: () => Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              builder: (_) => StagedProviderApplicationPage(
+                                categoryId: widget.categoryId!,
+                                categorySlug: widget.style.slug,
+                                categoryName: widget.style.title.replaceAll(
+                                  '\\n',
+                                  ' ',
+                                ),
+                                requirements: requirements,
+                              ),
+                            ),
+                          ),
+                          icon: const Icon(Icons.assignment_outlined),
+                          label: const Text('Start preliminary application'),
+                        )
+                      : Text(
+                          policy['guidance']?.toString() ?? 'Formal applications are not available for this category.',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: WantokColors.muted,
+                          ),
+                        ),
+                );
+              },
+            ),
           if (_registered)
             const Padding(
               padding: EdgeInsets.only(top: 7),

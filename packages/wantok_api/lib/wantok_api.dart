@@ -8,6 +8,7 @@ export 'src/open_request_repository.dart';
 export 'src/provider_application_repository.dart';
 export 'src/provider_category_interest_repository.dart';
 export 'src/provider_discovery_repository.dart';
+export 'src/staged_onboarding_repository.dart';
 export 'src/reservation_repository.dart';
 export 'src/taxi_repository.dart';
 export 'src/technical_control_repository.dart';

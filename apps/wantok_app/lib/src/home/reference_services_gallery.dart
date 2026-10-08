@@ -40,7 +40,7 @@ abstract final class ReferenceServiceCategories {
     ),
     ReferenceCategorySpec(
       WantokCategoryStyles.home,
-      'specialist-services',
+      'home-services',
       SmokeScene.trades,
     ),
     ReferenceCategorySpec(
