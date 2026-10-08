@@ -1,6 +1,9 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+
+import 'smoke_data.dart';
+
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
@@ -207,6 +210,11 @@ class _MessagesPageState extends State<MessagesPage> {
             padding: const EdgeInsets.fromLTRB(14, 10, 14, 28),
             children: [
               const _InboxHeader(),
+              if (WantokSmokeData.enabled)
+                const SmokePreviewSection(
+                  scene: SmokeScene.inbox,
+                  heading: 'Sample conversations',
+                ),
               const SizedBox(height: 14),
               _InboxCategorySelector(
                 selected: _category,

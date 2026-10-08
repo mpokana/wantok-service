@@ -491,6 +491,10 @@ Implemented presentation contract:
 - product rows may render existing `commerce_catalog_items.image_url`; missing/failed media falls back to Wantok icons;
 - existing checkout, fulfilment, delegated-beneficiary, order and cancellation authority is unchanged.
 
+### Mansfield's reversible smoke-data visual QA rule — 2026-10-08
+
+Approved local presentation examples may be shown to reproduce the reference visual theme **only if each sample has a small, visible `s` marker and an unambiguous `SMOKE_20261008_*` identifier**. Keep the entire fixture manifest in `docs/SMOKE_DATA.md` and gate the sample UI behind the compile-time `WANTOK_SMOKE_DATA` flag (default **false**). A sample must not look like a real payment, vendor approval, dispatch, booking or conversation; clicking a sample reveals its full ID and explanatory disclaimer but never makes backend writes. Delete the entire sample layer at project completion using the manifest; do not remove genuine backend records or reset local accounts.
+
 ### Truthful inventory rule
 
 Do not fabricate stores, products, stock, discounts, delivery times, ratings or promotions to make the marketplace look populated.

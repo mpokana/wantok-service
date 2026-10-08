@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import 'smoke_data.dart';
+
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_core/wantok_core.dart';
 import 'package:wantok_ui/wantok_ui.dart';
@@ -332,6 +335,11 @@ class _ClientHomeState extends State<ClientHome> {
                       );
                     },
                   ),
+                ),
+              if (WantokSmokeData.enabled)
+                const SmokePreviewSection(
+                  scene: SmokeScene.providers,
+                  heading: 'Sample popular near you',
                 ),
               const SizedBox(height: 18),
               _ScenicExploreBanner(onTap: _openServices),

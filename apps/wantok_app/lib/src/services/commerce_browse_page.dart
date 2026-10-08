@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../home/smoke_data.dart';
+
 import '../home/wantok_photo_hero.dart';
 
 import 'package:wantok_api/wantok_api.dart';
@@ -115,6 +117,13 @@ class _CommerceBrowsePageState extends State<CommerceBrowsePage> {
                     onTopRated: () {},
                   ),
                   const SizedBox(height: 20),
+                  if (WantokSmokeData.enabled)
+                    SmokePreviewSection(
+                      scene: isFood ? SmokeScene.food : SmokeScene.groceries,
+                      heading: isFood
+                          ? 'Sample restaurants'
+                          : 'Sample grocery shops',
+                    ),
                   _MessageCard(
                     icon: isFood
                         ? Icons.restaurant_outlined

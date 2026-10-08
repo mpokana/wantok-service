@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import 'smoke_data.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
@@ -208,10 +211,15 @@ class _ActivityPageState extends State<ActivityPage> {
           if (rows.isEmpty) {
             return ListView(
               padding: const EdgeInsets.fromLTRB(14, 10, 14, 28),
-              children: const [
-                _TrackHeader(),
-                SizedBox(height: 12),
-                _TrackJourneyLinks(),
+              children: [
+                const _TrackHeader(),
+                const SizedBox(height: 12),
+                const _TrackJourneyLinks(),
+                if (WantokSmokeData.enabled)
+                  const SmokePreviewSection(
+                    scene: SmokeScene.bookings,
+                    heading: 'Sample booking timeline',
+                  ),
                 SizedBox(height: 18),
                 Card(
                   child: Padding(
@@ -250,13 +258,19 @@ class _ActivityPageState extends State<ActivityPage> {
 
           return ListView.separated(
             padding: const EdgeInsets.fromLTRB(18, 10, 18, 28),
-            itemCount: entries.length + 2,
+            itemCount: entries.length + 2 + (WantokSmokeData.enabled ? 1 : 0),
             separatorBuilder: (_, _) => const SizedBox(height: 11),
             itemBuilder: (context, index) {
               if (index == 0) return const _TrackHeader();
               if (index == 1) return const _TrackJourneyLinks();
+              if (WantokSmokeData.enabled && index == 2) {
+                return const SmokePreviewSection(
+                  scene: SmokeScene.bookings,
+                  heading: 'Sample booking timeline',
+                );
+              }
 
-              final entry = entries[index - 2];
+              final entry = entries[index - (WantokSmokeData.enabled ? 3 : 2)];
               if (entry.row == null) {
                 return _TrackSectionHeader(
                   group: entry.group,

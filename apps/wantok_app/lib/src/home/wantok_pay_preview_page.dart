@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import 'smoke_data.dart';
+
 import 'package:wantok_ui/wantok_ui.dart';
 
 import 'png_visuals.dart';
@@ -91,6 +94,14 @@ class WantokPayPreviewPage extends StatelessWidget {
             ],
           ),
         ),
+        if (WantokSmokeData.enabled)
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: SmokePreviewSection(
+              scene: SmokeScene.wallet,
+              heading: 'Sample recent activity',
+            ),
+          ),
         const SizedBox(height: 20),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 18),

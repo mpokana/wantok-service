@@ -32,6 +32,10 @@ For focused changes, run narrower checks during development, then the full check
 
 After each meaningful validated work session, retain both a **local Git commit** and a verified **GitHub branch push** to the existing project remote (`origin`, `https://github.com/mpokana/wantok-service.git`). Before pushing, inspect `git status`, the exact remote URL and branch, and the staged file list for accidental secrets, environment files, personal data or generated artefacts. Never push credentials or ignored `.wantok/` local settings. Push only the current feature branch; do not force-push, rewrite shared history, change the default branch or merge without explicit approval. Verify the remote branch's commit ID against local `HEAD` after pushing. If GitHub access is unavailable, keep the local commit, record the blocked remote backup and retry after restoring authorised access. GitHub complements, but is not a substitute for, independent database/asset backups.
 
+## Smoke/sample data rule
+
+Temporary demo/sample records are **opt-in, presentation-only and reversible**. The canonical manifest is `docs/SMOKE_DATA.md`, with fixture IDs prefixed `SMOKE_20261008_` and a small visible **s** badge on every sample item. The `WANTOK_SMOKE_DATA` Flutter compile-time flag defaults to false and must not be enabled for production. Never insert demo records into Supabase or treat samples as genuine provider approvals, payments, bookings or messages. When the project is ready, disable the flag and follow the manifest to remove all fixture code. Do not SQL-delete anything merely because its display name resembles a sample.
+
 ## Living handover rule
 
 After a meaningful phase or safe Git checkpoint, update:

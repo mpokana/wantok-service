@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import 'smoke_data.dart';
+
 import 'package:geolocator/geolocator.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_core/wantok_core.dart';
@@ -744,6 +747,13 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
                   filtered,
                   grouped: query.isEmpty && _family == WantokServiceFamily.all,
                   textScale: textScale,
+                ),
+              if (WantokSmokeData.enabled &&
+                  query.isEmpty &&
+                  _family == WantokServiceFamily.all)
+                const SmokePreviewSection(
+                  scene: SmokeScene.trades,
+                  heading: 'Sample trusted services',
                 ),
               const SizedBox(height: 18),
               const _ServicePromiseCard(),

@@ -154,13 +154,16 @@ void main() {
     );
 
     expect(find.text('Popular categories'), findsOneWidget);
+    await tester.drag(find.byType(ListView).first, const Offset(0, -260));
+    await tester.pumpAndSettle();
+    await tester.ensureVisible(find.text('See all').first);
     await tester.tap(find.text('See all').first);
     await tester.pumpAndSettle();
 
     expect(find.text('All Wantok Services'), findsOneWidget);
-    expect(find.text('Move & travel'), findsOneWidget);
-    expect(find.text('Food & shopping'), findsOneWidget);
-    expect(find.text('People & skills'), findsOneWidget);
+    expect(find.text('Move & travel'), findsWidgets);
+    expect(find.text('Food & shopping'), findsWidgets);
+    expect(find.text('People & skills'), findsWidgets);
     expect(find.text('Taxi'), findsWidgets);
     expect(find.text('Food'), findsWidgets);
     expect(find.text('Groceries'), findsWidgets);
