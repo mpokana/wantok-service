@@ -1,0 +1,10 @@
+{
+  "name": "@wantok/evidence-scanner",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Local-only, fail-closed antivirus scanning core; no upload endpoint",
+  "scripts": {
+    "test": "node --test test/scan.test.mjs"
+  }
+}
