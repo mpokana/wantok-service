@@ -1,8 +1,25 @@
 # Wantok Services — Living Handover
 
-**Updated:** 2026-10-08
+**Updated:** 2026-10-09
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
+
+## NEW CHAT RESUME CHECKPOINT — 9 October 2026
+
+**Latest implemented-code checkpoint (before this documentation-only update):** `73ea82f71b784d098a3782cb383f40e6b8da9cff` (`feat: add sealed account-bound evidence intent and encrypted quarantine core`). Local HEAD and `origin/feature/flutter-platform-v1` match; working tree was clean before this handover-only documentation update. Repository: `D:\Project-M.2\wantok-service-recovery`, on EAGLT02. The project remains Wantok Services, separate from GVE and Wantok Neurons.
+
+**Resume task:** Continue the **provider-evidence intake security architecture**, not live uploads. The next engineering gate is a trusted, authenticated server-side admission service that verifies Supabase JWT/account/app/check/intent associations and atomically claims an intent before encrypted quarantine; ensure proper Windows ACLs or a dedicated Linux volume, managed encryption keys, durable integrity/audit, revocation, retention, scanner health and legitimate privacy consent. Audit, design and test locally before enabling a network route. The current `quarantine.mjs` verification callback in tests is injected, **not** real JWT/Supabase authority. Do not imply live upload readiness or connect Flutter to the sealed bucket.
+
+**Implemented & validated (local dev only):**
+- Official ClamAV 1.5.4 on EAGLT02, container `wantok-clamav-scanner`, loopback-only `127.0.0.1:3310`, persistent signature volume, 4 GiB/2 CPU caps; signatures **28147** at last recorded check. Run `scripts/clamav-local.ps1 -Action Status` then `-Action Test` and monitor signature freshness.
+- `staged-provider-evidence` Supabase Storage bucket remains PRIVATE with **no client object policies**. The `staged_evidence_intake_intents` migration `20261009024500_evidence_intake_intents.sql` records only revocable, applicant-bound **non-uploading** intents. Draft notice marker is **not valid consent**. `quarantine.mjs` encrypts synthetic scanned bytes to temporary AES-256-GCM candidates; exclusive creation is **not** a complete atomic custody or immutable storage solution.
+- Latest tests: `npm run db:test` **33 files / 711 assertions PASS**; `npm run test:evidence` **35 PASS**; `npm run test:evidence:real` **4 PASS**; `scripts/flutter/check.ps1`: seven analysis targets clear, **68 app / 3 Admin / 1 Technical tests PASS**. Android emulator `emulator-5554` retained, with **no reinstall or data reset** for this backend-only phase.
+- Backups: verified GitHub feature-branch SHA above; verified local Git bundle `D:\Wantok_Project_Backups\wantok-services-encrypted-quarantine-73ea82f-20261009.bundle`; private PostgreSQL archive `D:\Wantok_Project_Backups\Private_Supabase_20261008\wantok-evidence-intents-20261009.dump` (archive TOC checked; **restore rehearsal not done**). The local ClamAV Docker image/container/signature volume are **not** included in Git bundles.
+- Approved image-rich service category theme, unified category pictures across screens, opt-in `SMOKE_20261008_*` fixtures and visible small **s** indicators must be preserved. No fake live vendors, approvals, bookings or payments. Production remains untouched. Existing CX1 signed-in Web QA gate and later T2.4 dependency remain open, independent of the evidence-work milestone.
+
+**Read next (in this order):** root `AGENTS.md`, this handover, `docs/ROADMAP.md`, `docs/ROADMAP_FILLERS.md`, `docs/EVIDENCE_QUARANTINE_ADMISSION.md`, `docs/CLAMAV_LOCAL_RUNTIME.md`, and the relevant architecture documents. Inspect `git status --short --branch`, exact GitHub branch SHA and real scanner health before modifying anything. Follow additive migrations, full test gate, **GitHub plus local bundle and private DB backup** for changed database phases.
+
+**Do NOT assume complete:** public upload/JWT gateway, one-time atomic intent claim, key custody/rotation, protected filesystem ACLs, MIME/PDF decoder isolation, production-grade malware controls/retention/audited reviewer release, consent/privacy compliance, admin provider approval, Web CX1 gate or restore drill. Never make the `staged-provider-evidence` bucket publicly writable or reuse owner-editable `provider-documents`.
 
 ## Resume here
 

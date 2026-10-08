@@ -1,6 +1,14 @@
 # Wantok Services — Living Roadmap
 
-**Updated:** 2026-10-08
+**Updated:** 2026-10-09
+
+## Current engineering checkpoint (2026-10-09) — verified, no public intake
+
+- **Latest implementation source:** `73ea82f` on `feature/flutter-platform-v1`. EAGLT02 local + GitHub commit match; private DB archive and independent local Git bundle verified. Source-specific implementation/limitations in `docs/EVIDENCE_QUARANTINE_ADMISSION.md`.
+- **Implemented locally:** account-bound, withdrawable **non-uploading evidence intent** RPC/RLS; sealed Supabase bucket; real ClamAV/EICAR detection; separately injected **AES-256-GCM encrypted quarantine candidate** and integrity checker using synthetic bytes. No live session-verified network gateway, approved consent or reviewer release.
+- **Tests at checkpoint:** database **711/711** (33 files), scanner/quarantine **35/35**, real ClamAV **4/4**, Flutter **68 app + 3 Admin + 1 Technical**, seven analysis targets clean. No emulator reset required.
+- **Next gated work:** trusted server JWT validation and atomic one-time intent claim, proven secure local filesystem ACLs or Linux isolated volume, KMS/secret recovery, ingestion limits/content normaliser/ClamAV freshness, durable receipts and transaction recovery, audit, data retention/consent, reviewer separation and restore rehearsal. **Do not enable uploads or approval/payment/booking until full end-to-end controls are independently tested and authorised.**
+- **UX/fixtures:** approved photo-rich category grid with consistent assets and reversible s-marked fixtures remains unchanged. General CX1 signed-in Web QA and T2.4 are still open; work on evidence does not satisfy those gates.
 
 ## Completed platform phases
 

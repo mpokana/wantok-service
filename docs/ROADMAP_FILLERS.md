@@ -514,3 +514,29 @@ CX1G remains the future general-products expansion beyond Food/Groceries. This f
 - new marketplace payment movement.
 
 Those items remain governed by the existing CX1G roadmap gate.
+
+---
+
+## FILLER-2026-10-09-01 — New-chat continuity: evidence custody and approved user experience
+
+**Status:** Approved continuity constraints. Latest implemented-code checkpoint **`73ea82f`** on `feature/flutter-platform-v1`. See the first section of `docs/HANDOVER.md` and `docs/EVIDENCE_QUARANTINE_ADMISSION.md` before changing code. Do not infer new functionality from a planned roadmap item.
+
+### Preserve the approved Wantok Services experience
+
+- Keep the reference-matched **photographic**, rounded, enterprise-friendly category cards and the **same category picture/label throughout screens**. Do not revert to plain-colour, generic icon-only category cards or generate replacement reference art without explicit instruction.
+- Preserve Beauty & Wellness, Health & Medical, Travel & Flights and other expanded categories, while keeping their distinct information-only/provider-readiness restrictions intact.
+- All temporary illustrative data must carry a small visible **`s`** and a traceable `SMOKE_20261008_*` fixture ID, remain opt-in and removable by the manifest in `docs/SMOKE_DATA.md`; never seed fake Supabase provider approval, payments or bookings. Do not delete genuine records by matching display names.
+- Preserve the working emulator installation and authenticated session; never wipe data or rebuild the backend for a cosmetic change. Avoid disrupting the separate GVE systems.
+
+### Security boundary for the next engineering session
+
+- **Current reality:** isolated real ClamAV scan and encrypted synthetic candidate quarantine pass tests; there is **no operating secure applicant upload**. Draft `WANTOK-EVIDENCE-INTAKE-DRAFT-2026-10` is a version marker only, not informed consent. The evidence bucket remains sealed with no ordinary client Storage permissions.
+- The next phase must start with **trusted backend session verification and a one-time, atomic applicant/check/intent claim**, then evaluate protected file custody, encryption-key lifecycle, resource quotas, durable audit/receipt, malware signature freshness, malicious/failure paths, immutable/versioned storage, privacy/retention and separately authorised reviewer access. Do not let a client supply its own `verifyIntent` decision. Do not wire public routes or provider activation until end-to-end controls and tests are independently accepted.
+- Preserve the separate **Operations Admin** provider-review authority and Technical Control integration/health authority. There must be no automatic provider approval, payment flow or regulated-provider onboarding due to a clean antivirus verdict.
+- Production is untouched. Restrict any configuration/migrations to the specifically authorised **EAGLT02 local** development environment unless the user separately approves another machine/deployment.
+
+### Required resumption and backups
+
+Open `AGENTS.md` → `docs/HANDOVER.md` → `docs/ROADMAP.md` → this filler → `docs/EVIDENCE_QUARANTINE_ADMISSION.md` → `docs/CLAMAV_LOCAL_RUNTIME.md`. Then check Git, EAGLT02 Docker/ClamAV signature freshness and free disk/memory before work. Use additive migrations and mandatory Flutter/database/scanner tests.
+
+Keep both a verified GitHub push to the existing feature branch and an independent local `git bundle`; preserve private, access-restricted PostgreSQL backups for schema changes and **never include private archives, identity data, keys, configuration secrets or local `.wantok` files in Git**. An archive listing check is not a complete restore drill.
