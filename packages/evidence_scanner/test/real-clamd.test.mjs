@@ -6,6 +6,7 @@ import assert from 'node:assert/strict';
 import {scanWithClamd, inspectAndScanEvidence, EvidenceError} from '../src/scan.mjs';
 import {requireFreshClamd, scanWithFreshClamd} from '../src/freshness.mjs';
 import {quarantineWithVerifiedIntent, verifyQuarantineIntegrity} from '../src/quarantine.mjs';
+import {sealOfflineCustodyCandidate, verifyOfflineCustody} from '../src/custody.mjs';
 import {randomBytes,randomUUID} from 'node:crypto';
 import {mkdtemp,rm,readdir} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
@@ -66,6 +67,34 @@ test('real clean scan produces encrypted held ciphertext and no reviewer access'
     assert.equal((await readdir(root)).length,2);
     assert.equal((await verifyQuarantineIntegrity(input)).valid,true);
   } finally {
+    await rm(root,{recursive:true,force:true});
+  }
+});
+
+// Explicit OFFLINE fixture: real scanner + single-file claim-bound envelope.
+test('real ClamAV scans before offline claim-bound sealed envelope publication', async () => {
+  const root=await mkdtemp(join(tmpdir(),'wantok-offline-custody-'));
+  const binding={claimId:randomUUID(),intentId:randomUUID(),subjectId:randomUUID(),
+    applicationId:randomUUID(),checkId:randomUUID()};
+  const key=randomBytes(32);
+  try {
+    const sealed=await sealOfflineCustodyCandidate({
+      mode:'OFFLINE_SYNTHETIC_FIXTURE_ONLY',root,binding,
+      keyId:'synthetic-key-v1',key,
+      filename:'synthetic.pdf',declaredMime:'application/pdf',bytes:good,
+      verifyClaim:async()=>({...binding,eligible:true,state:'claimed_for_quarantine',
+        storagePermitted:false,reviewerAccessPermitted:false,approved:false}),
+    });
+    assert.equal(sealed.state,'sealed_candidate_not_released');
+    assert.equal(sealed.storagePermitted,false);
+    assert.equal((await readdir(root)).length,1);
+    const integrity=await verifyOfflineCustody({
+      root,claimId:binding.claimId,keyId:'synthetic-key-v1',key,expected:binding,
+    });
+    assert.equal(integrity.valid,true);
+    assert.equal(integrity.reviewerAccessPermitted,false);
+  } finally {
+    key.fill(0);
     await rm(root,{recursive:true,force:true});
   }
 });

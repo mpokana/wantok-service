@@ -2,6 +2,11 @@
 
 **Updated:** 2026-10-09
 
+## Current security increment (2026-10-09) — claim-bound offline crash-state prototype, uploads SEALED
+
+- [x] **Local synthetic-only custody:** AES-256-GCM single-envelope authenticated claim/intent/account/application/check/key-ID metadata; exclusive non-overwriting hard-link publish, file `sync()` and read-only inspection of lock/pending/held crash states. Concurrent claims and injected stops before/after publishing tested: **71 scanner/custody unit tests PASS, 6 actual ClamAV integration tests PASS**. Pure local temporary fixtures only; see `docs/EVIDENCE_CUSTODY_OFFLINE_RECOVERY.md`.
+- [ ] **Remaining release gates:** verified GoTrue claim-to-file execution, durable DB manifest/outbox, controlled retry after failures, independently accepted dedicated NTFS ACLs/Linux vault, KMS/key rotation and recovery, content normaliser sandbox, consent/privacy/legal holds/erasure, immutable off-host audit, authorised reviewer separation, power-loss and actual restore rehearsal. Scratch hard-link+file sync is not proof of durability/immutability and **does not permit actual applicant uploads**. CX1 stays open; signed-in Web QA precedes T2.4.
+
 ## Current security increment (2026-10-09) — ClamAV freshness preflight, uploads SEALED
 
 - [x] **Internal quarantine default gate:** require loopback ClamAV `VERSION` to report signature age at most **48 hours** before `INSTREAM`; reject stale/missing/malformed/version responses, overlong replies, health failures and excessive clock skew before bytes are scanned. 72-hour absolute maximum policy; original injection seam remains test-only. Scanner freshness alone is not content sanitisation or approval. Unit **57 PASS** and actual ClamAV **5 PASS**, including EICAR. See `docs/EVIDENCE_SIGNATURE_FRESHNESS.md`.

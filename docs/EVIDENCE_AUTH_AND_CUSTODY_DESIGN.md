@@ -31,6 +31,11 @@
 7. **Audit, retention, privacy and release:** append-only/off-host audit anchored to claim, scanner report, ciphertext digest and consent; time-bound retention, legal holds, approved deletion and cryptographic erasure; independent Operations Admin reviewer authorisation and least-privilege release. Technical Control may monitor integration health but cannot grant provider approval.
 8. **Operations and tests:** replay/race/revocation tests; invalid/malicious PDFs and images; scanner-outage/old-signature handling; interrupted I/O and partial DB commits; user enumeration leaks; file/DB integrity, KMS recovery, permission/ACL inspection, audited restore drills and sign-off before any applicant upload.
 
+## Offline single-envelope recovery prototype (9 October 2026)
+
+- Additive `packages/evidence_scanner/src/custody.mjs` uses only synthetic offline fixtures: claim ID and bounded non-secret key ID authenticated in a one-file AES-GCM envelope, exclusive lock/pending publication, non-overwriting filesystem hard-link, and read-only interrupted-state inspection. Detailed limits and testing are in `docs/EVIDENCE_CUSTODY_OFFLINE_RECOVERY.md`.
+- It is **not connected** to the real GoTrue adapter or database claim. Simulated interrupted-operation tests are not Windows power-loss durability evidence; there is no independently verified NTFS ACL, KMS, outbox, immutable audit, consent or reviewer path. All uploads remain disabled.
+
 ## Local scanner freshness increment (9 October 2026)
 
 - `freshness.mjs` runs the internal candidate-quarantine default scanner only after verifying the real loopback ClamAV VERSION signature time. It enforces at most 48 hours since definitions (72-hour configurable absolute upper limit), no negative clock skew beyond five minutes and strict bounded parsing, timeout and origin checks; see `docs/EVIDENCE_SIGNATURE_FRESHNESS.md`.

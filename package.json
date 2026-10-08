@@ -16,7 +16,7 @@
     "db:migrate": "node ./scripts/supabase-local.js migration up --local",
     "db:reset": "node ./scripts/supabase-local.js db reset --local",
     "db:test": "node ./scripts/supabase-local.js test db --local supabase/tests",
-    "test:evidence": "node --test --test-reporter=tap ./packages/evidence_scanner/test/scan.test.mjs ./packages/evidence_scanner/test/quarantine.test.mjs ./packages/evidence_scanner/test/admission.test.mjs ./packages/evidence_scanner/test/freshness.test.mjs",
+    "test:evidence": "node --test --test-reporter=tap ./packages/evidence_scanner/test/scan.test.mjs ./packages/evidence_scanner/test/quarantine.test.mjs ./packages/evidence_scanner/test/admission.test.mjs ./packages/evidence_scanner/test/freshness.test.mjs ./packages/evidence_scanner/test/custody.test.mjs",
     "test:evidence:real": "node --test --test-reporter=tap ./packages/evidence_scanner/test/real-clamd.test.mjs",
     "db:stop": "node ./scripts/supabase-local.js stop"
   },
