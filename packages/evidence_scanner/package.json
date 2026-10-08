@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "description": "Local-only, fail-closed antivirus scanning core; no upload endpoint",
   "scripts": {
-    "test": "node --test test/scan.test.mjs test/quarantine.test.mjs test/admission.test.mjs test/freshness.test.mjs test/custody.test.mjs",
+    "test": "node --test test/scan.test.mjs test/quarantine.test.mjs test/admission.test.mjs test/freshness.test.mjs test/custody.test.mjs test/custody-reconcile.test.mjs",
     "test:real": "node --test test/real-clamd.test.mjs"
   }
 }

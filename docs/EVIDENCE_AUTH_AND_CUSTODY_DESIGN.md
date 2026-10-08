@@ -31,6 +31,11 @@
 7. **Audit, retention, privacy and release:** append-only/off-host audit anchored to claim, scanner report, ciphertext digest and consent; time-bound retention, legal holds, approved deletion and cryptographic erasure; independent Operations Admin reviewer authorisation and least-privilege release. Technical Control may monitor integration health but cannot grant provider approval.
 8. **Operations and tests:** replay/race/revocation tests; invalid/malicious PDFs and images; scanner-outage/old-signature handling; interrupted I/O and partial DB commits; user enumeration leaks; file/DB integrity, KMS recovery, permission/ACL inspection, audited restore drills and sign-off before any applicant upload.
 
+## Offline consistency and evidence reconciliation (9 October 2026)
+
+- Read-only `custody-reconcile.mjs` compares a synthetic WQE2 scratch file against a **caller-supplied untrusted snapshot** and claim status. It never obtains records from the database, creates/reopens claims, writes files, releases ciphertext or approves providers. Mismatches, withdrawal or interrupted artifacts require investigation; an exact match still has **zero release rights**.
+- Required next phase: authenticate metadata read using a service-restricted server-only interface, bind it to the **current** one-time claim/withdrawal state, add durable transactional outbox and audited reconciliation with independently verified sealed filesystem permissions. Do not infer that an untrusted snapshot or unit test is a live custody proof.
+
 ## Local restricted custody metadata and NTFS ACL audit (9 October 2026)
 
 - New `20261009060000_custody_manifest_metadata.sql` creates a private, claim-receipt-linked, one-time server-role-only custody digest record. It is ALWAYS pending independent reconciliation: no physical file verification, no status release/review or upload. The new offline proposal function builds matching request fields from **synthetic** AES-GCM envelope inspection and intentionally makes **no RPC call**.

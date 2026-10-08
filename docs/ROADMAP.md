@@ -2,6 +2,12 @@
 
 **Updated:** 2026-10-09
 
+## Current security increment (2026-10-09) — read-only custody snapshot consistency, uploads SEALED
+
+- [x] **Synthetic-only offline comparator:** WQE2 encrypted scratch candidate checked against separately supplied SQL-shaped manifest snapshot and claimed/withdrawn status. Flags file/metadata absence, claim mismatch, hash/tamper mismatch, withdrawn claims and interrupted states. A perfect match remains `snapshot_matches_still_pending_independent_reconciliation`, **not proof of custody or authority**. `npm run test:evidence` **85 PASS**, real ClamAV **6 PASS**, local PostgreSQL **35 files / 767 assertions PASS**.
+- [x] **Android emulator preserved:** existing `Medium_Phone_API_36.1` launched without data wipe, installed Wantok Services `io.wantok.service` confirmed foreground by ADB. Docker Desktop process-environment issue fixed without system settings or volume changes. See `docs/EVIDENCE_CUSTODY_RECONCILIATION_DRYRUN.md`.
+- [ ] **Still required:** authentic restricted server-side database snapshot query and claim-state verification, independent manifest-to-file outbox reconciliation, dedicated service identity/storage, managed keys/rotation, content sandbox, consent/privacy, retention/erasure, off-host audit, restore drills, authorised reviewer access. CX1 signed-in Web QA remains open before T2.4. Live applicant uploads remain disabled.
+
 ## Current security increment (2026-10-09) — metadata-linked custody and protected ACL lab, uploads SEALED
 
 - [x] **Local schema only:** single-write, claim-receipt-bound custody manifest capturing bounded plaintext/ciphertext SHA-256 and file metadata under service-role-only RPC; all records remain `pending_independent_reconciliation`, without applicant grants, reviewer access, upload ability or provider approval. Local migration `20261009060000_custody_manifest_metadata.sql` applied; **35 SQL files / 767 pgTAP assertions PASS**.
