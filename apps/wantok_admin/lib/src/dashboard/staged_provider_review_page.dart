@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import 'staged_verification_checklist_page.dart';
+
 /// Preliminary intake triage. No approval, verification or listing action.
 class StagedProviderReviewPage extends StatefulWidget {
   const StagedProviderReviewPage({super.key});
@@ -197,6 +199,27 @@ class _StagedProviderReviewPageState extends State<StagedProviderReviewPage> {
                             'Status: ${row['status']}',
                             style: const TextStyle(fontWeight: FontWeight.w700),
                           ),
+                          if (row['status'] == 'in_review') ...[
+                            const SizedBox(height: 10),
+                            OutlinedButton.icon(
+                              key: ValueKey(
+                                'review-application-checks-${row['id']}',
+                              ),
+                              icon: const Icon(Icons.fact_check_outlined),
+                              label: const Text('Open verification checklist'),
+                              onPressed: () => Navigator.of(context).push(
+                                MaterialPageRoute<void>(
+                                  builder: (_) =>
+                                      StagedVerificationChecklistPage(
+                                        applicationId: row['id'] as String,
+                                        applicantName:
+                                            row['applicant_name']?.toString() ??
+                                            'Applicant',
+                                      ),
+                                ),
+                              ),
+                            ),
+                          ],
                           if (row['status'] == 'submitted') ...[
                             const SizedBox(height: 10),
                             Wrap(

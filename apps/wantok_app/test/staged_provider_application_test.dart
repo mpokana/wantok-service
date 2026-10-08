@@ -4,6 +4,53 @@ import 'package:wantok_app/src/home/staged_provider_application_page.dart';
 
 void main() {
   testWidgets(
+    'Applicant sees read-only checklist status without approval actions',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 1800);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      var loaded = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: StagedProviderApplicationPage(
+            categoryId: 'cat-one',
+            categorySlug: 'home-services',
+            categoryName: 'Home Services',
+            requirements: const ['Trade description'],
+            loadApplication: (_) async => {
+              'id': 'app-one',
+              'status': 'in_review',
+              'applicant_name': 'Example Applicant',
+            },
+            loadChecks: (id) async {
+              expect(id, 'app-one');
+              loaded++;
+              return [
+                {
+                  'requirement_index': 1,
+                  'requirement_label': 'Trade description and coverage area',
+                  'review_status': 'needs_followup',
+                },
+              ];
+            },
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(loaded, greaterThan(0));
+      expect(find.text('Preliminary checklist progress'), findsOneWidget);
+      expect(find.text('Needs follow-up'), findsOneWidget);
+      expect(find.text('Trade description and coverage area'), findsOneWidget);
+      expect(find.byType(FilledButton), findsNothing);
+      expect(
+        find.byKey(const ValueKey('submit-staged-application')),
+        findsNothing,
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
+  testWidgets(
     'Preliminary intake only collects minimal details and never approves',
     (tester) async {
       tester.view.physicalSize = const Size(390, 2800);

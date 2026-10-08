@@ -24,6 +24,17 @@ class StagedOnboardingRepository {
         .maybeSingle();
   }
 
+  /// Read-only verification progress, filtered by database RLS.
+  Future<List<Map<String, dynamic>>> loadMyChecks(String applicationId) async {
+    if (WantokBackend.client.auth.currentUser == null) return const [];
+    final rows = await WantokBackend.client
+        .from('staged_verification_checks')
+        .select('requirement_index, requirement_label, review_status')
+        .eq('application_id', applicationId)
+        .order('requirement_index');
+    return (rows as List<dynamic>).cast<Map<String, dynamic>>();
+  }
+
   Future<void> submit({
     required String categorySlug,
     required String applicantName,

@@ -11,6 +11,7 @@ class StagedProviderApplicationPage extends StatefulWidget {
     required this.categoryName,
     required this.requirements,
     this.loadApplication,
+    this.loadChecks,
     this.submitApplication,
   });
 
@@ -19,6 +20,7 @@ class StagedProviderApplicationPage extends StatefulWidget {
   final String categoryName;
   final List<String> requirements;
   final Future<Map<String, dynamic>?> Function(String)? loadApplication;
+  final Future<List<Map<String, dynamic>>> Function(String)? loadChecks;
   final Future<void> Function(String, String, String, String, String, String)?
   submitApplication;
 
@@ -211,6 +213,64 @@ class _StagedProviderApplicationPageState
                   ),
                 ),
               ),
+              if (existing['id'] case final String applicationId) ...[
+                const SizedBox(height: 12),
+                Text(
+                  'Preliminary checklist progress',
+                  style: Theme.of(context).textTheme.titleMedium
+                      ?.copyWith(fontWeight: FontWeight.w800),
+                ),
+                const SizedBox(height: 8),
+                FutureBuilder<List<Map<String, dynamic>>>(
+                  future: (widget.loadChecks ?? _repo.loadMyChecks)(
+                    applicationId,
+                  ),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState != ConnectionState.done) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    if (snapshot.hasError) {
+                      return const Text(
+                        'Verification progress is unavailable. Please try again later.',
+                      );
+                    }
+                    final checks =
+                        snapshot.data ?? const <Map<String, dynamic>>[];
+                    if (checks.isEmpty) {
+                      return const Text('No review checklist available yet.');
+                    }
+                    return Column(
+                      children: [
+                        for (final check in checks)
+                          Card(
+                            child: ListTile(
+                              leading: const Icon(
+                                Icons.fact_check_outlined,
+                                color: WantokColors.primary,
+                              ),
+                              title: Text(
+                                check['requirement_label']?.toString() ??
+                                    'Requirement',
+                              ),
+                              subtitle: Text(switch (check['review_status']) {
+                                'under_review' => 'Under review',
+                                'needs_followup' => 'Needs follow-up',
+                                _ => 'Pending',
+                              }),
+                            ),
+                          ),
+                        const Text(
+                          'These are preliminary review statuses, not provider approval.',
+                          style: TextStyle(
+                            color: WantokColors.muted,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+              ],
             ] else ...[
               Form(
                 key: _form,
