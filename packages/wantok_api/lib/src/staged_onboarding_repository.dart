@@ -35,6 +35,18 @@ class StagedOnboardingRepository {
     return (rows as List<dynamic>).cast<Map<String, dynamic>>();
   }
 
+  /// Applicant-only view of future evidence planning; documents are NOT accepted.
+  Future<List<Map<String, dynamic>>> loadMyEvidencePlans(
+    String applicationId,
+  ) async {
+    if (WantokBackend.client.auth.currentUser == null) return const [];
+    final rows = await WantokBackend.client
+        .from('staged_evidence_requirements')
+        .select('check_id, state, planned_at')
+        .eq('application_id', applicationId);
+    return (rows as List<dynamic>).cast<Map<String, dynamic>>();
+  }
+
   Future<void> submit({
     required String categorySlug,
     required String applicantName,

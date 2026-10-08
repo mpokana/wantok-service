@@ -12,6 +12,7 @@ class StagedProviderApplicationPage extends StatefulWidget {
     required this.requirements,
     this.loadApplication,
     this.loadChecks,
+    this.loadEvidencePlans,
     this.submitApplication,
   });
 
@@ -21,6 +22,7 @@ class StagedProviderApplicationPage extends StatefulWidget {
   final List<String> requirements;
   final Future<Map<String, dynamic>?> Function(String)? loadApplication;
   final Future<List<Map<String, dynamic>>> Function(String)? loadChecks;
+  final Future<List<Map<String, dynamic>>> Function(String)? loadEvidencePlans;
   final Future<void> Function(String, String, String, String, String, String)?
   submitApplication;
 
@@ -267,6 +269,49 @@ class _StagedProviderApplicationPageState
                           ),
                         ),
                       ],
+                    );
+                  },
+                ),
+                const SizedBox(height: 12),
+                FutureBuilder<List<Map<String, dynamic>>>(
+                  future:
+                      (widget.loadEvidencePlans ?? _repo.loadMyEvidencePlans)(
+                        applicationId,
+                      ),
+                  builder: (context, snapshot) {
+                    final plans =
+                        (snapshot.data ?? const <Map<String, dynamic>>[])
+                            .where((item) => item['state'] == 'planned')
+                            .toList();
+                    if (plans.isEmpty) return const SizedBox.shrink();
+                    return Card(
+                      color: const Color(0xFFFFF3E5),
+                      child: Padding(
+                        padding: const EdgeInsets.all(14),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Future evidence planning only',
+                              style: TextStyle(fontWeight: FontWeight.w800),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              '${plans.length} checklist requirement(s) marked for possible future evidence.',
+                            ),
+                            const SizedBox(height: 6),
+                            const Text(
+                              'Secure document upload is not available. '
+                              'Do not email, message or send identity, licence or financial documents. '
+                              'No submission is requested at this stage.',
+                              style: TextStyle(
+                                color: WantokColors.muted,
+                                height: 1.4,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     );
                   },
                 ),

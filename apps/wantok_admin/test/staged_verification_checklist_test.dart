@@ -27,6 +27,7 @@ void main() {
             applicationId: 'app-one',
             applicantName: 'Example Applicant',
             loadChecks: load,
+            loadEvidencePlans: (_) async => const [],
             loadAudit: (_) async => nextStatus == 'pending'
                 ? []
                 : [
@@ -45,7 +46,7 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      expect(find.text('Trade description and coverage area'), findsOneWidget);
+      expect(find.text('Trade description and coverage area'), findsNWidgets(2));
       expect(find.text('Status: Pending'), findsOneWidget);
       expect(find.textContaining('approve the applicant'), findsNothing);
       expect(find.text('Approve'), findsNothing);

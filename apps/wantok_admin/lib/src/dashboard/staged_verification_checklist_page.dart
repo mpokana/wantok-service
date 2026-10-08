@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import 'staged_evidence_planning_section.dart';
+
 /// Early-stage administrative checks ONLY. Never grants provider verification.
 class StagedVerificationChecklistPage extends StatefulWidget {
   const StagedVerificationChecklistPage({
@@ -10,6 +12,9 @@ class StagedVerificationChecklistPage extends StatefulWidget {
     required this.applicantName,
     this.loadChecks,
     this.loadAudit,
+    this.loadEvidencePlans,
+    this.planEvidenceCheck,
+    this.cancelEvidencePlan,
     this.updateCheck,
   });
 
@@ -17,6 +22,9 @@ class StagedVerificationChecklistPage extends StatefulWidget {
   final String applicantName;
   final Future<List<Map<String, dynamic>>> Function(String)? loadChecks;
   final Future<List<Map<String, dynamic>>> Function(String)? loadAudit;
+  final Future<List<Map<String, dynamic>>> Function(String)? loadEvidencePlans;
+  final Future<void> Function(String)? planEvidenceCheck;
+  final Future<void> Function(String)? cancelEvidencePlan;
   final Future<void> Function(String, String)? updateCheck;
 
   @override
@@ -248,6 +256,14 @@ class _StagedVerificationChecklistPageState
                       ),
                     ),
                   ),
+              const SizedBox(height: 18),
+              StagedEvidencePlanningSection(
+                applicationId: widget.applicationId,
+                checks: checks,
+                loadPlans: widget.loadEvidencePlans,
+                planCheck: widget.planEvidenceCheck,
+                cancelPlan: widget.cancelEvidencePlan,
+              ),
               const SizedBox(height: 18),
               const Text(
                 'Review activity',

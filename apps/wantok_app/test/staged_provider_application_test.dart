@@ -23,6 +23,9 @@ void main() {
               'status': 'in_review',
               'applicant_name': 'Example Applicant',
             },
+            loadEvidencePlans: (_) async => [
+              {'check_id': 'check-one', 'state': 'planned'},
+            ],
             loadChecks: (id) async {
               expect(id, 'app-one');
               loaded++;
@@ -41,6 +44,11 @@ void main() {
       expect(loaded, greaterThan(0));
       expect(find.text('Preliminary checklist progress'), findsOneWidget);
       expect(find.text('Needs follow-up'), findsOneWidget);
+      expect(find.text('Future evidence planning only'), findsOneWidget);
+      expect(
+        find.textContaining('Do not email, message or send'),
+        findsOneWidget,
+      );
       expect(find.text('Trade description and coverage area'), findsOneWidget);
       expect(find.byType(FilledButton), findsNothing);
       expect(
