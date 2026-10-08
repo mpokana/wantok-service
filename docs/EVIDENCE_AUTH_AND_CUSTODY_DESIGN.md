@@ -31,6 +31,11 @@
 7. **Audit, retention, privacy and release:** append-only/off-host audit anchored to claim, scanner report, ciphertext digest and consent; time-bound retention, legal holds, approved deletion and cryptographic erasure; independent Operations Admin reviewer authorisation and least-privilege release. Technical Control may monitor integration health but cannot grant provider approval.
 8. **Operations and tests:** replay/race/revocation tests; invalid/malicious PDFs and images; scanner-outage/old-signature handling; interrupted I/O and partial DB commits; user enumeration leaks; file/DB integrity, KMS recovery, permission/ACL inspection, audited restore drills and sign-off before any applicant upload.
 
+## Local restricted custody metadata and NTFS ACL audit (9 October 2026)
+
+- New `20261009060000_custody_manifest_metadata.sql` creates a private, claim-receipt-linked, one-time server-role-only custody digest record. It is ALWAYS pending independent reconciliation: no physical file verification, no status release/review or upload. The new offline proposal function builds matching request fields from **synthetic** AES-GCM envelope inspection and intentionally makes **no RPC call**.
+- Read-only `scripts/verify-evidence-vault-acl.ps1` audits an empty isolated NTFS lab using only explicit FullControl grants for current EAGLT02 Windows user and SYSTEM. It does not establish a dedicated service account, network boundary, full restore, unprivileged account denial or production-grade storage. See `docs/EVIDENCE_CUSTODY_MANIFEST_AND_ACL_LAB.md`. Real uploads remain disabled.
+
 ## Offline single-envelope recovery prototype (9 October 2026)
 
 - Additive `packages/evidence_scanner/src/custody.mjs` uses only synthetic offline fixtures: claim ID and bounded non-secret key ID authenticated in a one-file AES-GCM envelope, exclusive lock/pending publication, non-overwriting filesystem hard-link, and read-only interrupted-state inspection. Detailed limits and testing are in `docs/EVIDENCE_CUSTODY_OFFLINE_RECOVERY.md`.

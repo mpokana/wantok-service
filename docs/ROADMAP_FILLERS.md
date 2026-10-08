@@ -568,3 +568,11 @@ The GoTrue request validates a Bearer JWT on the server; only the returned GoTru
 **Status: Implemented as an internal synthetic-only fixture/test library**, not a production vault. One-file AES-GCM authenticated envelope binds claim, intent, subject, check, application and key version. Exclusive lock/pending/held publication refuses replacement; the read-only inspector identifies incomplete claims after simulated interrupted writes and never automatically retries. Unit suite 71 PASS, real ClamAV suite 6 PASS. See `docs/EVIDENCE_CUSTODY_OFFLINE_RECOVERY.md`.
 
 **Remain blocked:** trusted GoTrue claim-to-storage gateway, durable DB/file transaction, KMS, dedicated ACL-proven storage, document sandbox, approved informed consent, separate reviewer access, legal retention/deletion, off-host audit, real crash/restore testing. Production and sealed Supabase Storage unchanged. CX1 remains in progress and T2.4 follows signed-in Web QA; do not disrupt the image-rich service taxonomy, opt-in `s`-marked smoke data, or sessions.
+
+---
+
+## FILLER-2026-10-09-05 — Claim-bound manifest and protected storage laboratory
+
+**Status: IMPLEMENTED LOCALLY, NO LIVE EVIDENCE.** One-time service-only SQL metadata manifest is bound to an existing one-time applicant claim and stores bounded SHA-256 plaintext/sealed digests, MIME, byte counts and non-secret key version. Its sole state is `pending_independent_reconciliation`. The synthetic WQE2 envelope can produce an unsubmitted metadata proposal after verifying the encrypted object. No actual storage, Auth, upload, reviewer, consent or verification authority is connected. Database 35 files / 767 assertions PASS, scanner/custody 73 tests PASS, real ClamAV 6 PASS.
+
+An empty private NTFS laboratory folder on EAGLT02 is restricted to Mansfield and SYSTEM with inheritance off. The new read-only auditor accepts this and rejects the ordinary repository permissions. This is **not production vault validation** and does not establish independent service-account or power-loss recovery. See `docs/EVIDENCE_CUSTODY_MANIFEST_AND_ACL_LAB.md`. Protected Storage policies stay absent, CX1 signed-in Web QA stays open and T2.4 is deferred. Do not modify Flutter photographic categories or s-marked sample fixtures.

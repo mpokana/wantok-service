@@ -4,7 +4,7 @@ import {randomUUID,randomBytes} from 'node:crypto';
 import {mkdtemp,rm,readFile,readdir,writeFile,symlink} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {sealOfflineCustodyCandidate,inspectOfflineCustody,verifyOfflineCustody} from '../src/custody.mjs';
+import {sealOfflineCustodyCandidate,inspectOfflineCustody,verifyOfflineCustody,buildOfflineCustodyManifestProposal} from '../src/custody.mjs';
 import {EvidenceError} from '../src/scan.mjs';
 
 const pdf=Buffer.from('%PDF-1.7\n1 0 obj\n<<>>\nendobj\n%%EOF\n','ascii');
@@ -170,4 +170,39 @@ test('injected stop after hard-link publication stays blocked until manual recon
   assert.ok(files.includes(f.binding.claimId+'.held'));
   await assert.rejects(verifyOfflineCustody({root,claimId:f.binding.claimId,keyId:f.keyId,key:f.key}),denied);
   await assert.rejects(sealOfflineCustodyCandidate(f),denied);
+}));
+
+test('verified synthetic ciphertext creates a digest-bound metadata-only RPC proposal',async()=>fixture(async root=>{
+  const f=input(root);
+  await sealOfflineCustodyCandidate(f);
+  const body=await buildOfflineCustodyManifestProposal({
+    mode,root,expected:f.binding,keyId:f.keyId,key:f.key,
+  });
+  assert.deepEqual(Object.keys(body).sort(),[
+    'p_claim_id','p_intent_id','p_applicant_id','p_application_id','p_check_id',
+    'p_plain_sha256','p_sealed_sha256','p_plain_bytes','p_sealed_bytes',
+    'p_mime','p_key_id',
+  ].sort());
+  assert.equal(body.p_claim_id,f.binding.claimId);
+  assert.equal(body.p_applicant_id,f.binding.subjectId);
+  assert.equal(body.p_plain_bytes,pdf.length);
+  assert.ok(body.p_sealed_bytes > pdf.length);
+  assert.equal(body.p_mime,'application/pdf');
+  assert.equal(body.p_key_id,f.keyId);
+  assert.equal(JSON.stringify(body).includes(f.key.toString('hex')),false);
+  assert.equal(Object.isFrozen(body),true);
+}));
+test('offline manifest proposal refuses unverified key, bad claim and nonfixture mode',async()=>fixture(async root=>{
+  const f=input(root);
+  await sealOfflineCustodyCandidate(f);
+  await assert.rejects(buildOfflineCustodyManifestProposal({
+    mode:'real',root,expected:f.binding,keyId:f.keyId,key:f.key,
+  }),denied);
+  await assert.rejects(buildOfflineCustodyManifestProposal({
+    mode,root,expected:f.binding,keyId:f.keyId,key:randomBytes(32),
+  }),denied);
+  await assert.rejects(buildOfflineCustodyManifestProposal({
+    mode,root,expected:{...f.binding,applicationId:randomUUID()},
+    keyId:f.keyId,key:f.key,
+  }),denied);
 }));

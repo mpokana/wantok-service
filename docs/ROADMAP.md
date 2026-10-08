@@ -2,6 +2,12 @@
 
 **Updated:** 2026-10-09
 
+## Current security increment (2026-10-09) — metadata-linked custody and protected ACL lab, uploads SEALED
+
+- [x] **Local schema only:** single-write, claim-receipt-bound custody manifest capturing bounded plaintext/ciphertext SHA-256 and file metadata under service-role-only RPC; all records remain `pending_independent_reconciliation`, without applicant grants, reviewer access, upload ability or provider approval. Local migration `20261009060000_custody_manifest_metadata.sql` applied; **35 SQL files / 767 pgTAP assertions PASS**.
+- [x] **Offline synthetic bridge and ACL validation:** WQE2 synthetic envelope verifies digests and builds non-submitted manifest arguments (no database or Auth service connection). New read-only Windows verifier accepts an empty, inheritance-disabled NTFS lab with exactly SYSTEM/current EAGLT02 account FullControl; rejects the inherited project repository ACL. **73 unit tests + 6 real ClamAV tests PASS**. See `docs/EVIDENCE_CUSTODY_MANIFEST_AND_ACL_LAB.md`.
+- [ ] **Not completed:** production-safe ACL/service account, real file/DB transaction and reconciliation outbox, interrupted-write recovery, KMS, actual consent, sandboxed PDF/image validation, off-host audit, retention/erasure and Operations Admin reviewer release. The manifest is **not proof that a file is held**, and the NTFS lab is not a production vault. CX1 signed-in Web QA remains open; T2.4 deferred.
+
 ## Current security increment (2026-10-09) — claim-bound offline crash-state prototype, uploads SEALED
 
 - [x] **Local synthetic-only custody:** AES-256-GCM single-envelope authenticated claim/intent/account/application/check/key-ID metadata; exclusive non-overwriting hard-link publish, file `sync()` and read-only inspection of lock/pending/held crash states. Concurrent claims and injected stops before/after publishing tested: **71 scanner/custody unit tests PASS, 6 actual ClamAV integration tests PASS**. Pure local temporary fixtures only; see `docs/EVIDENCE_CUSTODY_OFFLINE_RECOVERY.md`.

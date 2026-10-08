@@ -174,10 +174,44 @@ export async function verifyOfflineCustody({root, claimId, keyId, key, expected}
     const hash=createHash('sha256').update(partial).update(tail).digest('hex');
     if (partial.length + tail.length !== meta.bytes || hash !== meta.sha256) refuse();
     return Object.freeze({
-      claimId, keyId, sha256:hash,
+      claimId, keyId, sha256:hash, plainBytes:meta.bytes,
+      sealedBytes:payload.length, mime:meta.mime,
       ciphertextSha256:createHash('sha256').update(payload).digest('hex'),
       valid:true, reviewerAccessPermitted:false, storagePermitted:false, approved:false,
     });
   } catch { refuse(); }
   finally { partial.fill(0); tail.fill(0); }
+}
+
+/**
+ * Build metadata-only RPC arguments from a verified SYNTHETIC envelope.
+ * This function does not contact Postgres, obtain a claim, or publish a file.
+ * Only a separately authorised future service could ever submit these args.
+ */
+export async function buildOfflineCustodyManifestProposal({
+  mode, root, expected, keyId, key,
+}) {
+  if (mode !== TEST_ONLY) refuse();
+  checkedIds(expected);
+  const result = await verifyOfflineCustody({
+    root,claimId:expected.claimId,keyId,key,expected,
+  });
+  if (!result.valid || !Number.isInteger(result.plainBytes) ||
+      !Number.isInteger(result.sealedBytes) ||
+      !['application/pdf','image/jpeg','image/png'].includes(result.mime) ||
+      result.sealedBytes <= result.plainBytes ||
+      result.sealedBytes > result.plainBytes + 8192) refuse();
+  return Object.freeze({
+    p_claim_id:expected.claimId,
+    p_intent_id:expected.intentId,
+    p_applicant_id:expected.subjectId,
+    p_application_id:expected.applicationId,
+    p_check_id:expected.checkId,
+    p_plain_sha256:result.sha256,
+    p_sealed_sha256:result.ciphertextSha256,
+    p_plain_bytes:result.plainBytes,
+    p_sealed_bytes:result.sealedBytes,
+    p_mime:result.mime,
+    p_key_id:keyId,
+  });
 }
