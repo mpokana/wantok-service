@@ -166,12 +166,14 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
 
   void _openCategoryInformation(
     WantokCategoryStyle style,
-    String? description,
-  ) {
+    String? description, {
+    String? categoryId,
+  }) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (_) => CategoryInformationPage(
           style: style,
+          categoryId: categoryId,
           description:
               description ??
               'This category is being prepared for verified Wantok providers '
@@ -1099,6 +1101,7 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
       _openCategoryInformation(
         WantokCategoryStyles.bySlug(service.slug),
         service.description,
+        categoryId: service.id,
       );
       return;
     }

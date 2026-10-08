@@ -4,6 +4,7 @@ import 'package:wantok_auth/wantok_auth.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
 import 'resource_review_page.dart';
+import 'provider_interest_queue_page.dart';
 
 class AdminShell extends StatefulWidget {
   const AdminShell({required this.roles, required this.email, super.key});
@@ -315,7 +316,22 @@ class _ProviderApplicationsPageState extends State<_ProviderApplicationsPage> {
     return _AdminPageFrame(
       title: 'Provider applications',
       subtitle: 'Approve identity/business applications before vendor capabilities become available.',
-      action: IconButton(onPressed: _refresh, icon: const Icon(Icons.refresh)),
+      action: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          IconButton(
+            key: const ValueKey('admin-provider-interest-queue'),
+            tooltip: 'View provider interest queue',
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const ProviderInterestQueuePage(),
+              ),
+            ),
+            icon: const Icon(Icons.pending_actions_outlined),
+          ),
+          IconButton(onPressed: _refresh, icon: const Icon(Icons.refresh)),
+        ],
+      ),
       child: FutureBuilder<List<Map<String, dynamic>>>(
         future: _future,
         builder: (context, snapshot) {

@@ -7,9 +7,16 @@ import 'package:wantok_ui/wantok_ui.dart';
 import 'png_visuals.dart';
 
 class ProviderDiscoveryPage extends StatefulWidget {
-  const ProviderDiscoveryPage({this.initialQuery, super.key});
+  const ProviderDiscoveryPage({
+    this.initialQuery,
+    this.initialCategoryId,
+    this.initialCategoryName,
+    super.key,
+  });
 
   final String? initialQuery;
+  final String? initialCategoryId;
+  final String? initialCategoryName;
 
   @override
   State<ProviderDiscoveryPage> createState() => _ProviderDiscoveryPageState();
@@ -35,10 +42,14 @@ class _ProviderDiscoveryPageState extends State<ProviderDiscoveryPage> {
     super.initState();
     final initialQuery = widget.initialQuery?.trim() ?? '';
     _search.text = initialQuery;
-    _showingTop = initialQuery.isEmpty;
-    _future = initialQuery.isEmpty
+    _categoryId = widget.initialCategoryId;
+    _showingTop = initialQuery.isEmpty && _categoryId == null;
+    _future = _showingTop
         ? _repository.loadTopProviders()
-        : _repository.searchProviders(query: initialQuery);
+        : _repository.searchProviders(
+            query: initialQuery,
+            categoryId: _categoryId,
+          );
     _loadSaved();
     _loadFilterOptions();
   }
@@ -83,6 +94,12 @@ class _ProviderDiscoveryPageState extends State<ProviderDiscoveryPage> {
       for (var index = 0; index < count; index++) {
         options[place.categoryIds[index]] = place.categoryNames[index];
       }
+    }
+    if (widget.initialCategoryId case final id?) {
+      options.putIfAbsent(
+        id,
+        () => widget.initialCategoryName ?? 'Selected category',
+      );
     }
     final entries = options.entries.toList()
       ..sort((a, b) => a.value.compareTo(b.value));

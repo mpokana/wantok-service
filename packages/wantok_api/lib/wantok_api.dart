@@ -6,6 +6,7 @@ export 'src/events_repository.dart';
 export 'src/messaging_repository.dart';
 export 'src/open_request_repository.dart';
 export 'src/provider_application_repository.dart';
+export 'src/provider_category_interest_repository.dart';
 export 'src/provider_discovery_repository.dart';
 export 'src/reservation_repository.dart';
 export 'src/taxi_repository.dart';
