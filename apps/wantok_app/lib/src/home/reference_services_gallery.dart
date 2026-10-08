@@ -1,0 +1,882 @@
+import 'package:flutter/material.dart';
+import 'package:wantok_ui/wantok_ui.dart';
+
+import 'smoke_data.dart';
+
+/// Twelve-category front door from the approved reference. The explicit
+/// categories always render, including before providers are onboarded.
+/// Missing backend categories may ONLY open non-transactional sample previews.
+class ReferenceCategorySpec {
+  const ReferenceCategorySpec(
+    this.title,
+    this.icon,
+    this.colour,
+    this.surface,
+    this.slug,
+    this.sampleScene,
+  );
+
+  final String title;
+  final IconData icon;
+  final Color colour;
+  final Color surface;
+  final String? slug;
+  final SmokeScene sampleScene;
+}
+
+abstract final class ReferenceServiceCategories {
+  static const items = <ReferenceCategorySpec>[
+    ReferenceCategorySpec(
+      'Taxi &\nTransport',
+      Icons.local_taxi_rounded,
+      Color(0xFFF2AF08),
+      Color(0xFFFFFAE8),
+      'taxi-ride',
+      SmokeScene.bookings,
+    ),
+    ReferenceCategorySpec(
+      'Food &\nRestaurants',
+      Icons.restaurant_rounded,
+      Color(0xFFFF6532),
+      Color(0xFFFFEEE8),
+      'food',
+      SmokeScene.food,
+    ),
+    ReferenceCategorySpec(
+      'Groceries &\nEssentials',
+      Icons.shopping_basket_rounded,
+      Color(0xFF10B467),
+      Color(0xFFE8FAEF),
+      'groceries',
+      SmokeScene.groceries,
+    ),
+    ReferenceCategorySpec(
+      'Shopping\n& Retail',
+      Icons.shopping_bag_rounded,
+      Color(0xFF9837F5),
+      Color(0xFFF6ECFF),
+      null,
+      SmokeScene.groceries,
+    ),
+    ReferenceCategorySpec(
+      'Home\nServices',
+      Icons.home_rounded,
+      Color(0xFF1677F4),
+      Color(0xFFEAF3FF),
+      'specialist-services',
+      SmokeScene.trades,
+    ),
+    ReferenceCategorySpec(
+      'Beauty\n& Wellness',
+      Icons.spa_rounded,
+      Color(0xFFEF40B2),
+      Color(0xFFFFF0FA),
+      null,
+      SmokeScene.trades,
+    ),
+    ReferenceCategorySpec(
+      'Health\n& Medical',
+      Icons.favorite_rounded,
+      Color(0xFF12B7A3),
+      Color(0xFFE8FCF8),
+      null,
+      SmokeScene.trades,
+    ),
+    ReferenceCategorySpec(
+      'Travel\n& Flights',
+      Icons.flight_rounded,
+      Color(0xFF166DF6),
+      Color(0xFFEAF4FF),
+      null,
+      SmokeScene.travel,
+    ),
+    ReferenceCategorySpec(
+      'Events\n& Tickets',
+      Icons.event_rounded,
+      Color(0xFFFF4E99),
+      Color(0xFFFFEFF6),
+      'events',
+      SmokeScene.events,
+    ),
+    ReferenceCategorySpec(
+      'Professional\nServices',
+      Icons.build_rounded,
+      Color(0xFF296CF2),
+      Color(0xFFECF0FF),
+      'specialist-services',
+      SmokeScene.trades,
+    ),
+    ReferenceCategorySpec(
+      'Automotive',
+      Icons.directions_car_rounded,
+      Color(0xFF2775DF),
+      Color(0xFFEDF3FF),
+      'vehicle-hire',
+      SmokeScene.bookings,
+    ),
+    ReferenceCategorySpec(
+      'More',
+      Icons.more_horiz_rounded,
+      Color(0xFF2059BA),
+      Color(0xFFEEF2F9),
+      null,
+      SmokeScene.providers,
+    ),
+  ];
+}
+
+enum ReferenceScene {
+  splash,
+  signIn,
+  home,
+  services,
+  foodListing,
+  restaurantDetail,
+  taxi,
+  travel,
+  bookings,
+  tracking,
+  wallet,
+  account,
+}
+
+class ReferenceScreenSpec {
+  const ReferenceScreenSpec(this.scene, this.title, this.asset, this.icon);
+  final ReferenceScene scene;
+  final String title;
+  final String asset;
+  final IconData icon;
+  String get smokeId =>
+      'SMOKE_20261008_SCREEN_${(scene.index + 1).toString().padLeft(3, '0')}';
+}
+
+abstract final class ReferenceScreenGallery {
+  static const items = <ReferenceScreenSpec>[
+    ReferenceScreenSpec(
+      ReferenceScene.splash,
+      'Splash / Launch',
+      'assets/images/hero_water.png',
+      Icons.waves_rounded,
+    ),
+    ReferenceScreenSpec(
+      ReferenceScene.signIn,
+      'Sign In',
+      'assets/images/vanessa_local_provider.jpg',
+      Icons.login_rounded,
+    ),
+    ReferenceScreenSpec(
+      ReferenceScene.home,
+      'Home',
+      'assets/images/hero_water.png',
+      Icons.home_filled,
+    ),
+    ReferenceScreenSpec(
+      ReferenceScene.services,
+      'Service Categories',
+      'assets/images/hero_trades.png',
+      Icons.grid_view_rounded,
+    ),
+    ReferenceScreenSpec(
+      ReferenceScene.foodListing,
+      'Service Listing (Food)',
+      'assets/images/hero_food.png',
+      Icons.restaurant_rounded,
+    ),
+    ReferenceScreenSpec(
+      ReferenceScene.restaurantDetail,
+      'Restaurant Detail',
+      'assets/images/hero_food.png',
+      Icons.menu_book_rounded,
+    ),
+    ReferenceScreenSpec(
+      ReferenceScene.taxi,
+      'Taxi Booking',
+      'assets/images/hero_delivery.png',
+      Icons.local_taxi_rounded,
+    ),
+    ReferenceScreenSpec(
+      ReferenceScene.travel,
+      'Travel / Flights',
+      'assets/images/hero_water.png',
+      Icons.flight_rounded,
+    ),
+    ReferenceScreenSpec(
+      ReferenceScene.bookings,
+      'Bookings',
+      'assets/images/hero_events.png',
+      Icons.event_note_rounded,
+    ),
+    ReferenceScreenSpec(
+      ReferenceScene.tracking,
+      'Tracking',
+      'assets/images/hero_delivery.png',
+      Icons.route_rounded,
+    ),
+    ReferenceScreenSpec(
+      ReferenceScene.wallet,
+      'Wallet / Payments',
+      'assets/images/hero_food.png',
+      Icons.account_balance_wallet_rounded,
+    ),
+    ReferenceScreenSpec(
+      ReferenceScene.account,
+      'Account',
+      'assets/images/hero_trades.png',
+      Icons.person_rounded,
+    ),
+  ];
+}
+
+/// Reference layout and icons are production styling; only contents of
+/// preview pages/fixtures are smoke data and opt in at build time.
+class ReferenceServicesLanding extends StatelessWidget {
+  const ReferenceServicesLanding({
+    super.key,
+    required this.onCategory,
+    required this.onAllServices,
+    this.onSearch,
+  });
+
+  final ValueChanged<ReferenceCategorySpec> onCategory;
+  final VoidCallback onAllServices;
+  final ValueChanged<String>? onSearch;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      key: const ValueKey('reference-services-landing'),
+      padding: const EdgeInsets.fromLTRB(13, 8, 13, 26),
+      children: [
+        Material(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(19),
+          child: TextField(
+            key: const ValueKey('reference-services-search'),
+            onSubmitted: onSearch,
+            decoration: const InputDecoration(
+              hintText: 'Search services, shops or providers',
+              hintStyle: TextStyle(fontSize: 12),
+              prefixIcon: Icon(Icons.search, color: Color(0xFF65748B)),
+              filled: true,
+              fillColor: Colors.white,
+              contentPadding: EdgeInsets.symmetric(vertical: 13),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFFEDF0F4)),
+                borderRadius: BorderRadius.all(Radius.circular(19)),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 15),
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  border: Border(
+                    bottom: BorderSide(color: WantokColors.primary, width: 2.5),
+                  ),
+                ),
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: Center(
+                    child: Text(
+                      'Categories',
+                      style: TextStyle(
+                        color: WantokColors.primary,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 13,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: TextButton(
+                key: const ValueKey('reference-all-services'),
+                onPressed: onAllServices,
+                child: const Text(
+                  'All Services',
+                  style: TextStyle(color: WantokColors.muted, fontSize: 13),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        LayoutBuilder(
+          builder: (context, constraints) {
+            final scale = MediaQuery.textScalerOf(context).scale(1);
+            final height =
+                (constraints.maxWidth / 3.0 * 1.06 +
+                        (scale - 1).clamp(0, 2) * 55)
+                    .toDouble();
+            return GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: ReferenceServiceCategories.items.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                mainAxisSpacing: 8,
+                crossAxisSpacing: 8,
+                mainAxisExtent: height,
+              ),
+              itemBuilder: (context, index) {
+                final cat = ReferenceServiceCategories.items[index];
+                return Material(
+                  color: cat.surface,
+                  borderRadius: BorderRadius.circular(17),
+                  child: InkWell(
+                    key: ValueKey('reference-category-${cat.title}'),
+                    onTap: () => onCategory(cat),
+                    borderRadius: BorderRadius.circular(17),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 5,
+                        vertical: 7,
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(cat.icon, size: 31, color: cat.colour),
+                          const SizedBox(height: 10),
+                          Text(
+                            cat.title,
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w800,
+                              height: 1.16,
+                              color: WantokColors.ink,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+        ),
+        if (WantokSmokeData.enabled) ...[
+          const SizedBox(height: 20),
+          const Row(
+            children: [
+              SmokeMarker(),
+              SizedBox(width: 7),
+              Expanded(
+                child: Text(
+                  'Reference screen samples',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'All twelve reference screens: example imagery and UI only.',
+            style: TextStyle(color: WantokColors.muted, fontSize: 12),
+          ),
+          const SizedBox(height: 10),
+          GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: ReferenceScreenGallery.items.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisExtent: 116,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+            ),
+            itemBuilder: (context, index) {
+              final item = ReferenceScreenGallery.items[index];
+              return _ReferenceSceneTile(item: item);
+            },
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+/// Keeps the image-only subject visible when an existing source photograph
+/// contains unwanted baked-in artefacts on the far left. No image is generated
+/// or overwritten; the view simply crops from the right.
+class _ReferencePhoto extends StatelessWidget {
+  const _ReferencePhoto({required this.asset});
+  final String asset;
+
+  @override
+  Widget build(BuildContext context) {
+    final cropRight =
+        asset.contains('hero_water') ||
+        asset.contains('hero_trades') ||
+        asset.contains('hero_delivery');
+    return ClipRect(
+      child: Transform.scale(
+        scale: cropRight ? 1.9 : 1.0,
+        alignment: Alignment.centerRight,
+        child: Image.asset(
+          asset,
+          fit: BoxFit.cover,
+          alignment: Alignment.centerRight,
+          width: double.infinity,
+          height: double.infinity,
+        ),
+      ),
+    );
+  }
+}
+
+class _ReferenceSceneTile extends StatelessWidget {
+  const _ReferenceSceneTile({required this.item});
+  final ReferenceScreenSpec item;
+
+  @override
+  Widget build(BuildContext context) => InkWell(
+    key: ValueKey('reference-scene-${item.scene.name}'),
+    borderRadius: BorderRadius.circular(14),
+    onTap: () => Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => ReferenceSampleScenePage(item: item),
+      ),
+    ),
+    child: ClipRRect(
+      borderRadius: BorderRadius.circular(14),
+      child: Stack(
+        fit: StackFit.expand,
+        children: [
+          _ReferencePhoto(asset: item.asset),
+          const DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                colors: [Color(0x190A284E), Color(0xE208213D)],
+              ),
+            ),
+          ),
+          Positioned(
+            top: 7,
+            right: 7,
+            child: Container(
+              padding: const EdgeInsets.all(3),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+              ),
+              child: const SmokeMarker(),
+            ),
+          ),
+          Positioned(
+            left: 10,
+            right: 6,
+            bottom: 9,
+            child: Row(
+              children: [
+                Icon(item.icon, size: 17, color: Colors.white),
+                const SizedBox(width: 5),
+                Expanded(
+                  child: Text(
+                    item.title,
+                    maxLines: 2,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+/// Visual reproduction previews do not invoke underlying service/payment APIs.
+class ReferenceSampleScenePage extends StatelessWidget {
+  const ReferenceSampleScenePage({super.key, required this.item});
+  final ReferenceScreenSpec item;
+
+  @override
+  Widget build(BuildContext context) {
+    final scene = item.scene;
+    final data = switch (scene) {
+      ReferenceScene.foodListing ||
+      ReferenceScene.restaurantDetail => SmokeScene.food,
+      ReferenceScene.taxi ||
+      ReferenceScene.bookings ||
+      ReferenceScene.tracking => SmokeScene.bookings,
+      ReferenceScene.wallet => SmokeScene.wallet,
+      ReferenceScene.travel => SmokeScene.travel,
+      ReferenceScene.account => SmokeScene.providers,
+      ReferenceScene.services => SmokeScene.trades,
+      ReferenceScene.signIn => SmokeScene.providers,
+      ReferenceScene.splash || ReferenceScene.home => SmokeScene.providers,
+    };
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(item.title),
+        backgroundColor: Colors.white,
+        foregroundColor: WantokColors.ink,
+      ),
+      body: ListView(
+        padding: const EdgeInsets.only(bottom: 25),
+        children: [
+          Stack(
+            children: [
+              SizedBox(
+                height: 220,
+                width: double.infinity,
+                child: _ReferencePhoto(asset: item.asset),
+              ),
+              Positioned(
+                top: 12,
+                right: 12,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.all(7),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SmokeMarker(),
+                        SizedBox(width: 6),
+                        Text(
+                          'Sample screen',
+                          style: TextStyle(fontWeight: FontWeight.w700),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 18, 16, 0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    const SmokeMarker(),
+                    const SizedBox(width: 9),
+                    Expanded(
+                      child: Text(
+                        item.title,
+                        style: const TextStyle(
+                          fontSize: 23,
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 7),
+                Text(
+                  'Sample ID: ${item.smokeId}',
+                  style: const TextStyle(
+                    color: WantokColors.primary,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  'Visual preview only — not real inventory, routes,'
+                  ' accounts, orders or funds.',
+                  style: TextStyle(color: WantokColors.muted, fontSize: 12),
+                ),
+                const SizedBox(height: 10),
+                if (scene == ReferenceScene.restaurantDetail)
+                  const _SampleRestaurantDetail(),
+                if (scene == ReferenceScene.taxi ||
+                    scene == ReferenceScene.tracking)
+                  const _SampleJourneyDiagram(),
+                if (scene == ReferenceScene.travel) const _SampleTravelSearch(),
+                if (scene == ReferenceScene.wallet) const _SampleWalletBanner(),
+                if (scene == ReferenceScene.account)
+                  const _SampleAccountFeatures(),
+                if (scene == ReferenceScene.signIn) const _SampleAuthPreview(),
+                SmokePreviewSection(
+                  scene: data,
+                  heading: scene == ReferenceScene.foodListing
+                      ? 'Sample restaurant listings'
+                      : 'Sample records',
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SampleRestaurantDetail extends StatelessWidget {
+  const _SampleRestaurantDetail();
+  @override
+  Widget build(BuildContext context) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Text(
+        'The Waterfront',
+        style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
+      ),
+      const SizedBox(height: 7),
+      const Row(
+        children: [
+          Icon(Icons.star_rounded, color: Color(0xFFF3AB16), size: 17),
+          Text(
+            ' 4.6 (320 sample reviews) · 20–30 min',
+            style: TextStyle(color: WantokColors.muted, fontSize: 12),
+          ),
+          SizedBox(width: 5),
+          SmokeMarker(),
+        ],
+      ),
+      const SizedBox(height: 8),
+      const Text(
+        'Menu    Reviews    Info',
+        style: TextStyle(
+          color: WantokColors.primary,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
+      const SizedBox(height: 10),
+      for (final meal in const [
+        ('Grilled Snapper', 'K38.00'),
+        ('Coconut Prawns', 'K32.00'),
+      ])
+        ListTile(
+          contentPadding: EdgeInsets.zero,
+          leading: ClipRRect(
+            borderRadius: BorderRadius.circular(9),
+            child: Image.asset(
+              'assets/images/hero_food.png',
+              width: 58,
+              height: 56,
+              fit: BoxFit.cover,
+            ),
+          ),
+          title: Text(meal.$1),
+          subtitle: const Text('Sample menu item · no checkout'),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(meal.$2),
+              const SizedBox(width: 5),
+              const SmokeMarker(),
+            ],
+          ),
+        ),
+    ],
+  );
+}
+
+class _SampleJourneyDiagram extends StatelessWidget {
+  const _SampleJourneyDiagram();
+  @override
+  Widget build(BuildContext context) => Container(
+    height: 205,
+    margin: const EdgeInsets.symmetric(vertical: 8),
+    decoration: BoxDecoration(
+      color: const Color(0xFFEFF3F1),
+      borderRadius: BorderRadius.circular(15),
+    ),
+    child: Stack(
+      children: [
+        Positioned.fill(child: CustomPaint(painter: _ReferenceRoutePainter())),
+        const Positioned(
+          left: 22,
+          top: 38,
+          child: Icon(Icons.location_on, color: WantokColors.primary, size: 32),
+        ),
+        const Positioned(
+          right: 28,
+          bottom: 30,
+          child: Icon(Icons.location_on, color: Color(0xFFEF5A3D), size: 34),
+        ),
+        const Positioned(
+          left: 12,
+          bottom: 8,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SmokeMarker(),
+              SizedBox(width: 5),
+              Text('Illustrative route only', style: TextStyle(fontSize: 11)),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+class _ReferenceRoutePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final road = Paint()
+      ..color = const Color(0xFFCBD5D7)
+      ..strokeWidth = 2;
+    for (var i = 0; i < 6; i++) {
+      final y = (i + .5) * size.height / 6;
+      canvas.drawLine(Offset(0, y), Offset(size.width, y + 16), road);
+    }
+    for (var i = 0; i < 7; i++) {
+      final x = (i + .5) * size.width / 7;
+      canvas.drawLine(Offset(x, 0), Offset(x + 35, size.height), road);
+    }
+    final route = Paint()
+      ..color = WantokColors.primary
+      ..strokeWidth = 5
+      ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round;
+    final path = Path()
+      ..moveTo(size.width * .13, size.height * .31)
+      ..lineTo(size.width * .34, size.height * .49)
+      ..lineTo(size.width * .59, size.height * .42)
+      ..lineTo(size.width * .82, size.height * .79);
+    canvas.drawPath(path, route);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+class _SampleTravelSearch extends StatelessWidget {
+  const _SampleTravelSearch();
+  @override
+  Widget build(BuildContext context) => const Card(
+    child: Padding(
+      padding: EdgeInsets.all(15),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              SmokeMarker(),
+              SizedBox(width: 8),
+              Text(
+                'Flights    Hotels    Packages',
+                style: TextStyle(fontWeight: FontWeight.w800),
+              ),
+            ],
+          ),
+          Divider(),
+          Text('From  Port Moresby (POM)'),
+          SizedBox(height: 10),
+          Text('To       Brisbane (BNE)'),
+          SizedBox(height: 10),
+          Text(
+            'Sample itinerary · flights are not searchable yet',
+            style: TextStyle(color: WantokColors.muted),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+class _SampleWalletBanner extends StatelessWidget {
+  const _SampleWalletBanner();
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsets.all(20),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(18),
+      gradient: const LinearGradient(
+        colors: [Color(0xFF0763DF), Color(0xFF40B0FF)],
+      ),
+    ),
+    child: const Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Text(
+              'Sample wallet balance',
+              style: TextStyle(color: Colors.white, fontSize: 12),
+            ),
+            SizedBox(width: 6),
+            SmokeMarker(),
+          ],
+        ),
+        Text(
+          'K120.50',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w900,
+            fontSize: 30,
+          ),
+        ),
+        Text(
+          'Not real funds; no payment functionality',
+          style: TextStyle(color: Colors.white),
+        ),
+      ],
+    ),
+  );
+}
+
+class _SampleAccountFeatures extends StatelessWidget {
+  const _SampleAccountFeatures();
+  @override
+  Widget build(BuildContext context) => Column(
+    children: [
+      for (final item in const [
+        ('My Bookings', Icons.event_note),
+        ('Wallet & Payments', Icons.account_balance_wallet),
+        ('Saved Places', Icons.location_on_outlined),
+        ('Trusted People', Icons.group_outlined),
+        ('Preferences', Icons.tune_rounded),
+        ('Help & Support', Icons.help_outline),
+        ('Settings', Icons.settings_outlined),
+      ])
+        ListTile(
+          leading: Icon(item.$2, color: WantokColors.primary),
+          title: Text(item.$1),
+          trailing: const SmokeMarker(),
+        ),
+    ],
+  );
+}
+
+class _SampleAuthPreview extends StatelessWidget {
+  const _SampleAuthPreview();
+  @override
+  Widget build(BuildContext context) => const Card(
+    child: Padding(
+      padding: EdgeInsets.all(18),
+      child: Column(
+        children: [
+          Text(
+            'Wantok Services',
+            style: TextStyle(fontWeight: FontWeight.w900, fontSize: 23),
+          ),
+          Text('Your everyday services in Papua New Guinea'),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.email_outlined),
+            title: Text('Email or phone number'),
+          ),
+          ListTile(leading: Icon(Icons.lock_outline), title: Text('Password')),
+          SmokeMarker(),
+          Text('Sample design only; sign-in disabled here'),
+        ],
+      ),
+    ),
+  );
+}

@@ -199,6 +199,9 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 
 - [x] implement opt-in temporary `SMOKE_20261008_*` visual fixtures with a small visible blue `s` beside every sample, read-only preview dialogs, an itemised removal manifest (`docs/SMOKE_DATA.md`), and **no Supabase fixture writes**. Local emulator AVD backed up and SHA-256 verified; small x86-64 APK installed in place with original userdata preserved. Demo/smoke data must be removed or disabled before release.
 
+- [x] rebuild the **main Services landing** to the supplied 12-category/3-column reference icon grid with pastel tile colours; retain a working **All Services** view for genuine backend catalogue/provider actions, and preserve live navigation. The old Top Providers/Recommendations view must no longer be the default Services landing.
+- [x] add an opt-in 12-screen **reference sample gallery** with registered `SMOKE_20261008_SCREEN_*` IDs, visible small `s` markers, sample food providers, booking/flight/hotel examples, a demonstration route, and wallet/account examples. All examples are read-only and disabled by default for non-smoke builds; the source screenshot's individual photographs are not separately present, so the examples use existing approved PNG-themed images.
+
 ### CX1G — General Goods Marketplace + Fulfilment — PLANNED
 
 - [ ] activate a general **Marketplace / Products** commerce category beyond Food/Groceries

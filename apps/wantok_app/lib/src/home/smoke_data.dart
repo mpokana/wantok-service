@@ -79,6 +79,22 @@ abstract final class SmokeCatalogue {
       icon: Icons.restaurant_menu,
       detail: 'Sample local dishes · K32.00',
     ),
+    SmokeRecord(
+      id: 'SMOKE_20261008_FOOD_003',
+      title: 'Café Melanesia',
+      subtitle: 'Sample café · coffee and pastries',
+      asset: 'assets/images/hero_food.png',
+      icon: Icons.local_cafe,
+      detail: 'Illustrative listing · no orders available',
+    ),
+    SmokeRecord(
+      id: 'SMOKE_20261008_FOOD_004',
+      title: 'The Noodle Place',
+      subtitle: 'Sample Asian noodles restaurant',
+      asset: 'assets/images/hero_food.png',
+      icon: Icons.ramen_dining,
+      detail: 'Illustrative listing · no orders available',
+    ),
   ];
 
   static const groceries = <SmokeRecord>[
@@ -117,6 +133,22 @@ abstract final class SmokeCatalogue {
       icon: Icons.directions_boat,
       detail: 'Illustrative reservation · not booked',
     ),
+    SmokeRecord(
+      id: 'SMOKE_20261008_BOOKING_004',
+      title: 'Brisbane flight',
+      subtitle: 'Sample flight · confirmed illustration only',
+      asset: 'assets/images/hero_water.png',
+      icon: Icons.flight,
+      detail: 'Sample date and route · not an airline reservation',
+    ),
+    SmokeRecord(
+      id: 'SMOKE_20261008_BOOKING_005',
+      title: 'Hilton Brisbane',
+      subtitle: 'Sample hotel stay',
+      asset: 'assets/images/hero_water.png',
+      icon: Icons.hotel,
+      detail: 'Sample stay · not booked',
+    ),
   ];
 
   static const wallet = <SmokeRecord>[
@@ -135,6 +167,22 @@ abstract final class SmokeCatalogue {
       asset: 'assets/images/hero_delivery.png',
       icon: Icons.local_taxi,
       detail: '− K25.00 · not a real transaction',
+    ),
+    SmokeRecord(
+      id: 'SMOKE_20261008_WALLET_003',
+      title: 'Sample top-up',
+      subtitle: 'Illustrative wallet top-up history',
+      asset: 'assets/images/hero_groceries.png',
+      icon: Icons.add_circle_outline,
+      detail: '+ K100.00 · not real funds',
+    ),
+    SmokeRecord(
+      id: 'SMOKE_20261008_WALLET_004',
+      title: 'Trukai Haus',
+      subtitle: 'Sample food payment history',
+      asset: 'assets/images/hero_food.png',
+      icon: Icons.receipt_long,
+      detail: '− K28.00 · not a real transaction',
     ),
   ];
 

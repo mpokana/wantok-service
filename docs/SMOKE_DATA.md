@@ -30,12 +30,22 @@ Each record's identifier starts with **`SMOKE_20261008_`**, and each sample item
 | `SMOKE_20261008_EVENT_001` | Preview catalogue | Sample community event |
 | `SMOKE_20261008_TRAVEL_001` | Preview catalogue | Sample water/travel |
 | `SMOKE_20261008_TRADES_001` | Services | Sample professional service |
+| `SMOKE_20261008_FOOD_003` | Food | Café Melanesia sample listing |
+| `SMOKE_20261008_FOOD_004` | Food | The Noodle Place sample listing |
+| `SMOKE_20261008_BOOKING_004` | Bookings | Brisbane flight illustration, not a reservation |
+| `SMOKE_20261008_BOOKING_005` | Bookings | Hilton Brisbane hotel illustration, not a reservation |
+| `SMOKE_20261008_WALLET_003` | Wallet | Sample top-up, not real funds |
+| `SMOKE_20261008_WALLET_004` | Wallet | Sample food payment, not real funds |
+
+The **twelve reference screen previews** in `reference_services_gallery.dart` are also smoke fixtures with deterministic IDs `SMOKE_20261008_SCREEN_001` through `SMOKE_20261008_SCREEN_012`, ordered as Splash/Launch, Sign In, Home, Service Categories, Food Listing, Restaurant Detail, Taxi Booking, Travel/Flights, Bookings, Tracking, Wallet/Payments, and Account. Each preview displays its ID and an `s` badge. The restaurant examples, prices, journeys and balances are presentation-only.
+
+**Image provenance:** The current gallery reuses approved local photo assets (`hero_food.png`, `hero_groceries.png`, `hero_water.png`, `hero_delivery.png`, `hero_events.png`, `hero_trades.png` and `vanessa_local_provider.jpg`). The screenshot supplied by Mansfield establishes the category icon, card, colour and layout target. Its individual photographs are not available as separate high-resolution originals; these previews are therefore visually themed examples, **not exact copies of each photo**. No new images are generated in this continuation.
 
 ## Cleanup when the project is ready
 
 1. Ensure production and release builds omit `WANTOK_SMOKE_DATA=true`; the samples immediately disappear from compiled UI with **no database deletion needed**.
 2. When the sample visuals are no longer useful, delete `lib/src/home/smoke_data.dart` and `test/smoke_data_test.dart`, remove the `SmokePreviewSection` branches and `smoke_data.dart` imports from Home, Services, Food/Groceries, Track, Inbox and Wallet.
-3. Search for `SMOKE_20261008`, `WantokSmokeData`, `SmokeMarker` and `SmokePreviewSection` to confirm no fixture or call site remains.
+3. In `reference_services_gallery.dart`, **retain** `ReferenceServiceCategories` and the twelve-icon `ReferenceServicesLanding` layout, but remove its `ReferenceScreenGallery`, sample-only preview cards, `ReferenceSampleScenePage` and sample painters/details. Replace any unsupported-category preview with the existing honest coming-soon message. Search for `SMOKE_20261008`, `WantokSmokeData`, `SmokeMarker`, `ReferenceScreenGallery` and `SmokePreviewSection` to confirm no fixture remains.
 4. Run `scripts/flutter/check.ps1`, `npm run db:test`, verify `git diff --check`, then commit and back up both locally and to GitHub.
 5. Because the fixtures never enter Supabase, **do not run any SQL deletes** for these identifiers. Never delete legitimate records by matching display names such as The Waterfront.
 

@@ -37,8 +37,8 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Sample restaurants'), findsOneWidget);
-    expect(find.byType(SmokeMarker), findsNWidgets(3));
-    expect(find.text('s'), findsNWidgets(3));
+    expect(find.byType(SmokeMarker), findsNWidgets(SmokeCatalogue.food.length + 1));
+    expect(find.text('s'), findsNWidgets(SmokeCatalogue.food.length + 1));
     expect(
       find.byKey(const ValueKey('SMOKE_20261008_FOOD_001')),
       findsOneWidget,

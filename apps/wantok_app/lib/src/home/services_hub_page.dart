@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'smoke_data.dart';
+import 'reference_services_gallery.dart';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:wantok_api/wantok_api.dart';
@@ -43,6 +44,7 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
   static const _providerDiscovery = ProviderDiscoveryRepository();
 
   late Future<List<WantokServiceCategory>> _future;
+  bool _referenceCategories = true;
   final _search = TextEditingController();
   final Set<String> _savedCategoryIds = <String>{};
   final Set<String> _savingSavedIds = <String>{};
@@ -158,6 +160,50 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
         setState(() => _topProviders = const <ClientProviderDiscovery>[]);
       }
     }
+  }
+
+  void _openReferenceCategory(
+    ReferenceCategorySpec spec,
+    List<WantokServiceCategory> services,
+  ) {
+    if (spec.title == 'More') {
+      setState(() => _referenceCategories = false);
+      return;
+    }
+    for (final service in services) {
+      if (spec.slug == service.slug) {
+        _openService(service);
+        return;
+      }
+    }
+    if (!WantokSmokeData.enabled) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('${spec.title.replaceAll('\n', ' ')} is coming soon.'),
+        ),
+      );
+      return;
+    }
+    final asset = switch (spec.sampleScene) {
+      SmokeScene.food => 'assets/images/hero_food.png',
+      SmokeScene.groceries => 'assets/images/hero_groceries.png',
+      SmokeScene.travel => 'assets/images/hero_water.png',
+      SmokeScene.events => 'assets/images/hero_events.png',
+      SmokeScene.trades => 'assets/images/hero_trades.png',
+      _ => 'assets/images/hero_delivery.png',
+    };
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => ReferenceSampleScenePage(
+          item: ReferenceScreenSpec(
+            ReferenceScene.services,
+            spec.title.replaceAll('\n', ' '),
+            asset,
+            spec.icon,
+          ),
+        ),
+      ),
+    );
   }
 
   void _openProviderSearch() {
@@ -486,10 +532,41 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
               .toList(growable: false);
           final textScale = MediaQuery.textScalerOf(context).scale(1);
 
+          // The screenshot-matched 12-icon landing is the canonical entry.
+          // An injected catalogue keeps the established deterministic tests.
+          if (widget.loadServices == null && _referenceCategories) {
+            return ReferenceServicesLanding(
+              onCategory: (spec) => _openReferenceCategory(spec, services),
+              onAllServices: () => setState(() => _referenceCategories = false),
+              onSearch: (value) {
+                _search.text = value;
+                setState(() {
+                  _query = value;
+                  _referenceCategories = false;
+                });
+              },
+            );
+          }
+
           return ListView(
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(14, 12, 14, 24),
             children: [
+              if (widget.loadServices == null)
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: TextButton.icon(
+                    key: const ValueKey('reference-categories-back'),
+                    onPressed: () => setState(() {
+                      _referenceCategories = true;
+                      _query = '';
+                      _search.clear();
+                      _family = WantokServiceFamily.all;
+                    }),
+                    icon: const Icon(Icons.grid_view_rounded),
+                    label: const Text('Categories'),
+                  ),
+                ),
               const Text(
                 'Services',
                 style: TextStyle(
