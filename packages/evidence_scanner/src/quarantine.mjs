@@ -1,7 +1,8 @@
 import { createCipheriv, createDecipheriv, randomBytes, createHash } from 'node:crypto';
 import { lstat, mkdir, readFile, unlink, writeFile } from 'node:fs/promises';
 import { isAbsolute, join } from 'node:path';
-import { inspectAndScanEvidence, EvidenceError, scanWithClamd } from './scan.mjs';
+import { inspectAndScanEvidence, EvidenceError } from './scan.mjs';
+import { scanWithFreshClamd } from './freshness.mjs';
 
 const ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const HEADER = Buffer.from('WQE1');
@@ -40,7 +41,7 @@ function fields({intentId, subjectId, checkId, applicationId, key}) {
 export async function quarantineWithVerifiedIntent({
   intentId, subjectId, checkId, applicationId,
   filename, declaredMime, bytes, key, root,
-  verifyIntent, scanner = scanWithClamd,
+  verifyIntent, scanner = scanWithFreshClamd,
 }) {
   fields({intentId,subjectId,checkId,applicationId,key});
   insist(typeof verifyIntent === 'function', 'Trusted intent verifier is mandatory');

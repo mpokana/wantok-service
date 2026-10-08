@@ -2,6 +2,11 @@
 
 **Updated:** 2026-10-09
 
+## Current security increment (2026-10-09) — ClamAV freshness preflight, uploads SEALED
+
+- [x] **Internal quarantine default gate:** require loopback ClamAV `VERSION` to report signature age at most **48 hours** before `INSTREAM`; reject stale/missing/malformed/version responses, overlong replies, health failures and excessive clock skew before bytes are scanned. 72-hour absolute maximum policy; original injection seam remains test-only. Scanner freshness alone is not content sanitisation or approval. Unit **57 PASS** and actual ClamAV **5 PASS**, including EICAR. See `docs/EVIDENCE_SIGNATURE_FRESHNESS.md`.
+- [ ] **Still blocked:** Auth/claim-to-file connection, safe retry/recovery, managed keys, explicit ACL/dedicated volume, durable ciphertext+DB manifest, decoder sandbox, explicit legal/privacy consent, reviewer authorisation, retention/erasure, off-host audit and full restore rehearsal. Uploads, Storage object policies and provider approval stay disabled.
+
 ## Current engineering checkpoint (2026-10-09) — server-only one-time claim, uploads SEALED
 
 - [x] **Implemented EAGLT02 locally:** loopback GoTrue account verification adapter, locked-to-`service_role` one-time claim RPC and claimant/check/application eligibility revalidation, atomic state/receipt transaction, and post-claim applicant withdrawal. Local migration `20261009043000_evidence_one_time_claim.sql` and 34-file pgTAP suite **736/736 PASS**; synthetic admission/scanner suite **46/46 PASS**; real ClamAV **4/4 PASS**. No public route, no client account UI changes, no file intake.

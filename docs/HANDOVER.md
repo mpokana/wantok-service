@@ -4,6 +4,12 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## NEW LOCAL SECURITY CHECKPOINT — 9 October 2026 (signature freshness gate)
+
+- After the one-time metadata claim checkpoint `3c0b42a`, the internal synthetic-candidate quarantine path now defaults to `scanWithFreshClamd` from `packages/evidence_scanner/src/freshness.mjs`. Before sending bytes, it queries the local ClamAV `zVERSION` response, checks parseable UTC signature time within **48 hours** (72-hour hard configurable ceiling; 5-minute future clock-skew allowance), and rejects outages, invalid replies, remote hosts and stale definitions. The clock used for the live probe comes from the backend, not caller parameters. The original generic scanner simulator remains available for unit coverage; injected scanner test doubles are **not production admission**.
+- Local test validation: `npm run test:evidence` **57/57 PASS**, `npm run test:evidence:real` **5/5 PASS** with real ClamAV including EICAR and encrypted synthetic quarantine. See `docs/EVIDENCE_SIGNATURE_FRESHNESS.md`. This is an additional **antivirus preflight**, not a durable quarantine custody pipeline or live upload permission.
+- Full regression checkpoint: `npm run db:test` **34 files / 736 assertions PASS**; `scripts/flutter/check.ps1` **7 analysis targets clear, 68 Wantok app + 3 Operations Admin + 1 Technical Control tests PASS**; `git diff --check` clean. Git HEAD and GitHub feature-branch SHA must be verified after committing. **Current client roadmap still CX1 OPEN**; signed-in Web QA blocks T2.4. No change to Flutter theme, category photos, s-marked fixtures, user accounts, storage policy, production systems or PostgreSQL schema.
+
 ## CURRENT IMPLEMENTATION UPDATE — 9 October 2026 (supersedes prior handover snapshot)
 
 - **Starting Git HEAD:** `4bf2647` (following implemented code `73ea82f`). Resolve the **new** checkpoint with `git log -1 --oneline` and verify its remote using `git ls-remote origin refs/heads/feature/flutter-platform-v1`.

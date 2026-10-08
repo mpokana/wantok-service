@@ -31,6 +31,11 @@
 7. **Audit, retention, privacy and release:** append-only/off-host audit anchored to claim, scanner report, ciphertext digest and consent; time-bound retention, legal holds, approved deletion and cryptographic erasure; independent Operations Admin reviewer authorisation and least-privilege release. Technical Control may monitor integration health but cannot grant provider approval.
 8. **Operations and tests:** replay/race/revocation tests; invalid/malicious PDFs and images; scanner-outage/old-signature handling; interrupted I/O and partial DB commits; user enumeration leaks; file/DB integrity, KMS recovery, permission/ACL inspection, audited restore drills and sign-off before any applicant upload.
 
+## Local scanner freshness increment (9 October 2026)
+
+- `freshness.mjs` runs the internal candidate-quarantine default scanner only after verifying the real loopback ClamAV VERSION signature time. It enforces at most 48 hours since definitions (72-hour configurable absolute upper limit), no negative clock skew beyond five minutes and strict bounded parsing, timeout and origin checks; see `docs/EVIDENCE_SIGNATURE_FRESHNESS.md`.
+- The scanner still accepts an explicitly injected test double in test code. This new gate is **not** an independently authorised network intake service. Authorised custody, consent, decoded-content security, audit and restore remain unimplemented.
+
 ## Testing status and open risks
 
 - 2026-10-09: `npm run db:test` **34 files / 736 assertions PASS**; local SQL schema migration applied to EAGLT02 only.

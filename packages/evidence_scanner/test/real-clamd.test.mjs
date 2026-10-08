@@ -4,6 +4,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {scanWithClamd, inspectAndScanEvidence, EvidenceError} from '../src/scan.mjs';
+import {requireFreshClamd, scanWithFreshClamd} from '../src/freshness.mjs';
 import {quarantineWithVerifiedIntent, verifyQuarantineIntegrity} from '../src/quarantine.mjs';
 import {randomBytes,randomUUID} from 'node:crypto';
 import {mkdtemp,rm,readdir} from 'node:fs/promises';
@@ -14,6 +15,14 @@ const good = Buffer.from('%PDF-1.7\n1 0 obj\n<<>>\nendobj\n%%EOF\n', 'ascii');
 const eicar = Buffer.from(
   'X5O!P%@AP[4\\PZX54(P^)7CC)7}' +
   '$EICAR-STANDARD-ANTIVIRUS-TEST-FILE!$H+H*', 'ascii');
+
+test('real ClamAV signature timestamp is fresh and preflight gates scanning', async () => {
+  const health = await requireFreshClamd({timeoutMs:20000});
+  assert.equal(health.fresh,true);
+  assert.ok(health.signatureVersion > 0);
+  const verdict = await scanWithFreshClamd(good,{timeoutMs:20000});
+  assert.equal(verdict.verdict,'candidate_clean');
+});
 
 test('real ClamAV socket recognises a clean in-memory PDF-like payload', async () => {
   const r = await scanWithClamd(good, {timeoutMs:20000});

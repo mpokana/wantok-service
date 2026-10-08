@@ -552,3 +552,11 @@ The GoTrue request validates a Bearer JWT on the server; only the returned GoTru
 **Tests:** PostgreSQL 34 files/736 pgTAP PASS; admission/scanner 46 tests PASS; real loopback ClamAV 4 PASS. Further gates and architectural risks in `docs/EVIDENCE_AUTH_AND_CUSTODY_DESIGN.md`. No actual authenticated evidence upload, approved privacy consent, FS/DB custody, KMS, hardened decoder, reviewer-release or external deployment. Existing encrypted-quarantine `verifyIntent` test callback is still synthetic and not connected to this adapter.
 
 **Preservation and backups:** do not enable the sealed `staged-provider-evidence` bucket or blend security work with user-facing theme. Keep private ACL-restricted PostgreSQL archives, independent local Git bundle and verified GitHub feature branch, without secrets in Git. Do not change working GVE machines or Wantok Neurons.
+
+---
+
+## FILLER-2026-10-09-03 — ClamAV freshness guard
+
+**Status: Implemented in local, internal synthetic quarantine only.** Before the default ClamAV INSTREAM scan, the code checks actual daemon VERSION metadata for current signatures (48-hour default, 72-hour maximum). Stale, missing, malformed, timeout or non-loopback responses fail closed before bytes are scanned. An injected simulator scanner in isolated tests does not provide this guarantee. Unit tests 57 PASS and real engine tests 5 PASS. Details: `docs/EVIDENCE_SIGNATURE_FRESHNESS.md`.
+
+**Remaining restrictions:** No consent, network uploader, protected ACLs, durable DB/file manifest, KMS, isolation of content decoders, approved reviewer release or retention/restore drills. CX1 signed-in Web QA remains open; T2.4 deferred. Preserve user-facing photographic categories, `s`-marked sample fixtures and sealed evidence bucket.
