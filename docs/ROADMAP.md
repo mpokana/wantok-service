@@ -1,6 +1,6 @@
 # Wantok Services — Living Roadmap
 
-**Updated:** 2026-10-07
+**Updated:** 2026-10-08
 
 ## Completed platform phases
 
@@ -194,6 +194,7 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 - [x] Local Providers promotion retains the approved `assets/images/vanessa_local_provider.jpg` asset; ordinary dashboard work must not replace it
 - [x] align the **existing Food/Groceries commerce browser** to the Wantok enterprise marketplace style: delivery/pickup context, search-first discovery, branded hero/filters, rating-based featured approved vendors, real backend storefront/product media where supplied, and truthful empty-market states. This is presentation work on the existing commerce core and **does not start CX1G**
 - [x] signed-in Android Groceries empty-market QA verifies the new commerce layout with the preserved local dataset (**0 live Food/Groceries storefronts / 0 catalogue items**); populated vendor presentation is covered by deterministic widget tests rather than fabricated local inventory
+- [x] guest Flutter Web login at true 320/390 px browser widths: correct mobile viewport, responsive **Wantok Services** branding/form without overflow, 320/390/800 enlarged-text sign-in widget regressions and narrow create-account/back flow. **Authenticated Web QA remains open**
 
 ### CX1G — General Goods Marketplace + Fulfilment — PLANNED
 

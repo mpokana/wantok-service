@@ -131,7 +131,7 @@ Checkpointed platform includes:
 - Wallet remains preview-only but now frames Top up/Scan/Send/Receive, verification, PNG-oriented planned services and future transaction history. No money movement exists.
 - The user-facing assistant is **Wantok Agent**. It remains outside the five-tab navigation and now appears as a compact **Ask Wantok** discovery shortcut rather than occupying the permanent app header or a large Home card. Home/Services are service-and-goods-first marketplace surfaces; the profile circle owns the conventional top-right header position and Client/Vendor mode switching moved inside Account. The authenticated capability API reports model/chat/handoff state; model chat is deliberately disabled until a controlled gateway is configured. The Agent surface can use real provider-search fallback and create owner-private human-help requests. Support/Operations/Admin can later triage those requests; live human chat and support triage UI are not yet implemented. Internal compatibility identifiers such as `WantokAiAgentRepository` and `wantok_ai_agent` remain unchanged.
 - retry failures stay in the view rather than escaping callbacks; Events/departures/order/registration/water-trip failures do not masquerade as empty records.
-- 44 focused client regressions plus the configuration smoke total **45 app tests**; they use in-memory/unconfigured backends and do not replace local account data.
+- 48 focused client regressions plus the configuration smoke total **49 app tests**; they use in-memory/unconfigured backends and do not replace local account data.
 - entry/back navigation coverage includes 11 categories. Signed-in Android Account read/write/media, categorised Inbox/support, map-first Taxi runtime, Services/Wallet and the existing Food/Groceries empty-market commerce journey are now live-verified within the documented evidence limits; signed-in Web and other unavailable populated journeys remain open.
 - do not call CX1 complete from widget/database tests alone; see its evidence document.
 
@@ -195,12 +195,22 @@ Checkpointed platform includes:
 - Fresh client checkpoint: all seven Flutter analysis targets PASS; Wantok app **45 tests PASS**, including compact empty-market and populated-vendor commerce regressions; Operations Admin and Technical Control smoke tests PASS. Database remains **27 files / 598 pgTAP tests PASS** and `git diff --check` is clean.
 - This is **existing Food/Groceries UX alignment only**. **CX1G General Marketplace remains PLANNED**; no general-product schema, vendor-expansion or fulfilment architecture was activated by this continuation.
 
+## Web sign-in and narrow-screen audit — 2026-10-08
+
+- Resumed EAGLT02 on the preserved Android emulator `emulator-5554`, local Docker/Supabase volumes and clean Git checkpoint `6a30f3b`. No reset, reseed, account removal or Android reinstall occurred.
+- Local Flutter Web is served at `http://127.0.0.1:3000` using ignored `.wantok/local-web.json`; Web uses the host `127.0.0.1:54321` Supabase URL, not Android's `10.0.2.2` bridge.
+- Live guest Web browser testing exposed a genuine narrow-width sign-in brand-row RenderFlex overflow at 320 px. `apps/wantok_app/lib/src/auth/sign_in_page.dart` now constrains the brand copy with `Expanded`, uses the product name **Wantok Services** and its established **People. Places. Possibilities.** tagline. `apps/wantok_app/web/index.html` now explicitly defines `width=device-width, initial-scale=1.0` for mobile Web.
+- Added `apps/wantok_app/test/sign_in_responsive_test.dart`: sign-in widths 320, 390 and 800 at 1.5x text, plus narrow-width Sign in -> Create account -> Sign in navigation; **four tests PASS**. The full checkpoint now passes all seven Flutter analysis targets, **49 client app tests**, Operations Admin and Technical Control smoke tests, and **27 files / 598 pgTAP tests**.
+- Live Chrome DevTools Protocol emulation was performed with an isolated, unauthenticated Chrome profile. After warm-up, 320 px and 390 px screenshots show the complete sign-in form/branding without overflow, the browser viewport equals the requested device width, and no browser JavaScript exceptions were recorded. Ignored evidence: `.wantok/cx1-cdp-320.png`, `cx1-cdp-390.png`, `cx1-web-cdp-warm-mobile.log`, `cx1-signin-full-flutter-check-20261008.log` and `cx1-signin-db-test-20261008.log`.
+- **This is guest Web visual PASS only. Signed-in Web provider search/filter/save/detail, Account, Track, Wallet, Inbox and Wantok Agent evidence remain OPEN.** Continue only after a legitimate browser login; do not clone Android session tokens, manufacture authentication or close CX1 prematurely. T2.4 remains deferred.
+- Separate non-blocking audit observation: `supabase_vector_wantok-service` restarts when its Docker-log collector attempts `192.168.65.254:2375` (connection refused), while local Auth, DB, REST, Storage, Realtime and Kong remain up. No Docker daemon/security setting was changed during this continuation.
+
 ## Validation baseline
 
 At this checkpoint:
 
 - all shared Flutter packages: analysis PASS
-- Wantok app: analysis + **45 tests PASS** (44 client regressions + configuration smoke)
+- Wantok app: analysis + **49 tests PASS** (48 client regressions + configuration smoke)
 - required `scripts/flutter/check.ps1`: PASS; Desktop Commander shells on EAGLT02 currently need the standard `PROGRAMFILES(X86)=C:\Program Files (x86)` supplied per process for `flutter test`
 - Wantok Operations Admin: analysis + smoke test PASS
 - Wantok Technical Control: analysis + smoke test PASS

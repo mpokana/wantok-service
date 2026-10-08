@@ -110,22 +110,24 @@ class _SignInPageState extends State<SignInPage> {
                             ),
                           ),
                           const SizedBox(width: 14),
-                          const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Wantok',
-                                style: TextStyle(
-                                  fontSize: 26,
-                                  fontWeight: FontWeight.w900,
-                                  color: WantokColors.ink,
+                          const Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Wantok Services',
+                                  style: TextStyle(
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.w900,
+                                    color: WantokColors.ink,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                'Everyday services. One Wantok.',
-                                style: TextStyle(color: WantokColors.muted),
-                              ),
-                            ],
+                                Text(
+                                  'People. Places. Possibilities.',
+                                  style: TextStyle(color: WantokColors.muted),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
