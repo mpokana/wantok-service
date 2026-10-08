@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
 import 'smoke_data.dart';
+import 'reference_scene_details.dart';
 
 /// Twelve-category front door from the approved reference. The explicit
 /// categories always render, including before providers are onboarded.
@@ -604,17 +605,13 @@ class ReferenceSampleScenePage extends StatelessWidget {
                 if (scene == ReferenceScene.taxi ||
                     scene == ReferenceScene.tracking)
                   const _SampleJourneyDiagram(),
-                if (scene == ReferenceScene.travel) const _SampleTravelSearch(),
                 if (scene == ReferenceScene.wallet) const _SampleWalletBanner(),
-                if (scene == ReferenceScene.account)
-                  const _SampleAccountFeatures(),
                 if (scene == ReferenceScene.signIn) const _SampleAuthPreview(),
-                SmokePreviewSection(
-                  scene: data,
-                  heading: scene == ReferenceScene.foodListing
-                      ? 'Sample restaurant listings'
-                      : 'Sample records',
-                ),
+                ReferenceSceneDetails(scene: scene.name),
+                if (scene == ReferenceScene.splash ||
+                    scene == ReferenceScene.signIn ||
+                    scene == ReferenceScene.services)
+                  SmokePreviewSection(scene: data, heading: 'Sample records'),
               ],
             ),
           ),
@@ -756,40 +753,6 @@ class _ReferenceRoutePainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-class _SampleTravelSearch extends StatelessWidget {
-  const _SampleTravelSearch();
-  @override
-  Widget build(BuildContext context) => const Card(
-    child: Padding(
-      padding: EdgeInsets.all(15),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              SmokeMarker(),
-              SizedBox(width: 8),
-              Text(
-                'Flights    Hotels    Packages',
-                style: TextStyle(fontWeight: FontWeight.w800),
-              ),
-            ],
-          ),
-          Divider(),
-          Text('From  Port Moresby (POM)'),
-          SizedBox(height: 10),
-          Text('To       Brisbane (BNE)'),
-          SizedBox(height: 10),
-          Text(
-            'Sample itinerary · flights are not searchable yet',
-            style: TextStyle(color: WantokColors.muted),
-          ),
-        ],
-      ),
-    ),
-  );
-}
-
 class _SampleWalletBanner extends StatelessWidget {
   const _SampleWalletBanner();
   @override
@@ -828,29 +791,6 @@ class _SampleWalletBanner extends StatelessWidget {
         ),
       ],
     ),
-  );
-}
-
-class _SampleAccountFeatures extends StatelessWidget {
-  const _SampleAccountFeatures();
-  @override
-  Widget build(BuildContext context) => Column(
-    children: [
-      for (final item in const [
-        ('My Bookings', Icons.event_note),
-        ('Wallet & Payments', Icons.account_balance_wallet),
-        ('Saved Places', Icons.location_on_outlined),
-        ('Trusted People', Icons.group_outlined),
-        ('Preferences', Icons.tune_rounded),
-        ('Help & Support', Icons.help_outline),
-        ('Settings', Icons.settings_outlined),
-      ])
-        ListTile(
-          leading: Icon(item.$2, color: WantokColors.primary),
-          title: Text(item.$1),
-          trailing: const SmokeMarker(),
-        ),
-    ],
   );
 }
 

@@ -44,7 +44,7 @@ The **twelve reference screen previews** in `reference_services_gallery.dart` ar
 ## Cleanup when the project is ready
 
 1. Ensure production and release builds omit `WANTOK_SMOKE_DATA=true`; the samples immediately disappear from compiled UI with **no database deletion needed**.
-2. When the sample visuals are no longer useful, delete `lib/src/home/smoke_data.dart` and `test/smoke_data_test.dart`, remove the `SmokePreviewSection` branches and `smoke_data.dart` imports from Home, Services, Food/Groceries, Track, Inbox and Wallet.
+2. When the sample visuals are no longer useful, delete `lib/src/home/smoke_data.dart`, `lib/src/home/reference_scene_details.dart`, `test/smoke_data_test.dart` and `test/reference_scene_details_test.dart`. Remove the `SmokePreviewSection` branches and `smoke_data.dart` imports from Home, Services, Food/Groceries, Track, Inbox and Wallet.
 3. In `reference_services_gallery.dart`, **retain** `ReferenceServiceCategories` and the twelve-icon `ReferenceServicesLanding` layout, but remove its `ReferenceScreenGallery`, sample-only preview cards, `ReferenceSampleScenePage` and sample painters/details. Replace any unsupported-category preview with the existing honest coming-soon message. Search for `SMOKE_20261008`, `WantokSmokeData`, `SmokeMarker`, `ReferenceScreenGallery` and `SmokePreviewSection` to confirm no fixture remains.
 4. Run `scripts/flutter/check.ps1`, `npm run db:test`, verify `git diff --check`, then commit and back up both locally and to GitHub.
 5. Because the fixtures never enter Supabase, **do not run any SQL deletes** for these identifiers. Never delete legitimate records by matching display names such as The Waterfront.

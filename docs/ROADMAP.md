@@ -201,6 +201,7 @@ Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Mes
 
 - [x] rebuild the **main Services landing** to the supplied 12-category/3-column reference icon grid with pastel tile colours; retain a working **All Services** view for genuine backend catalogue/provider actions, and preserve live navigation. The old Top Providers/Recommendations view must no longer be the default Services landing.
 - [x] add an opt-in 12-screen **reference sample gallery** with registered `SMOKE_20261008_SCREEN_*` IDs, visible small `s` markers, sample food providers, booking/flight/hotel examples, a demonstration route, and wallet/account examples. All examples are read-only and disabled by default for non-smoke builds; the source screenshot's individual photographs are not separately present, so the examples use existing approved PNG-themed images.
+- [x] refine separate smoke-only Food Listing, Taxi, Travel, Bookings, Tracking, Wallet, Account and Home preview layouts. Verify disabled payment/booking controls, smoke identifiers, Flutter analysis and tests; install the x86-64 QA build over the existing Android emulator without clearing saved data. Keep the genuine service modules separate.
 
 ### CX1G — General Goods Marketplace + Fulfilment — PLANNED
 
