@@ -28,6 +28,10 @@ Minimum checkpoint validation:
 
 For focused changes, run narrower checks during development, then the full checkpoint validation above before commit.
 
+## Local and GitHub checkpoint rule
+
+After each meaningful validated work session, retain both a **local Git commit** and a verified **GitHub branch push** to the existing project remote (`origin`, `https://github.com/mpokana/wantok-service.git`). Before pushing, inspect `git status`, the exact remote URL and branch, and the staged file list for accidental secrets, environment files, personal data or generated artefacts. Never push credentials or ignored `.wantok/` local settings. Push only the current feature branch; do not force-push, rewrite shared history, change the default branch or merge without explicit approval. Verify the remote branch's commit ID against local `HEAD` after pushing. If GitHub access is unavailable, keep the local commit, record the blocked remote backup and retry after restoring authorised access. GitHub complements, but is not a substitute for, independent database/asset backups.
+
 ## Living handover rule
 
 After a meaningful phase or safe Git checkpoint, update:

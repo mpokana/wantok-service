@@ -270,6 +270,10 @@ T2.4 remains deferred until CX1 passes. CX1 migrations `20261006130000_cx1_clien
 
 Do not begin Wantok Pay transaction movement until payment-rail and settlement decisions are made.
 
+## GitHub and local backup rule — 2026-10-08
+
+Mansfield has requested **both local Git and GitHub backups after meaningful validated project changes**. The verified project remote is `origin` → `https://github.com/mpokana/wantok-service.git`; working branch `feature/flutter-platform-v1`. Local checkpoint `e04c640` was already found on the remote feature branch during this session. Follow root `AGENTS.md`: audit staged paths for secrets, push the current feature branch without force, and compare the remote branch commit to local `HEAD` after each checkpoint. Never mistake Git for a backup of Supabase volumes, user uploads, or ignored local configuration.
+
 ## Recovery rule
 
 If a future chat loses context:
