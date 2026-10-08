@@ -409,7 +409,7 @@ Detailed design: `docs/GLOBAL_TRAVEL_ARCHITECTURE.md`.
 
 ## FILLER-2026-10-07-08 - Enterprise Home Dashboard + Payment/Travel Discovery
 
-**Status:** APPROVED and implemented as the current client visual baseline. This is a presentation/discovery layer only; it does not activate unapproved payment or travel transaction rails.
+**Status:** APPROVED, implemented and live-verified on signed-in Android as the current client visual baseline. This is a presentation/discovery layer only; it does not activate unapproved payment or travel transaction rails.
 
 ### Canonical Home dashboard
 
@@ -453,7 +453,7 @@ The approved Home payment strip includes:
 - Google Pay;
 - Bank Transfer.
 
-These are product/rail previews only until their respective integrations, compliance, settlement and market decisions are approved.
+These are product/rail previews only until their respective integrations, compliance, settlement and market decisions are approved. The standard Android layout uses a compact horizontal strip: Wantok Pay, Visa, Mastercard, PayPal and Google Pay are visible in the initial viewport; Bank Transfer remains the next item in the same strip and is reachable by a short horizontal swipe rather than shrinking the brands below a readable size.
 
 Rules:
 - Wantok Pay may open the safe Wallet preview;

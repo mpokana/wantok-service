@@ -984,7 +984,7 @@ class _PaymentRailStrip extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         children: [
           _PaymentBrandTile(
-            width: 164,
+            width: 112,
             onTap: onWantokPayTap,
             child: const Row(
               children: [
@@ -993,7 +993,7 @@ class _PaymentRailStrip extends StatelessWidget {
                   foreground: Colors.white,
                   background: Color(0xFF6C35D7),
                 ),
-                SizedBox(width: 10),
+                SizedBox(width: 7),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -1004,7 +1004,7 @@ class _PaymentRailStrip extends StatelessWidget {
                         maxLines: 1,
                         style: TextStyle(
                           color: WantokColors.ink,
-                          fontSize: 12,
+                          fontSize: 10.5,
                           fontWeight: FontWeight.w900,
                         ),
                       ),
@@ -1013,7 +1013,7 @@ class _PaymentRailStrip extends StatelessWidget {
                         'Kina wallet',
                         style: TextStyle(
                           color: WantokColors.muted,
-                          fontSize: 10,
+                          fontSize: 9,
                         ),
                       ),
                     ],
@@ -1024,6 +1024,7 @@ class _PaymentRailStrip extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           _PaymentBrandTile(
+            width: 54,
             onTap: () => onPlannedRailTap('Visa'),
             child: const Center(
               child: Text(
@@ -1040,19 +1041,20 @@ class _PaymentRailStrip extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           _PaymentBrandTile(
+            width: 56,
             onTap: () => onPlannedRailTap('Mastercard'),
             child: Center(
               child: SizedBox(
-                width: 54,
-                height: 30,
+                width: 42,
+                height: 26,
                 child: Stack(
                   children: [
                     Positioned(
-                      left: 6,
-                      top: 3,
+                      left: 3,
+                      top: 2,
                       child: Container(
-                        width: 27,
-                        height: 27,
+                        width: 22,
+                        height: 22,
                         decoration: const BoxDecoration(
                           color: Color(0xFFEB001B),
                           shape: BoxShape.circle,
@@ -1060,11 +1062,11 @@ class _PaymentRailStrip extends StatelessWidget {
                       ),
                     ),
                     Positioned(
-                      right: 6,
-                      top: 3,
+                      right: 3,
+                      top: 2,
                       child: Container(
-                        width: 27,
-                        height: 27,
+                        width: 22,
+                        height: 22,
                         decoration: const BoxDecoration(
                           color: Color(0xFFF79E1B),
                           shape: BoxShape.circle,
@@ -1078,13 +1080,14 @@ class _PaymentRailStrip extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           _PaymentBrandTile(
+            width: 60,
             onTap: () => onPlannedRailTap('PayPal'),
             child: const Center(
               child: Text(
                 'PayPal',
                 style: TextStyle(
                   color: Color(0xFF003087),
-                  fontSize: 17,
+                  fontSize: 14,
                   fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.w900,
                   letterSpacing: -0.8,
@@ -1094,6 +1097,7 @@ class _PaymentRailStrip extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           _PaymentBrandTile(
+            width: 58,
             onTap: () => onPlannedRailTap('Google Pay'),
             child: const Center(
               child: Text.rich(
@@ -1115,13 +1119,13 @@ class _PaymentRailStrip extends StatelessWidget {
                     ),
                   ],
                 ),
-                style: TextStyle(fontSize: 16),
+                style: TextStyle(fontSize: 13),
               ),
             ),
           ),
           const SizedBox(width: 8),
           _PaymentBrandTile(
-            width: 118,
+            width: 76,
             onTap: () => onPlannedRailTap('Bank Transfer'),
             child: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -1129,16 +1133,16 @@ class _PaymentRailStrip extends StatelessWidget {
                 Icon(
                   Icons.account_balance_rounded,
                   color: Color(0xFF7547CE),
-                  size: 25,
+                  size: 20,
                 ),
-                SizedBox(width: 6),
+                SizedBox(width: 4),
                 Flexible(
                   child: Text(
                     'Bank\nTransfer',
                     style: TextStyle(
                       color: Color(0xFF7547CE),
                       height: 1.05,
-                      fontSize: 10.5,
+                      fontSize: 9.5,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -1148,13 +1152,13 @@ class _PaymentRailStrip extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           _PaymentBrandTile(
-            width: 54,
+            width: 36,
             onTap: onWantokPayTap,
             child: const Center(
               child: Icon(
                 Icons.chevron_right_rounded,
                 color: WantokColors.primaryDark,
-                size: 28,
+                size: 24,
               ),
             ),
           ),
@@ -1186,7 +1190,7 @@ class _PaymentBrandTile extends StatelessWidget {
           onTap: onTap,
           borderRadius: BorderRadius.circular(18),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
               border: Border.all(color: const Color(0xFFE3EAE6)),
@@ -1213,14 +1217,14 @@ class _PaymentIconBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 42,
-      height: 42,
+      width: 36,
+      height: 36,
       decoration: BoxDecoration(
         color: background,
-        borderRadius: BorderRadius.circular(13),
+        borderRadius: BorderRadius.circular(11),
       ),
       alignment: Alignment.center,
-      child: Icon(icon, color: foreground, size: 23),
+      child: Icon(icon, color: foreground, size: 21),
     );
   }
 }
