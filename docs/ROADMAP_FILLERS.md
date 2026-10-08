@@ -540,3 +540,15 @@ Those items remain governed by the existing CX1G roadmap gate.
 Open `AGENTS.md` → `docs/HANDOVER.md` → `docs/ROADMAP.md` → this filler → `docs/EVIDENCE_QUARANTINE_ADMISSION.md` → `docs/CLAMAV_LOCAL_RUNTIME.md`. Then check Git, EAGLT02 Docker/ClamAV signature freshness and free disk/memory before work. Use additive migrations and mandatory Flutter/database/scanner tests.
 
 Keep both a verified GitHub push to the existing feature branch and an independent local `git bundle`; preserve private, access-restricted PostgreSQL backups for schema changes and **never include private archives, identity data, keys, configuration secrets or local `.wantok` files in Git**. An archive listing check is not a complete restore drill.
+
+---
+
+## FILLER-2026-10-09-02 — Trusted metadata claim checkpoint (EAGLT02)
+
+**Status: IMPLEMENTED LOCALLY, NO REAL EVIDENCE INTAKE.** Following `4bf2647`, the internal GoTrue verification adapter and one-time SQL claim are added without changes to approved photographic categories, consistent service taxonomy, Flutter layout, emulator session or opt-in `SMOKE_20261008_*` `s` markers.
+
+The GoTrue request validates a Bearer JWT on the server; only the returned GoTrue account ID is sent using an isolated service-role credential to the server-only database claim RPC. The metadata intent is atomically changed from `awaiting_secure_gateway` to `claimed_for_quarantine` once; receipt is in the same PostgreSQL transaction. Claim races, revoked intent, foreign account or changed application/check must fail. Post-claim withdrawal remains possible; however the receipt is **not** tamper-proof evidence custody.
+
+**Tests:** PostgreSQL 34 files/736 pgTAP PASS; admission/scanner 46 tests PASS; real loopback ClamAV 4 PASS. Further gates and architectural risks in `docs/EVIDENCE_AUTH_AND_CUSTODY_DESIGN.md`. No actual authenticated evidence upload, approved privacy consent, FS/DB custody, KMS, hardened decoder, reviewer-release or external deployment. Existing encrypted-quarantine `verifyIntent` test callback is still synthetic and not connected to this adapter.
+
+**Preservation and backups:** do not enable the sealed `staged-provider-evidence` bucket or blend security work with user-facing theme. Keep private ACL-restricted PostgreSQL archives, independent local Git bundle and verified GitHub feature branch, without secrets in Git. Do not change working GVE machines or Wantok Neurons.

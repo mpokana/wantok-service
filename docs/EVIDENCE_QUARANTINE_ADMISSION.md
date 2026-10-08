@@ -40,6 +40,10 @@ A storage-side lock, atomic DB/FS transaction, and irrevocable immutability are 
 - `scripts/flutter/check.ps1`: full Flutter analysis and smoke/widget suite. No Dart screens are modified by this milestone.
 - `git diff --check`, private local PostgreSQL archive, verified GitHub feature-branch push and independent local Git bundle before checkpoint.
 
+## Following local one-time claim implementation (9 October 2026)
+
+The next additive checkpoint implements a GoTrue-verified, **internal loopback-only** admission adapter and `service_role`-restricted one-time SQL claim, but does **not** wire either to Flutter or an upload endpoint. See `docs/EVIDENCE_AUTH_AND_CUSTODY_DESIGN.md`, `packages/evidence_scanner/src/admission.mjs` and migration `20261009043000_evidence_one_time_claim.sql`. It adds claim state, a private same-transaction receipt, and post-claim owner withdrawal. The existing encrypted quarantine prototype is unchanged. Tests: 34 SQL files / 736 assertions, 46 unit tests and 4 genuine ClamAV tests pass. Live Auth-to-claim and custody crash/retry validation remain open.
+
 ## Required next phase before real uploads
 
 Implement an authenticated network gateway with session JWT validation **on the server**, server-side record admission and one-time claim/consumption, approved privacy notice, strict rate/size limits, scanner health and fresh signatures, robust decoder/normaliser, private encrypted quarantine with safe ownership/ACLs, durable digest-bound atomic manifests, retention and deletion/holds, key management, separate least-privilege reviewer release and independent account/listing authorisation. Perform end-to-end negative tests and restore drills; deploy only with explicit approval.

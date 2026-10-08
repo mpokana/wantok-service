@@ -2,7 +2,13 @@
 
 **Updated:** 2026-10-09
 
-## Current engineering checkpoint (2026-10-09) — verified, no public intake
+## Current engineering checkpoint (2026-10-09) — server-only one-time claim, uploads SEALED
+
+- [x] **Implemented EAGLT02 locally:** loopback GoTrue account verification adapter, locked-to-`service_role` one-time claim RPC and claimant/check/application eligibility revalidation, atomic state/receipt transaction, and post-claim applicant withdrawal. Local migration `20261009043000_evidence_one_time_claim.sql` and 34-file pgTAP suite **736/736 PASS**; synthetic admission/scanner suite **46/46 PASS**; real ClamAV **4/4 PASS**. No public route, no client account UI changes, no file intake.
+- [ ] **Next separate gates:** verified live GoTrue-to-claim end-to-end test and concurrency/crash recovery; real consent/withdrawal notice; dedicated protected storage/ACLs and immutable digest-bound encrypted custody; KMS rotation/recovery; document content normalisation; ClamAV signature freshness and resource quotas; off-host audit; retention/erasure/holds; least-privilege reviewer release; restore rehearsal and authorisation. `docs/EVIDENCE_AUTH_AND_CUSTODY_DESIGN.md` defines scope and limitations. Never activate `staged-provider-evidence` Storage policies or real uploads prematurely.
+- [x] **Preservation:** category photographs/unified taxonomy, Flutter theme, `SMOKE_20261008_*` `s` fixtures, emulator/session, existing Operations/Technical role separation and all client journey controls unchanged.
+
+## Prior engineering checkpoint (2026-10-09) — historical 73ea82f baseline
 
 - **Latest implementation source:** `73ea82f` on `feature/flutter-platform-v1`. EAGLT02 local + GitHub commit match; private DB archive and independent local Git bundle verified. Source-specific implementation/limitations in `docs/EVIDENCE_QUARANTINE_ADMISSION.md`.
 - **Implemented locally:** account-bound, withdrawable **non-uploading evidence intent** RPC/RLS; sealed Supabase bucket; real ClamAV/EICAR detection; separately injected **AES-256-GCM encrypted quarantine candidate** and integrity checker using synthetic bytes. No live session-verified network gateway, approved consent or reviewer release.
