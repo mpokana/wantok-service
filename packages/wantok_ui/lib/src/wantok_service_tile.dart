@@ -12,6 +12,7 @@ class WantokServiceTile extends StatelessWidget {
     this.surfaceColor,
     this.badgeColor,
     this.isSaved = false,
+    this.featureStyle = false,
     this.onSavedToggle,
     super.key,
   });
@@ -24,6 +25,7 @@ class WantokServiceTile extends StatelessWidget {
   final Color? surfaceColor;
   final Color? badgeColor;
   final bool isSaved;
+  final bool featureStyle;
   final VoidCallback? onSavedToggle;
 
   @override
@@ -31,6 +33,64 @@ class WantokServiceTile extends StatelessWidget {
     final accent = accentColor ?? WantokColors.primaryDark;
     final surface = surfaceColor ?? const Color(0xFFE7F4ED);
     final badgeSurface = badgeColor ?? WantokColors.gold;
+
+    if (featureStyle) {
+      return InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(17),
+        child: Container(
+          margin: const EdgeInsets.all(3),
+          padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 12),
+          decoration: BoxDecoration(
+            color: accent,
+            borderRadius: BorderRadius.circular(17),
+            boxShadow: [
+              BoxShadow(
+                color: accent.withValues(alpha: 0.13),
+                blurRadius: 8,
+                offset: const Offset(0, 3),
+              ),
+            ],
+          ),
+          child: Stack(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(icon, color: Colors.white, size: 29),
+                  const SizedBox(height: 8),
+                  Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 10.2,
+                      height: 1.12,
+                    ),
+                  ),
+                ],
+              ),
+              if (onSavedToggle != null)
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: GestureDetector(
+                    onTap: onSavedToggle,
+                    child: Icon(
+                      isSaved ? Icons.bookmark : Icons.bookmark_outline,
+                      color: Colors.white,
+                      size: 18,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      );
+    }
 
     return InkWell(
       borderRadius: BorderRadius.circular(22),

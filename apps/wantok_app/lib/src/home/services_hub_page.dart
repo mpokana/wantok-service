@@ -487,67 +487,18 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(14, 12, 14, 24),
             children: [
-              Container(
-                padding: const EdgeInsets.fromLTRB(18, 18, 18, 16),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(28),
-                  gradient: const LinearGradient(
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                    colors: [Color(0xFFFFFEF8), Color(0xFFF0F8F3)],
-                  ),
-                  border: Border.all(color: const Color(0xFFE1EBE5)),
+              const Text(
+                'Services',
+                style: TextStyle(
+                  color: WantokColors.ink,
+                  fontSize: 25,
+                  fontWeight: FontWeight.w900,
                 ),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      right: -20,
-                      top: -18,
-                      child: Icon(
-                        Icons.landscape_rounded,
-                        size: 150,
-                        color: WantokColors.primaryDark.withValues(alpha: 0.08),
-                      ),
-                    ),
-                    Positioned(
-                      right: 25,
-                      top: 2,
-                      child: Container(
-                        width: 44,
-                        height: 44,
-                        decoration: BoxDecoration(
-                          color: WantokColors.gold.withValues(alpha: 0.82),
-                          shape: BoxShape.circle,
-                        ),
-                      ),
-                    ),
-                    const Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Explore services and goods',
-                          style: TextStyle(
-                            color: WantokColors.ink,
-                            fontSize: 29,
-                            height: 1.04,
-                            fontWeight: FontWeight.w900,
-                            letterSpacing: -0.9,
-                          ),
-                        ),
-                        SizedBox(height: 7),
-                        Text(
-                          'Find trusted providers for everyday needs wherever you are.',
-                          style: TextStyle(
-                            color: WantokColors.muted,
-                            fontSize: 13.5,
-                            height: 1.35,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+              ),
+              const SizedBox(height: 6),
+              const Text(
+                'Explore everyday services, shops and trusted local providers.',
+                style: TextStyle(color: WantokColors.muted, fontSize: 13),
               ),
               const SizedBox(height: 12),
               TextField(

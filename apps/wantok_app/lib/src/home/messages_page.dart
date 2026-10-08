@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
-import 'png_visuals.dart';
 import 'wantok_agent_page.dart';
 
 class MessagesPage extends StatefulWidget {
@@ -556,46 +555,37 @@ class _InboxHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PngScenicBackdrop(
-      minHeight: 150,
-      colors: const [Color(0xFF075C3A), Color(0xFF087A4B), Color(0xFF5A3421)],
-      child: const Column(
+    return const Padding(
+      padding: EdgeInsets.fromLTRB(4, 10, 4, 8),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             'Inbox',
             style: TextStyle(
-              color: Colors.white,
-              fontSize: 27,
+              color: WantokColors.ink,
+              fontSize: 25,
               fontWeight: FontWeight.w900,
-              letterSpacing: -0.7,
             ),
           ),
           SizedBox(height: 6),
           Text(
             'Service conversations and Wantok help in one place.',
-            style: TextStyle(color: Color(0xFFE4F6EE), fontSize: 12.5),
+            style: TextStyle(color: WantokColors.muted, fontSize: 13),
           ),
-          SizedBox(height: 11),
+          SizedBox(height: 8),
           Row(
             children: [
               Icon(
                 Icons.verified_user_outlined,
-                color: WantokColors.gold,
-                size: 17,
+                color: WantokColors.primary,
+                size: 16,
               ),
               SizedBox(width: 6),
               Expanded(
                 child: Text(
                   'Booking-linked and owner-private support',
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 10.5,
-                    fontWeight: FontWeight.w800,
-                  ),
+                  style: TextStyle(color: WantokColors.muted, fontSize: 11.5),
                 ),
               ),
             ],

@@ -13,79 +13,76 @@ class WantokPayPreviewPage extends StatelessWidget {
     final content = ListView(
       padding: EdgeInsets.zero,
       children: [
-        Container(
-          padding: const EdgeInsets.fromLTRB(20, 18, 20, 30),
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xFF5123B2), Color(0xFF7B35D8)],
-            ),
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(34)),
-          ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 18, 16, 6),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'A preview of everyday payments across Wantok markets.',
+                'Wallet',
                 style: TextStyle(
-                  color: Color(0xFFEDE4FF),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w700,
+                  fontSize: 25,
+                  fontWeight: FontWeight.w900,
+                  color: WantokColors.ink,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 14),
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white.withValues(alpha: 0.96),
-                  borderRadius: BorderRadius.circular(24),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.14),
-                      blurRadius: 18,
-                      offset: const Offset(0, 8),
-                    ),
-                  ],
+                  borderRadius: BorderRadius.circular(20),
+                  gradient: const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color(0xFF0758D7),
+                      Color(0xFF087BFA),
+                      Color(0xFF45B0FF),
+                    ],
+                  ),
                 ),
-                child: const Row(
+                child: Row(
                   children: [
-                    Expanded(
+                    const Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
                             'Wantok Wallet preview',
                             style: TextStyle(
-                              color: WantokColors.muted,
+                              color: Colors.white,
+                              fontSize: 13,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
-                          SizedBox(height: 5),
+                          SizedBox(height: 7),
                           Text(
                             'K0.00',
                             style: TextStyle(
-                              color: WantokColors.ink,
-                              fontSize: 32,
+                              color: Colors.white,
+                              fontSize: 33,
                               fontWeight: FontWeight.w900,
                             ),
                           ),
-                          SizedBox(height: 6),
+                          SizedBox(height: 8),
                           Text(
                             'Preview only - payment rails are not active yet.',
                             style: TextStyle(
-                              color: WantokColors.muted,
+                              color: Color(0xFFEAF6FF),
                               fontSize: 11.5,
                             ),
                           ),
                         ],
                       ),
                     ),
-                    CircleAvatar(
-                      radius: 28,
-                      backgroundColor: Color(0xFFEDE3FF),
+                    const SizedBox(width: 8),
+                    const CircleAvatar(
+                      radius: 26,
+                      backgroundColor: Colors.white,
                       child: Icon(
-                        Icons.account_balance_wallet_rounded,
-                        color: WantokColors.purplePay,
-                        size: 30,
+                        Icons.account_balance_wallet_outlined,
+                        color: WantokColors.primary,
+                        size: 28,
                       ),
                     ),
                   ],
@@ -265,7 +262,7 @@ class WantokPayPreviewPage extends StatelessWidget {
     );
 
     if (embedded) {
-      return ColoredBox(color: const Color(0xFFF7F5FB), child: content);
+      return ColoredBox(color: WantokColors.canvas, child: content);
     }
 
     return Scaffold(

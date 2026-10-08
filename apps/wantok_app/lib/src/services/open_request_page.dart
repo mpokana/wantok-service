@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import '../home/wantok_photo_hero.dart';
+
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_core/wantok_core.dart';
 import 'package:wantok_ui/wantok_ui.dart';
@@ -268,14 +271,13 @@ class _RequestHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return WantokPhotoHero(
+      image:
+          (category.slug == 'specialist-services' ||
+              category.slug == 'general-labour')
+          ? 'assets/images/hero_trades.png'
+          : 'assets/images/hero_delivery.png',
       padding: const EdgeInsets.all(22),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [WantokColors.primaryDark, WantokColors.primary],
-        ),
-        borderRadius: BorderRadius.circular(24),
-      ),
       child: Row(
         children: [
           Container(

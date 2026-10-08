@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import '../home/wantok_photo_hero.dart';
+
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
@@ -672,14 +675,9 @@ class _EventsHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return WantokPhotoHero(
+      image: 'assets/images/hero_events.png',
       padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [WantokColors.primaryDark, WantokColors.primary],
-        ),
-        borderRadius: BorderRadius.circular(24),
-      ),
       child: const Row(
         children: [
           Icon(Icons.event_available, color: Colors.white, size: 50),

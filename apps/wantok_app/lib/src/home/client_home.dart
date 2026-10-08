@@ -219,8 +219,6 @@ class _ClientHomeState extends State<ClientHome> {
                   ),
                 ),
               ],
-              const SizedBox(height: 18),
-              _MarketplacePromo(onTap: _openServices),
               const SizedBox(height: 22),
               PngSectionTitle(
                 title: 'Popular categories',
@@ -300,6 +298,7 @@ class _ClientHomeState extends State<ClientHome> {
                             final service = quickServices[index];
                             final visual = _visualFor(service.slug);
                             return WantokServiceTile(
+                              featureStyle: true,
                               label: _shortLabel(service),
                               icon: visual.icon,
                               accentColor: visual.accent,
@@ -311,6 +310,7 @@ class _ClientHomeState extends State<ClientHome> {
 
                           if (index == quickServices.length) {
                             return WantokServiceTile(
+                              featureStyle: true,
                               label: 'Travel & Flights',
                               icon: Icons.flight_rounded,
                               accentColor: const Color(0xFF326FE5),
@@ -321,6 +321,7 @@ class _ClientHomeState extends State<ClientHome> {
                           }
 
                           return WantokServiceTile(
+                            featureStyle: true,
                             label: 'Hotels',
                             icon: Icons.apartment_rounded,
                             accentColor: const Color(0xFFD43C5D),
@@ -332,6 +333,11 @@ class _ClientHomeState extends State<ClientHome> {
                     },
                   ),
                 ),
+              const SizedBox(height: 18),
+              _ScenicExploreBanner(onTap: _openServices),
+              const SizedBox(height: 14),
+              _MarketplacePromo(onTap: _openServices),
+              const SizedBox(height: 22),
               if (widget.loadServices == null) ...[
                 const SizedBox(height: 22),
                 PngSectionTitle(
@@ -665,127 +671,134 @@ class _MarketplaceHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(18, 18, 18, 16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(28),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xFFFFFEF8), Color(0xFFF1F8F3)],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'What do you need today?',
+          style: TextStyle(
+            color: WantokColors.ink,
+            fontWeight: FontWeight.w900,
+            fontSize: 22,
+            letterSpacing: -0.5,
+          ),
         ),
-        border: Border.all(color: const Color(0xFFE1EBE5)),
-      ),
-      child: Stack(
-        children: [
-          Positioned(
-            right: -18,
-            top: -12,
-            child: Icon(
-              Icons.landscape_rounded,
-              size: 150,
-              color: WantokColors.primaryDark.withValues(alpha: 0.08),
-            ),
+        const SizedBox(height: 10),
+        Material(
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: const BorderSide(color: Color(0xFFE3E8F1)),
           ),
-          Positioned(
-            right: 24,
-            top: 3,
-            child: Container(
-              width: 44,
-              height: 44,
-              decoration: BoxDecoration(
-                color: WantokColors.gold.withValues(alpha: 0.82),
-                shape: BoxShape.circle,
-              ),
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Explore services and goods',
-                style: TextStyle(
-                  color: WantokColors.ink,
-                  fontSize: 29,
-                  height: 1.04,
-                  fontWeight: FontWeight.w900,
-                  letterSpacing: -0.9,
-                ),
-              ),
-              const SizedBox(height: 7),
-              const Text(
-                'Find trusted providers for everyday needs across Papua New Guinea and worldwide.',
-                style: TextStyle(
-                  color: WantokColors.muted,
-                  fontSize: 13.5,
-                  height: 1.35,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              const SizedBox(height: 18),
-              Material(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                elevation: 1,
-                shadowColor: Colors.black.withValues(alpha: 0.12),
-                child: InkWell(
-                  onTap: onSearchTap,
-                  borderRadius: BorderRadius.circular(20),
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 8, 8, 8),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.search_rounded,
-                          color: WantokColors.ink,
-                          size: 27,
-                        ),
-                        const SizedBox(width: 10),
-                        const Expanded(
-                          child: Text(
-                            'Search services, goods or providers',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: WantokColors.muted,
-                              fontSize: 13.5,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
-                        if (onAgentTap != null) ...[
-                          IconButton(
-                            tooltip: 'Ask Wantok',
-                            onPressed: onAgentTap,
-                            icon: const Icon(
-                              Icons.auto_awesome_rounded,
-                              color: WantokColors.primaryDark,
-                            ),
-                          ),
-                          const SizedBox(width: 2),
-                        ],
-                        Container(
-                          decoration: BoxDecoration(
-                            color: WantokColors.primaryDark,
-                            borderRadius: BorderRadius.circular(15),
-                          ),
-                          child: IconButton(
-                            tooltip: 'Search services',
-                            onPressed: onSearchTap,
-                            icon: const Icon(
-                              Icons.arrow_forward_rounded,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ],
+          child: InkWell(
+            onTap: onSearchTap,
+            borderRadius: BorderRadius.circular(16),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
+              child: Row(
+                children: [
+                  const Icon(Icons.search, color: WantokColors.muted),
+                  const SizedBox(width: 10),
+                  const Expanded(
+                    child: Text(
+                      'Search services, goods or providers',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(color: WantokColors.muted, fontSize: 13),
                     ),
                   ),
-                ),
+                  if (onAgentTap != null)
+                    IconButton(
+                      tooltip: 'Ask Wantok',
+                      onPressed: onAgentTap,
+                      icon: const Icon(
+                        Icons.auto_awesome_outlined,
+                        color: WantokColors.primary,
+                      ),
+                    ),
+                ],
               ),
-            ],
+            ),
           ),
-        ],
+        ),
+      ],
+    );
+  }
+}
+
+class _ScenicExploreBanner extends StatelessWidget {
+  const _ScenicExploreBanner({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(20),
+        child: Ink(
+          height:
+              165 +
+              (MediaQuery.textScalerOf(context).scale(1) - 1).clamp(0, 2) * 450,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20),
+            image: const DecorationImage(
+              image: AssetImage('assets/images/hero_water.png'),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Container(
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              gradient: const LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [
+                  Color(0xE4092852),
+                  Color(0xB1092852),
+                  Color(0x11092852),
+                ],
+              ),
+            ),
+            child: Row(
+              children: [
+                const Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Explore PNG and beyond',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w900,
+                          height: 1.12,
+                          fontSize: 22,
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      Text(
+                        'Discover services across our communities.',
+                        style: TextStyle(color: Color(0xFFE8F1FF)),
+                      ),
+                    ],
+                  ),
+                ),
+                const CircleAvatar(
+                  radius: 21,
+                  backgroundColor: Colors.white,
+                  child: Icon(
+                    Icons.arrow_forward_rounded,
+                    color: WantokColors.primary,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }

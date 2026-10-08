@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import '../home/wantok_photo_hero.dart';
+
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_core/wantok_core.dart';
 import 'package:wantok_ui/wantok_ui.dart';
@@ -231,13 +234,8 @@ class _CategoryHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [WantokColors.primaryDark, WantokColors.primary],
-        ),
-        borderRadius: BorderRadius.circular(24),
-      ),
+    return WantokPhotoHero(
+      image: 'assets/images/hero_water.png',
       padding: const EdgeInsets.all(22),
       child: Row(
         children: [

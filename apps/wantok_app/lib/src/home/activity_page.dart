@@ -8,7 +8,6 @@ import '../services/event_registrations_page.dart';
 import '../services/taxi_ride_page.dart';
 import '../services/water_trip_bookings_page.dart';
 import 'messages_page.dart';
-import 'png_visuals.dart';
 
 class ActivityPage extends StatefulWidget {
   const ActivityPage({super.key});
@@ -935,36 +934,25 @@ class _TrackHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
-      child: PngScenicBackdrop(
-        minHeight: 150,
-        colors: const [Color(0xFF7B2D3A), Color(0xFFC85536), Color(0xFF0B79A8)],
-        child: const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Track your Wantok',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25,
-                height: 1,
-                fontWeight: FontWeight.w900,
-                letterSpacing: -0.7,
-              ),
+    return const Padding(
+      padding: EdgeInsets.fromLTRB(4, 10, 4, 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Track your Wantok',
+            style: TextStyle(
+              color: WantokColors.ink,
+              fontSize: 25,
+              fontWeight: FontWeight.w900,
             ),
-            SizedBox(height: 8),
-            Text(
-              'Open your service records or review requests and reservations below.',
-              style: TextStyle(
-                color: Color(0xFFFFECE6),
-                fontSize: 12.5,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
+          ),
+          SizedBox(height: 6),
+          Text(
+            'Your bookings, orders, rides and reservations.',
+            style: TextStyle(color: WantokColors.muted, fontSize: 13),
+          ),
+        ],
       ),
     );
   }

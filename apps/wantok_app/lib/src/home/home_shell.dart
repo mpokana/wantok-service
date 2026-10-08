@@ -14,7 +14,6 @@ import 'account_page.dart';
 import 'activity_page.dart';
 import 'client_home.dart';
 import 'messages_page.dart';
-import 'png_visuals.dart';
 import 'services_hub_page.dart';
 import 'vendor_home.dart';
 import 'wantok_agent_page.dart';
@@ -254,9 +253,9 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
     final client = _mode == AppMode.client;
 
     return AppBar(
-      backgroundColor: client ? WantokColors.primaryDark : WantokColors.canvas,
-      foregroundColor: client ? Colors.white : WantokColors.ink,
-      toolbarHeight: 72,
+      backgroundColor: Colors.white,
+      foregroundColor: WantokColors.ink,
+      toolbarHeight: 66,
       titleSpacing: 18,
       title: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -270,7 +269,7 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
                 Text(
                   'Wantok',
                   style: TextStyle(
-                    color: client ? Colors.white : WantokColors.primaryDark,
+                    color: WantokColors.ink,
                     fontSize: 21,
                     fontWeight: FontWeight.w900,
                     letterSpacing: -0.8,
@@ -280,7 +279,7 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
                 const Text(
                   'Services',
                   style: TextStyle(
-                    color: WantokColors.gold,
+                    color: WantokColors.primary,
                     fontSize: 21,
                     fontWeight: FontWeight.w900,
                     letterSpacing: -0.8,
@@ -294,9 +293,7 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              color: client
-                  ? Colors.white.withValues(alpha: 0.72)
-                  : WantokColors.muted,
+              color: WantokColors.muted,
               fontSize: 10.5,
               fontWeight: FontWeight.w600,
               letterSpacing: 0.1,
@@ -314,19 +311,10 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
                 tooltip: 'Account and profile',
                 onPressed: _openAccount,
                 style: IconButton.styleFrom(
-                  backgroundColor: client
-                      ? Colors.white.withValues(alpha: 0.14)
-                      : WantokColors.primaryDark.withValues(alpha: 0.08),
-                  side: BorderSide(
-                    color: client
-                        ? Colors.white.withValues(alpha: 0.32)
-                        : WantokColors.primaryDark.withValues(alpha: 0.16),
-                  ),
+                  backgroundColor: const Color(0xFFF2F5FC),
+                  side: const BorderSide(color: Color(0xFFE5EBF4)),
                 ),
-                icon: Icon(
-                  Icons.person_rounded,
-                  color: client ? Colors.white : WantokColors.primaryDark,
-                ),
+                icon: Icon(Icons.person_rounded, color: WantokColors.primary),
               ),
               Positioned(
                 right: 2,
@@ -335,14 +323,9 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
                   width: 9,
                   height: 9,
                   decoration: BoxDecoration(
-                    color: WantokColors.gold,
+                    color: const Color(0xFF16B47D),
                     shape: BoxShape.circle,
-                    border: Border.all(
-                      color: client
-                          ? WantokColors.primaryDark
-                          : WantokColors.canvas,
-                      width: 1.5,
-                    ),
+                    border: Border.all(color: Colors.white, width: 1.5),
                   ),
                 ),
               ),
@@ -382,104 +365,59 @@ class _WantokBottomBar extends StatelessWidget {
     return SafeArea(
       top: false,
       child: Container(
-        margin: const EdgeInsets.fromLTRB(10, 0, 10, 8),
-        height: 72,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.18),
-              blurRadius: 18,
-              offset: const Offset(0, 8),
-            ),
-          ],
+        height: 68,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          border: Border(top: BorderSide(color: Color(0xFFE7EAF0))),
         ),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(24),
-          child: CustomPaint(
-            painter: const BilumPatternPainter(),
-            child: DecoratedBox(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [WantokColors.bilumDark, WantokColors.bilum],
-                ),
-              ),
-              child: Row(
-                children: List.generate(items.length, (index) {
-                  final selected = index == selectedIndex;
-                  final item = items[index];
-
-                  return Expanded(
-                    child: Semantics(
-                      key: ValueKey('wantok-nav-${item.label}'),
-                      label: item.label,
-                      button: true,
-                      selected: selected,
-                      onTap: () => onSelected(index),
-                      excludeSemantics: true,
-                      child: InkWell(
-                        onTap: () => onSelected(index),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 3,
-                            vertical: 7,
-                          ),
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 180),
-                            curve: Curves.easeOut,
-                            decoration: BoxDecoration(
-                              color: selected
-                                  ? WantokColors.gold
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(18),
-                              boxShadow: selected
-                                  ? [
-                                      BoxShadow(
-                                        color: WantokColors.gold.withValues(
-                                          alpha: 0.26,
-                                        ),
-                                        blurRadius: 9,
-                                        offset: const Offset(0, 3),
-                                      ),
-                                    ]
-                                  : null,
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  selected ? item.icon : item.outlineIcon,
-                                  color: selected
-                                      ? const Color(0xFF39200F)
-                                      : const Color(0xFFF4E7D7),
-                                  size: 23,
-                                ),
-                                const SizedBox(height: 3),
-                                Text(
-                                  item.label,
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: selected
-                                        ? const Color(0xFF39200F)
-                                        : const Color(0xFFF4E7D7),
-                                    fontSize: items.length > 4 ? 9.2 : 10.2,
-                                    fontWeight: selected
-                                        ? FontWeight.w900
-                                        : FontWeight.w700,
-                                  ),
-                                ),
-                              ],
-                            ),
+        child: Row(
+          children: List.generate(items.length, (index) {
+            final selected = index == selectedIndex;
+            final item = items[index];
+            return Expanded(
+              child: Semantics(
+                key: ValueKey('wantok-nav-${item.label}'),
+                label: item.label,
+                button: true,
+                selected: selected,
+                onTap: () => onSelected(index),
+                excludeSemantics: true,
+                child: InkWell(
+                  onTap: () => onSelected(index),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 7),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          selected ? item.icon : item.outlineIcon,
+                          size: 23,
+                          color: selected
+                              ? WantokColors.primary
+                              : const Color(0xFF7D8593),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          item.label,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: selected
+                                ? WantokColors.primary
+                                : const Color(0xFF7D8593),
+                            fontSize: 10,
+                            fontWeight: selected
+                                ? FontWeight.w800
+                                : FontWeight.w500,
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  );
-                }),
+                  ),
+                ),
               ),
-            ),
-          ),
+            );
+          }),
         ),
       ),
     );

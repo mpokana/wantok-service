@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import '../home/wantok_photo_hero.dart';
+
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_core/wantok_core.dart';
 import 'package:wantok_ui/wantok_ui.dart';
@@ -1125,11 +1128,11 @@ class _CommerceHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PngScenicBackdrop(
+    return WantokPhotoHero(
+      image: isFood
+          ? 'assets/images/hero_food.png'
+          : 'assets/images/hero_groceries.png',
       minHeight: 176,
-      colors: isFood
-          ? const [Color(0xFF8A381D), Color(0xFFD86020), Color(0xFF087A4B)]
-          : const [Color(0xFF075C3A), Color(0xFF2E8B57), Color(0xFF0B79A8)],
       child: Row(
         children: [
           Expanded(
