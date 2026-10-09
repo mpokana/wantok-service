@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'smoke_data.dart';
+import 'offline_demo_navigation.dart';
 
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
@@ -10,7 +11,14 @@ import 'package:wantok_ui/wantok_ui.dart';
 import 'wantok_agent_page.dart';
 
 class MessagesPage extends StatefulWidget {
-  const MessagesPage({this.loadThreads, this.loadSupportRequests, super.key});
+  const MessagesPage({
+    this.loadThreads,
+    this.loadSupportRequests,
+    this.demoMode = false,
+    super.key,
+  });
+
+  final bool demoMode;
 
   final Future<List<Map<String, dynamic>>> Function()? loadThreads;
   final Future<List<Map<String, dynamic>>> Function()? loadSupportRequests;
@@ -183,6 +191,10 @@ class _MessagesPageState extends State<MessagesPage> {
   }
 
   Future<void> _openAgent() async {
+    if (widget.demoMode) {
+      OfflineDemoNavigation.notice(context, 'Wantok Agent');
+      return;
+    }
     await Navigator.of(context).push(
       MaterialPageRoute<void>(builder: (context) => const WantokAgentPage()),
     );

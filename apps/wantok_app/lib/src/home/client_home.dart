@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'smoke_data.dart';
+import 'offline_demo_navigation.dart';
 
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_core/wantok_core.dart';
@@ -28,6 +29,8 @@ class ClientHome extends StatefulWidget {
     this.onServicesTap,
     this.onExploreTap,
     this.loadServices,
+    this.loadTopProviders,
+    this.demoMode = false,
     super.key,
   });
 
@@ -38,6 +41,8 @@ class ClientHome extends StatefulWidget {
   final VoidCallback? onServicesTap;
   final VoidCallback? onExploreTap;
   final Future<List<WantokServiceCategory>> Function()? loadServices;
+  final Future<List<ClientProviderDiscovery>> Function()? loadTopProviders;
+  final bool demoMode;
 
   @override
   State<ClientHome> createState() => _ClientHomeState();
@@ -54,6 +59,7 @@ class _ClientHomeState extends State<ClientHome> {
       (widget.loadServices ?? _catalog.loadActiveServices)();
 
   Future<List<ClientProviderDiscovery>> _loadTopProviders() async {
+    if (widget.loadTopProviders != null) return widget.loadTopProviders!();
     if (widget.loadServices != null) {
       return const <ClientProviderDiscovery>[];
     }
@@ -267,7 +273,7 @@ class _ClientHomeState extends State<ClientHome> {
               const SizedBox(height: 18),
               _MarketplacePromo(onTap: _openProviderSearch),
               const SizedBox(height: 22),
-              if (widget.loadServices == null) ...[
+              if (widget.loadServices == null || widget.demoMode) ...[
                 const SizedBox(height: 22),
                 PngSectionTitle(
                   title: 'Top providers',
@@ -355,6 +361,10 @@ class _ClientHomeState extends State<ClientHome> {
   }
 
   void _openProviderSearch() {
+    if (widget.demoMode) {
+      OfflineDemoNavigation.providers(context);
+      return;
+    }
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (context) => const ProviderDiscoveryPage(),
@@ -363,6 +373,10 @@ class _ClientHomeState extends State<ClientHome> {
   }
 
   void _openProvider(ClientProviderDiscovery provider) {
+    if (widget.demoMode) {
+      OfflineDemoNavigation.providers(context);
+      return;
+    }
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (context) => ProviderDetailPage(provider: provider),
@@ -439,6 +453,10 @@ class _ClientHomeState extends State<ClientHome> {
   };
 
   void _openService(WantokServiceCategory service) {
+    if (widget.demoMode) {
+      OfflineDemoNavigation.category(context, service.slug);
+      return;
+    }
     if (service.slug == 'taxi-ride') {
       Navigator.of(context).push(
         MaterialPageRoute<void>(builder: (context) => const TaxiRidePage()),

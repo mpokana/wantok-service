@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'smoke_data.dart';
+import 'offline_demo_navigation.dart';
 import 'reference_services_gallery.dart';
 import 'category_information_page.dart';
 
@@ -25,17 +26,21 @@ import 'adaptive_category_grid.dart';
 class ServicesHubPage extends StatefulWidget {
   const ServicesHubPage({
     this.loadServices,
+    this.loadTopProviders,
     this.loadRecommendations,
     this.loadPlaces,
     this.showMarketplaceLandingWhenInjected = false,
+    this.demoMode = false,
     super.key,
   });
 
   final Future<List<WantokServiceCategory>> Function()? loadServices;
+  final Future<List<ClientProviderDiscovery>> Function()? loadTopProviders;
   final Future<List<ClientServiceRecommendation>> Function()?
   loadRecommendations;
   final Future<List<ClientServicePlace>> Function()? loadPlaces;
   final bool showMarketplaceLandingWhenInjected;
+  final bool demoMode;
 
   @override
   State<ServicesHubPage> createState() => _ServicesHubPageState();
@@ -152,6 +157,11 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
   }
 
   Future<void> _loadTopProviders() async {
+    if (widget.loadTopProviders != null) {
+      final providers = await widget.loadTopProviders!();
+      if (mounted) setState(() => _topProviders = providers);
+      return;
+    }
     if (widget.loadServices != null) return;
     try {
       final providers = await _providerDiscovery.loadTopProviders(
@@ -188,6 +198,13 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
     ReferenceCategorySpec spec,
     List<WantokServiceCategory> services,
   ) {
+    if (widget.demoMode && spec.title != 'More') {
+      OfflineDemoNavigation.category(
+        context,
+        spec.slug ?? 'specialist-services',
+      );
+      return;
+    }
     if (spec.title == 'More') {
       setState(() => _referenceCategories = false);
       return;
@@ -204,6 +221,10 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
   }
 
   void _openProviderSearch() {
+    if (widget.demoMode) {
+      OfflineDemoNavigation.providers(context);
+      return;
+    }
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (context) => const ProviderDiscoveryPage(),
@@ -212,6 +233,10 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
   }
 
   void _openProvider(ClientProviderDiscovery provider) {
+    if (widget.demoMode) {
+      OfflineDemoNavigation.providers(context);
+      return;
+    }
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (context) => ProviderDetailPage(provider: provider),
@@ -220,6 +245,7 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
   }
 
   Future<void> _loadSavedItems() async {
+    if (widget.demoMode || widget.loadServices != null) return;
     try {
       final ids = await _experience.loadSavedIds('category');
       if (mounted) {
@@ -235,6 +261,10 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
   }
 
   Future<void> _toggleSaved(WantokServiceCategory service) async {
+    if (widget.demoMode) {
+      OfflineDemoNavigation.notice(context, 'Saved services');
+      return;
+    }
     if (_savingSavedIds.contains(service.id)) return;
     final wasSaved = _savedCategoryIds.contains(service.id);
     setState(() => _savingSavedIds.add(service.id));
@@ -267,6 +297,10 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
   }
 
   Future<void> _openSaved() async {
+    if (widget.demoMode) {
+      OfflineDemoNavigation.notice(context, 'Saved services');
+      return;
+    }
     await Navigator.of(context).push(
       MaterialPageRoute<void>(builder: (context) => const SavedItemsPage()),
     );
@@ -519,7 +553,8 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
 
           // The screenshot-matched 12-icon landing is the canonical entry.
           // An injected catalogue keeps the established deterministic tests.
-          if (widget.loadServices == null && _referenceCategories) {
+          if ((widget.loadServices == null || widget.demoMode) &&
+              _referenceCategories) {
             return ReferenceServicesLanding(
               onCategory: (spec) => _openReferenceCategory(spec, services),
               onAllServices: () => setState(() => _referenceCategories = false),
@@ -537,7 +572,7 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(14, 12, 14, 24),
             children: [
-              if (widget.loadServices == null)
+              if (widget.loadServices == null || widget.demoMode)
                 Align(
                   alignment: Alignment.centerLeft,
                   child: TextButton.icon(
@@ -621,7 +656,8 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
                 ),
               ),
               if ((widget.loadServices == null ||
-                      widget.showMarketplaceLandingWhenInjected) &&
+                      widget.showMarketplaceLandingWhenInjected ||
+                      widget.demoMode) &&
                   query.isEmpty &&
                   _family == WantokServiceFamily.all) ...[
                 const SizedBox(height: 18),
@@ -1077,6 +1113,10 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
   }
 
   void _openService(WantokServiceCategory service) {
+    if (widget.demoMode) {
+      OfflineDemoNavigation.category(context, service.slug);
+      return;
+    }
     if (service.bookingMode == 'information') {
       _openCategoryInformation(
         WantokCategoryStyles.bySlug(service.slug),

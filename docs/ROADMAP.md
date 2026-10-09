@@ -2,6 +2,12 @@
 
 **Updated:** 2026-10-09
 
+## CX1 complete emulator-interface HONOR offline demonstration — 2026-10-09
+
+- [x] **Owner-approved scope:** replace reduced six-category HONOR-only layout with the **real** emulator Home, Services, Explore, Track, Wallet and Inbox Flutter widgets using opt-in, read-only sample data. Preserve Vanessa/scenic PNG cards, original category photography, all twelve S-marked Explore reference scenes, green/gold brand, five bottom tabs and header Inbox/Profile including 2↔3 finger-pinch density.
+- [x] **Safety design:** demo fixture category catalogue in memory, injected service/Track/Inbox loaders, no Supabase initialization or developer backend URL. Real component navigation into provider search, booking, saved items, messages and Agent is intercepted to S-marked sample/detail or harmless explanatory pages. Existing VendorHome applicant and illustrative approved-vendor views are for visual review ONLY, without role assignment. Full authenticated provider records, real prices, service orders, ad sales, payment movement and approvals still need separately authorised HTTPS staging.
+- [ ] **HONOR visual acceptance:** build/verify updated offline ARM64 side-by-side APK, user to confirm matching emulator layouts and reveal further requested UX refinements. This is explicitly NOT a fully connected app or provider approval test. CX1 signed-in Web QA remains open and T2.4 deferred. See docs/HONOR_FULL_INTERFACE_DEMO.md.
+
 ## CX1 shared pinch-adaptive grids and Profile/Vendor entry — 2026-10-09
 
 - [x] **Owner-approved shared interaction:** category/photo/icon grids in Home, Services (catalogue and See all), Explore reference gallery, and sample preview screens adapt to exactly **2 or 3 columns**; default density follows usable width and large-text scaling. Two-finger pinch **in** selects 3 compact columns, spread **out** selects 2 larger columns. A common notifier shares the choice across grid screens in one client session. One-finger scrolling and regular card taps are unchanged. Detail/forms/lists are not forced into columns. Category text supports two lines. Distinct app build/test still required before HONOR acceptance.

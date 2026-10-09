@@ -13,7 +13,10 @@ import '../services/water_trip_bookings_page.dart';
 import 'messages_page.dart';
 
 class ActivityPage extends StatefulWidget {
-  const ActivityPage({super.key});
+  const ActivityPage({super.key, this.loadReservations, this.demoMode = false});
+
+  final Future<List<Map<String, dynamic>>> Function()? loadReservations;
+  final bool demoMode;
 
   @override
   State<ActivityPage> createState() => _ActivityPageState();
@@ -29,11 +32,11 @@ class _ActivityPageState extends State<ActivityPage> {
   @override
   void initState() {
     super.initState();
-    _future = _repository.loadMyReservations();
+    _future = (widget.loadReservations ?? _repository.loadMyReservations)();
   }
 
   Future<void> _refresh() async {
-    final next = _repository.loadMyReservations();
+    final next = (widget.loadReservations ?? _repository.loadMyReservations)();
     setState(() {
       _future = next;
     });
@@ -184,7 +187,10 @@ class _ActivityPageState extends State<ActivityPage> {
               children: [
                 const _TrackHeader(),
                 const SizedBox(height: 12),
-                const _TrackJourneyLinks(),
+                if (widget.demoMode)
+                  const _OfflineTrackNotice()
+                else
+                  const _TrackJourneyLinks(),
                 const SizedBox(height: 12),
                 Card(
                   child: ListTile(
@@ -214,7 +220,10 @@ class _ActivityPageState extends State<ActivityPage> {
               children: [
                 const _TrackHeader(),
                 const SizedBox(height: 12),
-                const _TrackJourneyLinks(),
+                if (widget.demoMode)
+                  const _OfflineTrackNotice()
+                else
+                  const _TrackJourneyLinks(),
                 if (WantokSmokeData.enabled)
                   const SmokePreviewSection(
                     scene: SmokeScene.bookings,
@@ -262,7 +271,11 @@ class _ActivityPageState extends State<ActivityPage> {
             separatorBuilder: (_, _) => const SizedBox(height: 11),
             itemBuilder: (context, index) {
               if (index == 0) return const _TrackHeader();
-              if (index == 1) return const _TrackJourneyLinks();
+              if (index == 1) {
+                return widget.demoMode
+                    ? const _OfflineTrackNotice()
+                    : const _TrackJourneyLinks();
+              }
               if (WantokSmokeData.enabled && index == 2) {
                 return const SmokePreviewSection(
                   scene: SmokeScene.bookings,
@@ -1096,3 +1109,27 @@ String? _emptyToNull(String value) {
 
 String _friendlyError(Object error) =>
     error.toString().replaceFirst('StateError: ', '');
+
+class _OfflineTrackNotice extends StatelessWidget {
+  const _OfflineTrackNotice();
+
+  @override
+  Widget build(BuildContext context) => Card(
+    child: Padding(
+      padding: const EdgeInsets.all(14),
+      child: Row(
+        children: [
+          const Icon(Icons.info_outline_rounded, color: WantokColors.primary),
+          const SizedBox(width: 10),
+          const Expanded(
+            child: Text(
+              'Demonstration booking timeline. Rides, reservations, reviews '
+              'and messages cannot be submitted from this offline preview.',
+              style: TextStyle(fontSize: 12),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}

@@ -4,6 +4,13 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## HONOR FULL EMULATOR INTERFACE WITH DEMONSTRATION DATA — 9 October 2026
+
+- **Owner instruction:** previous HONOR offline APK simplified the emulator and omitted real sections. Full-review goal is identical main Flutter screen widgets using **local S-marked demonstration data**, not real backend functions. See docs/HONOR_FULL_INTERFACE_DEMO.md.
+- **Implementation:** main.dart still boots an isolated preview before Supabase init only with explicit WANTOK_PHONE_PREVIEW; phone_preview_app now builds **ClientHome, ServicesHubPage, ExplorePage, ActivityPage, WantokPayPreviewPage and MessagesPage**. In-memory OfflineDemoCatalogue derives 17 sample categories from canonical ReferenceServiceCategories. Home/Services opt-in demoMode intercepts provider search, category booking and Saved actions; Activity/Inbox receive injected empty loaders with non-live notices. Vendor uses actual VendorHome mock applicant or mock approved layout, **never** backend roles. Original photographs, green/gold branding, existing 12 scene previews, sample markers, 2↔3-column pinch and Inbox/Profile navigation preserved.
+- **Safety:** No credentials, account session, catalogue writes, approved provider identity, uploaded evidence, genuine booking, checkout, payment movement, ads, live Vendor panel or Supabase backend in this offline visual mode. Actions that normally require auth open labelled sample detail scenes or explanations. Actual emulator personalised data is not copied into the demo APK.
+- **Validation/build:** focused sample tests default and sample-enabled run first. Full Flutter/database test, updated isolated ARM64 output, local checksum/backups and verified GitHub checkpoint must follow before declaring complete. User real-HONOR screenshot acceptance remains open.
+
 ## HONOR PINCH/PROFILE OFFLINE PREVIEW APK — 9 October 2026
 
 - **Source:** validated checkpoint `340f1fa260a4f131f5d0a1c1c9ac449820a841f7` on `feature/flutter-platform-v1`. Flutter regression **7 clean analyses, 79 client + 3 Admin + 1 Tech tests PASS**; SQL **35 files, 767 assertions PASS**. The menu and two-finger 2/3-column grid are in the normal Flutter client and the isolated offline preview; vendor role-gating remains server-authoritative. General-goods sales, ads and settlements are **not yet activated**.

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wantok_app/src/phone_preview/phone_preview_app.dart';
+import 'package:wantok_app/src/home/client_home.dart';
+import 'package:wantok_app/src/home/services_hub_page.dart';
+import 'package:wantok_app/src/home/activity_page.dart';
+import 'package:wantok_app/src/home/wantok_pay_preview_page.dart';
 import 'package:wantok_app/src/home/smoke_data.dart';
 
 void main() {
@@ -13,26 +17,55 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  testWidgets('phone preview is visibly offline with no sign-in', (
+  testWidgets(
+    'offline HONOR uses the REAL emulator Home and Services widgets',
+    (tester) async {
+      await showPhone(tester, 390);
+      expect(
+        find.byKey(const ValueKey('phone-preview-warning')),
+        findsOneWidget,
+      );
+      expect(find.textContaining('OFFLINE DEMONSTRATION'), findsOneWidget);
+      expect(find.byType(ClientHome), findsOneWidget);
+      expect(find.byType(ServicesHubPage, skipOffstage: false), findsOneWidget);
+      expect(find.byType(ActivityPage, skipOffstage: false), findsOneWidget);
+      expect(
+        find.byType(WantokPayPreviewPage, skipOffstage: false),
+        findsOneWidget,
+      );
+      expect(find.text('What do you need today?'), findsOneWidget);
+      expect(find.text('Popular categories'), findsOneWidget);
+      expect(find.text('Sign in'), findsNothing);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets('Services keeps the original full photo-category entrance', (
     tester,
   ) async {
     await showPhone(tester, 390);
-    expect(find.byKey(const ValueKey('phone-preview-warning')), findsOneWidget);
-    expect(find.textContaining('OFFLINE PREVIEW'), findsOneWidget);
-    expect(find.text('Discover local services'), findsOneWidget);
-    expect(find.text('Services for everyday life'), findsOneWidget);
-    expect(find.text('Home'), findsOneWidget);
-    expect(find.text('Services'), findsWidgets);
-    expect(find.text('Explore'), findsWidgets);
-    expect(find.text('Track'), findsOneWidget);
-    expect(find.text('Wallet'), findsOneWidget);
-    expect(find.text('Sign in'), findsNothing);
+    await tester.tap(find.byIcon(Icons.grid_view_outlined).last);
+    await tester.pumpAndSettle();
+    expect(
+      find.byKey(const ValueKey('reference-services-landing')),
+      findsOneWidget,
+    );
+    expect(find.text('All Services'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('reference-services-search')),
+      findsOneWidget,
+    );
+    await tester.tap(find.byKey(const ValueKey('reference-all-services')));
+    await tester.pumpAndSettle();
+    expect(find.text('Browse services'), findsWidgets);
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Explore keeps the approved photo gallery gated', (tester) async {
+  testWidgets('Explore preserves the approved twelve photographic samples', (
+    tester,
+  ) async {
     await showPhone(tester, 390);
-    await tester.tap(find.byIcon(Icons.explore_outlined).first);
+    await tester.tap(find.byIcon(Icons.explore_outlined).last);
     await tester.pumpAndSettle();
     expect(
       find.text(
@@ -47,52 +80,71 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('Track and Wallet clearly deny live operations at phone width', (
+  testWidgets('Track and Wallet render real surfaces without live operations', (
     tester,
   ) async {
-    await showPhone(tester, 320);
-    await tester.tap(find.byIcon(Icons.route_outlined));
+    await showPhone(tester, 360);
+    await tester.tap(find.byIcon(Icons.route_outlined).last);
     await tester.pumpAndSettle();
-    expect(find.textContaining('approved staging connection'), findsOneWidget);
-    await tester.tap(find.byIcon(Icons.account_balance_wallet_outlined));
-    await tester.pumpAndSettle();
+    if (WantokSmokeData.enabled) {
+      expect(find.text('Sample booking timeline'), findsOneWidget);
+    } else {
+      expect(find.text('No requests or reservations yet'), findsOneWidget);
+    }
     expect(
-      find.textContaining('No balance, top-up or money movement'),
+      find.textContaining('Demonstration booking timeline'),
       findsOneWidget,
     );
-    await tester.tap(find.byTooltip('Inbox unavailable in preview'));
-    await tester.pump();
-    expect(find.textContaining('no live account or service'), findsOneWidget);
+    await tester.tap(find.byIcon(Icons.account_balance_wallet_outlined).last);
+    await tester.pumpAndSettle();
+    expect(find.text('Wantok Wallet preview'), findsOneWidget);
+    expect(
+      find.textContaining('payment rails are not active yet'),
+      findsWidgets,
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Inbox and applicant/vendor simulator do not require a backend', (
+    tester,
+  ) async {
+    await showPhone(tester, 390);
+    await tester.tap(find.byTooltip('Inbox'));
+    await tester.pumpAndSettle();
+    expect(find.text('Inbox · SAMPLE'), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
     await tester.tap(find.byTooltip('Account and profile'));
     await tester.pumpAndSettle();
     expect(find.text('My Settings'), findsOneWidget);
     expect(find.text('Vendor'), findsOneWidget);
     await tester.tap(find.text('Vendor'));
     await tester.pumpAndSettle();
-    expect(
-      find.textContaining('Nothing is active in this offline preview'),
-      findsOneWidget,
-    );
+    expect(find.text('Approved vendor dashboard · SAMPLE'), findsOneWidget);
+    await tester.tap(find.text('Applicant view'));
+    await tester.pumpAndSettle();
+    expect(find.text('Become a Wantok Vendor'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('scenic card remains at bottom of Home and opens Explore', (
-    tester,
-  ) async {
+  testWidgets('full Home scenic footer opens full Explore', (tester) async {
     await showPhone(tester, 390);
-    await tester.scrollUntilVisible(
-      find.byKey(const ValueKey('phone-preview-scenic-card')),
-      400,
-      scrollable: find.byType(Scrollable).first,
+    final scenic = find.text('Explore PNG and beyond');
+    await tester.dragUntilVisible(
+      scenic,
+      find.byType(ListView).first,
+      const Offset(0, -600),
     );
     await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const ValueKey('phone-preview-explore')));
+    await tester.tap(scenic);
     await tester.pumpAndSettle();
+    expect(find.text('Explore'), findsWidgets);
     expect(
       find.text(
         'Discover PNG and beyond — places, local experiences and services.',
       ),
       findsOneWidget,
     );
+    expect(tester.takeException(), isNull);
   });
 }
