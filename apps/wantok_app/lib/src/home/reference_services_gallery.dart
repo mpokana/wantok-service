@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import 'adaptive_category_grid.dart';
+
 import 'package:wantok_ui/wantok_ui.dart';
 
 import 'smoke_data.dart';
@@ -294,16 +297,11 @@ class ReferenceServicesLanding extends StatelessWidget {
                 (constraints.maxWidth / 3.0 * 1.06 +
                         (scale - 1).clamp(0, 2) * 55)
                     .toDouble();
-            return GridView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
+            return AdaptiveCategoryGrid(
               itemCount: ReferenceServiceCategories.items.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
-                mainAxisExtent: height,
-              ),
+              tileHeight: height,
+              rowSpacing: 8,
+              columnSpacing: 8,
               itemBuilder: (context, index) {
                 final cat = ReferenceServiceCategories.items[index];
                 return WantokCategoryTile(
@@ -352,16 +350,11 @@ class ReferenceScreenSamplesSection extends StatelessWidget {
           style: TextStyle(color: WantokColors.muted, fontSize: 12),
         ),
         const SizedBox(height: 10),
-        GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
+        AdaptiveCategoryGrid(
           itemCount: ReferenceScreenGallery.items.length,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisExtent: 116,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-          ),
+          tileHeight: 135,
+          columnSpacing: 10,
+          rowSpacing: 10,
           itemBuilder: (context, index) {
             final item = ReferenceScreenGallery.items[index];
             return _ReferenceSceneTile(item: item);

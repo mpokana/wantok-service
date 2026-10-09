@@ -12,6 +12,7 @@ class VendorHome extends StatelessWidget {
     required this.onApply,
     required this.onOpenJobs,
     required this.onOpenListings,
+    required this.onOpenProfile,
     super.key,
   });
 
@@ -24,6 +25,7 @@ class VendorHome extends StatelessWidget {
   final VoidCallback onApply;
   final VoidCallback onOpenJobs;
   final VoidCallback onOpenListings;
+  final VoidCallback onOpenProfile;
 
   @override
   Widget build(BuildContext context) {
@@ -130,6 +132,13 @@ class VendorHome extends StatelessWidget {
               ?.copyWith(fontWeight: FontWeight.w800),
         ),
         const SizedBox(height: 10),
+        _ActionCard(
+          icon: Icons.verified_user_outlined,
+          title: 'Provider status & verification',
+          body: 'Review approved business details, verification status and the linked Wantok account.',
+          onTap: onOpenProfile,
+        ),
+        const SizedBox(height: 10),
         if (hasDriverAccess) ...[
           _ActionCard(
             icon: Icons.local_taxi_outlined,
@@ -190,9 +199,21 @@ class VendorHome extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         const _ActionCard(
+          icon: Icons.inventory_2_outlined,
+          title: 'General products & sales — planned',
+          body: 'General goods, store inventory and order settlement require CX1G approval and backend controls.',
+        ),
+        const SizedBox(height: 10),
+        const _ActionCard(
+          icon: Icons.campaign_outlined,
+          title: 'Promotions & advertising — planned',
+          body: 'In-app sponsored placements and external ads are separate future gated modules.',
+        ),
+        const SizedBox(height: 10),
+        const _ActionCard(
           icon: Icons.account_balance_wallet_outlined,
           title: 'Earnings & settlements',
-          body: 'Payment and settlement records will be connected in a later platform phase.',
+          body: 'Payment, payout and settlement records will be enabled in a later approved phase; no money movement is active.',
         ),
       ],
     );

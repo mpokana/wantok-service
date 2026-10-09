@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import 'adaptive_category_grid.dart';
+
 import 'package:wantok_ui/wantok_ui.dart';
 
 import 'smoke_data.dart';
@@ -607,47 +610,45 @@ class _HomeQuickLinks extends StatelessWidget {
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       const _Heading('What do you need today?'),
-      GridView.count(
-        crossAxisCount: 3,
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        crossAxisSpacing: 7,
-        mainAxisSpacing: 7,
-        childAspectRatio: 1.06,
-        children: [
-          for (final style in const [
+      AdaptiveCategoryGrid(
+        itemCount: 6,
+        tileHeight: 128,
+        columnSpacing: 7,
+        rowSpacing: 7,
+        itemBuilder: (context, index) {
+          final style = const [
             WantokCategoryStyles.taxi,
             WantokCategoryStyles.food,
             WantokCategoryStyles.groceries,
             WantokCategoryStyles.shopping,
             WantokCategoryStyles.home,
             WantokCategoryStyles.travel,
-          ])
-            Container(
-              decoration: BoxDecoration(
-                color: style.accent,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  WantokCategoryBadge(style: style, size: 35, iconSize: 19),
-                  const SizedBox(height: 7),
-                  Text(
-                    style.title.replaceAll('\n', ' '),
-                    maxLines: 2,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 10.5,
-                    ),
-                  ),
-                  const SmokeMarker(),
-                ],
-              ),
+          ][index];
+          return Container(
+            decoration: BoxDecoration(
+              color: style.accent,
+              borderRadius: BorderRadius.circular(15),
             ),
-        ],
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                WantokCategoryBadge(style: style, size: 35, iconSize: 19),
+                const SizedBox(height: 7),
+                Text(
+                  style.title.replaceAll('\n', ' '),
+                  maxLines: 2,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 10.5,
+                  ),
+                ),
+                const SmokeMarker(),
+              ],
+            ),
+          );
+        },
       ),
     ],
   );

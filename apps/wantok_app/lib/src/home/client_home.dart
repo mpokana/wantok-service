@@ -14,6 +14,7 @@ import '../services/taxi_ride_page.dart';
 import '../services/water_transport_page.dart';
 import 'png_visuals.dart';
 import 'explore_page.dart';
+import 'adaptive_category_grid.dart';
 import 'provider_discovery_page.dart';
 import 'service_catalog_taxonomy.dart';
 import 'wantok_category_ui.dart';
@@ -219,27 +220,12 @@ class _ClientHomeState extends State<ClientHome> {
                   ),
                   child: LayoutBuilder(
                     builder: (context, constraints) {
-                      final columns =
-                          constraints.maxWidth >= 520 && textScale <= 1.1
-                          ? 8
-                          : (constraints.maxWidth /
-                                    (88 * textScale.clamp(1, 2)))
-                                .floor()
-                                .clamp(2, 6);
                       final categoryCount = quickServices.length + 2;
-                      return GridView.builder(
+                      return AdaptiveCategoryGrid(
                         itemCount: categoryCount,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: columns,
-                          mainAxisExtent:
-                              90 +
-                              MediaQuery.textScalerOf(context).scale(11.5) *
-                                  2.4,
-                          crossAxisSpacing: 5,
-                          mainAxisSpacing: 3,
-                        ),
+                        tileHeight: 126,
+                        columnSpacing: 5,
+                        rowSpacing: 3,
                         itemBuilder: (context, index) {
                           if (index < quickServices.length) {
                             final service = quickServices[index];

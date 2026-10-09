@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
 import '../home/explore_page.dart';
+import '../home/adaptive_category_grid.dart';
+import '../home/wantok_profile_menu.dart';
 
 /// Offline ARM64 phone review only. No Supabase bootstrap, real identity,
 /// providers, bookings, payment, upload, geolocation or messaging.
@@ -27,6 +29,54 @@ class WantokPhonePreviewShell extends StatefulWidget {
 
 class _WantokPhonePreviewShellState extends State<WantokPhonePreviewShell> {
   int _tab = 0;
+  final ValueNotifier<int?> _gridDensity = ValueNotifier<int?>(null);
+
+  @override
+  void dispose() {
+    _gridDensity.dispose();
+    super.dispose();
+  }
+
+  void _showPreviewSheet(String title, String message) {
+    showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) => Padding(
+        padding: const EdgeInsets.fromLTRB(24, 8, 24, 36),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
+            ),
+            const SizedBox(height: 12),
+            Text(message),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _selectProfileAction(WantokProfileAction action) {
+    switch (action) {
+      case WantokProfileAction.settings:
+        _showPreviewSheet(
+          'My Settings',
+          'Account preferences and security settings become available with approved sign-in. This is an offline demonstration.',
+        );
+      case WantokProfileAction.wallet:
+        _open(4);
+      case WantokProfileAction.vendor:
+        _showPreviewSheet(
+          'Vendor',
+          'Apply for a vendor profile using your Wantok account when signed in. Approved vendors will access their dashboard for application progress, jobs, products, sales and future advertising and payout modules. Nothing is active in this offline preview.',
+        );
+    }
+  }
+
   void _unavailable() => ScaffoldMessenger.of(context).showSnackBar(
     const SnackBar(
       content: Text(
@@ -37,111 +87,121 @@ class _WantokPhonePreviewShellState extends State<WantokPhonePreviewShell> {
   void _open(int tab) => setState(() => _tab = tab);
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      toolbarHeight: 70,
-      backgroundColor: const Color(0xFFF5F7F8),
-      title: const Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
+  Widget build(BuildContext context) => AdaptiveGridDensityScope(
+    density: _gridDensity,
+    child: Scaffold(
+      appBar: AppBar(
+        toolbarHeight: 70,
+        backgroundColor: const Color(0xFFF5F7F8),
+        title: const Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text.rich(
+              TextSpan(
+                children: [
+                  TextSpan(
+                    text: 'Wantok ',
+                    style: TextStyle(color: WantokColors.ink),
+                  ),
+                  TextSpan(
+                    text: 'Services',
+                    style: TextStyle(color: WantokColors.primary),
+                  ),
+                ],
+              ),
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
+            ),
+            Text(
+              'People. Places. Possibilities.',
+              style: TextStyle(fontSize: 11, color: WantokColors.muted),
+            ),
+          ],
+        ),
+        actions: [
+          IconButton(
+            tooltip: 'Inbox unavailable in preview',
+            onPressed: _unavailable,
+            icon: const Icon(Icons.forum_outlined, color: WantokColors.primary),
+          ),
+          WantokProfileMenu(onSelected: _selectProfileAction),
+        ],
+      ),
+      body: Column(
         children: [
-          Text.rich(
-            TextSpan(
+          Container(
+            key: const ValueKey('phone-preview-warning'),
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+            color: const Color(0xFFFFF3D7),
+            child: const Text(
+              'OFFLINE PREVIEW · Sample imagery · No sign-in, bookings or money movement',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 10,
+                color: Color(0xFF684907),
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ),
+          Expanded(
+            child: IndexedStack(
+              index: _tab,
               children: [
-                TextSpan(
-                  text: 'Wantok ',
-                  style: TextStyle(color: WantokColors.ink),
+                _PreviewHome(
+                  onExplore: () => _open(2),
+                  onServices: () => _open(1),
                 ),
-                TextSpan(
-                  text: 'Services',
-                  style: TextStyle(color: WantokColors.primary),
+                _PreviewServices(onNotice: _unavailable),
+                ExplorePage(onBrowseServices: () => _open(1)),
+                const _Placeholder(
+                  title: 'Track',
+                  info: 'Live bookings and journey history require an approved staging connection.',
+                ),
+                const _Placeholder(
+                  title: 'Wallet',
+                  info: 'Wantok Pay remains a preview. No balance, top-up or money movement is active.',
                 ),
               ],
             ),
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
-          ),
-          Text(
-            'People. Places. Possibilities.',
-            style: TextStyle(fontSize: 11, color: WantokColors.muted),
           ),
         ],
       ),
-      actions: [
-        IconButton(
-          tooltip: 'Inbox unavailable in preview',
-          onPressed: _unavailable,
-          icon: const Icon(Icons.forum_outlined, color: WantokColors.primary),
-        ),
-        IconButton(
-          tooltip: 'Profile unavailable in preview',
-          onPressed: _unavailable,
-          icon: const Icon(
-            Icons.account_circle_outlined,
-            color: WantokColors.primary,
+      bottomNavigationBar: NavigationBarTheme(
+        data: const NavigationBarThemeData(
+          labelTextStyle: WidgetStatePropertyAll(
+            TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
           ),
         ),
-      ],
-    ),
-    body: Column(
-      children: [
-        Container(
-          key: const ValueKey('phone-preview-warning'),
-          width: double.infinity,
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
-          color: const Color(0xFFFFF3D7),
-          child: const Text(
-            'OFFLINE PREVIEW · Sample imagery · No sign-in, bookings or money movement',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 10,
-              color: Color(0xFF684907),
-              fontWeight: FontWeight.w700,
+        child: NavigationBar(
+          height: 72,
+          selectedIndex: _tab,
+          onDestinationSelected: _open,
+          labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+          destinations: const [
+            NavigationDestination(
+              icon: Icon(Icons.home_outlined),
+              label: 'Home',
             ),
-          ),
+            NavigationDestination(
+              icon: Icon(Icons.grid_view_outlined),
+              label: 'Services',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.explore_outlined),
+              label: 'Explore',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.route_outlined),
+              label: 'Track',
+            ),
+            NavigationDestination(
+              icon: Icon(Icons.account_balance_wallet_outlined),
+              label: 'Wallet',
+            ),
+          ],
         ),
-        Expanded(
-          child: IndexedStack(
-            index: _tab,
-            children: [
-              _PreviewHome(
-                onExplore: () => _open(2),
-                onServices: () => _open(1),
-              ),
-              _PreviewServices(onNotice: _unavailable),
-              ExplorePage(onBrowseServices: () => _open(1)),
-              const _Placeholder(
-                title: 'Track',
-                info: 'Live bookings and journey history require an approved staging connection.',
-              ),
-              const _Placeholder(
-                title: 'Wallet',
-                info: 'Wantok Pay remains a preview. No balance, top-up or money movement is active.',
-              ),
-            ],
-          ),
-        ),
-      ],
-    ),
-    bottomNavigationBar: NavigationBar(
-      selectedIndex: _tab,
-      onDestinationSelected: _open,
-      labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
-      destinations: const [
-        NavigationDestination(icon: Icon(Icons.home_outlined), label: 'Home'),
-        NavigationDestination(
-          icon: Icon(Icons.grid_view_outlined),
-          label: 'Services',
-        ),
-        NavigationDestination(
-          icon: Icon(Icons.explore_outlined),
-          label: 'Explore',
-        ),
-        NavigationDestination(icon: Icon(Icons.route_outlined), label: 'Track'),
-        NavigationDestination(
-          icon: Icon(Icons.account_balance_wallet_outlined),
-          label: 'Wallet',
-        ),
-      ],
+      ),
     ),
   );
 }
@@ -233,51 +293,45 @@ class _CategoryTiles extends StatelessWidget {
   ];
 
   @override
-  Widget build(BuildContext context) => LayoutBuilder(
-    builder: (context, constraints) => GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: values.length,
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: constraints.maxWidth < 330 ? 2 : 3,
-        mainAxisExtent: 145,
-        mainAxisSpacing: 10,
-        crossAxisSpacing: 10,
-      ),
-      itemBuilder: (context, i) => InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: onTap,
-        child: Ink(
-          decoration: BoxDecoration(
-            color: const Color(0xFFE8F3EC),
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: Column(
-              children: [
-                Expanded(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.asset(
-                      'assets/images/categories/${values[i].$2}',
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                    ),
+  Widget build(BuildContext context) => AdaptiveCategoryGrid(
+    gridKey: const ValueKey('preview-category-grid'),
+    tileHeight: 164,
+    itemCount: values.length,
+    itemBuilder: (context, i) => InkWell(
+      borderRadius: BorderRadius.circular(16),
+      onTap: onTap,
+      child: Ink(
+        decoration: BoxDecoration(
+          color: const Color(0xFFE8F3EC),
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            children: [
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.asset(
+                    'assets/images/categories/${values[i].$2}',
+                    fit: BoxFit.cover,
+                    width: double.infinity,
                   ),
                 ),
-                const SizedBox(height: 7),
-                Text(
-                  values[i].$1,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.bold,
-                  ),
+              ),
+              const SizedBox(height: 7),
+              Text(
+                values[i].$1,
+                maxLines: 2,
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 12,
+                  height: 1.08,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

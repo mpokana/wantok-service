@@ -307,6 +307,11 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.byTooltip('Account and profile'));
       await tester.pumpAndSettle();
+      expect(find.text('My Settings'), findsOneWidget);
+      expect(find.text('Wallet'), findsWidgets);
+      expect(find.text('Vendor'), findsOneWidget);
+      await tester.tap(find.text('My Settings'));
+      await tester.pumpAndSettle();
       expect(find.text('Account and profile'), findsOneWidget);
       expect(find.byType(BackButton), findsOneWidget);
       await tester.tap(find.byType(BackButton));
@@ -314,6 +319,38 @@ void main() {
       expect(find.text('Home'), findsOneWidget);
     },
   );
+
+  testWidgets('approved vendor enters role-gated workspace from Profile', (
+    tester,
+  ) async {
+    await showPage(
+      tester,
+      const HomeShell(roles: {'customer', 'provider'}, email: null),
+    );
+    await tester.tap(find.byTooltip('Account and profile'));
+    await tester.pumpAndSettle();
+    expect(find.text('My Settings'), findsOneWidget);
+    expect(find.text('Vendor'), findsOneWidget);
+    await tester.tap(find.text('Vendor'));
+    await tester.pumpAndSettle();
+    expect(find.text('Vendor dashboard'), findsOneWidget);
+    expect(find.text('Become a Wantok Vendor'), findsNothing);
+    expect(find.text('Technical access'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('unapproved vendor is routed to application, not dashboard', (
+    tester,
+  ) async {
+    await showPage(tester, const HomeShell(roles: {'customer'}, email: null));
+    await tester.tap(find.byTooltip('Account and profile'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Vendor'));
+    await tester.pumpAndSettle();
+    expect(find.text('Vendor dashboard'), findsNothing);
+    expect(find.text('Technical access'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
 
   testWidgets('Home scenic Explore card opens the new destination', (
     tester,
@@ -361,6 +398,8 @@ void main() {
 
       await tester.tap(find.byTooltip('Account and profile'));
       await tester.pumpAndSettle();
+      await tester.tap(find.text('My Settings'));
+      await tester.pumpAndSettle();
       await tester.tap(find.byTooltip('Switch Client/Vendor mode'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Vendor mode').last);
@@ -372,6 +411,8 @@ void main() {
       expect(tester.takeException(), isNull);
 
       await tester.tap(find.byTooltip('Account and profile'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('My Settings'));
       await tester.pumpAndSettle();
       await tester.tap(find.byTooltip('Switch Client/Vendor mode'));
       await tester.pumpAndSettle();

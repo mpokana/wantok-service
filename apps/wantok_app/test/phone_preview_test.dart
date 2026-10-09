@@ -63,6 +63,16 @@ void main() {
     await tester.tap(find.byTooltip('Inbox unavailable in preview'));
     await tester.pump();
     expect(find.textContaining('no live account or service'), findsOneWidget);
+    await tester.tap(find.byTooltip('Account and profile'));
+    await tester.pumpAndSettle();
+    expect(find.text('My Settings'), findsOneWidget);
+    expect(find.text('Vendor'), findsOneWidget);
+    await tester.tap(find.text('Vendor'));
+    await tester.pumpAndSettle();
+    expect(
+      find.textContaining('Nothing is active in this offline preview'),
+      findsOneWidget,
+    );
     expect(tester.takeException(), isNull);
   });
 

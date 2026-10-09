@@ -20,6 +20,7 @@ import 'png_visuals.dart';
 import 'provider_discovery_page.dart';
 import 'service_catalog_taxonomy.dart';
 import 'wantok_category_ui.dart';
+import 'adaptive_category_grid.dart';
 
 class ServicesHubPage extends StatefulWidget {
   const ServicesHubPage({
@@ -377,24 +378,12 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
                           const SizedBox(height: 10),
                           LayoutBuilder(
                             builder: (context, constraints) {
-                              final columns =
-                                  (constraints.maxWidth /
-                                          (94 * textScale.clamp(1, 1.8)))
-                                      .floor()
-                                      .clamp(3, 5);
-                              return GridView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
+                              return AdaptiveCategoryGrid(
                                 itemCount: matches.length,
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: columns,
-                                      mainAxisExtent:
-                                          104 +
-                                          ((textScale - 1).clamp(0, 1) * 20),
-                                      crossAxisSpacing: 8,
-                                      mainAxisSpacing: 8,
-                                    ),
+                                tileHeight:
+                                    124 + ((textScale - 1).clamp(0, 1) * 20),
+                                columnSpacing: 8,
+                                rowSpacing: 8,
                                 itemBuilder: (context, index) {
                                   final service = matches[index];
                                   final visual = _visualFor(service.slug);
@@ -1064,20 +1053,11 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
   }) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final columns = (constraints.maxWidth / (88 * textScale.clamp(1, 2)))
-            .floor()
-            .clamp(2, 6);
-        return GridView.builder(
+        return AdaptiveCategoryGrid(
           itemCount: services.length,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: columns,
-            mainAxisExtent:
-                92 + MediaQuery.textScalerOf(context).scale(11.8) * 2.4,
-            crossAxisSpacing: 5,
-            mainAxisSpacing: 3,
-          ),
+          tileHeight: 122,
+          columnSpacing: 5,
+          rowSpacing: 3,
           itemBuilder: (context, index) {
             final service = services[index];
             return WantokCategoryTile(

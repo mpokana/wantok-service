@@ -2,6 +2,14 @@
 
 **Updated:** 2026-10-09
 
+## CX1 shared pinch-adaptive grids and Profile/Vendor entry — 2026-10-09
+
+- [x] **Owner-approved shared interaction:** category/photo/icon grids in Home, Services (catalogue and See all), Explore reference gallery, and sample preview screens adapt to exactly **2 or 3 columns**; default density follows usable width and large-text scaling. Two-finger pinch **in** selects 3 compact columns, spread **out** selects 2 larger columns. A common notifier shares the choice across grid screens in one client session. One-finger scrolling and regular card taps are unchanged. Detail/forms/lists are not forced into columns. Category text supports two lines. Distinct app build/test still required before HONOR acceptance.
+- [x] **Profile dropdown:** the icon beside Inbox now offers **My Settings** (existing account/preferences/security), **Wallet** (Wantok Pay preview only) and **Vendor**. Signed-in, server-authorised providers/drivers go to their existing vendor dashboard; unapproved users go to existing provider application. No automatic approval or bypass of backend RBAC. The offline HONOR design-preview displays same menu with explanatory, nonfunctional My Settings/Vendor sheets and visual Wallet navigation.
+- [x] **Vendor panel clarity:** approved vendor dashboard includes entry to existing provider verification/profile details; existing Jobs, Listings, Food/Groceries commerce and industry consoles remain governed by existing authorisation. General-product storefront/sales CX1G, in-app sponsored promotion CX1H, managed external Wantok Ads ADS1 and real earnings/payouts remain **PLANNED / DISABLED**, shown as informational non-action cards rather than fake functioning controls. No real money movement, ad charges, inventory approval, applicant uploads or database role changes.
+- [x] **Source regression:** 7 Flutter analysis targets clean, **79 client + 3 Operations Admin + 1 Technical Control widget tests PASS**, 35 PostgreSQL files / **767 pgTAP assertions PASS**; focused pinching 2↔3 and unauthorised Vendor entry checks pass. No DB/schema or permissions changed.
+- [ ] **Next acceptance:** package a new distinct `io.wantok.service.offlinepreview` ARM64 APK with no Internet/location permissions, then owner HONOR pinching/Profile menu/long-scroll QA and signed-in Web CX1 paths. CX1 still **IN PROGRESS**; T2.4 later.
+
 ## CX1 next milestone — HONOR Android ARM64 visual beta and Web acceptance (2026-10-09)
 
 - [x] **Approved scope:** EAGLT02 source checkpoint `1ccd640` completed Home/Services/Explore separation, photo gallery relocation, green/gold design, Inbox beside Profile and five bottom tabs `Home · Services · Explore · Track · Wallet`; vendor registration remains inside Profile. Android emulator checked with opt-in S-marked samples.

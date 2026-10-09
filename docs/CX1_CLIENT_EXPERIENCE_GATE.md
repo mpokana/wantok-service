@@ -17,6 +17,12 @@ The current five-button bottom bar is **Home · Services · Explore · Track · 
 
 The previous client-shell rows below document earlier acceptance snapshots, not a claim that the old bottom-bar layout remains current. Fresh signed-in Web acceptance is still open.
 
+## Shared density + Profile dropdown — owner-approved CX1 refinement (2026-10-09)
+
+- 2/3-column adaptive categories/photo grids with two-finger pinch, width/text-scale default, shared view density across Home, Services, Explore and sample grids. Lists/forms/details do **not** become 2/3-column grids. Verify on actual HONOR after separate preview build; no real sign-in in offline beta.
+- Header Profile dropdown **My Settings, Wallet, Vendor**, Inbox remains header next to it. My Settings uses existing Account/Profile; Wallet stays a non-live preview; Vendor routes to existing application unless existing server role allows vendor workspace. Provider approval is never granted by UI.
+- Vendor workspace preserves existing jobs, approved service listings and food/shop capabilities; user-requested general-products sales (CX1G), sponsored promotions (CX1H), external ads (ADS1), real settlement/payout and application workflow auditing remain separate backend/security gates and cannot be inferred from prototype cards.
+
 ## HONOR offline visual-preview evidence — 9 October 2026
 
 **Partial PASS — physical phone installation, app launch and visible screens only.** Owner shared six screenshots showing the separately packaged offline `Wantok Preview` on a HONOR handset. Observed Home, Services grid, scrolled Explore photo gallery with visible `S` markers, Track locked placeholder, Wallet locked placeholder and `Service Listing (Food)` sample detail. The five navigation destinations and header Inbox/Profile icons are visibly present, as is the no-sign-in/no-bookings/no-money-movement disclaimer. Approved green/gold branding and Vanessa/category photos display. This is **NOT the full signed-in Wantok Services app** and does not replace prior or remaining authenticated Web/Android acceptance evidence. Screenshots not committed to public GitHub.

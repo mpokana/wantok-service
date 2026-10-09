@@ -11,6 +11,8 @@ import '../vendor/vendor_jobs_page.dart';
 import '../vendor/vendor_listings_page.dart';
 import '../vendor/vendor_water_transport_page.dart';
 import 'account_page.dart';
+import 'adaptive_category_grid.dart';
+import 'wantok_profile_menu.dart';
 import 'activity_page.dart';
 import 'client_home.dart';
 import 'explore_page.dart';
@@ -37,6 +39,7 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
   int _tabIndex = 0;
   late Set<String> _roles;
   bool _refreshingRoles = false;
+  final ValueNotifier<int?> _gridDensity = ValueNotifier<int?>(null);
 
   bool get _hasVendorAccess =>
       _roles.contains('provider') || _roles.contains('driver');
@@ -52,6 +55,7 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _gridDensity.dispose();
     super.dispose();
   }
 
@@ -123,6 +127,33 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
         ),
       ),
     );
+  }
+
+  void _selectProfileAction(WantokProfileAction action) {
+    switch (action) {
+      case WantokProfileAction.settings:
+        _openAccount();
+      case WantokProfileAction.wallet:
+        if (_mode == AppMode.client) {
+          setState(() => _tabIndex = 4);
+        } else {
+          Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (context) => const WantokPayPreviewPage(),
+            ),
+          );
+        }
+      case WantokProfileAction.vendor:
+        if (_hasVendorAccess) {
+          _changeMode(AppMode.vendor);
+        } else {
+          Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (context) => const ProviderApplicationPage(),
+            ),
+          );
+        }
+    }
   }
 
   void _openAgent() {
@@ -229,6 +260,7 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
               ),
               onOpenJobs: () => setState(() => _tabIndex = 1),
               onOpenListings: () => setState(() => _tabIndex = 2),
+              onOpenProfile: _openAccount,
             ),
             const VendorJobsPage(),
             const VendorListingsPage(),
@@ -236,16 +268,19 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
             AccountPage(roles: _roles, onSignOut: _auth.signOut),
           ];
 
-    return Scaffold(
-      appBar: _buildAppBar(),
-      body: IndexedStack(index: _tabIndex, children: pages),
-      bottomNavigationBar: _WantokBottomBar(
-        items: navItems,
-        selectedIndex: _tabIndex == (_mode == AppMode.client ? 5 : 3)
-            ? -1
-            : (_mode == AppMode.vendor && _tabIndex == 4 ? 3 : _tabIndex),
-        onSelected: (index) => setState(
-          () => _tabIndex = _mode == AppMode.vendor && index == 3 ? 4 : index,
+    return AdaptiveGridDensityScope(
+      density: _gridDensity,
+      child: Scaffold(
+        appBar: _buildAppBar(),
+        body: IndexedStack(index: _tabIndex, children: pages),
+        bottomNavigationBar: _WantokBottomBar(
+          items: navItems,
+          selectedIndex: _tabIndex == (_mode == AppMode.client ? 5 : 3)
+              ? -1
+              : (_mode == AppMode.vendor && _tabIndex == 4 ? 3 : _tabIndex),
+          onSelected: (index) => setState(
+            () => _tabIndex = _mode == AppMode.vendor && index == 3 ? 4 : index,
+          ),
         ),
       ),
     );
@@ -321,34 +356,8 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(right: 14),
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              IconButton(
-                tooltip: 'Account and profile',
-                onPressed: _openAccount,
-                style: IconButton.styleFrom(
-                  backgroundColor: const Color(0xFFE8F3EC),
-                  side: const BorderSide(color: Color(0xFFD2E6D8)),
-                ),
-                icon: Icon(Icons.person_rounded, color: WantokColors.primary),
-              ),
-              Positioned(
-                right: 2,
-                top: 7,
-                child: Container(
-                  width: 9,
-                  height: 9,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF16B47D),
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 1.5),
-                  ),
-                ),
-              ),
-            ],
-          ),
+          padding: const EdgeInsets.only(right: 10),
+          child: WantokProfileMenu(onSelected: _selectProfileAction),
         ),
       ],
     );
