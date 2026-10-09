@@ -17,6 +17,10 @@ The current five-button bottom bar is **Home · Services · Explore · Track · 
 
 The previous client-shell rows below document earlier acceptance snapshots, not a claim that the old bottom-bar layout remains current. Fresh signed-in Web acceptance is still open.
 
+## HONOR updated pinch/Profile APK — source PASS, handset QA pending (2026-10-09)
+
+The redesigned UI source was tested: seven clean analyses, 79 client + 3 Admin + 1 Technical widget tests, and 767 pgTAP assertions. A new, separately signed/packaged **offline** ARM64 `Wantok Preview` APK was built and SHA256 verified as `F1CCFFA22C7F8DE03BD26918DAC189C87AD8D5C58D6709A8D27CA328BB4E2A6B`. The version awaits owner installation on HONOR to validate pinch-in/out 3↔2 across Home/Services/Explore, large text, Profile menu, long scrolling and bottom-safe-area. The prior six screenshots validate only the **previous** build. **No signed-in client or Vendor commerce/payment/advertisement capability is accepted via this offline package.**
+
 ## Shared density + Profile dropdown — owner-approved CX1 refinement (2026-10-09)
 
 - 2/3-column adaptive categories/photo grids with two-finger pinch, width/text-scale default, shared view density across Home, Services, Explore and sample grids. Lists/forms/details do **not** become 2/3-column grids. Verify on actual HONOR after separate preview build; no real sign-in in offline beta.
