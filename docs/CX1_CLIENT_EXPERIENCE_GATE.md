@@ -17,6 +17,12 @@ The current five-button bottom bar is **Home · Services · Explore · Track · 
 
 The previous client-shell rows below document earlier acceptance snapshots, not a claim that the old bottom-bar layout remains current. Fresh signed-in Web acceptance is still open.
 
+## HONOR offline visual-preview evidence — 9 October 2026
+
+**Partial PASS — physical phone installation, app launch and visible screens only.** Owner shared six screenshots showing the separately packaged offline `Wantok Preview` on a HONOR handset. Observed Home, Services grid, scrolled Explore photo gallery with visible `S` markers, Track locked placeholder, Wallet locked placeholder and `Service Listing (Food)` sample detail. The five navigation destinations and header Inbox/Profile icons are visibly present, as is the no-sign-in/no-bookings/no-money-movement disclaimer. Approved green/gold branding and Vanessa/category photos display. This is **NOT the full signed-in Wantok Services app** and does not replace prior or remaining authenticated Web/Android acceptance evidence. Screenshots not committed to public GitHub.
+
+**Open visual tasks:** three-across Service category tiles truncate `Home Services` and `Water Transport`; five bottom tab labels are tightly spaced at handset font size; investigate system bottom SafeArea/scroll inset on long sample detail; capture end-of-Home scenic Explore footer and full twelve-sample gallery behaviour before final visual acceptance. Any proposed category two-column / responsive-nav change needs owner approval. Device OS, account, permissions and live transactions have not been verified. **CX1 stays IN PROGRESS** and T2.4 waits for signed-in Web/client gates.
+
 ## Acceptance and evidence
 
 | Area | Evidence at this checkpoint | Status |

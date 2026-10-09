@@ -4,6 +4,12 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## HONOR REAL-HANDSET VISUAL CHECK — 9 October 2026
+
+- **Owner-supplied six HONOR screenshots in chat:** the offline `Wantok Preview` APK is visibly **installed and running on the physical phone**. Home, Services, Explore photographic tiles, Track, Wallet and `Service Listing (Food)` sample detail render; green/gold branding, Vanessa image, category photos and visible S markers retained. Banner correctly discloses no sign-in/bookings/money movement. This closes **installation/initial visual-display only**, not final real-device acceptance or working signed-in client QA. Screenshots are NOT committed to GitHub; avoid preserving phone status-bar metadata in public repository.
+- **Visual QA observations (open):** three-column phone category grid truncates `Home Services` and `Water Transport`; five bottom-nav labels are close at the captured text scaling; inspect SafeArea/inset behaviour on Food Listing detail near Android system navigation (lower sample provider card partly obscured). Recommended review: two-column category grid with full labels, modest responsive nav label adaptation, safe-area/scroll padding verification. No UI change or new APK authorised by screenshot alone. Screenshots do not prove that the very bottom of Home or all twelve reference pages were reached, nor device OS/version, permission prompts, real backend availability, sign-in or payments.
+- **Next:** request owner approval for targeted visual fixes, retest full Home scroll + scenic footer and complete reference gallery, physical phone browser/inset checks. Continue separately with signed-in Web CX1 gate and approved HTTPS staging for functional beta. Existing local offline APK and simulator remain unchanged.
+
 ## HONOR OFFLINE ARM64 APK VERIFIED — 9 October 2026
 
 - **Starting branch/checkpoint:** `feature/flutter-platform-v1` clean at `c983cfb0f4474ac3c13c86e6addfd7946f82dbcf`. A **detached, separate build worktree** `D:\Wantok_ARM64_Build_20261009` was created from that exact commit. Main repository, emulator/Supabase, all approved photography, accounts and data remained unchanged. Local-only Gradle build changes are NOT present on the main feature branch.
