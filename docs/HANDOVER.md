@@ -4,6 +4,15 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## CX1 WEB QA GUEST BASELINE — 9 October 2026 (AUTHENTICATION PENDING)
+
+- **Environment:** EAGLT02 reconnected; clean Git source checkpoint `67cad66533130782edf1baa34f538faf97279f21` on `feature/flutter-platform-v1`, remote remains `https://github.com/mpokana/wantok-service.git`. Owner-authorised local Supabase running. Flutter Web served on `http://127.0.0.1:18108/` from a **detached isolated worktree** `D:\Wantok_CX1_Web_QA_20261009` to avoid generated asset locks in the main checkout. Temporary QA tooling/logs and screenshots are ignored under the MAIN tree `.wantok/`; no existing emulator, Chrome profile, data or HONOR APK altered.
+- **Real Chrome guest QA:** isolated headless browser at **320, 390 and 1280 px** rendered the actual unauthenticated sign-in screen, original photo backdrop, Wantok brand, email/password and create-account link, with no visible clipped controls. Evidence `.wantok\cx1-guest-cdp-320.png`, `.wantok\cx1-guest-cdp-390.png` and `.wantok\cx1-guest-cdp-1280.png`. This does **not** establish signed-in Web functionality.
+- **Auth browser:** opened another **headed isolated Chrome** with a dedicated QA profile at `http://127.0.0.1:18108/`, owner must sign in manually before Web provider/Account/Inbox/Track/Wallet/Agent acceptance; **never retrieve user's password, session cookie, OAuth token or normal Chrome profile**. Avoid writes to Saved/reviews, new bookings, app records or support messages until separately approved. QA scope/tracking: GitHub issue `https://github.com/mpokana/wantok-service/issues/1`.
+- **Network observation:** local dev Supabase Docker has some `0.0.0.0` published ports; that alone does **not** prove LAN/public reachability. No network changes were authorised or performed. A future restricted bind/firewall review should protect Studio/API/Postgres without disturbing local users.
+- **Validation:** `scripts/flutter/check.ps1` **PASS** (7 clean Flutter analysis targets; 81 client, 3 Operations Admin, 1 Technical Control tests); `npm run db:test` **PASS** (35 SQL files/767 assertions). `git diff --check` required before commit. No source/schema changes made for this Web guest QA checkpoint.
+- **Next:** commit guest-QA evidence **metadata only** to roadmap/CX1 gate/fillers, local bundle + verified GitHub feature push. Then owner signs in, and Web CX1F/provider search/filter/read-only Saved/detail and remaining client journeys get genuine evidence. No signed-in result is claimed; T2.4 remains gated.
+
 ## HONOR FULL EMULATOR INTERFACE — VERIFIED ARM64 APK 9 October 2026
 
 - **Source checkpoint:** `a6b164a9305741c2e210134bd4055e79d1507ee3` on `feature/flutter-platform-v1`, source fully tested. `scripts/flutter/check.ps1`: **7 clean Flutter analyses, 81 client + 3 Admin + 1 Technical widget tests PASS**; `npm run db:test`: **35 SQL files / 767 assertions PASS**. Six dedicated full-screen phone tests PASS in both default and `WANTOK_SMOKE_DATA=true` builds; git diff whitespace clean. Use `docs/HONOR_FULL_INTERFACE_DEMO.md` for implementation boundaries.
