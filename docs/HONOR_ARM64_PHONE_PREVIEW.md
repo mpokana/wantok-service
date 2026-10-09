@@ -42,6 +42,26 @@ Never supply `--dart-define-from-file=.wantok/local-android.json` or any secret 
 
 The generated file is `build\app\outputs\flutter-apk\app-debug.apk`. Verify with Android `aapt`, `apksigner`, ZIP engine inspection and SHA-256 before distribution. The final APK has `lib/arm64-v8a/libflutter.so` but not an x86_64 Flutter engine; some other plugin libraries still have multiple ABIs. This is **not** a signed release and has **not** been accepted on an actual HONOR handset.
 
+## Updated pinch-grid and Profile-menu offline visual build — 9 October 2026
+
+Latest source checkpoint `340f1fa260a4f131f5d0a1c1c9ac449820a841f7` adds app-session shared 2↔3-column pinch category grids and Profile popup **My Settings / Wallet / Vendor**. Offline Vendor displays non-live preview guidance only; live role-based vendor access and application status require approved backend. General marketplace sales/advertising/settlements remain roadmap-gated.
+
+**New separate APK**: `D:\Wantok_Project_Backups\WantokServices-HONOR-OfflinePreview-PinchProfile-arm64-20261009.apk`, size 105218839 bytes; SHA-256 `F1CCFFA22C7F8DE03BD26918DAC189C87AD8D5C58D6709A8D27CA328BB4E2A6B`. Built from detached clean-source worktree `D:\Wantok_ARM64_Build_20261009_v2`, where the reproducible build-only Gradle/Kotlin/Android manifest adjustments are held separately as `WantokServices-HONOR-OfflinePreview-PinchProfile-build-only-20261009.patch` with the `.sha256` checksum sidecar beside the APK. The normal project build configuration was not altered. Package ID `io.wantok.service.offlinepreview`, verified Android debug signature, ARM64 Flutter engine and original photographic assets. No Android Internet/location permission or emulator backend URL literals detected in targeted scans. Android 7+ minSdk; **not an app-store/production release**. This latest build has NOT been accepted on a physical HONOR yet; earlier visual acceptance was for the preceding APK.
+
+A phone running the earlier **Wantok Preview** with the same signing certificate can update the preview in place; leave the actual Wantok Services application installed and do not delete account data. Transfer using trusted local means and verify checksum. Record visual QA separately.
+
+## Latest HONOR pinch/Profile updated APK — 9 October 2026
+
+The **NEW** offline design APK, built from committed Flutter source `340f1fa260a4f131f5d0a1c1c9ac449820a841f7`, is:
+
+`D:\Wantok_Project_Backups\WantokServices-HONOR-PinchProfile-OfflinePreview-arm64-20261009.apk`
+
+Length **105218839 bytes**, SHA-256 **`F1CCFFA22C7F8DE03BD26918DAC189C87AD8D5C58D6709A8D27CA328BB4E2A6B`**. Separate `.sha256` and `WantokServices-HONOR-PinchProfile-build-only-20261009.patch` live beside it. Source build was isolated in `D:\Wantok_ARM64_Build_20261009_v2` with the same verified worktree-only Kotlin/debug package/manifest patch recorded below. Android signature, ARM64 Flutter engine, Vanessa/scenic original assets and no INTERNET/location permissions checked. Same distinct `io.wantok.service.offlinepreview` app ID and **same signing certificate** as prior installed preview, so the update is intended to install in place without deleting prior app data. User must still verify the physical upgrade and UI behaviour.
+
+**New controls:** shared 2/3-column photo/icon grids in Home/Services/Explore and photo-reference screens; pinch **in → 3 columns** and spread **out → 2 columns**, with default density based on screen width/large text, retaining ordinary scrolling/taps. Header Profile dropdown **My Settings / Wallet / Vendor**; offline settings/vendor text is explicitly not functional, Wallet remains a preview. Approved-only vendor portal and future ads/sales are NOT usable offline.
+
+**Install:** transfer the new APK by trusted USB/local copy, tap to update `Wantok Preview`. **Do not uninstall** the older preview or the full app. Disable installer unknown-source permission again afterwards. This is developer-signed and not a release. The older `WantokServices-HONOR-OfflinePreview-arm64-20261009.apk` remains as independent backup.
+
 ## Verified build checkpoint — 9 October 2026
 
 - **Source tests PASS:** focused offline phone-preview widget tests 4/4 in both default and sample modes; full Flutter suite **7 clean analysis targets, 75 client + 3 Operations Admin + 1 Technical Control tests PASS**; PostgreSQL **35 files / 767 assertions PASS** at commit `c983cfb`.
