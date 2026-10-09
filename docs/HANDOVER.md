@@ -1,8 +1,16 @@
 # Wantok Services — Living Handover
 
-**Updated:** 2026-10-09
+**Updated:** 2026-10-10
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
+
+## ENTERPRISE RESPONSIVE UI CHECKPOINT — 10 October 2026
+
+- **Owner approved coding from six reference mockup images**, not new image generation. EAGLT02 alone authorised. New `apps/wantok_app/lib/src/home/enterprise_services_catalogue.dart`, wired from existing `services_hub_page.dart` at width >=700 px; photo catalogue 4/3/2 responsive columns, functional local filtering/search/provider link; smaller handhelds retain current pinch photo tiles. Original photo asset still called `vanessa_local_provider.jpg` on disk but owner's preferred name is **Venenssa**; do not rename asset or invent profile/endorsement data.
+- **Existing Operations Admin remains a separate RBAC-gated Flutter web app.** Added read-only `operations_overview_page.dart` and `operations_sidebar.dart` through existing `admin_shell.dart`; desktop sidebar/tablet rail/mobile drawer. Supabase provider applications/listings, bookings and audit queries use the authenticated client + RLS. Results are recent/limited snapshots, NOT all-time totals; no invented provider counts or transaction values. Payment/regional blocks informational only, no new schema or live workflow permissions.
+- **Validated:** 7 Flutter analyzer targets clean, **84 client tests + 7 Admin + 1 Technical PASS**, database **35 SQL files / 767 assertions PASS**. Focused client text-scale 150% at 800 px originally flagged hero overflow and now PASS; Services 840/1440 and Operations 390/900/1440 widget tests PASS. No DB mutations or auth override made.
+- **Emulator:** authorised `Medium_Phone_API_36.1` started in interactive Windows console Session 2 via existing scheduled task `Wantok_Emulator_Interactive`; ADB `emulator-5554` booted without wipe and package `io.wantok.service` installed. Existing installed app unexpectedly returned to launcher after starting. First live Flutter update from main checkout hit Gradle's generated-asset file lock (not code failure); do NOT erase app data, reset AVD or clean main build indiscriminately. Build/refresh from a detached worktree after committing tested source, with local `.wantok/local-android.json` kept external to Git. If external Kotlin cache mismatch, use known `kotlin.incremental=false` workaround ONLY inside disposable build worktree. Verify UI before claiming installed new code.
+- **Next:** review diff/status and remote; update source/docs Git commit, local verified Git bundle, verified GitHub feature-branch push. Then isolated emulator build, app visual review with existing session, document acceptance/remaining gaps. CX1 signed-in Web still OPEN, T2.4 deferred. Security gates: no public Admin access, real provider approval, evidence upload, ads, funds movement or settlement.
 
 ## CX1 WEB QA GUEST BASELINE — 9 October 2026 (AUTHENTICATION PENDING)
 

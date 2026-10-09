@@ -1,6 +1,13 @@
 # Wantok Services — Living Roadmap
 
-**Updated:** 2026-10-09
+**Updated:** 2026-10-10
+
+## Enterprise responsive catalogue and Operations dashboard — 10 October 2026 (source PASS; device review pending)
+
+- [x] **Services desktop/tablet catalogue:** on existing signed-in Services, widths >=700 px now display an enterprise marketplace banner, local service-photo grid (4 desktop / 3 tablet / 2 compact columns), functional category-search/filter chips and a provider discovery panel. Tap destinations still pass through the original `ServicesHubPage`/approved backend routes; missing categories remain informational, not invented providers. Narrow mobile preserves the existing pinch-adaptive entry and the approved **Venenssa** hero photograph (legacy bundled asset filename intentionally unchanged).
+- [x] **Operations Admin frontend/backend integration:** existing RLS-protected, role-gated AdminShell now has green desktop sidebar, tablet rail and mobile drawer; overview uses read-only Supabase provider applications, listing reviews, active bookings, recent booking categories and audit events. Financial figures, regional analytics and scheduled modules are clearly labelled **not available**. No sample income/provider records, schema migrations, role grants, upload access or payment activation.
+- [x] **Source regression PASS:** 7 clean Flutter analyzer targets; 84 client + 7 Operations Admin + 1 Technical Control widget tests PASS; 35 pgTAP SQL files / 767 assertions PASS; responsive widget tests at Services 840/1440 px and Operations 390/900/1440 px, plus 150% text-scale client regression fixed. `git diff --check` required for commit.
+- [ ] **Live visual acceptance / further desktop Home, Explore, Track, Wallet, Inbox polish:** owner-provided PNG reference mockups guide subsequent client UI milestones; these are not yet a pixel-perfect full-screen implementation. Test signed-in browser and admin account against permitted local Supabase before marking CX1 acceptance. Emulator AVD `Medium_Phone_API_36.1` was restarted in active Windows Session 2 without resetting data; rebuilding refreshed client code in a detached worktree is pending after initial main-checkout Gradle asset-lock failure.
 
 ## CX1 signed-in Web QA on EAGLT02 — 9 October 2026 (GATE OPEN)
 

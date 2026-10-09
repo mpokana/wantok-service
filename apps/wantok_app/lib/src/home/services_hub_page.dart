@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'smoke_data.dart';
 import 'offline_demo_navigation.dart';
 import 'reference_services_gallery.dart';
+import 'enterprise_services_catalogue.dart';
 import 'category_information_page.dart';
 
 import 'package:geolocator/geolocator.dart';
@@ -555,16 +556,34 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
           // An injected catalogue keeps the established deterministic tests.
           if ((widget.loadServices == null || widget.demoMode) &&
               _referenceCategories) {
-            return ReferenceServicesLanding(
-              onCategory: (spec) => _openReferenceCategory(spec, services),
-              onAllServices: () => setState(() => _referenceCategories = false),
-              onSearch: (value) {
-                _search.text = value;
-                setState(() {
-                  _query = value;
-                  _referenceCategories = false;
-                });
-              },
+            return LayoutBuilder(
+              builder: (context, viewport) => viewport.maxWidth >= 700
+                  ? EnterpriseServicesCatalogue(
+                      onCategory: (spec) =>
+                          _openReferenceCategory(spec, services),
+                      onAllServices: () =>
+                          setState(() => _referenceCategories = false),
+                      onSearch: (value) {
+                        _search.text = value;
+                        setState(() {
+                          _query = value;
+                          _referenceCategories = false;
+                        });
+                      },
+                    )
+                  : ReferenceServicesLanding(
+                      onCategory: (spec) =>
+                          _openReferenceCategory(spec, services),
+                      onAllServices: () =>
+                          setState(() => _referenceCategories = false),
+                      onSearch: (value) {
+                        _search.text = value;
+                        setState(() {
+                          _query = value;
+                          _referenceCategories = false;
+                        });
+                      },
+                    ),
             );
           }
 

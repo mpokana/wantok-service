@@ -6,6 +6,8 @@ import 'package:wantok_ui/wantok_ui.dart';
 import 'resource_review_page.dart';
 import 'provider_interest_queue_page.dart';
 import 'staged_provider_review_page.dart';
+import 'operations_overview_page.dart';
+import 'operations_sidebar.dart';
 
 class AdminShell extends StatefulWidget {
   const AdminShell({required this.roles, required this.email, super.key});
@@ -50,34 +52,15 @@ class _AdminShellState extends State<AdminShell> {
     ),
   ];
 
-  static const _bottomDestinations = [
-    NavigationDestination(
-      icon: Icon(Icons.dashboard_outlined),
-      label: 'Overview',
-    ),
-    NavigationDestination(
-      icon: Icon(Icons.how_to_reg_outlined),
-      label: 'Providers',
-    ),
-    NavigationDestination(
-      icon: Icon(Icons.storefront_outlined),
-      label: 'Listings',
-    ),
-    NavigationDestination(
-      icon: Icon(Icons.inventory_2_outlined),
-      label: 'Resources',
-    ),
-    NavigationDestination(
-      icon: Icon(Icons.receipt_long_outlined),
-      label: 'Bookings',
-    ),
-    NavigationDestination(icon: Icon(Icons.history_outlined), label: 'Audit'),
-  ];
-
   @override
   Widget build(BuildContext context) {
     final pages = [
-      const _OverviewPage(),
+      OperationsOverviewPage(
+        onOpenProviders: () => setState(() => _index = 1),
+        onOpenListings: () => setState(() => _index = 2),
+        onOpenBookings: () => setState(() => _index = 4),
+        onOpenAudit: () => setState(() => _index = 5),
+      ),
       const _ProviderApplicationsPage(),
       const _ServiceReviewPage(),
       const ResourceReviewPage(),
@@ -85,7 +68,13 @@ class _AdminShellState extends State<AdminShell> {
       const _AuditPage(),
     ];
 
-    final wide = MediaQuery.sizeOf(context).width >= 900;
+    final width = MediaQuery.sizeOf(context).width;
+    final desktop = width >= 1200;
+    final tablet = width >= 760;
+    void selectSection(int index) {
+      setState(() => _index = index);
+      if (!desktop && !tablet) Navigator.of(context).maybePop();
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -93,7 +82,7 @@ class _AdminShellState extends State<AdminShell> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Wantok',
+              'Wantok Services',
               style: TextStyle(
                 color: WantokColors.primaryDark,
                 fontWeight: FontWeight.w900,
@@ -101,7 +90,7 @@ class _AdminShellState extends State<AdminShell> {
             ),
             SizedBox(width: 6),
             Text(
-              'Admin',
+              'Operations',
               style: TextStyle(
                 color: WantokColors.muted,
                 fontWeight: FontWeight.w700,
@@ -110,7 +99,7 @@ class _AdminShellState extends State<AdminShell> {
           ],
         ),
         actions: [
-          if (wide)
+          if (tablet)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Center(
@@ -128,16 +117,35 @@ class _AdminShellState extends State<AdminShell> {
           const SizedBox(width: 8),
         ],
       ),
-      body: wide
+      drawer: desktop || tablet
+          ? null
+          : Drawer(
+              child: OperationsSidebar(
+                selected: _index,
+                onSelect: selectSection,
+              ),
+            ),
+      body: desktop
+          ? Row(
+              children: [
+                SizedBox(
+                  width: 235,
+                  child: OperationsSidebar(
+                    selected: _index,
+                    onSelect: selectSection,
+                  ),
+                ),
+                Expanded(child: pages[_index]),
+              ],
+            )
+          : tablet
           ? Row(
               children: [
                 NavigationRail(
                   selectedIndex: _index,
                   labelType: NavigationRailLabelType.all,
                   groupAlignment: -0.85,
-                  onDestinationSelected: (value) {
-                    setState(() => _index = value);
-                  },
+                  onDestinationSelected: selectSection,
                   destinations: _destinations,
                 ),
                 const VerticalDivider(width: 1),
@@ -145,118 +153,6 @@ class _AdminShellState extends State<AdminShell> {
               ],
             )
           : pages[_index],
-      bottomNavigationBar: wide
-          ? null
-          : NavigationBar(
-              selectedIndex: _index,
-              onDestinationSelected: (value) {
-                setState(() => _index = value);
-              },
-              destinations: _bottomDestinations,
-            ),
-    );
-  }
-}
-
-class _OverviewPage extends StatefulWidget {
-  const _OverviewPage();
-
-  @override
-  State<_OverviewPage> createState() => _OverviewPageState();
-}
-
-class _OverviewPageState extends State<_OverviewPage> {
-  late Future<_AdminMetrics> _future;
-
-  @override
-  void initState() {
-    super.initState();
-    _future = _load();
-  }
-
-  Future<_AdminMetrics> _load() async {
-    final client = WantokBackend.client;
-
-    final applications = await client
-        .from('provider_applications')
-        .select('id')
-        .eq('status', 'pending');
-    final services = await client
-        .from('provider_services')
-        .select('id')
-        .eq('status', 'pending_review');
-    final bookings = await client
-        .from('service_bookings')
-        .select('id')
-        .inFilter('status', [
-          'requested',
-          'quoted',
-          'accepted',
-          'confirmed',
-          'in_progress',
-        ]);
-    final audits = await client.from('audit_events').select('id').limit(100);
-
-    return _AdminMetrics(
-      providerApplications: (applications as List).length,
-      serviceReviews: (services as List).length,
-      activeBookings: (bookings as List).length,
-      recentAudits: (audits as List).length,
-    );
-  }
-
-  void _refresh() {
-    setState(() => _future = _load());
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _AdminPageFrame(
-      title: 'Operations overview',
-      subtitle: 'Live platform workload from the Wantok backend.',
-      action: IconButton(onPressed: _refresh, icon: const Icon(Icons.refresh)),
-      child: FutureBuilder<_AdminMetrics>(
-        future: _future,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState != ConnectionState.done) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasError) {
-            return _ErrorCard(
-              message: snapshot.error.toString(),
-              onRetry: _refresh,
-            );
-          }
-
-          final metrics = snapshot.data!;
-          return Wrap(
-            spacing: 14,
-            runSpacing: 14,
-            children: [
-              _AdminMetricCard(
-                label: 'Provider applications',
-                value: metrics.providerApplications.toString(),
-                icon: Icons.how_to_reg_outlined,
-              ),
-              _AdminMetricCard(
-                label: 'Listings to review',
-                value: metrics.serviceReviews.toString(),
-                icon: Icons.storefront_outlined,
-              ),
-              _AdminMetricCard(
-                label: 'Active bookings',
-                value: metrics.activeBookings.toString(),
-                icon: Icons.receipt_long_outlined,
-              ),
-              _AdminMetricCard(
-                label: 'Recent audit records',
-                value: metrics.recentAudits.toString(),
-                icon: Icons.history_outlined,
-              ),
-            ],
-          );
-        },
-      ),
     );
   }
 }
@@ -789,46 +685,6 @@ class _AdminPageFrame extends StatelessWidget {
   }
 }
 
-class _AdminMetricCard extends StatelessWidget {
-  const _AdminMetricCard({
-    required this.label,
-    required this.value,
-    required this.icon,
-  });
-
-  final String label;
-  final String value;
-  final IconData icon;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 230,
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(18),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Icon(icon, color: WantokColors.primary),
-              const SizedBox(height: 16),
-              Text(
-                value,
-                style: const TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(label, style: const TextStyle(color: WantokColors.muted)),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _ErrorCard extends StatelessWidget {
   const _ErrorCard({required this.message, required this.onRetry});
 
@@ -896,18 +752,4 @@ class _EmptyState extends StatelessWidget {
       ),
     );
   }
-}
-
-class _AdminMetrics {
-  const _AdminMetrics({
-    required this.providerApplications,
-    required this.serviceReviews,
-    required this.activeBookings,
-    required this.recentAudits,
-  });
-
-  final int providerApplications;
-  final int serviceReviews;
-  final int activeBookings;
-  final int recentAudits;
 }
