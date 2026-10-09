@@ -276,35 +276,66 @@ void main() {
     expect(find.text('Food'), findsOneWidget);
   });
 
-  testWidgets('four bottom tabs and header Inbox keep account navigation', (
+  testWidgets(
+    'five bottom tabs including Explore and header Inbox keep account navigation',
+    (tester) async {
+      await showPage(tester, const HomeShell(roles: {'customer'}, email: null));
+      for (final tab in ['Home', 'Services', 'Explore', 'Track', 'Wallet']) {
+        final navigation = find.byKey(ValueKey('wantok-nav-$tab'));
+        expect(navigation, findsOneWidget);
+        await tester.tap(navigation);
+        await tester.pumpAndSettle();
+        expect(
+          tester.widget<Semantics>(navigation).properties.selected,
+          isTrue,
+        );
+        expect(
+          tester.widget<Semantics>(navigation).properties.onTap,
+          isNotNull,
+        );
+        expect(tester.takeException(), isNull);
+      }
+      expect(find.byKey(const ValueKey('wantok-nav-Inbox')), findsNothing);
+      await tester.tap(find.byTooltip('Inbox'));
+      await tester.pumpAndSettle();
+      expect(find.text('Inbox'), findsWidgets);
+      expect(find.byKey(const ValueKey('wantok-nav-Wallet')), findsOneWidget);
+      expect(find.byKey(const ValueKey('wantok-nav-Track')), findsOneWidget);
+      expect(find.byKey(const ValueKey('wantok-nav-Explore')), findsOneWidget);
+      expect(find.text('Technical access'), findsNothing);
+      await tester.tap(find.text('Home'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byTooltip('Account and profile'));
+      await tester.pumpAndSettle();
+      expect(find.text('Account and profile'), findsOneWidget);
+      expect(find.byType(BackButton), findsOneWidget);
+      await tester.tap(find.byType(BackButton));
+      await tester.pumpAndSettle();
+      expect(find.text('Home'), findsOneWidget);
+    },
+  );
+
+  testWidgets('Home scenic Explore card opens the new destination', (
     tester,
   ) async {
-    await showPage(tester, const HomeShell(roles: {'customer'}, email: null));
-    for (final tab in ['Home', 'Services', 'Track', 'Wallet']) {
-      final navigation = find.byKey(ValueKey('wantok-nav-$tab'));
-      expect(navigation, findsOneWidget);
-      await tester.tap(navigation);
-      await tester.pumpAndSettle();
-      expect(tester.widget<Semantics>(navigation).properties.selected, isTrue);
-      expect(tester.widget<Semantics>(navigation).properties.onTap, isNotNull);
-      expect(tester.takeException(), isNull);
-    }
-    expect(find.byKey(const ValueKey('wantok-nav-Inbox')), findsNothing);
-    await tester.tap(find.byTooltip('Inbox'));
+    var exploreOpens = 0;
+    await showPage(
+      tester,
+      ClientHome(
+        loadServices: () async => services,
+        onExploreTap: () => exploreOpens++,
+      ),
+    );
+    final card = find.text('Explore PNG and beyond');
+    await tester.dragUntilVisible(
+      card,
+      find.byType(ListView).first,
+      const Offset(0, -450),
+    );
     await tester.pumpAndSettle();
-    expect(find.text('Inbox'), findsWidgets);
-    expect(find.byKey(const ValueKey('wantok-nav-Wallet')), findsOneWidget);
-    expect(find.byKey(const ValueKey('wantok-nav-Track')), findsOneWidget);
-    expect(find.text('Technical access'), findsNothing);
-    await tester.tap(find.text('Home'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('Account and profile'));
-    await tester.pumpAndSettle();
-    expect(find.text('Account and profile'), findsOneWidget);
-    expect(find.byType(BackButton), findsOneWidget);
-    await tester.tap(find.byType(BackButton));
-    await tester.pumpAndSettle();
-    expect(find.text('Home'), findsOneWidget);
+    await tester.tap(card);
+    expect(exploreOpens, 1);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('Wantok Agent is a compact discovery action', (tester) async {
@@ -379,7 +410,7 @@ void main() {
         width: width,
         scale: 1.5,
       );
-      for (final tab in ['Home', 'Services', 'Track', 'Wallet']) {
+      for (final tab in ['Home', 'Services', 'Explore', 'Track', 'Wallet']) {
         await tester.tap(find.byKey(ValueKey('wantok-nav-$tab')));
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull);

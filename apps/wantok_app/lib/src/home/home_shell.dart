@@ -13,6 +13,7 @@ import '../vendor/vendor_water_transport_page.dart';
 import 'account_page.dart';
 import 'activity_page.dart';
 import 'client_home.dart';
+import 'explore_page.dart';
 import 'messages_page.dart';
 import 'services_hub_page.dart';
 import 'vendor_home.dart';
@@ -145,6 +146,11 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
               label: 'Services',
             ),
             _NavItem(
+              icon: Icons.explore_rounded,
+              outlineIcon: Icons.explore_outlined,
+              label: 'Explore',
+            ),
+            _NavItem(
               icon: Icons.route_rounded,
               outlineIcon: Icons.route_outlined,
               label: 'Track',
@@ -184,8 +190,10 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
               onAccountTap: _openAccount,
               onAgentTap: _openAgent,
               onServicesTap: () => setState(() => _tabIndex = 1),
+              onExploreTap: () => setState(() => _tabIndex = 2),
             ),
             const ServicesHubPage(),
+            ExplorePage(onBrowseServices: () => setState(() => _tabIndex = 1)),
             const ActivityPage(),
             const WantokPayPreviewPage(embedded: true),
             const MessagesPage(),
@@ -233,7 +241,7 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
       body: IndexedStack(index: _tabIndex, children: pages),
       bottomNavigationBar: _WantokBottomBar(
         items: navItems,
-        selectedIndex: _tabIndex == (_mode == AppMode.client ? 4 : 3)
+        selectedIndex: _tabIndex == (_mode == AppMode.client ? 5 : 3)
             ? -1
             : (_mode == AppMode.vendor && _tabIndex == 4 ? 3 : _tabIndex),
         onSelected: (index) => setState(
@@ -299,14 +307,14 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
         IconButton(
           tooltip: 'Inbox',
           onPressed: () =>
-              setState(() => _tabIndex = _mode == AppMode.client ? 4 : 3),
+              setState(() => _tabIndex = _mode == AppMode.client ? 5 : 3),
           style: IconButton.styleFrom(
-            backgroundColor: _tabIndex == (_mode == AppMode.client ? 4 : 3)
+            backgroundColor: _tabIndex == (_mode == AppMode.client ? 5 : 3)
                 ? const Color(0xFFE8F3EC)
                 : Colors.transparent,
           ),
           icon: Icon(
-            _tabIndex == (_mode == AppMode.client ? 4 : 3)
+            _tabIndex == (_mode == AppMode.client ? 5 : 3)
                 ? Icons.forum_rounded
                 : Icons.forum_outlined,
             color: WantokColors.primary,

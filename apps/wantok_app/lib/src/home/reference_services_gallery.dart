@@ -315,42 +315,58 @@ class ReferenceServicesLanding extends StatelessWidget {
             );
           },
         ),
-        if (WantokSmokeData.enabled) ...[
-          const SizedBox(height: 20),
-          const Row(
-            children: [
-              SmokeMarker(),
-              SizedBox(width: 7),
-              Expanded(
-                child: Text(
-                  'Reference screen samples',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
-                ),
+        // Photographic reference samples now live on Explore, not Services.
+      ],
+    );
+  }
+}
+
+/// A development-only photographic design gallery, shown on Explore.
+/// These twelve previews are not providers, ads, bookings, or live products.
+class ReferenceScreenSamplesSection extends StatelessWidget {
+  const ReferenceScreenSamplesSection({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    if (!WantokSmokeData.enabled) return const SizedBox.shrink();
+
+    return Column(
+      key: const ValueKey('explore-reference-samples'),
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Row(
+          children: [
+            SmokeMarker(),
+            SizedBox(width: 7),
+            Expanded(
+              child: Text(
+                'Reference screen samples',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
               ),
-            ],
-          ),
-          const SizedBox(height: 4),
-          const Text(
-            'All twelve reference screens: example imagery and UI only.',
-            style: TextStyle(color: WantokColors.muted, fontSize: 12),
-          ),
-          const SizedBox(height: 10),
-          GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: ReferenceScreenGallery.items.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              mainAxisExtent: 116,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
             ),
-            itemBuilder: (context, index) {
-              final item = ReferenceScreenGallery.items[index];
-              return _ReferenceSceneTile(item: item);
-            },
+          ],
+        ),
+        const SizedBox(height: 4),
+        const Text(
+          'All twelve reference screens: example imagery and UI only.',
+          style: TextStyle(color: WantokColors.muted, fontSize: 12),
+        ),
+        const SizedBox(height: 10),
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: ReferenceScreenGallery.items.length,
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisExtent: 116,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
           ),
-        ],
+          itemBuilder: (context, index) {
+            final item = ReferenceScreenGallery.items[index];
+            return _ReferenceSceneTile(item: item);
+          },
+        ),
       ],
     );
   }

@@ -13,6 +13,7 @@ import '../services/reservation_browse_page.dart';
 import '../services/taxi_ride_page.dart';
 import '../services/water_transport_page.dart';
 import 'png_visuals.dart';
+import 'explore_page.dart';
 import 'provider_discovery_page.dart';
 import 'service_catalog_taxonomy.dart';
 import 'wantok_category_ui.dart';
@@ -24,6 +25,7 @@ class ClientHome extends StatefulWidget {
     this.onAccountTap,
     this.onAgentTap,
     this.onServicesTap,
+    this.onExploreTap,
     this.loadServices,
     super.key,
   });
@@ -33,6 +35,7 @@ class ClientHome extends StatefulWidget {
   final VoidCallback? onAccountTap;
   final VoidCallback? onAgentTap;
   final VoidCallback? onServicesTap;
+  final VoidCallback? onExploreTap;
   final Future<List<WantokServiceCategory>> Function()? loadServices;
 
   @override
@@ -93,6 +96,18 @@ class _ClientHomeState extends State<ClientHome> {
           appBar: AppBar(title: const Text('Services')),
           body: ServicesHubPage(loadServices: widget.loadServices),
         ),
+      ),
+    );
+  }
+
+  void _openExplore() {
+    if (widget.onExploreTap != null) {
+      widget.onExploreTap!();
+      return;
+    }
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => ExplorePage(onBrowseServices: _openServices),
       ),
     );
   }
@@ -264,8 +279,6 @@ class _ClientHomeState extends State<ClientHome> {
                   heading: 'Sample popular near you',
                 ),
               const SizedBox(height: 18),
-              _ScenicExploreBanner(onTap: _openServices),
-              const SizedBox(height: 14),
               _MarketplacePromo(onTap: _openProviderSearch),
               const SizedBox(height: 22),
               if (widget.loadServices == null) ...[
@@ -345,6 +358,9 @@ class _ClientHomeState extends State<ClientHome> {
               ],
               const SizedBox(height: 20),
               const _SafetyCard(),
+              const SizedBox(height: 28),
+              // Explore sits at the very bottom of Home, not beside Vanessa.
+              _ScenicExploreBanner(onTap: _openExplore),
             ],
           );
         },

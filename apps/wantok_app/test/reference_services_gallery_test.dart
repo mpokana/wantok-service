@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wantok_app/src/home/reference_services_gallery.dart';
-import 'package:wantok_app/src/home/smoke_data.dart';
 
 void main() {
   test(
@@ -124,7 +123,7 @@ void main() {
     await pumpLanding(tester, onCategory: (_) {}, onAll: () {});
     expect(
       find.byKey(const ValueKey('reference-scene-foodListing')),
-      WantokSmokeData.enabled ? findsOneWidget : findsNothing,
+      findsNothing,
     );
     expect(tester.takeException(), isNull);
   });

@@ -2,6 +2,14 @@
 
 **Updated:** 2026-10-09
 
+## CX1 approved Explore restructuring (2026-10-09) — distinct destination and de-duplicated Home
+
+- [x] **Bottom navigation update:** add fifth client tab **Explore** between Services and Track; resulting **Home · Services · Explore · Track · Wallet**; keep Inbox icon beside Profile. Provider registration stays in Profile, vendor navigation unaffected.
+- [x] **Home:** move the existing photographic `Explore PNG and beyond` banner to the very bottom of the Home list, separated from Vanessa's existing green/gold provider card; clicking scenic card opens Explore, while Vanessa's card continues to open provider search.
+- [x] **Services / Explore:** leave functional Services Categories and search on Services. Relocate all twelve S-marked photographic Reference Screen Samples to the new Explore page without duplicating previews on Services; preserve original assets and sample-detail previews. The gallery is still **opt-in developer-only**. Explore remains available with `WANTOK_SMOKE_DATA=false` through a photographic header, `Browse services` link and non-misleading placeholder copy.
+- [x] **Regression gate:** focused tests in default and `WANTOK_SMOKE_DATA=true` modes PASS; **7 clean Flutter analysis targets, 71 client + 3 Operations Admin + 1 Technical Control tests PASS**; **35 SQL files / 767 assertions PASS**. Assets unchanged.
+- [ ] **Remaining acceptance:** signed-in emulator and Web visual QA (especially navigational scrolling/small displays), rollout of real Explore experiences only when approved. CX1 remains in progress before T2.4. No live ads, applicant uploads, payment rails or provider approvals enabled.
+
 ## CX1 approved interface adjustment (2026-10-09) — green/gold navigation and Home consolidation
 
 - [x] **Global design tokens:** replace bright-blue primary with forest green `#075D3F` / dark `#06482F` and use gold `#FFBD2F` accent; retain original photographic categories and Vanessa portrait/promo card unchanged.
