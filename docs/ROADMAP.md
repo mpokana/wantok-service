@@ -2,6 +2,14 @@
 
 **Updated:** 2026-10-09
 
+## CX1 approved interface adjustment (2026-10-09) — green/gold navigation and Home consolidation
+
+- [x] **Global design tokens:** replace bright-blue primary with forest green `#075D3F` / dark `#06482F` and use gold `#FFBD2F` accent; retain original photographic categories and Vanessa portrait/promo card unchanged.
+- [x] **Owner-approved navigation placement:** Inbox button beside Profile in the header, **Home · Services · Track · Wallet** in the client bottom navigation; vendor bottom **Dashboard · Jobs · Listings · Me**, Inbox in header. Existing Account/Profile provider-registration and mode switching retained. No route removed.
+- [x] **Reduced Home repetition:** remove horizontal category-chip rail (Popular Categories already provides navigation); keep distinct scenic PNG discovery and Vanessa local-provider photo promo, with the latter opening provider search. Services Categories remain functional catalogue navigation; the 12-screen photo Reference Gallery remains development-only, marked `S` and controlled by opt-in `WANTOK_SMOKE_DATA`.
+- [x] **Local Android QA:** `Medium_Phone_API_36.1` session 1; new in-place debug APK built with developer-only photo `S` samples on, `MainActivity` foreground with Home/Services/Track/Wallet/Inbox/Profile accessibility labels. Existing emulator sign-in data not wiped or app uninstalled. Source tests 7 analysis targets, 72 Flutter tests and 767 pgTAP assertions PASS.
+- [ ] **Remaining CX1 acceptance:** review visual details on signed-in Android and the signed-in Web search/filter/account/wallet/inbox journeys; T2.4 still deferred. Evidence uploads, reviewer access, approvals and money movement remain unchanged/disabled.
+
 ## Current security increment (2026-10-09) — read-only custody snapshot consistency, uploads SEALED
 
 - [x] **Synthetic-only offline comparator:** WQE2 encrypted scratch candidate checked against separately supplied SQL-shaped manifest snapshot and claimed/withdrawn status. Flags file/metadata absence, claim mismatch, hash/tamper mismatch, withdrawn claims and interrupted states. A perfect match remains `snapshot_matches_still_pending_independent_reconciliation`, **not proof of custody or authority**. `npm run test:evidence` **85 PASS**, real ClamAV **6 PASS**, local PostgreSQL **35 files / 767 assertions PASS**.

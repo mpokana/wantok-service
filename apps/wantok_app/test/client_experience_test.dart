@@ -276,37 +276,36 @@ void main() {
     expect(find.text('Food'), findsOneWidget);
   });
 
-  testWidgets(
-    'five client tabs and account back navigation work without admin UI',
-    (tester) async {
-      await showPage(tester, const HomeShell(roles: {'customer'}, email: null));
-      for (final tab in ['Home', 'Services', 'Track', 'Wallet', 'Inbox']) {
-        final navigation = find.byKey(ValueKey('wantok-nav-$tab'));
-        expect(navigation, findsOneWidget);
-        await tester.tap(navigation);
-        await tester.pumpAndSettle();
-        expect(
-          tester.widget<Semantics>(navigation).properties.selected,
-          isTrue,
-        );
-        expect(
-          tester.widget<Semantics>(navigation).properties.onTap,
-          isNotNull,
-        );
-        expect(tester.takeException(), isNull);
-      }
-      expect(find.text('Technical access'), findsNothing);
-      await tester.tap(find.text('Home'));
+  testWidgets('four bottom tabs and header Inbox keep account navigation', (
+    tester,
+  ) async {
+    await showPage(tester, const HomeShell(roles: {'customer'}, email: null));
+    for (final tab in ['Home', 'Services', 'Track', 'Wallet']) {
+      final navigation = find.byKey(ValueKey('wantok-nav-$tab'));
+      expect(navigation, findsOneWidget);
+      await tester.tap(navigation);
       await tester.pumpAndSettle();
-      await tester.tap(find.byTooltip('Account and profile'));
-      await tester.pumpAndSettle();
-      expect(find.text('Account and profile'), findsOneWidget);
-      expect(find.byType(BackButton), findsOneWidget);
-      await tester.tap(find.byType(BackButton));
-      await tester.pumpAndSettle();
-      expect(find.text('Home'), findsOneWidget);
-    },
-  );
+      expect(tester.widget<Semantics>(navigation).properties.selected, isTrue);
+      expect(tester.widget<Semantics>(navigation).properties.onTap, isNotNull);
+      expect(tester.takeException(), isNull);
+    }
+    expect(find.byKey(const ValueKey('wantok-nav-Inbox')), findsNothing);
+    await tester.tap(find.byTooltip('Inbox'));
+    await tester.pumpAndSettle();
+    expect(find.text('Inbox'), findsWidgets);
+    expect(find.byKey(const ValueKey('wantok-nav-Wallet')), findsOneWidget);
+    expect(find.byKey(const ValueKey('wantok-nav-Track')), findsOneWidget);
+    expect(find.text('Technical access'), findsNothing);
+    await tester.tap(find.text('Home'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Account and profile'));
+    await tester.pumpAndSettle();
+    expect(find.text('Account and profile'), findsOneWidget);
+    expect(find.byType(BackButton), findsOneWidget);
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    expect(find.text('Home'), findsOneWidget);
+  });
 
   testWidgets('Wantok Agent is a compact discovery action', (tester) async {
     await showPage(tester, const HomeShell(roles: {'customer'}, email: null));
@@ -380,7 +379,7 @@ void main() {
         width: width,
         scale: 1.5,
       );
-      for (final tab in ['Home', 'Services', 'Track', 'Wallet', 'Inbox']) {
+      for (final tab in ['Home', 'Services', 'Track', 'Wallet']) {
         await tester.tap(find.byKey(ValueKey('wantok-nav-$tab')));
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull);

@@ -15,7 +15,7 @@ abstract final class WantokTheme {
       colorScheme: scheme.copyWith(
         primary: WantokColors.primary,
         onPrimary: Colors.white,
-        secondary: WantokColors.ocean,
+        secondary: WantokColors.gold,
       ),
       filledButtonTheme: FilledButtonThemeData(
         style: FilledButton.styleFrom(

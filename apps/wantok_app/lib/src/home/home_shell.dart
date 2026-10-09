@@ -154,11 +154,6 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
               outlineIcon: Icons.account_balance_wallet_outlined,
               label: 'Wallet',
             ),
-            _NavItem(
-              icon: Icons.forum_rounded,
-              outlineIcon: Icons.forum_outlined,
-              label: 'Inbox',
-            ),
           ]
         : const [
             _NavItem(
@@ -175,11 +170,6 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
               icon: Icons.storefront_rounded,
               outlineIcon: Icons.storefront_outlined,
               label: 'Listings',
-            ),
-            _NavItem(
-              icon: Icons.forum_rounded,
-              outlineIcon: Icons.forum_outlined,
-              label: 'Inbox',
             ),
             _NavItem(
               icon: Icons.person_rounded,
@@ -243,8 +233,12 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
       body: IndexedStack(index: _tabIndex, children: pages),
       bottomNavigationBar: _WantokBottomBar(
         items: navItems,
-        selectedIndex: _tabIndex,
-        onSelected: (index) => setState(() => _tabIndex = index),
+        selectedIndex: _tabIndex == (_mode == AppMode.client ? 4 : 3)
+            ? -1
+            : (_mode == AppMode.vendor && _tabIndex == 4 ? 3 : _tabIndex),
+        onSelected: (index) => setState(
+          () => _tabIndex = _mode == AppMode.vendor && index == 3 ? 4 : index,
+        ),
       ),
     );
   }
@@ -302,6 +296,22 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
         ],
       ),
       actions: [
+        IconButton(
+          tooltip: 'Inbox',
+          onPressed: () =>
+              setState(() => _tabIndex = _mode == AppMode.client ? 4 : 3),
+          style: IconButton.styleFrom(
+            backgroundColor: _tabIndex == (_mode == AppMode.client ? 4 : 3)
+                ? const Color(0xFFE8F3EC)
+                : Colors.transparent,
+          ),
+          icon: Icon(
+            _tabIndex == (_mode == AppMode.client ? 4 : 3)
+                ? Icons.forum_rounded
+                : Icons.forum_outlined,
+            color: WantokColors.primary,
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.only(right: 14),
           child: Stack(
@@ -311,8 +321,8 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
                 tooltip: 'Account and profile',
                 onPressed: _openAccount,
                 style: IconButton.styleFrom(
-                  backgroundColor: const Color(0xFFF2F5FC),
-                  side: const BorderSide(color: Color(0xFFE5EBF4)),
+                  backgroundColor: const Color(0xFFE8F3EC),
+                  side: const BorderSide(color: Color(0xFFD2E6D8)),
                 ),
                 icon: Icon(Icons.person_rounded, color: WantokColors.primary),
               ),

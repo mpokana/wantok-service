@@ -15,7 +15,7 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 - Preserve completed checkpoints and working modules.
 - Prefer additive changes and shared platform primitives.
 - When a filler becomes implemented, mark it here and reflect the durable architecture/state in `ROADMAP.md` and `HANDOVER.md`.
-- Keep the locked client navigation **Home · Services · Track · Wallet · Inbox** unless Mansfield explicitly approves a redesign.
+- Keep the five client destinations **Home · Services · Track · Wallet · Inbox**. **Owner-approved 9 October 2026 navigation change:** Inbox moves to the top header beside Profile; the persistent bottom bar is **Home · Services · Track · Wallet**. This is relocation, not removal of Inbox functionality. Preserve the Provider registration link inside Account/Profile. Further navigation changes require approval.
 - Product concepts may be inspired by other platforms, but Wantok Services must retain its own PNG identity, interaction model and branding.
 
 ---
@@ -584,3 +584,11 @@ An empty private NTFS laboratory folder on EAGLT02 is restricted to Mansfield an
 **Status: implemented locally as a read-only synthetic consistency checker.** `custody-reconcile.mjs` compares a WQE2 test envelope against a caller-supplied untrusted metadata snapshot and claim status, marking missing/tampered/mismatched/withdrawn/interrupted states for independent investigation. Even exact matches never release content or grant Storage/reviewer/provider approval. New test coverage: **85 scanner/auth/custody unit tests PASS**, **6 real ClamAV tests PASS**, **35 SQL files / 767 assertions PASS**. No live Auth, database read, uploader, or production custody is enabled; see `docs/EVIDENCE_CUSTODY_RECONCILIATION_DRYRUN.md`.
 
 The existing `Medium_Phone_API_36.1` Android emulator was launched without wipe/reset or app reinstall and then moved from invisible Session 0 to active console Session 1 using an on-demand non-recurring scheduled task; Wantok Services `io.wantok.service/.MainActivity` was confirmed resumed. Docker Desktop initially failed due to a missing `ProgramData` variable in the remote process and was recovered through process-only environment restoration, retaining local Supabase and ClamAV volumes. Preserve working customer UI, photographic categories, signed-in session and `SMOKE_20261008_*` markers. CX1 still requires signed-in Web QA before T2.4; applicant uploads remain disabled.
+
+---
+
+## FILLER-2026-10-09-07 — Customer navigation placement, Vanessa image and green/gold theme
+
+**Status: IMPLEMENTED, FULL FLUTTER/DB TESTS PASS AND UPDATED DEBUG APK INSTALLED ON EAGLT02.** Inbox remains an accessible destination but is moved to a header icon directly beside Profile; the client bottom navigation is **Home · Services · Track · Wallet**, and vendor navigation remains Dashboard/Jobs/Listings/Me with header Inbox. Keep the existing **Account/Profile → Apply for vendor profile** registration entry, role checks and mode switch. Do not introduce a new registration shortcut on Home or Services; any pre-existing vendor workspace entry remains unchanged.
+
+Replace blue primary styling with forest green/dark green and golden yellow in the shared theme; retain category photography, the scenic PNG discovery banner and **Vanessa's original `vanessa_local_provider.jpg`** green/gold `Services for everyday life` card. Remove the redundant horizontal Home category-chip row in favour of the existing Popular Categories grid. Vanessa's promo now leads to provider discovery, while scenic PNG remains broader Services discovery. Preserve the twelve development-only `S`-marked photographic reference previews under Services; do not misrepresent them as advertisements, customer listings, verified providers or financial transactions. No database/storage changes. Follow-up sign-in Web and owner visual QA remain open.

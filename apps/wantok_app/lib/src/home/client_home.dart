@@ -149,79 +149,8 @@ class _ClientHomeState extends State<ClientHome> {
                 onSearchTap: _openServices,
                 onAgentTap: widget.onAgentTap == null ? null : _openAgent,
               ),
-              if (quickServices.isNotEmpty || widget.onAgentTap != null) ...[
-                const SizedBox(height: 12),
-                SizedBox(
-                  height: 42,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: quickServices.length + 4,
-                    separatorBuilder: (_, _) => const SizedBox(width: 8),
-                    itemBuilder: (context, index) {
-                      if (index == 0) {
-                        return ActionChip(
-                          avatar: const Icon(Icons.grid_view_rounded, size: 17),
-                          label: const Text('All'),
-                          onPressed: _openServices,
-                        );
-                      }
-                      if (index <= quickServices.length) {
-                        final service = quickServices[index - 1];
-                        return ActionChip(
-                          avatar: WantokCategoryBadge(
-                            style: WantokCategoryStyles.bySlug(service.slug),
-                            size: 24,
-                          ),
-                          label: Text(_shortLabel(service)),
-                          onPressed: () => _openService(service),
-                        );
-                      }
-
-                      final extraIndex = index - quickServices.length - 1;
-                      if (extraIndex == 0) {
-                        return ActionChip(
-                          avatar: const WantokCategoryBadge(
-                            style: WantokCategoryStyles.travel,
-                            size: 24,
-                          ),
-                          label: const Text('Travel & Flights'),
-                          onPressed: () =>
-                              _openPlannedGlobalService('Travel & Flights'),
-                        );
-                      }
-                      if (extraIndex == 1) {
-                        return ActionChip(
-                          avatar: const WantokCategoryBadge(
-                            style: WantokCategoryStyles.hotels,
-                            size: 24,
-                          ),
-                          label: const Text('Hotels'),
-                          onPressed: () => _openPlannedGlobalService('Hotels'),
-                        );
-                      }
-                      if (extraIndex == 2) {
-                        return ActionChip(
-                          avatar: const WantokCategoryBadge(
-                            style: WantokCategoryStyles.more,
-                            size: 24,
-                          ),
-                          label: const Text('More'),
-                          onPressed: _openServices,
-                        );
-                      }
-
-                      return ActionChip(
-                        avatar: const WantokCategoryBadge(
-                          style: WantokCategoryStyles.more,
-                          size: 24,
-                        ),
-                        label: const Text('More'),
-                        onPressed: _openServices,
-                      );
-                    },
-                  ),
-                ),
-              ],
+              // Home shows one quick category grid; the duplicate chip rail
+              // is omitted so Services remains the full catalogue.
               const SizedBox(height: 22),
               PngSectionTitle(
                 title: 'Popular categories',
@@ -337,7 +266,7 @@ class _ClientHomeState extends State<ClientHome> {
               const SizedBox(height: 18),
               _ScenicExploreBanner(onTap: _openServices),
               const SizedBox(height: 14),
-              _MarketplacePromo(onTap: _openServices),
+              _MarketplacePromo(onTap: _openProviderSearch),
               const SizedBox(height: 22),
               if (widget.loadServices == null) ...[
                 const SizedBox(height: 22),
