@@ -5,19 +5,17 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
-## Locked client navigation
+## Current approved client navigation — 9 October 2026
 
-Wantok Services keeps its own five-button bottom navigation:
+The current five-button bottom bar is **Home · Services · Explore · Track · Wallet**. **Inbox** is accessible from the top header immediately beside the **Profile/Account** button. This explicitly supersedes the earlier Home/Services/Track/Wallet/Inbox bottom bar documented in older evidence rows. Vendor navigation is separate and provider registration remains in Profile.
 
-**Home · Services · Track · Wallet · Inbox**
+- **Services** owns functional catalogue, provider discovery, search, Saved and filters.
+- **Explore** owns the scenic PNG discovery entry and, only for opt-in development builds, the existing twelve photographic `S`-marked reference previews. These are not live ads, inventory or approved experiences.
+- **Track** owns ongoing/scheduled/completed activity and reviews.
+- **Wallet** owns the Wantok Pay preview; no money moves.
+- **Inbox** remains messages/updates with a header shortcut. This redesign is not a change to server authority, role access or support handling.
 
-This is intentional and must not be renamed to Grab-style Discover / Activity / Payment / Messages. The product concepts are adapted, not cloned:
-
-- **Services** owns discovery, browse, search, saved items and local service exploration.
-- **Track** owns ongoing/scheduled/completed service activity, messaging entry points and reviews.
-- **Wallet** owns Wantok Pay preview and future payment history.
-- **Inbox** owns messages/updates.
-- Profile/Account remains outside the bottom bar.
+The previous client-shell rows below document earlier acceptance snapshots, not a claim that the old bottom-bar layout remains current. Fresh signed-in Web acceptance is still open.
 
 ## Acceptance and evidence
 

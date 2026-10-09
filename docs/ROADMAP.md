@@ -2,6 +2,15 @@
 
 **Updated:** 2026-10-09
 
+## CX1 next milestone — HONOR Android ARM64 visual beta and Web acceptance (2026-10-09)
+
+- [x] **Approved scope:** EAGLT02 source checkpoint `1ccd640` completed Home/Services/Explore separation, photo gallery relocation, green/gold design, Inbox beside Profile and five bottom tabs `Home · Services · Explore · Track · Wallet`; vendor registration remains inside Profile. Android emulator checked with opt-in S-marked samples.
+- [x] **Device-build diagnosis:** prior `wantok-android-prior-explore-20261009.apk` is an x86_64 Flutter debug engine build for an emulator, compiled with backend host `10.0.2.2`. It is NOT a working physical-phone build; default Android production signing remains unconfigured and debug-signed. The existing local development Supabase must not be exposed to enable a phone test.
+- [x] **HONOR offline phone-preview source and tests:** explicit `WANTOK_PHONE_PREVIEW=true` boot branch **before** Supabase init, approved photographic Home / Services / Explore, S-marked opt-in gallery, five tabs and conspicuous read-only warnings; no backend config, sign-in, bookings or payments. 4 focused phone tests PASS in both sample modes, 7 Flutter analyses clean, 75 client + 3 Admin + 1 Technical tests PASS, database 767/767 PASS.
+- [ ] **ARM64 APK packaging — BLOCKED by local Gradle-generated file locks:** attempted debug `android-arm64` build without the emulator `10.0.2.2` config, but `cleanMergeDebugAssets`/`mergeDebugNativeLibs` directory locks prevented any verified ARM64 artifact after controlled safe retries. Existing x86_64 emulator APK backed up before builds. Resolve in isolated generated build dir / clean build workspace, then inspect ABI, URL/secret absence, digest/version and safe mobile signing. **Do not distribute x86_64 backup or claim phone acceptance.**
+- [ ] **Functional physical-phone beta gate:** obtain/approve a dedicated reachable HTTPS staging API/Auth endpoint (not local emulator `10.0.2.2`), signed mobile test accounts and non-production dataset, TLS/network controls, safe mobile signing/update/distribution and end-to-end tests. No public Supabase Studio, PostgreSQL, unrestricted Storage or real money movement. No secrets in Git.
+- [ ] **Close CX1:** signed-in Web provider search/filter/rating/save/detail, Account/Inbox/Track/Wallet/Agent handoff, final Android/Web screenshots and documented acceptance in `docs/CX1_CLIENT_EXPERIENCE_GATE.md`. CX1 is still **IN PROGRESS**; T2.4 diagnostics follows acceptance, while CX1G/CX1H/ADS1/GLOB1/TRV1 remain planned.
+
 ## CX1 approved Explore restructuring (2026-10-09) — distinct destination and de-duplicated Home
 
 - [x] **Bottom navigation update:** add fifth client tab **Explore** between Services and Track; resulting **Home · Services · Explore · Track · Wallet**; keep Inbox icon beside Profile. Provider registration stays in Profile, vendor navigation unaffected.
@@ -151,13 +160,12 @@
 
 Required sequence: **T2.3 checkpoint → CX1 → T2.4**. T2.4 must wait until the client gate is completed with recorded evidence.
 
-### Navigation decision — LOCKED
+### Navigation decision — CURRENT (supersedes earlier historical layouts)
 
-Wantok Services keeps its own five-button client navigation:
+**Owner-approved current bottom bar: Home · Services · Explore · Track · Wallet.**
+**Inbox** is in the global header beside **Profile**; Account/Provider registration stays inside Profile. Vendor bottom navigation remains separate. The Home `Explore PNG and beyond` card opens Explore; photographic `Reference Screen Samples` are development-only on Explore, not Services.
 
-**Home · Services · Track · Wallet · Inbox**
-
-Do not rename the bottom bar to Grab-style **Discover / Activity / Payment / Messages**. Rich discovery belongs inside **Services**; lifecycle/activity belongs inside **Track**; profile remains outside the bottom bar and opens from Home/Account entry points.
+Earlier four/five-tab entries lower in this historical roadmap reflect prior checkpoints and are superseded by the 9 October 2026 CX1 Explore decision. Do not rename navigation to another brand's labels. Product discovery lives in Services; PNG travel/experience design discovery starts in Explore; activity lives in Track.
 
 ### CX1 reliability and discovery baseline
 
