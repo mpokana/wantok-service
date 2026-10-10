@@ -16,7 +16,7 @@
 | Check | Actual evidence | Status |
 | --- | --- | --- |
 | Operations Admin authenticated browser | Existing signed-in Chrome at `127.0.0.1:3200` visibly displayed the Operations overview and **Support & inquiries** sidebar; no role or backend override | **PASS — shell/sidebar only** |
-| Operations Support & Inquiries **queue** | 5 synthetic Flutter widget scenarios previously PASS; prior local read-only database count = 1 open handoff. Authenticated queue itself not observed in a stable browser: foreground desktop tabs changed during attempted inspection | **BLOCKED / OWNER REVIEW REQUIRED** |
+| Operations Support & Inquiries **queue** | Later owner screenshot verified genuine authenticated queue display: one existing Open QA handoff, UTC timestamp, filters/Refresh visible. Source updated to `a69d366` and Admin `:3200` redeployed; filter/Refresh interaction checked via eight focused Flutter widget cases, not post-restart live browser | **PASS — display; browser interactions not separately observed** |
 | Signed-in Android Services | Existing EAGLT02 `emulator-5554` opens real All Services and provider discovery | **PASS** |
 | Signed-in Android CX1F plumber search | Search `plumber`, filter **Specialist Services → Morobe → Lae**, result **Wantok QA Plumbing Services** 5.0 stars from one review | **PASS** |
 | Signed-in Android provider detail | Opens provider storefront and approved **QA Plumber & Maintenance**, labelled Quote; no new action initiated | **PASS** |
