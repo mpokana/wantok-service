@@ -5,6 +5,16 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## CURRENT PRIMARY CX1F TEST — category-first, not plumber keyword (10 October 2026)
+
+**PASS — real signed-in Android, category-first read-only flow:** `Services → Browse providers → Specialist Services → Morobe → Lae → Provider Details`, **free-text search completely empty**. On the retained EAGLT02 emulator and existing Supabase data, filter choices all persisted and produced **Wantok QA Plumbing Services**, **5.0 (1)**, Specialist Services in Lae; detail opened and listed approved **QA Plumber & Maintenance**, `Specialist Services · Lae, Morobe · Quote`. This provider is an available non-commercial QA record, **not a claim that Specialist Services is the plumber category**. No Saved toggles, ratings/reviews, bookings, provider applications, payments or new records were written. Evidence stored privately in ignored `.wantok/cx1-categoryfirst-*.png`; no credential/screenshot committed.
+
+**Distinct routes observed:** Home → **Specialists** photo tile goes to an existing **Describe the job / Post request** form (form observed; never submitted). **Services → Browse providers / Explore providers** goes to the verified category/location provider directory. Do not confuse request creation with searching the approved-provider directory or change this UX without a separate decision.
+
+**Latest category-first checkpoint validation:** Seven Flutter analysis targets clean; **94 Client / 15 Admin / 1 Technical** tests PASS; **35 SQL files / 767 database assertions PASS**. This was a documentation/acceptance clarification and real emulator QA, **not** a new backend or UI feature release.
+
+**Primary unclosed gate is still authenticated Web CX1F on `:3000`:** repeat the SAME **blank-search** category/location/detail and read-only Saved verification, then Account/Inbox/Track/Wallet/Wantok Agent. Separate **secondary keyword matching** for `plumber` remains a prior Android PASS. Other trades (electricians, mechanics, ICT, etc.) and other service families must be judged on actual approved records or honest empty/unavailable states—not simulated data. Physical HONOR, status-changing support and production integrations remain gated. **CX1 IN PROGRESS; T2.4 DEFERRED.**
+
 ## CX1I owner screenshot acceptance and Refresh repair — 10 October 2026
 
 **PASS — authenticated Operations Admin queue DISPLAY.** The owner furnished a screenshot taken at `http://127.0.0.1:3200/` showing an authenticated **Support & Inquiries** page with **1 recent request / 1 open or assigned**, the original Open CX1 Android QA handoff, UTC timestamp and visible All/Open/Assigned/Resolved/Closed and Refresh controls. This supersedes the previous "browser queue not yet observed" entry below. A screenshot alone does not establish filter or Refresh interaction or any staff reply/assignment. Request text, image and browser credentials are not published to GitHub.
@@ -18,7 +28,8 @@
 | Operations Admin authenticated browser | Existing signed-in Chrome at `127.0.0.1:3200` visibly displayed the Operations overview and **Support & inquiries** sidebar; no role or backend override | **PASS — shell/sidebar only** |
 | Operations Support & Inquiries **queue** | Later owner screenshot verified genuine authenticated queue display: one existing Open QA handoff, UTC timestamp, filters/Refresh visible. Source updated to `a69d366` and Admin `:3200` redeployed; filter/Refresh interaction checked via eight focused Flutter widget cases, not post-restart live browser | **PASS — display; browser interactions not separately observed** |
 | Signed-in Android Services | Existing EAGLT02 `emulator-5554` opens real All Services and provider discovery | **PASS** |
-| Signed-in Android CX1F plumber search | Search `plumber`, filter **Specialist Services → Morobe → Lae**, result **Wantok QA Plumbing Services** 5.0 stars from one review | **PASS** |
+| Signed-in Android CX1F category-first (PRIMARY) | Services → Browse providers → Specialist Services → Morobe → Lae → QA provider/detail, **keyword field blank**, sourced 5.0 (1) and approved Quote listing | **PASS** |
+| Signed-in Android CX1F keyword search (SECONDARY) | Earlier `plumber` text search combined with Specialist Services → Morobe → Lae returned existing verified QA provider; independent from the category-first acceptance path | **PASS — secondary** |
 | Signed-in Android provider detail | Opens provider storefront and approved **QA Plumber & Maintenance**, labelled Quote; no new action initiated | **PASS** |
 | Saved persistence / reviews | The bookmark icon and sourced aggregate appeared but were **not tapped/changed** during this repeat; prior Android persistence checks remain historical evidence only | **NOT RE-TESTED** |
 | Android Inbox support visibility | Existing signed-in account shows Services (0), Help & support (1); did not open/export summary or send a reply | **PASS — read-only count and categorisation** |
