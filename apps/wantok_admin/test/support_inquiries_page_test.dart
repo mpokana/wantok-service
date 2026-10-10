@@ -93,6 +93,93 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
+  testWidgets('all status chips filter existing requests locally', (
+    tester,
+  ) async {
+    var reads = 0;
+    await pump(
+      tester,
+      width: 1440,
+      loader: () async {
+        reads++;
+        return requests;
+      },
+    );
+    for (final status in ['open', 'assigned', 'resolved', 'closed', 'all']) {
+      await tester.tap(find.byKey(ValueKey('support-status-$status')));
+      await tester.pumpAndSettle();
+      final showOpen = status == 'open' || status == 'all';
+      final showResolved = status == 'resolved' || status == 'all';
+      expect(
+        find.byKey(const ValueKey('support-request-request-1')),
+        showOpen ? findsOneWidget : findsNothing,
+      );
+      expect(
+        find.byKey(const ValueKey('support-request-request-2')),
+        showResolved ? findsOneWidget : findsNothing,
+      );
+      if (status == 'assigned' || status == 'closed') {
+        expect(find.text('No requests match this filter.'), findsOneWidget);
+      }
+    }
+    expect(reads, 1, reason: 'Filtering must not issue additional DB reads');
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Refresh reloads the queue without changing request status', (
+    tester,
+  ) async {
+    var reads = 0;
+    await pump(
+      tester,
+      width: 1440,
+      loader: () async {
+        reads++;
+        return reads == 1 ? requests : [requests.first];
+      },
+    );
+    expect(reads, 1);
+    expect(find.textContaining('2 recent requests'), findsOneWidget);
+    await tester.tap(find.widgetWithText(OutlinedButton, 'Refresh'));
+    await tester.pumpAndSettle();
+    expect(reads, 2);
+    expect(find.textContaining('1 recent request'), findsOneWidget);
+    expect(
+      find.byKey(const ValueKey('support-request-request-1')),
+      findsOneWidget,
+    );
+    expect(
+      find.byKey(const ValueKey('support-request-request-2')),
+      findsNothing,
+    );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Retry recovers safely after a failed support load', (
+    tester,
+  ) async {
+    var reads = 0;
+    await pump(
+      tester,
+      width: 390,
+      loader: () async {
+        reads++;
+        if (reads == 1) throw StateError('Disconnected');
+        return [requests.first];
+      },
+    );
+    expect(find.text('Could not load support requests'), findsOneWidget);
+    await tester.tap(find.byTooltip('Retry support queue'));
+    await tester.pumpAndSettle();
+    expect(reads, 2);
+    expect(
+      find.byKey(const ValueKey('support-request-request-1')),
+      findsOneWidget,
+    );
+    expect(find.text('Could not load support requests'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('support load failure displays retryable safe error', (
     tester,
   ) async {

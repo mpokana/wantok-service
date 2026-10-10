@@ -37,16 +37,17 @@ class _SupportInquiriesPageState extends State<SupportInquiriesPage> {
     if (loader != null) return loader();
     final rows = await WantokBackend.client
         .from('ai_agent_handoff_requests')
-        .select(
-          'id, summary, status, created_at, resolution_note',
-        )
+        .select('id, summary, status, created_at, resolution_note')
         .order('created_at', ascending: false)
         .limit(150);
     return (rows as List<dynamic>).cast<Map<String, dynamic>>();
   }
 
   void _refresh() {
-    setState(() => _future = _load());
+    // Keep setState synchronous: returning _load()'s Future is invalid.
+    setState(() {
+      _future = _load();
+    });
   }
 
   String _date(dynamic value) {
@@ -130,7 +131,7 @@ class _SupportInquiriesPageState extends State<SupportInquiriesPage> {
                     children: [
                       Text(
                         snapshot.connectionState == ConnectionState.done
-                            ? '${data.length} recent requests · $openCount open or assigned'
+                            ? '${data.length} recent ${data.length == 1 ? 'request' : 'requests'} · $openCount open or assigned'
                             : 'Loading requests…',
                         style: const TextStyle(
                           fontSize: 15,

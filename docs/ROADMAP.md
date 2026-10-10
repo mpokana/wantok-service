@@ -2,6 +2,14 @@
 
 **Updated:** 2026-10-10
 
+## CX1I owner browser evidence and read-only queue reliability — 10 October 2026
+
+- [x] **Authenticated Support & Inquiries queue DISPLAY PASS:** owner screenshot at `:3200` confirms signed-in page, 1 real existing Open CX1 QA handoff, UTC submission date, five filter chips and Refresh button. Neither active filter switching nor Refresh click is established by the screenshot.
+- [x] **Refresh/Retry Flutter assertion FIXED:** replace Future-returning `setState` callback with synchronous assignment, ensuring errors can retry without assertion; correct 1-request singular grammar. Eight Support widget tests cover widths 390/850/1440, all five status filters, refresh re-fetch, retry recovery, previous failure/error state. No RLS/schema/business writes.
+- [x] **Source validation PASS:** seven Flutter analysis targets, 94 Client + 15 Admin + 1 Technical widget tests, 35 SQL/767 pgTAP assertions, and clean source changes. No live data mutations.
+- [ ] **Deploy tested Admin-only source** to the existing detached `:3200` worktree after full Flutter/database regressions, verified GitHub checkpoint and independent local bundle. Preserve signed-in browser origin and client/technical servers.
+- [ ] **Remaining CX1:** authenticated Client **Web** functional QA (provider/plumber/filter/detail/Saved/Account/Inbox/Track/Wallet/Agent), HONOR physical/full Android visual check. Staff responses/assignments, model chat, approval/money/evidence movement remain gated; T2.4 deferred.
+
 ## CX1 functional Android evidence + Admin browser shell — 10 October 2026
 
 - [x] **Authenticated browser Admin shell/sidebar PASS** at `127.0.0.1:3200`: live Operations overview, existing signed-in session, Support & inquiries navigation visible; private screen evidence local-only.

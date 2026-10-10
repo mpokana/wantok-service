@@ -5,6 +5,12 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## CX1I owner screenshot acceptance and Refresh repair — 10 October 2026
+
+**PASS — authenticated Operations Admin queue DISPLAY.** The owner furnished a screenshot taken at `http://127.0.0.1:3200/` showing an authenticated **Support & Inquiries** page with **1 recent request / 1 open or assigned**, the original Open CX1 Android QA handoff, UTC timestamp and visible All/Open/Assigned/Resolved/Closed and Refresh controls. This supersedes the previous "browser queue not yet observed" entry below. A screenshot alone does not establish filter or Refresh interaction or any staff reply/assignment. Request text, image and browser credentials are not published to GitHub.
+
+**New code reliability coverage:** expanded `support_inquiries_page_test.dart` from 5 to **8 focused tests**. Tests discovered a pre-existing **Future-returning `setState` assertion when pressing Refresh/Retry**, now corrected with synchronous `setState` and the count singular/plural display fixed. Tests verify five local filters, backend-loader count, changed read results on Refresh, recovery after error/Retry and responsive sizes. **Full source regression PASS:** 7 Flutter analysis targets; 94 Client, 15 Operations Admin and 1 Technical tests; local database 35 files/767 assertions. **No real request mutation**, live chat, roles, payment or schema changes. Source does not imply separate Client Web authentication/functional acceptance. **CX1 IN PROGRESS; T2.4 DEFERRED.**
+
 ## Resumed live CX1 acceptance — 10 October 2026
 
 | Check | Actual evidence | Status |
