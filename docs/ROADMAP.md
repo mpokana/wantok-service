@@ -2,6 +2,15 @@
 
 **Updated:** 2026-10-10
 
+## CX1 functional Android evidence + Admin browser shell — 10 October 2026
+
+- [x] **Authenticated browser Admin shell/sidebar PASS** at `127.0.0.1:3200`: live Operations overview, existing signed-in session, Support & inquiries navigation visible; private screen evidence local-only.
+- [x] **Real signed-in Android CX1F provider-discovery PASS:** `plumber` search, Specialist Services → Morobe → Lae, QA provider 5.0 (1), provider detail, approved `QA Plumber & Maintenance` Quote listing. No Saved, booking or other user-data writes. Existing emulator userdata preserved.
+- [x] **Other Android read-only journey PASS:** Inbox Services (0) / Help & support (1), Track retained completed Specialist booking/Edit review entry, Wallet K0.00 inactive preview, and Profile My Settings/Wallet/Vendor menu. No sensitive request details read or edited. Installed Android Wallet is **blue**, while the newly approved Web style is **green**; update Android only through a verified, non-destructive detached-worktree build and retain this parity as an open check.
+- [ ] **Still pending Admin queue browser acceptance:** select Support & inquiries and verify 1 pre-existing open request and All/Open/Assigned/Resolved/Closed/Refresh behaviour with the authorised Admin session; do not capture/export requester text. Flutter widget tests and a database count are not substitutes for live route QA.
+- [ ] **Still pending Client Web CX1F:** personally signed-in browser search/filter/detail/read-only Saved and Account/Inbox/Track/Wallet/Wantok Agent, then tablet/handset acceptance. Android PASS cannot close Web gate. Real staff replies/assignments, live model gateway and all payment/provider-approval/evidence-intake gates remain disabled.
+- [ ] T2.4 starts only after CX1 acceptance, not merely after this evidence.
+
 ## CX1I deployment checkpoint — 10 October 2026
 
 - [x] **Read-only Operations Admin Support & Inquiries** deployed on EAGLT02 `http://127.0.0.1:3200/` from source `3342ac0` with original RLS/auth; HTML and Flutter bootstrap HTTP 200, backend read-only request count reports 1 pre-existing open handoff, 7 clean analysis targets, 94 Client + 12 Admin + 1 Technical widget tests and 35 SQL files/767 assertions PASS. `:3000` Client and `:3100` Technical Control still HTTP 200. No schema/role/payment changes.

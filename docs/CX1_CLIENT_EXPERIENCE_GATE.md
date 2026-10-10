@@ -5,6 +5,25 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## Resumed live CX1 acceptance — 10 October 2026
+
+| Check | Actual evidence | Status |
+| --- | --- | --- |
+| Operations Admin authenticated browser | Existing signed-in Chrome at `127.0.0.1:3200` visibly displayed the Operations overview and **Support & inquiries** sidebar; no role or backend override | **PASS — shell/sidebar only** |
+| Operations Support & Inquiries **queue** | 5 synthetic Flutter widget scenarios previously PASS; prior local read-only database count = 1 open handoff. Authenticated queue itself not observed in a stable browser: foreground desktop tabs changed during attempted inspection | **BLOCKED / OWNER REVIEW REQUIRED** |
+| Signed-in Android Services | Existing EAGLT02 `emulator-5554` opens real All Services and provider discovery | **PASS** |
+| Signed-in Android CX1F plumber search | Search `plumber`, filter **Specialist Services → Morobe → Lae**, result **Wantok QA Plumbing Services** 5.0 stars from one review | **PASS** |
+| Signed-in Android provider detail | Opens provider storefront and approved **QA Plumber & Maintenance**, labelled Quote; no new action initiated | **PASS** |
+| Saved persistence / reviews | The bookmark icon and sourced aggregate appeared but were **not tapped/changed** during this repeat; prior Android persistence checks remain historical evidence only | **NOT RE-TESTED** |
+| Android Inbox support visibility | Existing signed-in account shows Services (0), Help & support (1); did not open/export summary or send a reply | **PASS — read-only count and categorisation** |
+| Android Track completed booking | Existing completed Specialist Services booking and Edit review entry visible; no review edits | **PASS — read-only visual** |
+| Android Wallet safety | K0.00 preview explicitly says inactive rails; no payment action taken. Installed Android APK still has blue Wallet card, unlike newer approved green Web style | **PASS — safe preview; Android theme parity open** |
+| Android Profile header | My Settings / Wallet / Vendor menu visible; no role-changing or provider actions | **PASS — menu only** |
+| Client signed-in **Web** equivalent | `:3000` returned HTTP 200 but no current authenticated provider search/filter/detail browser run; prior owner accepted visual layout only | **OPEN** |
+| Account/Inbox/Track/Wallet/Agent browser checks | Prior Android/automated evidence exists; today's live signed-in Web flows, staff triage and real chat remain open | **OPEN** |
+
+Private local screenshots: `.wantok/cx1-operations-browser-initial-20261010.png` (Admin overview), `.wantok/cx1-android-services-live.png`, `.wantok/cx1-android-plumber-search.png`, and `.wantok/cx1-android-provider-detail.png`. Screenshots, private request summaries, credentials and session data are never added to GitHub. This test used the retained user/login and local RLS; no new accounts, fixtures, payment operations, approval actions, Saved changes or support submissions. **CX1 IN PROGRESS; T2.4 DEFERRED.** Fresh validation after this documentation-only review: **7 clean Flutter analyses, 94 Client + 12 Admin + 1 Technical tests PASS**, local PostgreSQL **35 files / 767 pgTAP assertions PASS**. First remote Flutter test process lacked `ProgramFiles(x86)`; a temporary process-only value resolved it and the complete rerun passed. No system configuration or data was changed.
+
 ## Owner-signed visual acceptance and CX1I continuation — 10 October 2026
 
 **PASS — visual UX acceptance only.** The owner inspected refreshed **signed-in Web** screenshots on EAGLT02, first accepted the compact desktop Home/Services composition, and then explicitly approved the consistent **Home · Services · Explore · Track · Wallet** plus header Inbox responsive layouts. The adopted code on `feature/flutter-platform-v1` at `b80ea83` uses centred Client page widths (1480 px for Home/Services/Explore/Wallet, 1160 px for Track/Inbox), compact category tiles and local editorial Explore photographs. Owner acceptance **does not** verify Web `plumber` provider search, province/town filters, rating aggregation, Saved persistence, authenticated Account privacy, Inbox help-detail, Track review, Agent handoff or HONOR offline/connected APK. Those remain separate CX1 functional/handset checks. No simulated bookings, financial transactions, providers or client data were introduced.
