@@ -221,6 +221,15 @@ abstract final class WantokCategoryStyles {
     photoAsset: 'assets/images/categories/category_more.webp',
   );
 
+  static const publicServices = WantokCategoryStyle(
+    slug: 'public-services',
+    title: 'Public\nServices',
+    icon: Icons.account_balance_rounded,
+    accent: Color(0xFF005337),
+    surface: Color(0xFFFFF2C6),
+    badgeSurface: Color(0xFFFFE49B),
+  );
+
   static const reference = <WantokCategoryStyle>[
     taxi,
     food,
@@ -239,6 +248,7 @@ abstract final class WantokCategoryStyles {
     financial,
     waterRides,
     labour,
+    publicServices,
     more,
   ];
 
@@ -263,6 +273,7 @@ abstract final class WantokCategoryStyles {
     'hotels' || 'accommodation' => hotels,
     'education-training' => education,
     'financial-services' => financial,
+    'public-services' => publicServices,
     _ => more,
   };
 }

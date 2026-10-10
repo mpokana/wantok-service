@@ -11,10 +11,12 @@ class EnterpriseServicesCatalogue extends StatefulWidget {
     required this.onCategory,
     required this.onAllServices,
     this.onSearch,
+    this.showPublicServices = false,
     super.key,
   });
   final ValueChanged<ReferenceCategorySpec> onCategory;
   final VoidCallback onAllServices;
+  final bool showPublicServices;
   final ValueChanged<String>? onSearch;
   @override
   State<EnterpriseServicesCatalogue> createState() =>
@@ -43,6 +45,9 @@ class _EnterpriseServicesCatalogueState
   }
 
   bool _matches(ReferenceCategorySpec spec) {
+    if (spec.slug == 'public-services' && !widget.showPublicServices) {
+      return false;
+    }
     final slug = spec.slug ?? '';
     final q = _query.trim().toLowerCase();
     final search =

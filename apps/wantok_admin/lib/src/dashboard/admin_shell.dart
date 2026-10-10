@@ -9,6 +9,7 @@ import 'staged_provider_review_page.dart';
 import 'operations_overview_page.dart';
 import 'operations_sidebar.dart';
 import 'support_inquiries_page.dart';
+import 'public_services_module_control_page.dart';
 
 class AdminShell extends StatefulWidget {
   const AdminShell({required this.roles, required this.email, super.key});
@@ -55,6 +56,10 @@ class _AdminShellState extends State<AdminShell> {
       icon: Icon(Icons.support_agent_outlined),
       label: Text('Support'),
     ),
+    NavigationRailDestination(
+      icon: Icon(Icons.tune_rounded),
+      label: Text('Modules'),
+    ),
   ];
 
   @override
@@ -72,6 +77,7 @@ class _AdminShellState extends State<AdminShell> {
       const _BookingsPage(),
       const _AuditPage(),
       const SupportInquiriesPage(),
+      const PublicServicesModuleControlPage(),
     ];
 
     final width = MediaQuery.sizeOf(context).width;

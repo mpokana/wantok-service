@@ -6,7 +6,7 @@ void main() {
   test(
     'Catalogue includes original reference and six extended service categories',
     () {
-      expect(ReferenceServiceCategories.items.length, 18);
+      expect(ReferenceServiceCategories.items.length, 19);
       expect(
         ReferenceServiceCategories.items
             .map((item) => item.title.replaceAll('\n', ' '))
@@ -29,6 +29,7 @@ void main() {
           'Financial Services',
           'Water Transport',
           'General Labour',
+          'Public Services',
           'More',
         ],
       );
@@ -92,19 +93,21 @@ void main() {
       expect(find.byType(GridView), findsWidgets);
       expect(
         find.image(
-          const AssetImage('assets/images/categories/category_taxi.webp'),
+          const AssetImage('assets/images/reference/services_taxi_photo.jpg'),
         ),
         findsWidgets,
       );
       expect(
         find.image(
-          const AssetImage('assets/images/categories/category_food.webp'),
+          const AssetImage('assets/images/reference/services_food_photo.jpg'),
         ),
         findsWidgets,
       );
       expect(
         find.image(
-          const AssetImage('assets/images/categories/category_groceries.webp'),
+          const AssetImage(
+            'assets/images/reference/services_groceries_photo.jpg',
+          ),
         ),
         findsWidgets,
       );

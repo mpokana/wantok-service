@@ -50,7 +50,7 @@ void main() {
       find.byKey(const ValueKey('reference-services-landing')),
       findsOneWidget,
     );
-    expect(find.text('All Services'), findsOneWidget);
+    expect(find.text('Services'), findsWidgets);
     expect(
       find.byKey(const ValueKey('reference-services-search')),
       findsOneWidget,

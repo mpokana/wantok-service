@@ -7,6 +7,7 @@ import 'package:wantok_ui/wantok_ui.dart';
 import 'smoke_data.dart';
 import 'reference_scene_details.dart';
 import 'wantok_category_ui.dart';
+import 'screenshot_service_tiles.dart';
 
 /// Twelve-category front door from the approved reference. The explicit
 /// categories always render, including before providers are onboarded.
@@ -105,6 +106,11 @@ abstract final class ReferenceServiceCategories {
       WantokCategoryStyles.labour,
       'general-labour',
       SmokeScene.trades,
+    ),
+    ReferenceCategorySpec(
+      WantokCategoryStyles.publicServices,
+      'public-services',
+      SmokeScene.providers,
     ),
     ReferenceCategorySpec(
       WantokCategoryStyles.more,
@@ -224,14 +230,29 @@ class ReferenceServicesLanding extends StatelessWidget {
     required this.onCategory,
     required this.onAllServices,
     this.onSearch,
+    this.showPublicServices = false,
   });
 
+  final bool showPublicServices;
   final ValueChanged<ReferenceCategorySpec> onCategory;
   final VoidCallback onAllServices;
   final ValueChanged<String>? onSearch;
 
   @override
   Widget build(BuildContext context) {
+    final categories = ReferenceServiceCategories.items
+        .where((item) => item.slug != 'public-services' || showPublicServices)
+        .toList(growable: true);
+    categories.sort((a, b) {
+      final aPriority = ScreenshotServiceArt.priority.indexOf(a.slug ?? '');
+      final bPriority = ScreenshotServiceArt.priority.indexOf(b.slug ?? '');
+      if (aPriority >= 0 && bPriority >= 0) {
+        return aPriority.compareTo(bPriority);
+      }
+      if (aPriority >= 0) return -1;
+      if (bPriority >= 0) return 1;
+      return 0;
+    });
     return ListView(
       key: const ValueKey('reference-services-landing'),
       padding: const EdgeInsets.fromLTRB(13, 8, 13, 26),
@@ -244,7 +265,7 @@ class ReferenceServicesLanding extends StatelessWidget {
 
               children: [
                 Text(
-                  'All Services',
+                  'Services',
                   style: TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.w900,
@@ -253,7 +274,7 @@ class ReferenceServicesLanding extends StatelessWidget {
                 ),
                 SizedBox(height: 3),
                 Text(
-                  'Find trusted services and providers across Papua New Guinea.',
+                  'Find trusted providers across Papua New Guinea.',
                   style: TextStyle(fontSize: 11.5, color: WantokColors.muted),
                 ),
               ],
@@ -293,17 +314,26 @@ class ReferenceServicesLanding extends StatelessWidget {
         LayoutBuilder(
           builder: (context, constraints) {
             final scale = MediaQuery.textScalerOf(context).scale(1);
-            final height =
-                (constraints.maxWidth / 3.0 * 1.06 +
-                        (scale - 1).clamp(0, 2) * 55)
-                    .toDouble();
-            return AdaptiveCategoryGrid(
-              itemCount: ReferenceServiceCategories.items.length,
-              tileHeight: height,
-              rowSpacing: 8,
-              columnSpacing: 8,
+            return GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: categories.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisExtent: 169 + (scale - 1).clamp(0, 2) * 88,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+              ),
               itemBuilder: (context, index) {
-                final cat = ReferenceServiceCategories.items[index];
+                final cat = categories[index];
+                final art = ScreenshotServiceArt.items[cat.slug];
+                if (art != null) {
+                  return ScreenshotServicesCard(
+                    key: ValueKey('reference-category-${cat.title}'),
+                    art: art,
+                    onTap: () => onCategory(cat),
+                  );
+                }
                 return WantokCategoryTile(
                   key: ValueKey('reference-category-${cat.title}'),
                   style: cat.style,

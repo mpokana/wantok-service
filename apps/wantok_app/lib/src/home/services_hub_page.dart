@@ -5,6 +5,7 @@ import 'offline_demo_navigation.dart';
 import 'reference_services_gallery.dart';
 import 'enterprise_services_catalogue.dart';
 import 'category_information_page.dart';
+import 'public_services_page.dart';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:wantok_api/wantok_api.dart';
@@ -199,6 +200,14 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
     ReferenceCategorySpec spec,
     List<WantokServiceCategory> services,
   ) {
+    // The public information module is never a sample/booking route.
+    if (spec.slug == 'public-services' &&
+        services.any((service) => service.slug == 'public-services')) {
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(builder: (_) => const PublicServicesPage()),
+      );
+      return;
+    }
     if (widget.demoMode && spec.title != 'More') {
       OfflineDemoNavigation.category(
         context,
@@ -539,7 +548,9 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
       child: FutureBuilder<List<WantokServiceCategory>>(
         future: _future,
         builder: (context, snapshot) {
-          final services = snapshot.data ?? const <WantokServiceCategory>[];
+          final services = (snapshot.data ?? const <WantokServiceCategory>[])
+              .where((service) => service.isActive)
+              .toList(growable: false);
           final query = _query.trim().toLowerCase();
           final filtered = services
               .where((service) {
@@ -572,6 +583,9 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
                       },
                     )
                   : ReferenceServicesLanding(
+                      showPublicServices: services.any(
+                        (s) => s.slug == 'public-services',
+                      ),
                       onCategory: (spec) =>
                           _openReferenceCategory(spec, services),
                       onAllServices: () =>
@@ -1009,6 +1023,7 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
     required double textScale,
   }) {
     final accent = switch (family) {
+      WantokServiceFamily.publicServices => const Color(0xFF005337),
       WantokServiceFamily.moveTravel => const Color(0xFF0B6F9E),
       WantokServiceFamily.foodShopping => const Color(0xFFB85624),
       WantokServiceFamily.sendTasks => const Color(0xFF007A50),
@@ -1132,6 +1147,12 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
   }
 
   void _openService(WantokServiceCategory service) {
+    if (service.slug == 'public-services') {
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(builder: (_) => const PublicServicesPage()),
+      );
+      return;
+    }
     if (widget.demoMode) {
       OfflineDemoNavigation.category(context, service.slug);
       return;

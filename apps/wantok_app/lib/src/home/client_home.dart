@@ -15,10 +15,12 @@ import '../services/taxi_ride_page.dart';
 import '../services/water_transport_page.dart';
 import 'png_visuals.dart';
 import 'explore_page.dart';
-import 'adaptive_category_grid.dart';
 import 'provider_discovery_page.dart';
 import 'service_catalog_taxonomy.dart';
 import 'wantok_category_ui.dart';
+import 'public_services_page.dart';
+import 'screenshot_service_tiles.dart';
+import 'adaptive_category_grid.dart';
 import 'services_hub_page.dart';
 import 'wantok_pay_preview_page.dart';
 
@@ -159,7 +161,9 @@ class _ClientHomeState extends State<ClientHome> {
       child: FutureBuilder<List<WantokServiceCategory>>(
         future: _services,
         builder: (context, snapshot) {
-          final services = snapshot.data ?? const <WantokServiceCategory>[];
+          final services = (snapshot.data ?? const <WantokServiceCategory>[])
+              .where((service) => service.isActive)
+              .toList(growable: false);
           final quickServices = _quickAccessServices(services);
           final textScale = MediaQuery.textScalerOf(context).scale(1);
           final viewportWidth = MediaQuery.sizeOf(context).width;
@@ -245,10 +249,24 @@ class _ClientHomeState extends State<ClientHome> {
                   ),
                   child: LayoutBuilder(
                     builder: (context, constraints) {
-                      final categoryCount = quickServices.length + 2;
+                      final categoryCount = quickServices.length + 1;
+                      final travelIndex = quickServices.length >= 5
+                          ? 5
+                          : quickServices.length;
                       Widget tile(BuildContext context, int index) {
-                        if (index < quickServices.length) {
-                          final service = quickServices[index];
+                        if (index != travelIndex) {
+                          final service =
+                              quickServices[index > travelIndex
+                                  ? index - 1
+                                  : index];
+                          final art = ScreenshotServiceArt.items[service.slug];
+                          if (constraints.maxWidth < 700 && art != null) {
+                            return ScreenshotHomeTile(
+                              key: ValueKey('home-category-${service.slug}'),
+                              art: art,
+                              onTap: () => _openService(service),
+                            );
+                          }
                           return WantokCategoryTile(
                             key: ValueKey('home-category-${service.slug}'),
                             compact: constraints.maxWidth < 700,
@@ -259,20 +277,20 @@ class _ClientHomeState extends State<ClientHome> {
                           );
                         }
 
-                        if (index == quickServices.length) {
-                          return WantokCategoryTile(
-                            compact: constraints.maxWidth < 700,
-                            style: WantokCategoryStyles.travel,
-                            label: 'Travel & Flights',
+                        if (constraints.maxWidth < 700) {
+                          return ScreenshotHomeTile(
+                            key: const ValueKey('home-category-travel-flights'),
+                            art: ScreenshotServiceArt.items['travel-flights']!,
                             onTap: () =>
                                 _openPlannedGlobalService('Travel & Flights'),
                           );
                         }
-
                         return WantokCategoryTile(
                           compact: constraints.maxWidth < 700,
-                          style: WantokCategoryStyles.hotels,
-                          onTap: () => _openPlannedGlobalService('Hotels'),
+                          style: WantokCategoryStyles.travel,
+                          label: 'Travel & Flights',
+                          onTap: () =>
+                              _openPlannedGlobalService('Travel & Flights'),
                         );
                       }
 
@@ -295,9 +313,16 @@ class _ClientHomeState extends State<ClientHome> {
                       }
                       return AdaptiveCategoryGrid(
                         itemCount: categoryCount,
-                        tileHeight: 126,
-                        columnSpacing: 5,
-                        rowSpacing: 3,
+                        initialColumns:
+                            constraints.maxWidth >= 320 && textScale <= 1.3
+                            ? 4
+                            : 2,
+                        tileHeight:
+                            constraints.maxWidth >= 320 && textScale <= 1.3
+                            ? 93
+                            : 118,
+                        columnSpacing: 7,
+                        rowSpacing: 7,
                         itemBuilder: tile,
                       );
                     },
@@ -493,6 +518,12 @@ class _ClientHomeState extends State<ClientHome> {
   };
 
   void _openService(WantokServiceCategory service) {
+    if (service.slug == 'public-services') {
+      Navigator.of(context).push(
+        MaterialPageRoute<void>(builder: (_) => const PublicServicesPage()),
+      );
+      return;
+    }
     if (widget.demoMode) {
       OfflineDemoNavigation.category(context, service.slug);
       return;

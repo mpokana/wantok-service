@@ -27,6 +27,7 @@ class AdaptiveCategoryGrid extends StatefulWidget {
     this.columnSpacing = 10,
     this.rowSpacing = 10,
     this.gridKey,
+    this.initialColumns,
     super.key,
   });
 
@@ -36,6 +37,7 @@ class AdaptiveCategoryGrid extends StatefulWidget {
   final double columnSpacing;
   final double rowSpacing;
   final Key? gridKey;
+  final int? initialColumns;
 
   @override
   State<AdaptiveCategoryGrid> createState() => _AdaptiveCategoryGridState();
@@ -103,7 +105,7 @@ class _AdaptiveCategoryGridState extends State<AdaptiveCategoryGrid> {
       final textScaler = MediaQuery.textScalerOf(context);
       final expandedText = textScaler.scale(14) > 17;
       final suggested = constraints.maxWidth >= 420 && !expandedText ? 3 : 2;
-      final columns = _selectedDensity ?? suggested;
+      final columns = _selectedDensity ?? widget.initialColumns ?? suggested;
       return Listener(
         key: const ValueKey('adaptive-category-gesture-surface'),
         behavior: HitTestBehavior.translucent,

@@ -51,6 +51,13 @@ enum WantokServiceFamily {
     subtitle: 'Venues, events and things to do.',
     icon: Icons.event_available_rounded,
     slugs: <String>{'venue-booking', 'events'},
+  ),
+  publicServices(
+    label: 'Public services',
+    shortLabel: 'Public',
+    subtitle: 'Emergency, health, government and community information.',
+    icon: Icons.account_balance_rounded,
+    slugs: <String>{'public-services'},
   );
 
   const WantokServiceFamily({
@@ -71,6 +78,7 @@ enum WantokServiceFamily {
       this == WantokServiceFamily.all || slugs.contains(slug);
 
   static List<WantokServiceFamily> get catalogueFamilies => const [
+    publicServices,
     moveTravel,
     foodShopping,
     sendTasks,
@@ -83,9 +91,10 @@ enum WantokServiceFamily {
 /// The complete catalogue remains in the Services tab.
 const wantokHomeQuickAccessOrder = <String>[
   'taxi-ride',
-  'food',
-  'delivery',
-  'groceries',
-  'specialist-services',
   'vehicle-hire',
+  'food',
+  'groceries',
+  'delivery',
+  'specialist-services',
+  'public-services',
 ];

@@ -4,9 +4,9 @@ import 'package:wantok_app/src/home/wantok_category_ui.dart';
 import 'package:wantok_app/src/home/reference_services_gallery.dart';
 
 void main() {
-  test('Eighteen catalogue entries use the central picture registry', () {
+  test('Nineteen catalogue entries share the category style registry', () {
     final styles = WantokCategoryStyles.reference;
-    expect(styles.length, 18);
+    expect(styles.length, 19);
     expect(
       styles.map((style) => style.photoAsset).toSet().length,
       greaterThanOrEqualTo(12),
@@ -19,8 +19,16 @@ void main() {
       expect(category.colour, styles[i].accent);
       expect(category.surface, styles[i].surface);
       expect(category.style.photoAsset, styles[i].photoAsset);
-      expect(styles[i].photoAsset, startsWith('assets/images/'));
-      expect(styles[i].photoAsset, anyOf(endsWith('.webp'), endsWith('.png')));
+      if (styles[i] == WantokCategoryStyles.publicServices) {
+        // The Public Services tile intentionally uses the approved gold icon.
+        expect(styles[i].photoAsset, isNull);
+      } else {
+        expect(styles[i].photoAsset, startsWith('assets/images/'));
+        expect(
+          styles[i].photoAsset,
+          anyOf(endsWith('.webp'), endsWith('.png')),
+        );
+      }
     }
   });
 
