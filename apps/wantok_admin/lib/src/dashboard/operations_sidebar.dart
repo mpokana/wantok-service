@@ -18,6 +18,7 @@ class OperationsSidebar extends StatelessWidget {
     ('Resources', Icons.inventory_2_outlined),
     ('Bookings & orders', Icons.receipt_long_outlined),
     ('Audit & activity', Icons.history_outlined),
+    ('Support & inquiries', Icons.support_agent_outlined),
   ];
 
   @override

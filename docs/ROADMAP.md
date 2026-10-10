@@ -2,6 +2,13 @@
 
 **Updated:** 2026-10-10
 
+## CX1 owner visual acceptance + support triage foundation — 10 October 2026
+
+- [x] **Owner-approved responsive Client presentation:** after reviewing live, signed-in EAGLT02 Client screenshots at `127.0.0.1:3000`, owner explicitly approved the updated enterprise **Home, Services, Explore, Track, Wallet and Inbox** desktop/tablet/mobile styling on 10 October 2026. The previous visual-approval checkbox in the historical section is superseded by this PASS; it is not proof of authenticated end-to-end provider discovery, OAuth, payment, every populated state, or actual HONOR acceptance.
+- [x] **CX1I read-only Operations support intake:** (verified: 7 clean Flutter analyses, 94 Client + 12 Admin + 1 Technical tests, 35 SQL/767 assertions) an authenticated Admin-only **Support & Inquiries** navigation destination queries `ai_agent_handoff_requests` under existing Supabase RLS, shows a bounded recent queue, open/assigned/resolved/closed status filters and safe retry; no new users/roles/schema, no staff responses, no status mutations and no impersonation. Existing agent-owner Inbox remains separate. Local Admin browser QA and staff workflow acceptance remain pending.
+- [ ] **CX1 functional gate:** authentic signed-in Web `plumber` search → Specialist Services/Morobe/Lae filters → 5.0 (1) provider detail + read-only Saved state; Account privacy, Inbox Help & support, Track completed booking/review, Wallet preview and Agent entry/handoff; capture verified real browser evidence without exporting any Chrome cookies or writing new records. **CX1 IN PROGRESS; T2.4 DEFERRED.**
+- [ ] **CX1I further step:** authorised staff assignment/status update with audit, responses to owner Inbox, and approved live human-chat capability remain unimplemented. Model chat and payment rails remain disabled.
+
 ## Unified signed-in Client desktop pages — 10 October 2026 (source PASS; browser review pending)
 
 - [x] **Consistent responsive shell:** `ResponsiveClientCanvas` centres all six signed-in Client destinations on wider screens; Home, Services, Explore and Wallet have a 1480 px maximum; activity/Track and Inbox use a 1160 px reading width. Below 700 px the original handheld flow remains unchanged, and tablet uses available width.

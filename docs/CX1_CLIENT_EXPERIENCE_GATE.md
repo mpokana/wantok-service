@@ -5,6 +5,12 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## Owner-signed visual acceptance and CX1I continuation — 10 October 2026
+
+**PASS — visual UX acceptance only.** The owner inspected refreshed **signed-in Web** screenshots on EAGLT02, first accepted the compact desktop Home/Services composition, and then explicitly approved the consistent **Home · Services · Explore · Track · Wallet** plus header Inbox responsive layouts. The adopted code on `feature/flutter-platform-v1` at `b80ea83` uses centred Client page widths (1480 px for Home/Services/Explore/Wallet, 1160 px for Track/Inbox), compact category tiles and local editorial Explore photographs. Owner acceptance **does not** verify Web `plumber` provider search, province/town filters, rating aggregation, Saved persistence, authenticated Account privacy, Inbox help-detail, Track review, Agent handoff or HONOR offline/connected APK. Those remain separate CX1 functional/handset checks. No simulated bookings, financial transactions, providers or client data were introduced.
+
+**CX1I read-only staff triage implementation:** Operations Admin receives a `Support & Inquiries` destination reading the existing `ai_agent_handoff_requests` under existing RLS. A bounded 150-record read, status filters and safe error/retry are provided; only authenticated Admin app users can reach the shell, while RLS controls database visibility. No staff status update, assignment, outbound response or live chat is implemented by this page. The owner-visible Inbox Help & support source remains unchanged. **Full source regression PASS:** 7 Flutter analysis targets, 94 Client + 12 Operations Admin + 1 Technical Control tests; 35 SQL files / 767 pgTAP assertions. **CX1 stays IN PROGRESS; T2.4 DEFERRED** until functional signed-in evidence, separate physical-device approval and remaining CX1-specific gates.
+
 ## Current approved client navigation — 9 October 2026
 
 The current five-button bottom bar is **Home · Services · Explore · Track · Wallet**. **Inbox** is accessible from the top header immediately beside the **Profile/Account** button. This explicitly supersedes the earlier Home/Services/Track/Wallet/Inbox bottom bar documented in older evidence rows. Vendor navigation is separate and provider registration remains in Profile.
