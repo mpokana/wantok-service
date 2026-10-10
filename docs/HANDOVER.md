@@ -4,6 +4,13 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## DESKTOP CLIENT HOME — RESPONSIVE LAYOUT FIX (10 OCTOBER 2026)
+
+- **Owner screenshots:** the signed-in Client on `127.0.0.1:3000` stretched a three-column mobile photo grid across desktop browser; Operations Admin `:3200` and Technical Control `:3100` already displayed desktop structures and their existing accounts successfully signed in.
+- **Source changes:** `apps/wantok_app/lib/src/home/client_home.dart` now limits desktop content to 1480 px centred, displays the bundled **Venenssa** promotional image above categories at >=1000 px, and uses compact category tiles of at most 205 px instead of three gigantic desktop banners at widths >=700 px; handheld pinch grid and lower placement of promo unchanged. `home_shell.dart` uses top desktop navigation and hides the phone bottom bar only at widths >=1120 px.
+- **Safety:** presentation/UX only; no Supabase writes, roles, payments, email, user sessions, HONOR data, emulator or admin/tech modules affected. Local `supabase/snippets/` is owner-created/untracked and must remain untouched. Original existing image asset filename not renamed.
+- **Validation:** all 7 Flutter analyses clean; **88 Client, 7 Admin, 1 Tech** widget tests; **35 SQL files, 767 assertions** PASS. New tests for Home 390/900/1600 px and desktop shell 1500 px. Follow-up: commit+GitHub push, independent verified bundle, restart only Client :3000 from commit (isolated worktree), manually verify signed-in web. **CX1 remains IN PROGRESS**; remaining Explore/Track/Wallet/Inbox fidelity and full signed-in QA need acceptance.
+
 ## ENTERPRISE RESPONSIVE UI CHECKPOINT — 10 October 2026
 
 - **Owner approved coding from six reference mockup images**, not new image generation. EAGLT02 alone authorised. New `apps/wantok_app/lib/src/home/enterprise_services_catalogue.dart`, wired from existing `services_hub_page.dart` at width >=700 px; photo catalogue 4/3/2 responsive columns, functional local filtering/search/provider link; smaller handhelds retain current pinch photo tiles. Original photo asset still called `vanessa_local_provider.jpg` on disk but owner's preferred name is **Venenssa**; do not rename asset or invent profile/endorsement data.

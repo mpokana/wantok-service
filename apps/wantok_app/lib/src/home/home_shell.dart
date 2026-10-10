@@ -273,15 +273,21 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
       child: Scaffold(
         appBar: _buildAppBar(),
         body: IndexedStack(index: _tabIndex, children: pages),
-        bottomNavigationBar: _WantokBottomBar(
-          items: navItems,
-          selectedIndex: _tabIndex == (_mode == AppMode.client ? 5 : 3)
-              ? -1
-              : (_mode == AppMode.vendor && _tabIndex == 4 ? 3 : _tabIndex),
-          onSelected: (index) => setState(
-            () => _tabIndex = _mode == AppMode.vendor && index == 3 ? 4 : index,
-          ),
-        ),
+        bottomNavigationBar: MediaQuery.sizeOf(context).width >= 1120
+            ? null
+            : _WantokBottomBar(
+                items: navItems,
+                selectedIndex: _tabIndex == (_mode == AppMode.client ? 5 : 3)
+                    ? -1
+                    : (_mode == AppMode.vendor && _tabIndex == 4
+                          ? 3
+                          : _tabIndex),
+                onSelected: (index) => setState(
+                  () => _tabIndex = _mode == AppMode.vendor && index == 3
+                      ? 4
+                      : index,
+                ),
+              ),
       ),
     );
   }
@@ -339,6 +345,20 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
         ],
       ),
       actions: [
+        if (MediaQuery.sizeOf(context).width >= 1120 && client) ...[
+          _desktopNavButton('Home', Icons.home_outlined, 0),
+          _desktopNavButton('Services', Icons.grid_view_outlined, 1),
+          _desktopNavButton('Explore', Icons.explore_outlined, 2),
+          _desktopNavButton('Track', Icons.route_outlined, 3),
+          _desktopNavButton('Wallet', Icons.account_balance_wallet_outlined, 4),
+          const SizedBox(width: 16),
+        ] else if (MediaQuery.sizeOf(context).width >= 1120) ...[
+          _desktopNavButton('Dashboard', Icons.dashboard_outlined, 0),
+          _desktopNavButton('Jobs', Icons.work_outline_rounded, 1),
+          _desktopNavButton('Listings', Icons.storefront_outlined, 2),
+          _desktopNavButton('Me', Icons.person_outline_rounded, 4),
+          const SizedBox(width: 16),
+        ],
         IconButton(
           tooltip: 'Inbox',
           onPressed: () =>
@@ -360,6 +380,32 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
           child: WantokProfileMenu(onSelected: _selectProfileAction),
         ),
       ],
+    );
+  }
+
+  Widget _desktopNavButton(String label, IconData icon, int index) {
+    final selected = _tabIndex == index;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 9),
+      child: TextButton.icon(
+        key: ValueKey('wantok-desktop-nav-$label'),
+        onPressed: () => setState(() => _tabIndex = index),
+        icon: Icon(icon, size: 19),
+        label: Text(label),
+        style: TextButton.styleFrom(
+          foregroundColor: selected
+              ? WantokColors.primaryDark
+              : WantokColors.ink,
+          backgroundColor: selected
+              ? const Color(0xFFE6F3EB)
+              : Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          textStyle: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13),
+        ),
+      ),
     );
   }
 }

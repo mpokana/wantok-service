@@ -162,15 +162,34 @@ class _ClientHomeState extends State<ClientHome> {
           final services = snapshot.data ?? const <WantokServiceCategory>[];
           final quickServices = _quickAccessServices(services);
           final textScale = MediaQuery.textScalerOf(context).scale(1);
+          final viewportWidth = MediaQuery.sizeOf(context).width;
+          final desktop = viewportWidth >= 1000;
+          final horizontalPadding = viewportWidth >= 1550
+              ? (viewportWidth - 1480) / 2
+              : desktop
+              ? 26.0
+              : 14.0;
 
           return ListView(
             physics: const AlwaysScrollableScrollPhysics(),
-            padding: const EdgeInsets.fromLTRB(14, 12, 14, 24),
+            padding: EdgeInsets.fromLTRB(
+              horizontalPadding,
+              16,
+              horizontalPadding,
+              26,
+            ),
             children: [
               _MarketplaceHero(
                 onSearchTap: _openServices,
                 onAgentTap: widget.onAgentTap == null ? null : _openAgent,
               ),
+              if (desktop) ...[
+                const SizedBox(height: 18),
+                SizedBox(
+                  height: 230,
+                  child: _MarketplacePromo(onTap: _openProviderSearch),
+                ),
+              ],
               // Home shows one quick category grid; the duplicate chip rail
               // is omitted so Services remains the full catalogue.
               const SizedBox(height: 22),
@@ -227,40 +246,59 @@ class _ClientHomeState extends State<ClientHome> {
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       final categoryCount = quickServices.length + 2;
+                      Widget tile(BuildContext context, int index) {
+                        if (index < quickServices.length) {
+                          final service = quickServices[index];
+                          return WantokCategoryTile(
+                            key: ValueKey('home-category-${service.slug}'),
+                            compact: constraints.maxWidth < 700,
+                            style: WantokCategoryStyles.bySlug(service.slug),
+                            label: _shortLabel(service),
+                            badge: _badgeFor(service.slug),
+                            onTap: () => _openService(service),
+                          );
+                        }
+
+                        if (index == quickServices.length) {
+                          return WantokCategoryTile(
+                            compact: constraints.maxWidth < 700,
+                            style: WantokCategoryStyles.travel,
+                            label: 'Travel & Flights',
+                            onTap: () =>
+                                _openPlannedGlobalService('Travel & Flights'),
+                          );
+                        }
+
+                        return WantokCategoryTile(
+                          compact: constraints.maxWidth < 700,
+                          style: WantokCategoryStyles.hotels,
+                          onTap: () => _openPlannedGlobalService('Hotels'),
+                        );
+                      }
+
+                      if (constraints.maxWidth >= 700) {
+                        return GridView.builder(
+                          key: const ValueKey('enterprise-home-category-grid'),
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: categoryCount,
+                          gridDelegate:
+                              SliverGridDelegateWithMaxCrossAxisExtent(
+                                maxCrossAxisExtent: 205,
+                                mainAxisExtent:
+                                    165 + (textScale - 1).clamp(0, 2) * 55,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                              ),
+                          itemBuilder: tile,
+                        );
+                      }
                       return AdaptiveCategoryGrid(
                         itemCount: categoryCount,
                         tileHeight: 126,
                         columnSpacing: 5,
                         rowSpacing: 3,
-                        itemBuilder: (context, index) {
-                          if (index < quickServices.length) {
-                            final service = quickServices[index];
-                            return WantokCategoryTile(
-                              key: ValueKey('home-category-${service.slug}'),
-                              compact: true,
-                              style: WantokCategoryStyles.bySlug(service.slug),
-                              label: _shortLabel(service),
-                              badge: _badgeFor(service.slug),
-                              onTap: () => _openService(service),
-                            );
-                          }
-
-                          if (index == quickServices.length) {
-                            return WantokCategoryTile(
-                              compact: true,
-                              style: WantokCategoryStyles.travel,
-                              label: 'Travel & Flights',
-                              onTap: () =>
-                                  _openPlannedGlobalService('Travel & Flights'),
-                            );
-                          }
-
-                          return WantokCategoryTile(
-                            compact: true,
-                            style: WantokCategoryStyles.hotels,
-                            onTap: () => _openPlannedGlobalService('Hotels'),
-                          );
-                        },
+                        itemBuilder: tile,
                       );
                     },
                   ),
@@ -271,8 +309,10 @@ class _ClientHomeState extends State<ClientHome> {
                   heading: 'Sample popular near you',
                 ),
               const SizedBox(height: 18),
-              _MarketplacePromo(onTap: _openProviderSearch),
-              const SizedBox(height: 22),
+              if (!desktop) ...[
+                _MarketplacePromo(onTap: _openProviderSearch),
+                const SizedBox(height: 22),
+              ],
               if (widget.loadServices == null || widget.demoMode) ...[
                 const SizedBox(height: 22),
                 PngSectionTitle(

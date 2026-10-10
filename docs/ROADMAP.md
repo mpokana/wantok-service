@@ -2,6 +2,13 @@
 
 **Updated:** 2026-10-10
 
+## Responsive desktop Client Home correction — 10 October 2026 (source PASS, browser acceptance pending)
+
+- [x] **Desktop Chrome issue addressed:** at 1600 px, the existing three-column mobile photo grid previously stretched to enormous landscape strips. Client Home now uses a **centred maximum 1480 px content region**, photographic tiles with maximum cross-axis size **205 px**, and a desktop-only **Venenssa** provider hero before popular categories. Desktop >=1120 px moves Home/Services/Explore/Track/Wallet to the header; the mobile bottom navigation remains at narrower widths.
+- [x] **Mobile/tablet retained:** 390 px maintains original two-/three-column pinch/gesture surface; 900 px shows the width-conscious photographic grid and standard touch navigation; the connected categories/booking links, provider results and Account/Inbox/Wallet routes remain unchanged.
+- [x] **Regression:** seven Flutter analysis targets PASS; **88 client + 7 Operations Admin + 1 Technical Control tests** PASS; database **35 SQL/767 pgTAP assertions** PASS. New `enterprise_home_responsive_test.dart` covers 390/900/1600 px and header navigation at 1500 px. Untracked developer-created `supabase/snippets/` is explicitly **out of scope and untouched**.
+- [ ] **Owner acceptance:** restart the loopback Client Web at `http://127.0.0.1:3000/` from verified source and visually inspect signed-in Chrome; this is a layout milestone, not full CX1 acceptance. Technical `:3100` and Operations Admin `:3200` retain the user's confirmed logins, separate roles and code. Continue remaining desktop Explore/Track/Wallet/Inbox polish later; payment and real vendor actions remain gated.
+
 ## Enterprise responsive catalogue and Operations dashboard — 10 October 2026 (source PASS; device review pending)
 
 - [x] **Services desktop/tablet catalogue:** on existing signed-in Services, widths >=700 px now display an enterprise marketplace banner, local service-photo grid (4 desktop / 3 tablet / 2 compact columns), functional category-search/filter chips and a provider discovery panel. Tap destinations still pass through the original `ServicesHubPage`/approved backend routes; missing categories remain informational, not invented providers. Narrow mobile preserves the existing pinch-adaptive entry and the approved **Venenssa** hero photograph (legacy bundled asset filename intentionally unchanged).
