@@ -21,7 +21,7 @@ class WantokCategoryStyle {
   final Color surface;
   final Color badgeSurface;
 
-  /// AI-generated, locally bundled category picture; common on all screens.
+  /// Unique bundled photo when suitable; otherwise render this category's own icon.
   final String? photoAsset;
 }
 
@@ -149,11 +149,10 @@ abstract final class WantokCategoryStyles {
   static const errands = WantokCategoryStyle(
     slug: 'errands',
     title: 'Errands',
-    icon: Icons.shopping_bag_rounded,
+    icon: Icons.assignment_turned_in_rounded,
     accent: Color(0xFFB57209),
     surface: Color(0xFFFFF4E4),
     badgeSurface: Color(0xFFFFE8BD),
-    photoAsset: 'assets/images/categories/category_groceries.webp',
   );
   static const boatHire = WantokCategoryStyle(
     slug: 'boat-hire',
@@ -162,7 +161,6 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFF087E95),
     surface: Color(0xFFE8F7F9),
     badgeSurface: Color(0xFFD1F0F4),
-    photoAsset: 'assets/images/categories/category_water_transport.webp',
   );
   static const waterRides = WantokCategoryStyle(
     slug: 'boat-ship-rides',
@@ -176,11 +174,10 @@ abstract final class WantokCategoryStyles {
   static const labour = WantokCategoryStyle(
     slug: 'general-labour',
     title: 'General Labour',
-    icon: Icons.groups_rounded,
+    icon: Icons.handyman_rounded,
     accent: Color(0xFF7A53BA),
     surface: Color(0xFFF3EDFF),
     badgeSurface: Color(0xFFE5DAFA),
-    photoAsset: 'assets/images/categories/category_professional.webp',
   );
   static const venue = WantokCategoryStyle(
     slug: 'venue-booking',
@@ -198,10 +195,9 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFFD04C7B),
     surface: Color(0xFFFFEFF4),
     badgeSurface: Color(0xFFFFD9E6),
-    photoAsset: 'assets/images/categories/category_home_services.webp',
   );
 
-  // Catalogue-only addition: reuse bundled imagery (no new generation).
+  // Category-specific illustrated icons replace unrelated/repeated photos.
   static const education = WantokCategoryStyle(
     slug: 'education-training',
     title: 'Education &\nTraining',
@@ -209,16 +205,14 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFFBC693E),
     surface: Color(0xFFFFEDE6),
     badgeSurface: Color(0xFFFFDACC),
-    photoAsset: 'assets/images/categories/category_professional.webp',
   );
   static const financial = WantokCategoryStyle(
     slug: 'financial-services',
     title: 'Financial\nServices',
-    icon: Icons.account_balance_rounded,
+    icon: Icons.payments_rounded,
     accent: Color(0xFF13856A),
     surface: Color(0xFFE9F8F0),
     badgeSurface: Color(0xFFD0F1E3),
-    photoAsset: 'assets/images/categories/category_more.webp',
   );
 
   static const publicServices = WantokCategoryStyle(
@@ -310,13 +304,7 @@ class WantokCategoryPicture extends StatelessWidget {
               ),
             )
           : style.photoAsset == null
-          ? Center(
-              child: Icon(
-                style.icon,
-                color: style.accent,
-                size: compact ? 21 : 28,
-              ),
-            )
+          ? _CategoryIconIllustration(style: style, compact: compact)
           : Image.asset(
               style.photoAsset!,
               width: double.infinity,
@@ -333,6 +321,87 @@ class WantokCategoryPicture extends StatelessWidget {
               ),
             ),
     ),
+  );
+}
+
+/// Lightweight, locally rendered illustration for categories that do not
+/// yet have their own suitable photograph. Never recycle another category's
+/// photo as a fallback; the icon, accent and background identify this category.
+class _CategoryIconIllustration extends StatelessWidget {
+  const _CategoryIconIllustration({required this.style, required this.compact});
+
+  final WantokCategoryStyle style;
+  final bool compact;
+
+  @override
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, constraints) {
+      final width = constraints.maxWidth;
+      final height = constraints.maxHeight;
+      final shortest = constraints.biggest.shortestSide;
+      final iconSize = (shortest * (compact ? .43 : .47))
+          .clamp(20.0, 68.0)
+          .toDouble();
+      return DecoratedBox(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [style.badgeSurface, style.surface],
+          ),
+        ),
+        child: Stack(
+          fit: StackFit.expand,
+          clipBehavior: Clip.hardEdge,
+          children: [
+            Positioned(
+              right: -width * .10,
+              top: -height * .26,
+              child: Container(
+                width: shortest * .84,
+                height: shortest * .84,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: style.accent.withValues(alpha: .10),
+                    width: compact ? 3 : 7,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: -height * .28,
+              left: -width * .09,
+              child: Container(
+                width: shortest * .65,
+                height: shortest * .65,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: style.accent.withValues(alpha: .08),
+                ),
+              ),
+            ),
+            Center(
+              child: Container(
+                width: shortest * .73,
+                height: shortest * .73,
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: .84),
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: style.accent.withValues(alpha: .09),
+                      blurRadius: 9,
+                    ),
+                  ],
+                ),
+                child: Icon(style.icon, size: iconSize, color: style.accent),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
   );
 }
 

@@ -7,10 +7,12 @@ void main() {
   test('Nineteen catalogue entries share the category style registry', () {
     final styles = WantokCategoryStyles.reference;
     expect(styles.length, 19);
-    expect(
-      styles.map((style) => style.photoAsset).toSet().length,
-      greaterThanOrEqualTo(12),
-    );
+    final photos = styles
+        .map((style) => style.photoAsset)
+        .whereType<String>()
+        .toList(growable: false);
+    // No two visible categories may silently share one photo.
+    expect(photos.toSet().length, photos.length);
     expect(ReferenceServiceCategories.items.length, styles.length);
     for (var i = 0; i < styles.length; i++) {
       final category = ReferenceServiceCategories.items[i];
@@ -19,9 +21,9 @@ void main() {
       expect(category.colour, styles[i].accent);
       expect(category.surface, styles[i].surface);
       expect(category.style.photoAsset, styles[i].photoAsset);
-      if (styles[i] == WantokCategoryStyles.publicServices) {
-        // The Public Services tile intentionally uses the approved gold icon.
-        expect(styles[i].photoAsset, isNull);
+      if (styles[i].photoAsset == null) {
+        // A meaningful icon illustration is preferable to an unrelated photo.
+        expect(styles[i].icon, isNotNull);
       } else {
         expect(styles[i].photoAsset, startsWith('assets/images/'));
         expect(
@@ -30,6 +32,68 @@ void main() {
         );
       }
     }
+  });
+
+  test('Missing category photographs use their own relevant icons', () {
+    expect(WantokCategoryStyles.education.photoAsset, isNull);
+    expect(WantokCategoryStyles.education.icon, Icons.school_rounded);
+    expect(WantokCategoryStyles.labour.photoAsset, isNull);
+    expect(WantokCategoryStyles.labour.icon, Icons.handyman_rounded);
+    expect(WantokCategoryStyles.financial.photoAsset, isNull);
+    expect(WantokCategoryStyles.financial.icon, Icons.payments_rounded);
+    expect(WantokCategoryStyles.hotels.photoAsset, isNull);
+    expect(WantokCategoryStyles.hotels.icon, Icons.hotel_rounded);
+    expect(WantokCategoryStyles.errands.photoAsset, isNull);
+    expect(WantokCategoryStyles.boatHire.photoAsset, isNull);
+    expect(
+      WantokCategoryStyles.professional.photoAsset,
+      'assets/images/categories/category_professional.webp',
+    );
+    expect(
+      WantokCategoryStyles.home.photoAsset,
+      'assets/images/categories/category_home_services.webp',
+    );
+  });
+
+  testWidgets('Education and Labour tiles render different illustrated icons', (
+    tester,
+  ) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Row(
+            children: [
+              SizedBox(
+                width: 146,
+                height: 160,
+                child: WantokCategoryTile(
+                  style: WantokCategoryStyles.education,
+                  onTap: () {},
+                ),
+              ),
+              SizedBox(
+                width: 146,
+                height: 160,
+                child: WantokCategoryTile(
+                  style: WantokCategoryStyles.labour,
+                  onTap: () {},
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.byIcon(Icons.school_rounded), findsOneWidget);
+    expect(find.byIcon(Icons.handyman_rounded), findsOneWidget);
+    expect(
+      find.image(
+        const AssetImage('assets/images/categories/category_professional.webp'),
+      ),
+      findsNothing,
+    );
+    expect(tester.takeException(), isNull);
   });
 
   test('Backend categories resolve the same identity throughout app', () {
