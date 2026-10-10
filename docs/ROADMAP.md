@@ -2,6 +2,14 @@
 
 **Updated:** 2026-10-10
 
+## Unified signed-in Client desktop pages — 10 October 2026 (source PASS; browser review pending)
+
+- [x] **Consistent responsive shell:** `ResponsiveClientCanvas` centres all six signed-in Client destinations on wider screens; Home, Services, Explore and Wallet have a 1480 px maximum; activity/Track and Inbox use a 1160 px reading width. Below 700 px the original handheld flow remains unchanged, and tablet uses available width.
+- [x] **Services:** the canonical category grid uses a maximum 245 px tile width within the same centred desktop canvas (not four stretched columns). Existing catalogue search, filters, service navigation, genuine provider data and demo-mode safeguards unchanged.
+- [x] **Explore, Track, Inbox, Wallet:** Explore now has a photographic 3/2/1-column editorial grid using original local PNG assets; content is clearly **inspiration, not live bookable listings**. Track and Inbox have green/gold enterprise headers with real booking/conversation views and empty states intact. Wallet's preview hero follows green/gold branding but remains **K0.00 preview, rails inactive**; no fictitious transactions.
+- [x] **Focused validation:** `enterprise_client_pages_test.dart` covers 1800 px Services tile width, 1600 px Explore, 390 px Explore/text scaling, 1560 px Track+Inbox, and 1600 px Wallet. New layout has no role, Supabase, payment, review, approval, messaging or transaction mutations.
+- [ ] **Owner review:** check refreshed signed-in Client on `127.0.0.1:3000` after validated source checkpoint and Client-only server restart. Technical `:3100`, Operations `:3200` and emulator intentionally unchanged. Full CX1 client journey sign-off still separate, T2.4 remains gated.
+
 ## Responsive desktop Client Home correction — 10 October 2026 (source PASS, browser acceptance pending)
 
 - [x] **Desktop Chrome issue addressed:** at 1600 px, the existing three-column mobile photo grid previously stretched to enormous landscape strips. Client Home now uses a **centred maximum 1480 px content region**, photographic tiles with maximum cross-axis size **205 px**, and a desktop-only **Venenssa** provider hero before popular categories. Desktop >=1120 px moves Home/Services/Explore/Track/Wallet to the header; the mobile bottom navigation remains at narrower widths.

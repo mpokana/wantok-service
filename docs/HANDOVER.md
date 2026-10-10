@@ -4,6 +4,14 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## ALL CLIENT DESTINATIONS — SHARED RESPONSIVE WEB LAYOUT (10 OCT 2026)
+
+- **Scope/intent:** owner accepted revised Home and Services screenshot direction, requested all other Client pages to match, including tablet/mobile responsive behaviour. Changes limited to the existing Client Flutter app on authorised EAGLT02; no server-side permission, data, schema or payment modifications.
+- **Shell:** `lib/src/home/responsive_client_canvas.dart` centred max-width wrapper at >=700 px, applied to signed-in Client (not Vendor/Admin/Technical): 1480 px Home/Services/Explore/Wallet; 1160 px Track and Inbox. Mobile bypasses wrapper and keeps existing 2/3-column pinch and bottom navigation. Existing desktop top nav and account menu retained.
+- **Screens:** `enterprise_services_catalogue.dart` now uses a max 245 px card extent to fix stretched photo tiles on Services. `explore_inspiration_grid.dart` uses app-bundled hero_water/events/trades photos as **editorial themes only**, not live bookable tours/services. Track and Inbox headers redesigned in brand green/gold, real backend queries and controls preserved. Wallet preview uses dark-green gradient and explicit inactive-rails notice; do not infer active payment rails or accounts.
+- **Validation:** new `enterprise_client_pages_test.dart` exercises Services 1800 px, Explore 1600/390 px, Track/Inbox 1560 px, Wallet 1600 px, including saved empty states and no data mutation. Run full `scripts/flutter/check.ps1`, `npm run db:test`, `git diff --check`, commit and verified push + independent bundle before restarting isolated Client web `:3000`. Do not touch `:3100`/`:3200` logged-in sessions, existing local Supabase, emulator or unrelated untracked `supabase/snippets/`.
+- **Acceptance:** visual sign-off from owner required after refreshing `http://127.0.0.1:3000/`; CX1 still IN PROGRESS; T2.4, provider verification/upload, payments and real vendor approvals remain gated.
+
 ## DESKTOP CLIENT HOME — RESPONSIVE LAYOUT FIX (10 OCTOBER 2026)
 
 - **Owner screenshots:** the signed-in Client on `127.0.0.1:3000` stretched a three-column mobile photo grid across desktop browser; Operations Admin `:3200` and Technical Control `:3100` already displayed desktop structures and their existing accounts successfully signed in.

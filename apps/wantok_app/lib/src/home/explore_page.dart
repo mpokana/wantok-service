@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
 import 'reference_services_gallery.dart';
+import 'explore_inspiration_grid.dart';
 import 'smoke_data.dart';
 
 /// PNG exploration entry point. Reference previews are opt-in development
@@ -86,20 +87,7 @@ class ExplorePage extends StatelessWidget {
           const ReferenceScreenSamplesSection(),
         ] else ...[
           const SizedBox(height: 24),
-          const Text(
-            'Explore more of PNG',
-            style: TextStyle(
-              color: WantokColors.ink,
-              fontSize: 19,
-              fontWeight: FontWeight.w900,
-            ),
-          ),
-          const SizedBox(height: 6),
-          const Text(
-            'New local experiences will appear here as they become available. '
-            'Browse current services to find providers in your community.',
-            style: TextStyle(color: WantokColors.muted, fontSize: 13),
-          ),
+          ExploreInspirationGrid(onBrowseServices: onBrowseServices),
         ],
       ],
     );

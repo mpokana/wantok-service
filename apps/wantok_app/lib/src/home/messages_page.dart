@@ -575,37 +575,55 @@ class _InboxHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.fromLTRB(4, 10, 4, 8),
-      child: Column(
+    return Container(
+      key: const ValueKey('inbox-enterprise-header'),
+      padding: const EdgeInsets.fromLTRB(23, 21, 23, 21),
+      margin: const EdgeInsets.only(bottom: 8),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(19),
+        gradient: const LinearGradient(
+          colors: [Color(0xFF074431), Color(0xFF096B4B)],
+        ),
+      ),
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
+            'CONVERSATIONS & SUPPORT',
+            style: TextStyle(
+              color: WantokColors.gold,
+              fontSize: 11,
+              fontWeight: FontWeight.w900,
+              letterSpacing: 1.2,
+            ),
+          ),
+          SizedBox(height: 7),
+          Text(
             'Inbox',
             style: TextStyle(
-              color: WantokColors.ink,
+              color: Colors.white,
               fontSize: 25,
               fontWeight: FontWeight.w900,
             ),
           ),
-          SizedBox(height: 6),
+          SizedBox(height: 7),
           Text(
             'Service conversations and Wantok help in one place.',
-            style: TextStyle(color: WantokColors.muted, fontSize: 13),
+            style: TextStyle(color: Color(0xFFE2F5E9), fontSize: 13),
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 9),
           Row(
             children: [
               Icon(
                 Icons.verified_user_outlined,
-                color: WantokColors.primary,
+                color: Colors.white70,
                 size: 16,
               ),
               SizedBox(width: 6),
               Expanded(
                 child: Text(
                   'Booking-linked and owner-private support',
-                  style: TextStyle(color: WantokColors.muted, fontSize: 11.5),
+                  style: TextStyle(color: Colors.white70, fontSize: 11.5),
                 ),
               ),
             ],

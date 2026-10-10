@@ -38,9 +38,9 @@ class WantokPayPreviewPage extends StatelessWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Color(0xFF0758D7),
-                      Color(0xFF087BFA),
-                      Color(0xFF45B0FF),
+                      Color(0xFF064431),
+                      Color(0xFF096B4B),
+                      Color(0xFF128761),
                     ],
                   ),
                 ),
@@ -71,7 +71,7 @@ class WantokPayPreviewPage extends StatelessWidget {
                           Text(
                             'Preview only - payment rails are not active yet.',
                             style: TextStyle(
-                              color: Color(0xFFEAF6FF),
+                              color: Color(0xFFE3F5EC),
                               fontSize: 11.5,
                             ),
                           ),
@@ -133,10 +133,10 @@ class WantokPayPreviewPage extends StatelessWidget {
             child: ListTile(
               contentPadding: EdgeInsets.all(16),
               leading: CircleAvatar(
-                backgroundColor: Color(0xFFE6F0FF),
+                backgroundColor: Color(0xFFE2F4EA),
                 child: Icon(
                   Icons.verified_user_outlined,
-                  color: Color(0xFF2864DC),
+                  color: WantokColors.primary,
                 ),
               ),
               title: Text(

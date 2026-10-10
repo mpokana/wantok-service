@@ -72,11 +72,6 @@ class _EnterpriseServicesCatalogueState
   Widget build(BuildContext context) => LayoutBuilder(
     builder: (context, size) {
       final desktop = size.maxWidth >= 1120;
-      final columns = desktop
-          ? 4
-          : size.maxWidth >= 880
-          ? 3
-          : 2;
       final items = ReferenceServiceCategories.items
           .where((e) => e.slug != 'more' && _matches(e))
           .toList(growable: false);
@@ -213,13 +208,13 @@ class _EnterpriseServicesCatalogueState
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Expanded(child: _cards(items, columns)),
+                Expanded(child: _cards(items)),
                 const SizedBox(width: 19),
                 SizedBox(width: 255, child: _sidebar()),
               ],
             )
           else ...[
-            _cards(items, columns),
+            _cards(items),
             const SizedBox(height: 15),
             _sidebar(),
           ],
@@ -228,7 +223,7 @@ class _EnterpriseServicesCatalogueState
     },
   );
 
-  Widget _cards(List<ReferenceCategorySpec> items, int columns) => Column(
+  Widget _cards(List<ReferenceCategorySpec> items) => Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       Row(
@@ -258,8 +253,8 @@ class _EnterpriseServicesCatalogueState
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           itemCount: items.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: columns,
+          gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 245,
             mainAxisExtent: 198,
             mainAxisSpacing: 12,
             crossAxisSpacing: 12,

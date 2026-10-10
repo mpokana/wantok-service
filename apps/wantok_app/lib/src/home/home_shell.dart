@@ -18,6 +18,7 @@ import 'client_home.dart';
 import 'explore_page.dart';
 import 'messages_page.dart';
 import 'services_hub_page.dart';
+import 'responsive_client_canvas.dart';
 import 'vendor_home.dart';
 import 'wantok_agent_page.dart';
 import 'wantok_pay_preview_page.dart';
@@ -272,7 +273,18 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
       density: _gridDensity,
       child: Scaffold(
         appBar: _buildAppBar(),
-        body: IndexedStack(index: _tabIndex, children: pages),
+        body: IndexedStack(
+          index: _tabIndex,
+          children: _mode == AppMode.client
+              ? [
+                  for (var i = 0; i < pages.length; i++)
+                    ResponsiveClientCanvas(
+                      maxWidth: i == 3 || i == 5 ? 1160 : 1480,
+                      child: pages[i],
+                    ),
+                ]
+              : pages,
+        ),
         bottomNavigationBar: MediaQuery.sizeOf(context).width >= 1120
             ? null
             : _WantokBottomBar(
