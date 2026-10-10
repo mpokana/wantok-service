@@ -287,41 +287,54 @@ class WantokCategoryPicture extends StatelessWidget {
   final double borderRadius;
 
   @override
-  Widget build(BuildContext context) => ClipRRect(
-    borderRadius: BorderRadius.circular(borderRadius),
-    child: ColoredBox(
-      color: style.badgeSurface,
-      child: style.slug == 'more'
-          ? Center(
-              child: CircleAvatar(
-                radius: compact ? 14 : 29,
-                backgroundColor: const Color(0xFFE4EAF5),
-                child: Icon(
-                  Icons.more_horiz_rounded,
-                  color: WantokColors.primary,
-                  size: compact ? 20 : 30,
+  Widget build(BuildContext context) {
+    final publishedPhoto = WantokBrandingScope.maybeOf(context)
+        ?.mediaUrl(style.slug, 'cardImage');
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(borderRadius),
+      child: ColoredBox(
+        color: style.badgeSurface,
+        child: publishedPhoto != null
+            ? Image.network(
+                publishedPhoto,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+                errorBuilder: (_, _, _) =>
+                    _CategoryIconIllustration(style: style, compact: compact),
+              )
+            : style.slug == 'more'
+            ? Center(
+                child: CircleAvatar(
+                  radius: compact ? 14 : 29,
+                  backgroundColor: const Color(0xFFE4EAF5),
+                  child: Icon(
+                    Icons.more_horiz_rounded,
+                    color: WantokColors.primary,
+                    size: compact ? 20 : 30,
+                  ),
+                ),
+              )
+            : style.photoAsset == null
+            ? _CategoryIconIllustration(style: style, compact: compact)
+            : Image.asset(
+                style.photoAsset!,
+                width: double.infinity,
+                height: double.infinity,
+                fit: BoxFit.cover,
+                alignment: Alignment.center,
+                excludeFromSemantics: true,
+                errorBuilder: (_, _, _) => Center(
+                  child: Icon(
+                    style.icon,
+                    color: style.accent,
+                    size: compact ? 21 : 28,
+                  ),
                 ),
               ),
-            )
-          : style.photoAsset == null
-          ? _CategoryIconIllustration(style: style, compact: compact)
-          : Image.asset(
-              style.photoAsset!,
-              width: double.infinity,
-              height: double.infinity,
-              fit: BoxFit.cover,
-              alignment: Alignment.center,
-              excludeFromSemantics: true,
-              errorBuilder: (_, _, _) => Center(
-                child: Icon(
-                  style.icon,
-                  color: style.accent,
-                  size: compact ? 21 : 28,
-                ),
-              ),
-            ),
-    ),
-  );
+      ),
+    );
+  }
 }
 
 /// Lightweight, locally rendered illustration for categories that do not

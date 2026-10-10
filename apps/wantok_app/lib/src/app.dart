@@ -1,27 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wantok_auth/wantok_auth.dart';
+import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
 import 'auth/sign_in_page.dart';
 import 'home/home_shell.dart';
 
-class WantokApp extends StatelessWidget {
+class WantokApp extends StatefulWidget {
   const WantokApp({required this.backendConfigured, super.key});
 
   final bool backendConfigured;
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Wantok Services',
-      debugShowCheckedModeBanner: false,
-      theme: WantokTheme.light(),
-      home: backendConfigured
-          ? const _AuthGate()
-          : const _ConfigurationRequiredPage(),
-    );
-  }
+  State<WantokApp> createState() => _WantokAppState();
+}
+
+class _WantokAppState extends State<WantokApp> {
+  late final Future<Map<String, dynamic>> _published = widget.backendConfigured
+      ? const BrandingRepository().getPublished()
+      : Future<Map<String, dynamic>>.value(BrandingRepository.defaultDocument);
+
+  @override
+  Widget build(BuildContext context) => FutureBuilder<Map<String, dynamic>>(
+    future: _published,
+    builder: (context, snapshot) {
+      // A temporary backend failure must never prevent customers opening
+      // the app or replace the last bundled category art with an error page.
+      final document = snapshot.data ?? BrandingRepository.defaultDocument;
+      return WantokBrandingScope(
+        document: document,
+        resolveMediaUrl: BrandingRepository.imageUrl,
+        child: MaterialApp(
+          title: 'Wantok Services',
+          debugShowCheckedModeBanner: false,
+          theme: WantokBrandingTheme.from(document),
+          darkTheme: WantokBrandingTheme.from(document, dark: true),
+          themeMode: WantokBrandingTheme.mode(document),
+          home: widget.backendConfigured
+              ? const _AuthGate()
+              : const _ConfigurationRequiredPage(),
+        ),
+      );
+    },
+  );
 }
 
 class _AuthGate extends StatelessWidget {

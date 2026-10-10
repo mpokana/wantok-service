@@ -6,6 +6,7 @@ import 'package:wantok_ui/wantok_ui.dart';
 import 'technical_access_page.dart';
 import 'technical_configuration_page.dart';
 import 'technical_health_page.dart';
+import 'technical_branding_page.dart';
 
 class TechnicalShell extends StatefulWidget {
   const TechnicalShell({required this.email, super.key});
@@ -28,6 +29,12 @@ class _TechnicalShellState extends State<TechnicalShell> {
   void initState() {
     super.initState();
     _future = _repository.loadModules();
+  }
+
+  void _openAppearance() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => const TechnicalBrandingPage()),
+    );
   }
 
   Future<void> _refresh() async {
@@ -279,6 +286,9 @@ class _TechnicalShellState extends State<TechnicalShell> {
             .where((module) => module.hasPermission('module.permissions'))
             .toList(growable: false);
 
+        final canManageAppearance = modules.any(
+          (module) => module.accessLevelCode == 'tech_platform_admin',
+        );
         final wide = MediaQuery.sizeOf(context).width >= 980;
         final content = _showAccessManagement && manageableModules.isNotEmpty
             ? TechnicalAccessPage(modules: manageableModules)
@@ -294,7 +304,7 @@ class _TechnicalShellState extends State<TechnicalShell> {
 
         if (wide) {
           return Scaffold(
-            appBar: _buildAppBar(),
+            appBar: _buildAppBar(canManageAppearance: canManageAppearance),
             body: Row(
               children: [
                 SizedBox(
@@ -303,6 +313,8 @@ class _TechnicalShellState extends State<TechnicalShell> {
                     modules: modules,
                     selectedModuleKey: _selectedModuleKey,
                     accessManagementSelected: _showAccessManagement,
+                    canManageAppearance: canManageAppearance,
+                    onAppearance: _openAppearance,
                     onOverview: () {
                       setState(() {
                         _showAccessManagement = false;
@@ -331,13 +343,18 @@ class _TechnicalShellState extends State<TechnicalShell> {
         }
 
         return Scaffold(
-          appBar: _buildAppBar(),
+          appBar: _buildAppBar(canManageAppearance: canManageAppearance),
           drawer: Drawer(
             child: SafeArea(
               child: _TechnicalSidebar(
                 modules: modules,
                 selectedModuleKey: _selectedModuleKey,
                 accessManagementSelected: _showAccessManagement,
+                canManageAppearance: canManageAppearance,
+                onAppearance: () {
+                  Navigator.of(context).pop();
+                  _openAppearance();
+                },
                 onOverview: () {
                   setState(() {
                     _showAccessManagement = false;
@@ -368,7 +385,7 @@ class _TechnicalShellState extends State<TechnicalShell> {
     );
   }
 
-  AppBar _buildAppBar() {
+  AppBar _buildAppBar({bool canManageAppearance = false}) {
     return AppBar(
       title: const Row(
         mainAxisSize: MainAxisSize.min,
@@ -395,6 +412,12 @@ class _TechnicalShellState extends State<TechnicalShell> {
               ),
             ),
           ),
+        if (canManageAppearance)
+          IconButton(
+            tooltip: 'Appearance & media',
+            onPressed: _openAppearance,
+            icon: const Icon(Icons.palette_outlined),
+          ),
         IconButton(
           tooltip: 'Refresh',
           onPressed: _refresh,
@@ -416,6 +439,8 @@ class _TechnicalSidebar extends StatelessWidget {
     required this.modules,
     required this.selectedModuleKey,
     required this.accessManagementSelected,
+    required this.canManageAppearance,
+    required this.onAppearance,
     required this.onOverview,
     required this.onAccessManagement,
     required this.onModule,
@@ -424,6 +449,8 @@ class _TechnicalSidebar extends StatelessWidget {
   final List<TechnicalModuleAccess> modules;
   final String? selectedModuleKey;
   final bool accessManagementSelected;
+  final bool canManageAppearance;
+  final VoidCallback onAppearance;
   final VoidCallback onOverview;
   final VoidCallback onAccessManagement;
   final ValueChanged<String> onModule;
@@ -449,6 +476,13 @@ class _TechnicalSidebar extends StatelessWidget {
             selected: selectedModuleKey == null && !accessManagementSelected,
             onTap: onOverview,
           ),
+          if (canManageAppearance)
+            _SideTile(
+              icon: Icons.palette_outlined,
+              label: 'Theme & Media',
+              selected: false,
+              onTap: onAppearance,
+            ),
           if (canManageAccess)
             _SideTile(
               icon: Icons.manage_accounts_outlined,

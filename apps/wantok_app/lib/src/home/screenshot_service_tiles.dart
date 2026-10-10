@@ -72,6 +72,28 @@ abstract final class ScreenshotServiceArt {
     'public-services',
   ];
   static String asset(String file) => 'assets/images/reference/$file';
+
+  static Widget visual(
+    BuildContext context,
+    ServiceArt art, {
+    required bool icon,
+    BoxFit fit = BoxFit.cover,
+  }) {
+    final slug = items.entries.firstWhere((entry) => entry.value == art).key;
+    final url = WantokBrandingScope.maybeOf(context)
+        ?.mediaUrl(slug, icon ? 'homeIcon' : 'cardImage');
+    final fallback = asset(icon ? art.icon : art.photo);
+    if (url == null) {
+      return Image.asset(fallback, fit: fit, width: double.infinity);
+    }
+    return Image.network(
+      url,
+      fit: fit,
+      width: double.infinity,
+      errorBuilder: (_, _, _) =>
+          Image.asset(fallback, fit: fit, width: double.infinity),
+    );
+  }
 }
 
 class ScreenshotHomeTile extends StatelessWidget {
@@ -95,13 +117,11 @@ class ScreenshotHomeTile extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              child: Image.asset(
-                ScreenshotServiceArt.asset(art.icon),
+              child: ScreenshotServiceArt.visual(
+                context,
+                art,
+                icon: true,
                 fit: BoxFit.contain,
-                errorBuilder: (_, _, _) => const Icon(
-                  Icons.grid_view_rounded,
-                  color: WantokColors.primaryDark,
-                ),
               ),
             ),
             const SizedBox(height: 4),
@@ -168,9 +188,10 @@ class ScreenshotServicesCard extends StatelessWidget {
                       height: 48,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(11),
-                        child: Image.asset(
-                          ScreenshotServiceArt.asset(art.icon),
-                          fit: BoxFit.cover,
+                        child: ScreenshotServiceArt.visual(
+                          context,
+                          art,
+                          icon: true,
                         ),
                       ),
                     ),
@@ -219,11 +240,7 @@ class ScreenshotServicesCard extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(11),
-                  child: Image.asset(
-                    ScreenshotServiceArt.asset(art.photo),
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  ),
+                  child: ScreenshotServiceArt.visual(context, art, icon: false),
                 ),
               ),
             ),

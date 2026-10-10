@@ -8,6 +8,7 @@ class PublicServicesPage extends StatelessWidget {
 
   static const areas = <PublicServiceArea>[
     PublicServiceArea(
+      slug: 'public-emergency-safety',
       title: 'Emergency & Safety',
       subtitle: 'Police, fire, ambulance, safety support.',
       icon: Icons.emergency_rounded,
@@ -24,6 +25,7 @@ class PublicServicesPage extends StatelessWidget {
       ],
     ),
     PublicServiceArea(
+      slug: 'public-health-services',
       title: 'Health Services',
       subtitle: 'Hospitals, clinics, pharmacies, blood donation.',
       icon: Icons.health_and_safety_rounded,
@@ -40,6 +42,7 @@ class PublicServicesPage extends StatelessWidget {
       ],
     ),
     PublicServiceArea(
+      slug: 'public-government-services',
       title: 'Government Services',
       subtitle: 'NID, immigration, tax, licensing, offices.',
       icon: Icons.account_balance_rounded,
@@ -56,6 +59,7 @@ class PublicServicesPage extends StatelessWidget {
       ],
     ),
     PublicServiceArea(
+      slug: 'public-community-services',
       title: 'Community Services',
       subtitle: 'NGOs, counselling, shelters, local support.',
       icon: Icons.groups_rounded,
@@ -216,94 +220,109 @@ class PublicServicesPage extends StatelessWidget {
     );
   }
 
-  Widget _hero(BuildContext context) => ClipRRect(
-    borderRadius: BorderRadius.circular(19),
-    child: SizedBox(
-      height: 250,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.asset(
-            'assets/images/reference/public_hero_photo.jpg',
-            fit: BoxFit.cover,
-            alignment: Alignment.centerRight,
-          ),
-          const DecoratedBox(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color(0xFF004329),
-                  Color(0xF0004F33),
-                  Color(0x33004F33),
-                ],
-                stops: [0, .59, 1],
+  Widget _hero(BuildContext context) {
+    final url = WantokBrandingScope.maybeOf(context)
+        ?.mediaUrl('public-services', 'bannerImage');
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(19),
+      child: SizedBox(
+        height: 250,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            if (url != null)
+              Image.network(
+                url,
+                fit: BoxFit.cover,
+                errorBuilder: (_, _, _) => Image.asset(
+                  'assets/images/reference/public_hero_photo.jpg',
+                  fit: BoxFit.cover,
+                  alignment: Alignment.centerRight,
+                ),
+              )
+            else
+              Image.asset(
+                'assets/images/reference/public_hero_photo.jpg',
+                fit: BoxFit.cover,
+                alignment: Alignment.centerRight,
+              ),
+            const DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xFF004329),
+                    Color(0xF0004F33),
+                    Color(0x33004F33),
+                  ],
+                  stops: [0, .59, 1],
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(13),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFFCF37),
-                    borderRadius: BorderRadius.circular(11),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.all(6),
-                    child: Icon(
-                      Icons.account_balance_rounded,
-                      size: 22,
-                      color: Color(0xFF00462C),
+            Padding(
+              padding: const EdgeInsets.all(13),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  DecoratedBox(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFCF37),
+                      borderRadius: BorderRadius.circular(11),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.all(6),
+                      child: Icon(
+                        Icons.account_balance_rounded,
+                        size: 22,
+                        color: Color(0xFF00462C),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 7),
-                const Text(
-                  'Public Services',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                const Text(
-                  'Find essential public, government,\nhealth and community services.',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 11.8,
-                    height: 1.18,
-                  ),
-                ),
-                const Spacer(),
-                ElevatedButton.icon(
-                  key: const ValueKey('public-services-explore'),
-                  onPressed: () => Scrollable.ensureVisible(
-                    _categoriesAnchor.currentContext ?? context,
-                    duration: const Duration(milliseconds: 300),
-                  ),
-                  iconAlignment: IconAlignment.end,
-                  icon: const Icon(Icons.arrow_forward_rounded, size: 18),
-                  label: const Text('Explore public services'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFFCC32),
-                    foregroundColor: const Color(0xFF10261C),
-                    textStyle: const TextStyle(fontWeight: FontWeight.w800),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 13,
-                      vertical: 7,
+                  const SizedBox(height: 7),
+                  const Text(
+                    'Public Services',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24,
+                      fontWeight: FontWeight.w900,
                     ),
                   ),
-                ),
-              ],
+                  const SizedBox(height: 5),
+                  const Text(
+                    'Find essential public, government,\nhealth and community services.',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 11.8,
+                      height: 1.18,
+                    ),
+                  ),
+                  const Spacer(),
+                  ElevatedButton.icon(
+                    key: const ValueKey('public-services-explore'),
+                    onPressed: () => Scrollable.ensureVisible(
+                      _categoriesAnchor.currentContext ?? context,
+                      duration: const Duration(milliseconds: 300),
+                    ),
+                    iconAlignment: IconAlignment.end,
+                    icon: const Icon(Icons.arrow_forward_rounded, size: 18),
+                    label: const Text('Explore public services'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFFCC32),
+                      foregroundColor: const Color(0xFF10261C),
+                      textStyle: const TextStyle(fontWeight: FontWeight.w800),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 13,
+                        vertical: 7,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 
   // Stable anchor for the banner action, independent of screen dimensions.
   static final GlobalKey _categoriesAnchor = GlobalKey();
@@ -336,7 +355,12 @@ class PublicServicesPage extends StatelessWidget {
                         alignment: Alignment.center,
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(11),
-                          child: Image.asset(area.iconAsset, fit: BoxFit.cover),
+                          child: _areaVisual(
+                            context,
+                            area,
+                            'homeIcon',
+                            area.iconAsset,
+                          ),
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -379,20 +403,31 @@ class PublicServicesPage extends StatelessWidget {
               ),
               Expanded(
                 flex: 4,
-                child: Image.asset(
-                  area.photo,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                  errorBuilder: (_, _, _) => ColoredBox(
-                    color: area.surface,
-                    child: Icon(area.icon, color: area.accent, size: 35),
-                  ),
-                ),
+                child: _areaVisual(context, area, 'cardImage', area.photo),
               ),
             ],
           ),
         ),
       );
+
+  Widget _areaVisual(
+    BuildContext context,
+    PublicServiceArea area,
+    String slot,
+    String fallback,
+  ) {
+    final url = WantokBrandingScope.maybeOf(context)?.mediaUrl(area.slug, slot);
+    if (url == null) {
+      return Image.asset(fallback, fit: BoxFit.cover, width: double.infinity);
+    }
+    return Image.network(
+      url,
+      fit: BoxFit.cover,
+      width: double.infinity,
+      errorBuilder: (_, _, _) =>
+          Image.asset(fallback, fit: BoxFit.cover, width: double.infinity),
+    );
+  }
 
   void _openArea(BuildContext context, PublicServiceArea area) =>
       Navigator.of(context).push(
@@ -404,6 +439,7 @@ class PublicServicesPage extends StatelessWidget {
 
 class PublicServiceArea {
   const PublicServiceArea({
+    required this.slug,
     required this.title,
     required this.subtitle,
     required this.icon,
@@ -413,7 +449,7 @@ class PublicServiceArea {
     required this.iconAsset,
     required this.topics,
   });
-  final String title, subtitle, photo, iconAsset;
+  final String slug, title, subtitle, photo, iconAsset;
   final IconData icon;
   final Color accent, surface;
   final List<String> topics;

@@ -15,3 +15,4 @@ export 'src/technical_control_repository.dart';
 export 'src/water_transport_repository.dart';
 export 'src/wantok_ai_agent_repository.dart';
 export 'src/wantok_backend.dart';
+export 'src/branding_repository.dart';
