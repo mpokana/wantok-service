@@ -10,7 +10,7 @@
 - Added a **read-only loopback-only Supabase REST test** (`npm run test:e6:auth-local`) which creates two short-lived synthetic signed JWTs but **no accounts/fixtures/SQL writes**, and checks 23 denial/empty RLS/legacy-activation cases. All **23/23 PASS**. No staff provisioned; tokens are not witnessed GoTrue sign-ins.
 - Built formal E6 acceptance runbook `docs/E6G_FORMAL_ACCEPTANCE_RUNBOOK_20261011.md` with ten independently auditable gates (staff verification, dual-person appointment, initial trusted key custody, ISO country/subdivision proof, service taxonomy/legal, conflicts, browser role matrix, legacy RPC review, recovery and owner security release). All remain **BLOCKED** without externally witnessed evidence. ISO OBP and PNG government sources identified for human cross-check, **not auto-loaded** or certified.
 - Kept E7–E12, production release and VM work **closed**; no real people, documents, live settings, provider/service activation or payments changed. Scope strictly EAGLT02 and the shared clean worktree; `supabase/snippets/` preserved.
-- Integrated SQL/Flutter and published GitHub/source package status to be recorded with exact commit after current validation.
+- Clean `3958e10` Flutter QA **7 analyses / 132 Client / 43 Operations / 22 Technical PASS**. `docs/E6G_INTEGRATED_QA_RESULTS_20261011.md` distinguishes E6-only 56-file SQL PASS from the T2.4 migration-blocked 57-file combined run. Package/GitHub verified separately after the final docs commit.
 
 ---
 
