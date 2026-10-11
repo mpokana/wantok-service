@@ -20,6 +20,10 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-11-19 — T2.4 owner-authorised read-only Technical observability
+
+**Status:** T2.4 started (partial), not production/phase complete. Existing Technical capability cards now open module-scoped read-only diagnostics, limited health transition logs and a truthful disconnected-queue state with no actions. Six tests and isolated full Flutter regression PASS; local SQL 52/1,043 PASS. No SQL migration, raw logs, arbitrary probes, job execution, Web/Android upgrade or VM deployment. Remaining real log/queue adapters, secure technical audits and approved job commands are explicit future gates. Owner CX1 manual acceptance is documented separately from objective release evidence. `docs/T24_READONLY_OBSERVABILITY_FOUNDATION_20261011.md`.
+
 ## FILLER-2026-10-11-18 — E6C1 case-scoped safety and clearance controls
 
 **Status:** E6C1 locally coded and tested; E6 programme OPEN. Safety investigators need current region/category grants and evidence-case ownership binding; global admins and conflicted officers are denied. Audited service-role-only emergency stop remains for unmatched historic providers; legacy activation and old provider approve/reject RPCs are blocked. Isolated Operations safety tab added. Database 52 files/1,043 assertions PASS; Operations analysis and 38 widget tests PASS. Production release, broad legacy route auditing, real staff provisioning and signed-in acceptance remain OPEN. See `docs/E6C_SCOPED_CLEARANCE_SAFETY_20261011.md`.

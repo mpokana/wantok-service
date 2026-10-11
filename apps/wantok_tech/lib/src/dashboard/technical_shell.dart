@@ -8,6 +8,7 @@ import 'technical_configuration_page.dart';
 import 'technical_health_page.dart';
 import 'technical_branding_page.dart';
 import 'technical_local_ports_page.dart';
+import 'technical_observability_page.dart';
 import 'technical_category_manager_page.dart';
 
 class TechnicalShell extends StatefulWidget {
@@ -952,23 +953,49 @@ class _ModuleWorkspace extends StatelessWidget {
               );
             },
           ),
-        if (module.hasPermission('module.diagnostics'))
-          const _CapabilityCard(
+        if (module.hasPermission('module.view') &&
+            module.hasPermission('module.diagnostics'))
+          _CapabilityCard(
             icon: Icons.monitor_heart_outlined,
             title: 'Diagnostics',
-            description: 'Diagnostic access is authorised. Richer diagnostic adapters belong to T2.4; health and dependency reporting is available separately.',
+            description: 'Read current module health, registered probes and scoped dependencies without running probes.',
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => TechnicalObservabilityPage(
+                  module: module,
+                  section: TechnicalObservabilitySection.diagnostics,
+                ),
+              ),
+            ),
           ),
-        if (module.hasPermission('module.logs'))
-          const _CapabilityCard(
+        if (module.hasPermission('module.view') &&
+            module.hasPermission('module.logs'))
+          _CapabilityCard(
             icon: Icons.subject_outlined,
             title: 'Logs',
-            description: 'Log access is authorised. Central log-source adapters are not yet connected.',
+            description: 'View a bounded module health-transition log. Central application logs are not connected.',
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => TechnicalObservabilityPage(
+                  module: module,
+                  section: TechnicalObservabilitySection.logs,
+                ),
+              ),
+            ),
           ),
         if (module.hasPermission('module.jobs'))
-          const _CapabilityCard(
+          _CapabilityCard(
             icon: Icons.work_history_outlined,
             title: 'Background jobs',
-            description: 'Job operations are authorised. Queue/job providers will be connected per module.',
+            description: 'Inspect queue-adapter availability. No job actions or live job counts are available yet.',
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => TechnicalObservabilityPage(
+                  module: module,
+                  section: TechnicalObservabilitySection.jobs,
+                ),
+              ),
+            ),
           ),
         if (module.hasPermission('module.integrations'))
           const _CapabilityCard(

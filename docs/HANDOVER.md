@@ -4,6 +4,13 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 11 October — T2.4 first read-only observability milestone (OWNER-AUTHORISED; IN PROGRESS)
+
+- Owner explicitly instructed **Continue T2.4** after reporting the eight CX1 manual acceptance checks complete; those manual checkmarks are an **owner report**, not newly witnessed authenticated browser/device proof. Keep CX1 release-evidence reconciliation and six unsaved draft category image paths separate.
+- Added scoped, permission-gated Technical Control **Diagnostics / Logs / Background jobs** destinations. Diagnostics reads existing authorised health/probe/dependency RPCs; Logs shows only bounded **health transitions** (not raw/central logs); Jobs truthfully reports **no queue adapter connected**, with no execution controls or false zero count. No SQL migration, VM deployment, service replacement or customer record changes.
+- **PASS in isolated worktree:** six focused tests, seven Flutter analyses, 132 Client / 38 Operations / 22 Technical widget tests, local SQL 52 files / 1,043 assertions. See `docs/T24_READONLY_OBSERVABILITY_FOUNDATION_20261011.md`.
+- **Remaining T2.4:** secured central log-source ingestion/redaction and provenance, real queue metadata adapters, privileged action/dual-control policy and dedicated immutable technical-audit view. Source-only milestone; no production sign-off.
+
 ## 11 October — E6C1 scoped clearance and safety controls (CURRENT IMPLEMENTATION)
 
 - EAGLT02 additive E6C migration introduced case-bound `safety_investigator` lookup, scoped clearance monitoring, auditor RLS and independent emergency clearance revocation. Conflicted identity/approval officers, unknown case links, expired grants, wrong countries/categories and broad admins cannot authorise staff action.

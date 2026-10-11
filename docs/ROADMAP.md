@@ -2,6 +2,13 @@
 
 **Updated:** 2026-10-11
 
+## T2.4 — Technical Diagnostics, Logs and Jobs (11 October; FIRST READ-ONLY MILESTONE)
+
+- [x] Owner-authorised **start** of T2.4 after reporting 8/8 CX1 manual checklist items complete. Preserve the difference between owner attestation and independently witnessed browser/HONOR evidence; CX1 photographs remain inactive without database image paths.
+- [x] Wire per-module Diagnostics, Logs and Jobs cards in Technical Control. Diagnostics shows existing server-scoped health/probes/dependencies; Logs only existing bounded health transitions (not central logs); Jobs clearly reports that no queue adapter is connected and makes no fabricated counts or calls. Module capability-gated read-only screens, safe retry and no raw exception data.
+- [x] Isolated 390/1200px capability/refresh/no-actions/error tests **6 PASS**; full 7 Flutter analyses / 132 Client / 38 Operations / 22 Technical widgets PASS; local DB 52 files / 1,043 assertions PASS. No migration, live application deployment, account/category changes or VM interaction.
+- [ ] T2.4 remaining: real central/module log adapters with redaction and server enforcement, queue metrics with provenance/freshness, explicitly approved scoped job execution/cancel/retry with immutable audits and high-risk dual control, and distinct richer technical audit queries. Browser staging acceptance separate. `docs/T24_READONLY_OBSERVABILITY_FOUNDATION_20261011.md`.
+
 ## E6C1 — Clearance safety and legacy activation guard (11 October; LOCAL PASS, E6 OPEN)
 
 - [x] Scoped `safety_investigator` access to existing verified case / region / service family, and checked clearance provider ownership against the original applicant; replaced broad admin reads and emergency revoke access.
