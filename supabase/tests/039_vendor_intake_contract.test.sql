@@ -1,0 +1,18 @@
+BEGIN;
+CREATE EXTENSION IF NOT EXISTS pgtap WITH SCHEMA extensions;
+SELECT plan(13);
+SELECT has_table('public','vendor_intake_cases','Private vendor cases exist');
+SELECT has_table('public','vendor_intake_events','Case audit events exist');
+SELECT has_table('public','vendor_activation_clearances','Independent clearance records exist');
+SELECT has_function('public','respond_vendor_intake_case',ARRAY['uuid','text'],'Applicant response endpoint exists');
+SELECT ok(public.vendor_intake_metadata_valid('individual','{"trade_speciality":"IT support"}'::jsonb),'Known trade fields valid');
+SELECT ok(NOT public.vendor_intake_metadata_valid('individual','{"unexpected":"value"}'::jsonb),'Unknown metadata rejected');
+SELECT ok(NOT public.vendor_intake_metadata_valid('individual','{"vehicle_plate":"***"}'::jsonb),'Malformed rego rejected');
+SELECT has_function('public','triage_vendor_intake_case',ARRAY['uuid','text','text'],'Reviewer workflow exists');
+SELECT has_function('public','submit_vendor_intake_case',ARRAY['text','text','text','text','text','text','text','text','text','text','text','text','text','text','jsonb'],'Submission workflow exists');
+SELECT ok(position('is_driver_approved' IN pg_get_functiondef('public.review_provider_application(uuid,text)'::regprocedure))=0,'Application acceptance does not grant driver rights');
+SELECT ok(position('vendor_activation_clearances' IN pg_get_functiondef('public.admin_set_provider_service_status(uuid,text)'::regprocedure))>0,'Activation requires clearance');
+SELECT ok((SELECT relrowsecurity FROM pg_class WHERE oid='public.vendor_intake_cases'::regclass),'Case RLS enabled');
+SELECT ok((SELECT relrowsecurity FROM pg_class WHERE oid='public.vendor_intake_events'::regclass),'Event RLS enabled');
+SELECT * FROM finish();
+ROLLBACK;

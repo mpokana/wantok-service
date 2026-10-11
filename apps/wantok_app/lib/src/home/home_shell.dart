@@ -3,7 +3,7 @@ import 'package:wantok_auth/wantok_auth.dart';
 import 'package:wantok_core/wantok_core.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
-import '../vendor/provider_application_page.dart';
+import '../vendor/vendor_enterprise_application_page.dart';
 import '../vendor/taxi_driver_page.dart';
 import '../vendor/vendor_commerce_page.dart';
 import '../vendor/vendor_events_page.dart';
@@ -150,7 +150,7 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
         } else {
           Navigator.of(context).push(
             MaterialPageRoute<void>(
-              builder: (context) => const ProviderApplicationPage(),
+              builder: (context) => const VendorEnterpriseApplicationPage(),
             ),
           );
         }
@@ -256,7 +256,7 @@ class _HomeShellState extends State<HomeShell> with WidgetsBindingObserver {
               ),
               onApply: () => Navigator.of(context).push(
                 MaterialPageRoute<void>(
-                  builder: (context) => const ProviderApplicationPage(),
+                  builder: (context) => const VendorEnterpriseApplicationPage(),
                 ),
               ),
               onOpenJobs: () => setState(() => _tabIndex = 1),

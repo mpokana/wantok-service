@@ -9,6 +9,7 @@ import 'staged_provider_review_page.dart';
 import 'operations_overview_page.dart';
 import 'operations_sidebar.dart';
 import 'verification_kyc_page.dart';
+import 'vendor_intake_queue_page.dart';
 import 'support_inquiries_page.dart';
 import 'public_services_module_control_page.dart';
 
@@ -190,10 +191,20 @@ class _ProviderApplicationsPageState extends State<_ProviderApplicationsPage> {
   Widget build(BuildContext context) {
     return _AdminPageFrame(
       title: 'Provider applications',
-      subtitle: 'Approve identity/business applications before vendor capabilities become available.',
+      subtitle: 'Legacy application acceptance is not identity verification. New cases are processed in Applications & Review.',
       action: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
+          TextButton.icon(
+            key: const ValueKey('enterprise-vendor-intake'),
+            icon: const Icon(Icons.assignment_turned_in_outlined),
+            label: const Text('Applications & Review'),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const VendorIntakeQueuePage(),
+              ),
+            ),
+          ),
           IconButton(
             key: const ValueKey('admin-staged-onboarding-queue'),
             tooltip: 'Preliminary onboarding applications',
@@ -302,7 +313,7 @@ class _ProviderApplicationsPageState extends State<_ProviderApplicationsPage> {
                             onPressed: busy
                                 ? null
                                 : () => _review(id, 'approved'),
-                            child: Text(busy ? 'Working...' : 'Approve'),
+                            child: Text(busy ? 'Working...' : 'Accept for checks'),
                           ),
                         ],
                       ),
@@ -372,7 +383,7 @@ class _ServiceReviewPageState extends State<_ServiceReviewPage> {
   Widget build(BuildContext context) {
     return _AdminPageFrame(
       title: 'Service listing review',
-      subtitle: 'Only approved vendor listings become discoverable to clients.',
+      subtitle: 'Service activation is held until separate independent verification and clearance are recorded.',
       action: IconButton(onPressed: _refresh, icon: const Icon(Icons.refresh)),
       child: FutureBuilder<List<Map<String, dynamic>>>(
         future: _future,
@@ -443,9 +454,9 @@ class _ServiceReviewPageState extends State<_ServiceReviewPage> {
                         child: const Text('Reject'),
                       ),
                       const SizedBox(width: 8),
-                      FilledButton(
-                        onPressed: busy ? null : () => _review(id, 'active'),
-                        child: Text(busy ? 'Working...' : 'Approve'),
+                      const FilledButton(
+                        onPressed: null,
+                        child: Text('Independent clearance required'),
                       ),
                     ],
                   ),
