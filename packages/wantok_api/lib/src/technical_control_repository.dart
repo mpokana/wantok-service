@@ -1,5 +1,45 @@
 import 'wantok_backend.dart';
 
+/// A strictly reduced event from the existing Technical Control audit trail.
+/// No actor IDs, target IDs, request IDs or metadata cross the API boundary.
+class TechnicalActivityEvent {
+  const TechnicalActivityEvent({
+    required this.id,
+    required this.occurredAt,
+    required this.actionCode,
+  });
+
+  final int id;
+  final DateTime occurredAt;
+  final String actionCode;
+
+  static const actions = {
+    'technical_module_state_changed',
+    'technical_module_configuration_changed',
+    'technical_module_access_granted',
+    'technical_module_access_revoked',
+  };
+
+  factory TechnicalActivityEvent.fromMap(Map<String, dynamic> json) {
+    final rawId = json['id'];
+    final timestamp = _dateTime(json['occurred_at']);
+    final action = json['action_code'];
+    if (rawId is! num ||
+        rawId < 1 ||
+        rawId.toInt() != rawId ||
+        timestamp == null ||
+        action is! String ||
+        !actions.contains(action)) {
+      throw StateError('Invalid technical activity record.');
+    }
+    return TechnicalActivityEvent(
+      id: rawId.toInt(),
+      occurredAt: timestamp,
+      actionCode: action,
+    );
+  }
+}
+
 /// A status aggregation, not a worker-liveness or delivery guarantee.
 class TechnicalQueueSnapshot {
   const TechnicalQueueSnapshot({
@@ -697,6 +737,21 @@ class TechnicalControlRepository {
     );
     return _maps(result)
         .map(TechnicalHealthHistoryEntry.fromMap)
+        .toList(growable: false);
+  }
+
+  /// Privacy-minimised, per-module Technical actions from audit_events.
+  /// PostgreSQL requires both module.view and module.logs, and caps at 30.
+  Future<List<TechnicalActivityEvent>> loadModuleActivity(
+    String moduleKey, {
+    int limit = 30,
+  }) async {
+    final result = await WantokBackend.client.rpc(
+      'list_technical_module_activity',
+      params: {'p_module_key': moduleKey, 'p_limit': limit.clamp(1, 30)},
+    );
+    return _maps(result)
+        .map(TechnicalActivityEvent.fromMap)
         .toList(growable: false);
   }
 

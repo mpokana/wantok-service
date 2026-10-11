@@ -78,7 +78,8 @@ try {
 
   $migrations = @(
     '20261011240000_technical_scoped_health_log_adapter.sql',
-    '20261011241000_technical_messaging_queue_snapshot.sql'
+    '20261011241000_technical_messaging_queue_snapshot.sql',
+    '20261011242000_technical_scoped_activity_audit.sql'
   )
   foreach ($migration in $migrations) {
     $file = Join-Path $root "supabase\migrations\$migration"
@@ -91,7 +92,8 @@ try {
 
   $tests = @(
     @{ name='090_technical_scoped_health_log_adapter.test.sql'; count=12 },
-    @{ name='091_technical_messaging_queue_snapshot.test.sql'; count=13 }
+    @{ name='091_technical_messaging_queue_snapshot.test.sql'; count=13 },
+    @{ name='092_technical_scoped_activity_audit.test.sql'; count=14 }
   )
   foreach ($test in $tests) {
     $name = $test.name
@@ -108,17 +110,17 @@ try {
     Write-Output "T24_STAGE_TEST_PASS=$name assertions=$ok"
   }
 
-  $isolatedSql = "select (to_regprocedure('public.list_technical_module_log_events(text,integer)') is not null) and (to_regprocedure('public.get_technical_messaging_queue_snapshot(text)') is not null) and (not exists(select 1 from auth.users where id in ('b2400000-0000-0000-0000-000000000001'::uuid,'b2410000-0000-0000-0000-000000000001'::uuid))) and ((select count(*) from public.notification_outbox)=0)"
+  $isolatedSql = "select (to_regprocedure('public.list_technical_module_log_events(text,integer)') is not null) and (to_regprocedure('public.get_technical_messaging_queue_snapshot(text)') is not null) and (to_regprocedure('public.list_technical_module_activity(text,integer)') is not null) and (not exists(select 1 from auth.users where id in ('b2400000-0000-0000-0000-000000000001'::uuid,'b2410000-0000-0000-0000-000000000001'::uuid,'b2420000-0000-0000-0000-000000000001'::uuid))) and ((select count(*) from public.notification_outbox)=0)"
   $check = @(& docker exec $target psql -X -U supabase_admin -d t24_stage -t -A -c $isolatedSql)
   if ($LASTEXITCODE -ne 0 -or ($check -join '').Trim() -ne 't') {
     throw 'Isolated migration or test rollback verification failed.'
   }
-  $sharedSql = "select (to_regprocedure('public.list_technical_module_log_events(text,integer)') is null) and (to_regprocedure('public.get_technical_messaging_queue_snapshot(text)') is null)"
+  $sharedSql = "select (to_regprocedure('public.list_technical_module_log_events(text,integer)') is null) and (to_regprocedure('public.get_technical_messaging_queue_snapshot(text)') is null) and (to_regprocedure('public.list_technical_module_activity(text,integer)') is null)"
   $shared = @(& docker exec $source psql -X -U postgres -d postgres -t -A -c $sharedSql)
   if ($LASTEXITCODE -ne 0 -or ($shared -join '').Trim() -ne 't') {
     throw 'Shared Supabase database has unexpected T2.4 schema state.'
   }
-  Write-Output 'T24_STAGING_PASS=2 migrations,25 assertions,fixtures rolled back'
+  Write-Output 'T24_STAGING_PASS=3 migrations,39 assertions,fixtures rolled back'
   Write-Output 'T24_SHARED_DB_UNCHANGED=true'
   if ($KeepContainer) { Write-Output "T24_DEBUG_CONTAINER=$target" }
 }

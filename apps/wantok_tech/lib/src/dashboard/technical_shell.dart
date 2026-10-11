@@ -9,6 +9,7 @@ import 'technical_health_page.dart';
 import 'technical_branding_page.dart';
 import 'technical_local_ports_page.dart';
 import 'technical_observability_page.dart';
+import 'technical_activity_page.dart';
 import 'technical_category_manager_page.dart';
 
 class TechnicalShell extends StatefulWidget {
@@ -980,6 +981,20 @@ class _ModuleWorkspace extends StatelessWidget {
                   module: module,
                   section: TechnicalObservabilitySection.logs,
                 ),
+              ),
+            ),
+          ),
+        if (module.hasPermission('module.view') &&
+            module.hasPermission('module.logs'))
+          _CapabilityCard(
+            icon: Icons.manage_history_outlined,
+            title: 'Technical activity',
+            description:
+                'Read bounded, privacy-redacted module configuration, '
+                'access and state-change history. No customer audit data.',
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => TechnicalActivityPage(module: module),
               ),
             ),
           ),
