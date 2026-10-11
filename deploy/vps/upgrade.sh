@@ -14,7 +14,7 @@ set -a
 source "$ENV_FILE"
 set +a
 
-"$ROOT/deploy/vps/backup.sh"
+bash "$ROOT/deploy/vps/backup.sh"
 
 if [[ "${WANTOK_UPGRADE_SUPABASE:-0}" == "1" ]]; then
   if [[ -x "$SUPABASE_PROJECT_DIR/update.sh" || -f "$SUPABASE_PROJECT_DIR/update.sh" ]]; then
@@ -29,8 +29,8 @@ if [[ "${WANTOK_UPGRADE_SUPABASE:-0}" == "1" ]]; then
   fi
 fi
 
-"$ROOT/deploy/vps/provision-supabase.sh"
-"$ROOT/deploy/vps/migrate.sh"
+bash "$ROOT/deploy/vps/provision-supabase.sh"
+bash "$ROOT/deploy/vps/migrate.sh"
 
 echo "==> Rebuilding Wantok web applications"
 docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" build --pull

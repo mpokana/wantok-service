@@ -17,10 +17,10 @@ fi
 chmod 600 "$ENV_FILE"
 
 echo "==> Provisioning/configuring production Supabase"
-"$ROOT/deploy/vps/provision-supabase.sh"
+bash "$ROOT/deploy/vps/provision-supabase.sh"
 
 echo "==> Applying Wantok migrations"
-"$ROOT/deploy/vps/migrate.sh"
+bash "$ROOT/deploy/vps/migrate.sh"
 
 echo "==> Building Wantok web applications"
 docker compose --env-file "$ENV_FILE" -f "$COMPOSE_FILE" build --pull
