@@ -6,7 +6,15 @@ import 'staged_verification_checklist_page.dart';
 
 /// Preliminary intake triage. No approval, verification or listing action.
 class StagedProviderReviewPage extends StatefulWidget {
-  const StagedProviderReviewPage({super.key});
+  const StagedProviderReviewPage({
+    super.key,
+    this.canTriage = true,
+    this.canReviewChecks = true,
+    this.canManageEvidence = true,
+  });
+  final bool canTriage;
+  final bool canReviewChecks;
+  final bool canManageEvidence;
 
   @override
   State<StagedProviderReviewPage> createState() =>
@@ -215,12 +223,17 @@ class _StagedProviderReviewPageState extends State<StagedProviderReviewPage> {
                                         applicantName:
                                             row['applicant_name']?.toString() ??
                                             'Applicant',
+                                        canRecordReviews:
+                                            widget.canReviewChecks,
+                                        canModifyEvidence:
+                                            widget.canManageEvidence,
                                       ),
                                 ),
                               ),
                             ),
                           ],
-                          if (row['status'] == 'submitted') ...[
+                          if (widget.canTriage &&
+                              row['status'] == 'submitted') ...[
                             const SizedBox(height: 10),
                             Wrap(
                               spacing: 10,

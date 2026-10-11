@@ -11,7 +11,9 @@ class StagedEvidencePlanningSection extends StatefulWidget {
     this.loadPlans,
     this.planCheck,
     this.cancelPlan,
+    this.canModify = true,
   });
+  final bool canModify;
 
   final String applicationId;
   final List<Map<String, dynamic>> checks;
@@ -200,7 +202,9 @@ class _StagedEvidencePlanningSectionState
                           style: const TextStyle(color: WantokColors.muted),
                         ),
                         const SizedBox(height: 7),
-                        if (state == null && checkId.isNotEmpty)
+                        if (widget.canModify &&
+                            state == null &&
+                            checkId.isNotEmpty)
                           OutlinedButton.icon(
                             onPressed: _busyId == null
                                 ? () => _change(checkId, cancel: false)
@@ -208,7 +212,7 @@ class _StagedEvidencePlanningSectionState
                             icon: const Icon(Icons.fact_check_outlined),
                             label: const Text('Plan future evidence'),
                           )
-                        else if (state == 'planned')
+                        else if (widget.canModify && state == 'planned')
                           TextButton.icon(
                             onPressed: _busyId == null
                                 ? () => _change(checkId, cancel: true)

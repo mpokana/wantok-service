@@ -16,7 +16,11 @@ class StagedVerificationChecklistPage extends StatefulWidget {
     this.planEvidenceCheck,
     this.cancelEvidencePlan,
     this.updateCheck,
+    this.canRecordReviews = true,
+    this.canModifyEvidence = true,
   });
+  final bool canRecordReviews;
+  final bool canModifyEvidence;
 
   final String applicationId;
   final String applicantName;
@@ -219,39 +223,40 @@ class _StagedVerificationChecklistPageState
                             style: const TextStyle(color: WantokColors.muted),
                           ),
                           const SizedBox(height: 10),
-                          Wrap(
-                            spacing: 8,
-                            runSpacing: 6,
-                            children: [
-                              OutlinedButton(
-                                onPressed: _busy == null
-                                    ? () => _change(
-                                        check['id'] as String,
-                                        'under_review',
-                                      )
-                                    : null,
-                                child: const Text('Under review'),
-                              ),
-                              OutlinedButton(
-                                onPressed: _busy == null
-                                    ? () => _change(
-                                        check['id'] as String,
-                                        'needs_followup',
-                                      )
-                                    : null,
-                                child: const Text('Needs follow-up'),
-                              ),
-                              TextButton(
-                                onPressed: _busy == null
-                                    ? () => _change(
-                                        check['id'] as String,
-                                        'pending',
-                                      )
-                                    : null,
-                                child: const Text('Reset pending'),
-                              ),
-                            ],
-                          ),
+                          if (widget.canRecordReviews)
+                            Wrap(
+                              spacing: 8,
+                              runSpacing: 6,
+                              children: [
+                                OutlinedButton(
+                                  onPressed: _busy == null
+                                      ? () => _change(
+                                          check['id'] as String,
+                                          'under_review',
+                                        )
+                                      : null,
+                                  child: const Text('Under review'),
+                                ),
+                                OutlinedButton(
+                                  onPressed: _busy == null
+                                      ? () => _change(
+                                          check['id'] as String,
+                                          'needs_followup',
+                                        )
+                                      : null,
+                                  child: const Text('Needs follow-up'),
+                                ),
+                                TextButton(
+                                  onPressed: _busy == null
+                                      ? () => _change(
+                                          check['id'] as String,
+                                          'pending',
+                                        )
+                                      : null,
+                                  child: const Text('Reset pending'),
+                                ),
+                              ],
+                            ),
                         ],
                       ),
                     ),
@@ -263,6 +268,7 @@ class _StagedVerificationChecklistPageState
                 loadPlans: widget.loadEvidencePlans,
                 planCheck: widget.planEvidenceCheck,
                 cancelPlan: widget.cancelEvidencePlan,
+                canModify: widget.canModifyEvidence,
               ),
               const SizedBox(height: 18),
               const Text(

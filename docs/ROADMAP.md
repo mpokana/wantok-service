@@ -2,6 +2,18 @@
 
 **Updated:** 2026-10-11
 
+## E6D–F — Dual staff approval, staged case isolation & COI (11 October; CODE PASS, FORMAL SIGN-OFF OPEN)
+
+- [x] Separate country-authorised provisioning requester from independent approver and subject; enforce country/subdivision/category, 366-day maximum expiry, audited grant/revoke, pending does not confer authority, no implicit administrator duties.
+- [x] Restrict legacy staged-provider triage/verification and evidence planning/metadata RLS to independently classified, active scoped case/evidence officers; keep applicant reads and non-uploading intents. Wire staged queue/checklist/evidence action separation into restricted Operations tabs. Seal old resource activation moderation.
+- [x] Add staff self-declared and independently recorded immutable case recusal; PostgreSQL case-scope checks deny reviewer, evidence or investigator privileges after a conflict is recorded.
+- [x] Validate existing provider/driver and listing activation column-level grants and RPC denials; ensure profile owner cannot change verification flags through direct SQL.
+- [x] Local three migrations PASS, **56 pgTAP files / 1,139 assertions PASS**, evidence safety 101/101 PASS, new staff authorisation 5 widget tests PASS, full Operations **43/43 PASS** and app analyzer clean. Full integrated Flutter test and package proof documented separately.
+- [ ] **Formal E6 sign-off open:** real verified independent staff delegation and key custody; official source provenance for country subdivision/classification; COI/business relationship review; controlled signed-in multi-user browser matrix; security/recovery and E6 release runbook approval.
+- [ ] E7–E12 separately gated; no production/online VM deployment, KYC issuance, documents, vendor activation or money movement. Detail `docs/E6D_E6F_DUAL_STAFF_STAGED_CASE_RECUSAL_20261011.md`.
+
+---
+
 ## T2.4 — Technical Diagnostics, Logs and Jobs (11 October; FIRST READ-ONLY MILESTONE)
 
 - [x] Owner-authorised **start** of T2.4 after reporting 8/8 CX1 manual checklist items complete. Preserve the difference between owner attestation and independently witnessed browser/HONOR evidence; CX1 photographs remain inactive without database image paths.

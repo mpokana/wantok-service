@@ -4,6 +4,17 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 11 October — E6D–F staff, staged-case and conflict-scoping checkpoint (NEW)
+
+- Added country-authorised two-person **Operations staff duty provisioning**: only independently authorised requesters and different approvers can request/approve bounded category/region duties, with explicit reason and atomic issue/revoke audit. Trusted service-only bootstrap remains sealed from browser and existing admins get no automatic authority.
+- Existing staged-applicant workflows now use separately verified country/subdivision/service-family case classification (not guessed text) with distinct case-review and evidence-officer duties and owner-read RLS. The restricted Operations **Staged cases** tab hides triage/checklist and evidence planning actions according to individual duties; PostgreSQL remains authoritative. Resource moderation legacy `active` status RPC is sealed, with current column-level table permission checks preserved.
+- Staff may declare case-specific conflicts; independent trusted officers can record an investigated recusal. Enterprise and staged case scope instantly fails closed for conflicted staff, including reviewer/evidence/safety duties. Applicant-owned reads continue.
+- Local migrations 20261011230000/231000/232000 applied, **56 files / 1,139 pgTAP assertions PASS**, Node evidence safety **101/101 PASS**, new Operations provisioning UI five focused widget tests PASS; full Operations analysis and **43/43 widgets PASS**, including existing staged-screen coverage. Full detached integrated Flutter QA/push/release separately recorded when verified.
+- **E6 engineering controls advanced but final E6 human acceptance remains OPEN**: verified real staff and delegation, official regional source attestation, declared/undeclared related-party conflicts, signed-in cross-role/country browser verification, security audit and review of all inherited provider paths. No VM, real documents, money or activation enabled.
+- See `docs/E6D_E6F_DUAL_STAFF_STAGED_CASE_RECUSAL_20261011.md`.
+
+---
+
 ## 11 October — T2.4 first read-only observability milestone (OWNER-AUTHORISED; IN PROGRESS)
 
 - Owner explicitly instructed **Continue T2.4** after reporting the eight CX1 manual acceptance checks complete; those manual checkmarks are an **owner report**, not newly witnessed authenticated browser/device proof. Keep CX1 release-evidence reconciliation and six unsaved draft category image paths separate.

@@ -28,11 +28,31 @@ select is((select count(*)::int from public.staged_verification_checks where rev
 select is((select count(*)::int from public.staged_verification_audit),0,'Applicant sees no admin audit');
 select throws_ok(
  $$select public.update_staged_verification_check((select id from public.staged_verification_checks limit 1),'needs_followup')$$,
- '42501','Admin access required','Applicant cannot edit progress');
+ '42501','Scoped staged case reviewer required','Applicant cannot edit progress');
 
 select set_config('request.jwt.claim.sub','c3100000-0000-0000-0000-000000000002',true);
 select is((select count(*)::int from public.staged_verification_checks),0,'Another user cannot read checks');
 
+RESET ROLE;
+SELECT public.map_operations_service_category(
+ (SELECT category_id FROM public.staged_provider_applications LIMIT 1),
+ 'trades','c3100000-0000-0000-0000-000000000003'::uuid,
+ 'Synthetic service family mapping only for transaction rollback');
+SELECT public.register_operations_region('PG-MPL','Morobe',
+ 'c3100000-0000-0000-0000-000000000003'::uuid,
+ 'Synthetic independently certified provincial location in test');
+SELECT public.classify_operations_staged_application(
+ (SELECT id FROM public.staged_provider_applications LIMIT 1),
+ 'PG-MPL','c3100000-0000-0000-0000-000000000003'::uuid,
+ 'Synthetic staged application jurisdiction certified in test');
+INSERT INTO public.operations_duty_grants(
+ staff_user_id,duty,country_code,region_code,category_scope,assignment_reason)
+VALUES
+ ('c3100000-0000-0000-0000-000000000003','case_reviewer','PG','PG-MPL','trades',
+ 'Synthetic staged reviewer assignment for rollback test only'),
+ ('c3100000-0000-0000-0000-000000000003','evidence_officer','PG','PG-MPL','trades',
+ 'Synthetic staged evidence officer for rollback test only');
+SET LOCAL ROLE authenticated;
 select set_config('request.jwt.claim.sub','c3100000-0000-0000-0000-000000000003',true);
 select is((select count(*)::int from public.staged_verification_checks),3,'Admin can read verification progress');
 select throws_ok(

@@ -60,7 +60,7 @@ select is((select count(*)::integer from public.staged_verification_checks),3,
 select throws_ok(
  $$select public.plan_staged_evidence_requirement(
    (select id from public.staged_verification_checks limit 1))$$,
- '42501','Admin access required',
+ '42501','Scoped staged evidence officer required',
  'Applicant cannot plan collection of sensitive evidence');
 
 select throws_ok(
@@ -72,6 +72,26 @@ select set_config('request.jwt.claim.sub',
  'c3200000-0000-0000-0000-000000000002',true);
 select is((select count(*)::integer from public.staged_verification_checks),0,
  'Another applicant cannot see protected checklist');
+RESET ROLE;
+SELECT public.map_operations_service_category(
+ (SELECT category_id FROM public.staged_provider_applications LIMIT 1),'trades',
+ 'c3200000-0000-0000-0000-000000000003'::uuid,
+ 'Synthetic taxonomic category assignment in rolled back test');
+SELECT public.register_operations_region('PG-MPL','Morobe',
+ 'c3200000-0000-0000-0000-000000000003'::uuid,
+ 'Synthetic officially checked subdivision for local regression');
+SELECT public.classify_operations_staged_application(
+ (SELECT id FROM public.staged_provider_applications LIMIT 1),
+ 'PG-MPL','c3200000-0000-0000-0000-000000000003'::uuid,
+ 'Synthetic staged application classification for this test');
+INSERT INTO public.operations_duty_grants(
+ staff_user_id,duty,country_code,region_code,category_scope,assignment_reason)
+VALUES
+ ('c3200000-0000-0000-0000-000000000003','case_reviewer','PG','PG-MPL','trades',
+ 'Synthetic category-scoped preliminary reviewer for rollback test'),
+ ('c3200000-0000-0000-0000-000000000003','evidence_officer','PG','PG-MPL','trades',
+ 'Synthetic category-scoped evidence officer for rollback test');
+SET LOCAL ROLE authenticated;
 select set_config('request.jwt.claim.sub',
  'c3200000-0000-0000-0000-000000000003',true);
 select throws_ok(
@@ -103,7 +123,7 @@ select is((select count(*)::integer from public.staged_evidence_requirement_audi
 select throws_ok(
  $$select public.cancel_staged_evidence_requirement(
    (select check_id from public.staged_evidence_requirements limit 1))$$,
- '42501','Admin access required',
+ '42501','Scoped staged evidence officer required',
  'Applicant cannot cancel administrator planning');
 select set_config('request.jwt.claim.sub',
  'c3200000-0000-0000-0000-000000000002',true);

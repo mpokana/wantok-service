@@ -8,8 +8,10 @@ import 'auth/admin_password_reset_page.dart';
 import 'auth/admin_sign_in_page.dart';
 import 'dashboard/admin_shell.dart';
 import 'dashboard/vendor_intake_queue_page.dart';
+import 'dashboard/staged_provider_review_page.dart';
 import 'dashboard/vendor_clearance_status_page.dart';
 import 'dashboard/vendor_policy_governance_page.dart';
+import 'dashboard/operations_duty_change_page.dart';
 
 class WantokAdminApp extends StatelessWidget {
   const WantokAdminApp({required this.backendConfigured, super.key});
@@ -118,6 +120,22 @@ Future<Set<String>> _loadScopedDuties() async {
         active.add(row['duty'].toString());
       }
     }
+    try {
+      final authorities = await WantokBackend.client
+          .from('operations_provisioning_authorities')
+          .select('authority,issued_at,revoked_at');
+      for (final record in (authorities as List)) {
+        final row = Map<String, dynamic>.from(record as Map);
+        final start = DateTime.tryParse(row['issued_at']?.toString() ?? '');
+        if (row['revoked_at'] == null &&
+            start != null &&
+            !start.toUtc().isAfter(now)) {
+          active.add('duty_changes');
+        }
+      }
+    } catch (_) {
+      // An older backend cannot accidentally grant provisioning UI access.
+    }
     return active;
   } catch (_) {
     // Older backends or unavailable scope data must not grant entry.
@@ -137,13 +155,18 @@ class _ScopedPolicyWorkspace extends StatelessWidget {
     final cases =
         duties.contains('case_reviewer') || duties.contains('evidence_officer');
     final safety = duties.contains('safety_investigator');
-    if (!policy && !cases && !safety) {
+    final provisioning = duties.contains('duty_changes');
+    if (!policy && !cases && !safety && !provisioning) {
       return const Scaffold(
         body: Center(child: Text('No authorised workspace')),
       );
     }
     return DefaultTabController(
-      length: (policy ? 1 : 0) + (cases ? 1 : 0) + (safety ? 1 : 0),
+      length:
+          (policy ? 1 : 0) +
+          (cases ? 2 : 0) +
+          (safety ? 1 : 0) +
+          (provisioning ? 1 : 0),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Wantok Operations · Scoped Compliance'),
@@ -160,7 +183,9 @@ class _ScopedPolicyWorkspace extends StatelessWidget {
             tabs: [
               if (policy) const Tab(text: 'Policy drafts'),
               if (cases) const Tab(text: 'Vendor cases'),
+              if (cases) const Tab(text: 'Staged cases'),
               if (safety) const Tab(text: 'Safety clearances'),
+              if (provisioning) const Tab(text: 'Staff duties'),
             ],
           ),
         ),
@@ -173,7 +198,14 @@ class _ScopedPolicyWorkspace extends StatelessWidget {
                 canReviewChecks: duties.contains('case_reviewer'),
                 canRequestEvidence: duties.contains('evidence_officer'),
               ),
+            if (cases)
+              StagedProviderReviewPage(
+                canTriage: duties.contains('case_reviewer'),
+                canReviewChecks: duties.contains('case_reviewer'),
+                canManageEvidence: duties.contains('evidence_officer'),
+              ),
             if (safety) const VendorClearanceStatusPage(),
+            if (provisioning) const OperationsDutyChangePage(),
           ],
         ),
       ),

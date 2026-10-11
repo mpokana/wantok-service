@@ -41,6 +41,26 @@ select set_config('request.jwt.claim.sub','c3500000-0000-0000-0000-000000000001'
 select lives_ok($$select public.submit_staged_provider_application(
  'home-services','Custody Test Provider','individual','Morobe','Lae',
  'Synthetic metadata-only custody testing')$$,'Staged application prepared');
+RESET ROLE;
+SELECT public.map_operations_service_category(
+ (SELECT category_id FROM public.staged_provider_applications LIMIT 1),
+ 'trades','c3500000-0000-0000-0000-000000000002'::uuid,
+ 'Synthetic service family mapping only for transaction rollback');
+SELECT public.register_operations_region('PG-MPL','Morobe',
+ 'c3500000-0000-0000-0000-000000000002'::uuid,
+ 'Synthetic independently certified provincial location in test');
+SELECT public.classify_operations_staged_application(
+ (SELECT id FROM public.staged_provider_applications LIMIT 1),
+ 'PG-MPL','c3500000-0000-0000-0000-000000000002'::uuid,
+ 'Synthetic staged application jurisdiction certified in test');
+INSERT INTO public.operations_duty_grants(
+ staff_user_id,duty,country_code,region_code,category_scope,assignment_reason)
+VALUES
+ ('c3500000-0000-0000-0000-000000000002','case_reviewer','PG','PG-MPL','trades',
+ 'Synthetic staged reviewer assignment for rollback test only'),
+ ('c3500000-0000-0000-0000-000000000002','evidence_officer','PG','PG-MPL','trades',
+ 'Synthetic staged evidence officer for rollback test only');
+SET LOCAL ROLE authenticated;
 select set_config('request.jwt.claim.sub','c3500000-0000-0000-0000-000000000002',true);
 select lives_ok($$select public.triage_staged_provider_application(
  (select id from public.staged_provider_applications

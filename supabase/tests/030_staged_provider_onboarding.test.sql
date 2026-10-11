@@ -34,9 +34,29 @@ select throws_ok(
  '22023','Formal category intake not available','Travel provider intake remains blocked');
 select throws_ok(
  $$select public.triage_staged_provider_application('00000000-0000-0000-0000-000000000001','in_review')$$,
- '42501','Admin access required','Regular user cannot triage');
+ '42501','Scoped staged case reviewer required','Regular user cannot triage');
 select set_config('request.jwt.claim.sub','c3000000-0000-0000-0000-000000000002',true);
 select is((select count(*)::int from public.staged_provider_applications),0,'Another user cannot view the application');
+RESET ROLE;
+SELECT public.map_operations_service_category(
+ (SELECT category_id FROM public.staged_provider_applications LIMIT 1),
+ 'trades','c3000000-0000-0000-0000-000000000003'::uuid,
+ 'Synthetic service family mapping only for transaction rollback');
+SELECT public.register_operations_region('PG-MPL','Morobe',
+ 'c3000000-0000-0000-0000-000000000003'::uuid,
+ 'Synthetic independently certified provincial location in test');
+SELECT public.classify_operations_staged_application(
+ (SELECT id FROM public.staged_provider_applications LIMIT 1),
+ 'PG-MPL','c3000000-0000-0000-0000-000000000003'::uuid,
+ 'Synthetic staged application jurisdiction certified in test');
+INSERT INTO public.operations_duty_grants(
+ staff_user_id,duty,country_code,region_code,category_scope,assignment_reason)
+VALUES
+ ('c3000000-0000-0000-0000-000000000003','case_reviewer','PG','PG-MPL','trades',
+ 'Synthetic staged reviewer assignment for rollback test only'),
+ ('c3000000-0000-0000-0000-000000000003','evidence_officer','PG','PG-MPL','trades',
+ 'Synthetic staged evidence officer for rollback test only');
+SET LOCAL ROLE authenticated;
 select set_config('request.jwt.claim.sub','c3000000-0000-0000-0000-000000000003',true);
 select lives_ok(
  $$select public.triage_staged_provider_application(id,'in_review') from public.staged_provider_applications where status='submitted'$$,

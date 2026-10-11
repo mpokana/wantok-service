@@ -25,6 +25,26 @@ select throws_ok(
  $$select public.prepare_staged_evidence_intake(
  (select id from public.staged_verification_checks limit 1),'WANTOK-EVIDENCE-INTAKE-DRAFT-2026-10')$$,
  '22023','Evidence intake is not eligible','No intent before admin planning');
+RESET ROLE;
+SELECT public.map_operations_service_category(
+ (SELECT category_id FROM public.staged_provider_applications LIMIT 1),
+ 'trades','c3300000-0000-0000-0000-000000000003'::uuid,
+ 'Synthetic service family mapping only for transaction rollback');
+SELECT public.register_operations_region('PG-MPL','Morobe',
+ 'c3300000-0000-0000-0000-000000000003'::uuid,
+ 'Synthetic independently certified provincial location in test');
+SELECT public.classify_operations_staged_application(
+ (SELECT id FROM public.staged_provider_applications LIMIT 1),
+ 'PG-MPL','c3300000-0000-0000-0000-000000000003'::uuid,
+ 'Synthetic staged application jurisdiction certified in test');
+INSERT INTO public.operations_duty_grants(
+ staff_user_id,duty,country_code,region_code,category_scope,assignment_reason)
+VALUES
+ ('c3300000-0000-0000-0000-000000000003','case_reviewer','PG','PG-MPL','trades',
+ 'Synthetic staged reviewer assignment for rollback test only'),
+ ('c3300000-0000-0000-0000-000000000003','evidence_officer','PG','PG-MPL','trades',
+ 'Synthetic staged evidence officer for rollback test only');
+SET LOCAL ROLE authenticated;
 select set_config('request.jwt.claim.sub','c3300000-0000-0000-0000-000000000003',true);
 select lives_ok(
  $$select public.triage_staged_provider_application(

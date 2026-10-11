@@ -20,6 +20,10 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-11-20 — E6D–F two-person grants and staged case recusals
+
+**Status:** Local E6 security engineering code implemented and regression tested, formal live E6 acceptance OPEN. Country-scoped signed-in requester and independent approver duty changes are audited, time-bound, denied to targets and unaffected by global administrator flags. Staged applications are registered against independent ISO subdivision/category mapping (no free-text guesses); review/evidence duty separation and applicant owner RLS are enforced. Staff case-specific recusals immediately invalidate enterprise/staged case authority. Legacy resource activation decision sealed and direct sensitive column grants tested. Local 56 SQL/1,139 assertions, Node evidence 101/101, five new Operations duty widget tests passed; integrated package QA separate. No real staff proof, signed-in browser witness, VM deployment, KYC, uploads, vendor activation or payment allowed. `docs/E6D_E6F_DUAL_STAFF_STAGED_CASE_RECUSAL_20261011.md`.
+
 ## FILLER-2026-10-11-19 — T2.4 owner-authorised read-only Technical observability
 
 **Status:** T2.4 started (partial), not production/phase complete. Existing Technical capability cards now open module-scoped read-only diagnostics, limited health transition logs and a truthful disconnected-queue state with no actions. Six tests and isolated full Flutter regression PASS; local SQL 52/1,043 PASS. No SQL migration, raw logs, arbitrary probes, job execution, Web/Android upgrade or VM deployment. Remaining real log/queue adapters, secure technical audits and approved job commands are explicit future gates. Owner CX1 manual acceptance is documented separately from objective release evidence. `docs/T24_READONLY_OBSERVABILITY_FOUNDATION_20261011.md`.

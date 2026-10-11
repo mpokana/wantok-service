@@ -12,6 +12,7 @@ import 'verification_kyc_page.dart';
 import 'vendor_intake_queue_page.dart';
 import 'support_inquiries_page.dart';
 import 'public_services_module_control_page.dart';
+import 'operations_duty_change_page.dart';
 
 class AdminShell extends StatefulWidget {
   const AdminShell({required this.roles, required this.email, super.key});
@@ -78,6 +79,16 @@ class _AdminShellState extends State<AdminShell> {
           ],
         ),
         actions: [
+          IconButton(
+            key: const ValueKey('operations-staff-duty-link'),
+            tooltip: 'Staff duty authorisation',
+            icon: const Icon(Icons.admin_panel_settings_outlined),
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => const OperationsDutyChangePage(),
+              ),
+            ),
+          ),
           if (desktop)
             TextButton.icon(
               key: const ValueKey('operations-kyc-header-link'),
@@ -313,7 +324,9 @@ class _ProviderApplicationsPageState extends State<_ProviderApplicationsPage> {
                             onPressed: busy
                                 ? null
                                 : () => _review(id, 'approved'),
-                            child: Text(busy ? 'Working...' : 'Accept for checks'),
+                            child: Text(
+                              busy ? 'Working...' : 'Accept for checks',
+                            ),
                           ),
                         ],
                       ),
