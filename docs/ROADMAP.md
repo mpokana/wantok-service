@@ -2,6 +2,13 @@
 
 **Updated:** 2026-10-11
 
+## T2.4 — Reproducible isolated staging SQL acceptance (11 October; QA PASS, LIVE MIGRATION OPEN)
+
+- [x] Added disposable, no-network/no-port Postgres staging runner `scripts/qa/t24-isolated-staging.ps1`, schema-only + five non-personal technical registry tables. Both T2.4 RPC migrations apply together only in isolated `t24_stage`, with **25/25 SQL negative/privacy assertions PASS**, fixture rollback, source DB unchanged and automatic container cleanup.
+- [x] Clean Flutter source validation **7 analyses / 132 Client / 43 Operations / 28 Technical widgets PASS**. Record `docs/T24_ISOLATED_STAGING_INTEGRATION_20261011.md`.
+- [ ] Full default shared 58-file SQL suite remains BLOCKED by **unapplied** T2.4 migrations 20261011240000 and 20261011241000; distinguish that from the isolated 25/25. Stage clone uses test grants, not exact production ownership/ACL parity.
+- [ ] Prepare independent backed-up real staging with exact grants, authentication/PostgREST role acceptance, E6H migration compatibility and full 58-file SQL suite. Keep online VM, run/retry/cancel jobs, payments, service activation and production release closed.
+
 ## E6H — Enterprise self-review and clearance read independence (11 October; CODE QA ONLY)
 
 - [x] Explicitly block enterprise applicant from gaining internal case scope on their own application even when granted reviewer, evidence or safety duties.

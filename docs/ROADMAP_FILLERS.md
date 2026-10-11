@@ -20,6 +20,10 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-11-24 — T2.4 isolated staging automation
+
+**Status:** Repeatable local `scripts/qa/t24-isolated-staging.ps1` PASS: disposable network-disabled PostgreSQL, schema-only plus non-personal technical references, T2.4 Log and Messaging migrations applied together in separate staging, **12 + 13 pgTAP assertions PASS**, sample data rolled back, original DB unchanged and test container removed. Seven Flutter analyses and 132 Client / 43 Operations / 28 Technical widgets PASS. Shared default full SQL suite remains blocked at 090/091 pending unapplied T2.4 schema; no production grant/owner parity, GoTrue/browser acceptance, online VM, worker liveness or executable jobs. `docs/T24_ISOLATED_STAGING_INTEGRATION_20261011.md`.
+
 ## FILLER-2026-10-11-23 — E6H case and clearance independent read scope
 
 **Status:** Added unapplied additive E6H migration denying a provider acting as their own enterprise case reviewer/evidence/safety officer, and denying prior clearance identity/final reviewers access via later investigator role. Rollback-only 051/052/056/057 SQL tests **106/106 PASS**; all DDL/fixture effects rolled back, EAGLT02 only. E6 formal sign-off still blocked; combined migrations must be coordinated with T2.4 before applying E6H. `docs/E6H_ENTERPRISE_CASE_INDEPENDENCE_20261011.md`.

@@ -4,6 +4,14 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 11 October — T2.4 disposable isolated staging QA (SOURCE/TEST PASS; NO LIVE MIGRATION)
+
+- Added repeatable **`scripts/qa/t24-isolated-staging.ps1`** for T2.4: launches network-disabled, no-port, tmpfs PostgreSQL container; restores schema-only plus five non-personal technical reference tables; applies protected module-log and Messaging-queue migrations **only to that isolated DB**; runs 12+13 pgTAP checks and removes fixtures and container.
+- **PASS:** independent first integration and repeatable script **25/25 SQL assertions**, two RPCs coexist in staging, fixture rollback and shared Supabase missing-RPC state explicitly verified. The script exits 0 and cleans up the disposable environment. No actual signed-in browser or PostgREST staging user acceptance.
+- Standard 58-file `npm run db:test` **is NOT GREEN** on the intentionally un-migrated shared database: earlier 56 SQL files complete, but new 090/091 fail when their functions are absent. Do not claim whole-suite SQL PASS. Staging schema restoration has explicit test grants and `supabase_admin` ownership, not exact production grants/ownership parity.
+- Detached `0fd7ede` full Flutter PASS: **seven analyses / 132 Client / 43 Operations / 28 Technical widgets**. Isolated validated T2.4 QA commit cherry-picked into the shared E6H branch; see `docs/T24_ISOLATED_STAGING_INTEGRATION_20261011.md`.
+- Both T2.4 RPCs and E6H's new migration remain unapplied to shared/live Supabase pending approved controlled database backup/migration. No online VM, job actions, provider activation, payments, or running Web services changed.
+
 ## 11 October — E6H independent case review safety (SOURCE QA PASS; NOT MIGRATED)
 
 - Audited E6F enterprise case scope against staged intake and found enterprise applicant self-review missing at **RLS helper** level; individual mutating RPCs already had further checks. Updated case-scope SQL to reject the applicant regardless of assigned Operations duty.
