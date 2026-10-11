@@ -5,6 +5,16 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## CX1 category administration and multi-platform visibility (11 Oct 2026)
+
+**SOURCE + LOCAL DATABASE PASS:** Backend `service_categories` now has Home/Services visibility and category image reference fields, with 6 future categories seeded **inactive**. Client Home uses dynamic category list rather than a 6-item hard-coded shortlist; no duplicate Travel tile. Services follows the same source with a separate flag. Technical Control has a role-gated CRUD/image editor; each mutation is independently Technical Platform Administrator-checked and audit logged, with proper archival instead of destroying provider or booking history. SQL migration applied locally only after a verified custom pg_dump backup. **41 SQL files / 828 assertions PASS**; 7 Flutter analyses and pre-existing widget regression PASS; new category manager mobile/desktop tests PASS.
+
+**MAIN WEB + ANDROID ROLLOUT PASS:** Chrome screenshot at `:3000` shows extended Home category grid; signed-in Technical Control Chrome `:3100` displays **Service categories** and loads **29 of 29 records**. Staging `:3300/:3400` remains independent; all five ports return HTTP 200. Source-backed, hash-verified Client/Technical runtime backups retained. Android emulator updated in place to offline-demo build **4006** with original installation date unchanged. No provider approvals, category enablement, payments or staff replies. Manual editor save/upload/delete not yet accepted in browser; transaction-isolated database test paths PASS.
+
+**STAGING PASS:** isolated release Web packages for Client/Technical compiled; independent staging 3300/3400 serve new content with HTTP 200 and matching hashes. At this checkpoint no new category is publicly activated, no backend personal data reset and no branding settings published. **Image artwork editorial gate remains open**: image generator provided a dashboard mock-up, not standalone usable Pacific/PNG human category photographs; six new entries remain inactive until each has approved distinct images.
+
+**OPEN:** main-build promotion with rollback, browser CRUD review, authenticated Web provider and Saved journey, Android/HONOR visual sign-off, real PNG/Pacific portrait/gallery art verification. CX1 remains IN PROGRESS; T2.4 DEFERRED.
+
 ## 11 October — Inactive-category media completion (no activation)
 
 **AUDIT PASS:** Read-only local PostgreSQL query confirms 23 backend category slugs, 20 currently active and 3 inactive. All 20 active slugs already had photo identities. The only actual gaps were inactive `bus-coach` (incorrect More fallback) and inactive `flights` (photo reused from `travel-flights`). Added two separate locally bundled WebP photos and canonical Flutter mapping without changing `is_active`, service booking modes or any data. AI image generation was attempted but yielded unsuitable dashboard mock-ups; these were rejected. Adopted licensed source photographs instead, not duplicating existing category images. See `docs/CATEGORY_PHOTO_ASSETS.md`.

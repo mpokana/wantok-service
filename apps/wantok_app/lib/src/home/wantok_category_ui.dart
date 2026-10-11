@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wantok_ui/wantok_ui.dart';
+import 'package:wantok_api/wantok_api.dart';
 
 /// One source of truth for Wantok category identity, colours, and icons.
 /// Use bySlug() on every surface; no local hard-coded category icons.
@@ -303,6 +304,21 @@ abstract final class WantokCategoryStyles {
     flights,
   ];
 
+  /// Editorial categories added after a mobile release need a safe, distinct
+  /// identity instead of accidentally rendering the More navigation tile.
+  static WantokCategoryStyle forService(String slug, String name) {
+    final known = bySlug(slug);
+    if (known.slug != 'more') return known;
+    return WantokCategoryStyle(
+      slug: slug,
+      title: name,
+      icon: Icons.handyman_outlined,
+      accent: const Color(0xFF157E6C),
+      surface: const Color(0xFFE7F4F0),
+      badgeSurface: const Color(0xFFCBEAE1),
+    );
+  }
+
   static WantokCategoryStyle bySlug(String? slug) => switch (slug) {
     'taxi-ride' || 'taxi' => taxi,
     'food' || 'restaurants' => food,
@@ -340,12 +356,14 @@ class WantokCategoryPicture extends StatelessWidget {
     this.compact = false,
     this.borderRadius = 13,
     this.mediaSlot = 'cardImage',
+    this.imagePath,
   });
 
   final WantokCategoryStyle style;
   final bool compact;
   final double borderRadius;
   final String mediaSlot;
+  final String? imagePath;
 
   @override
   Widget build(BuildContext context) {
@@ -354,7 +372,8 @@ class WantokCategoryPicture extends StatelessWidget {
         media?.mediaUrl(style.slug, mediaSlot) ??
         (mediaSlot == 'homeIcon'
             ? media?.mediaUrl(style.slug, 'cardImage')
-            : null);
+            : null) ??
+        (imagePath == null ? null : BrandingRepository.imageUrl(imagePath!));
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius),
       child: ColoredBox(
@@ -544,6 +563,7 @@ class WantokCategoryTile extends StatelessWidget {
     this.saved,
     this.onSavedToggle,
     this.mediaSlot = 'cardImage',
+    this.imagePath,
   });
 
   final WantokCategoryStyle style;
@@ -554,6 +574,7 @@ class WantokCategoryTile extends StatelessWidget {
   final bool? saved;
   final VoidCallback? onSavedToggle;
   final String mediaSlot;
+  final String? imagePath;
 
   @override
   Widget build(BuildContext context) => Material(
@@ -593,6 +614,7 @@ class WantokCategoryTile extends StatelessWidget {
                         style: style,
                         compact: compact,
                         mediaSlot: mediaSlot,
+                        imagePath: imagePath,
                         borderRadius: compact ? 13 : 16,
                       ),
                     ),

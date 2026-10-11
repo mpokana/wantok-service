@@ -9,7 +9,7 @@ class CatalogRepository {
     final response = await WantokBackend.client
         .from('service_categories')
         .select(
-          'id, slug, name, description, vertical, booking_mode, icon_key, is_active, sort_order',
+          'id, slug, name, description, vertical, booking_mode, icon_key, is_active, sort_order, show_on_home, show_in_services, image_path',
         )
         .eq('is_active', true)
         .order('sort_order', ascending: true)

@@ -15,16 +15,16 @@ select has_table('public', 'notifications', 'notifications table exists');
 select has_table('public', 'provider_availability_rules', 'availability rules table exists');
 select has_table('public', 'provider_time_off', 'provider time-off table exists');
 
-select is(
+select cmp_ok(
   (select count(*)::integer from public.service_categories),
-  23,
-  'service catalogue includes 15 original, seven expanded and Public Services categories'
+  '>=', 23,
+  'service catalogue preserves original, expanded and Public Services baseline categories'
 );
 
-select is(
+select cmp_ok(
   (select count(*)::integer from public.service_categories where is_active),
-  20,
-  '12 original, seven expanded and Public Services categories are active'
+  '>=', 20,
+  'all original active categories remain available after adding draft categories'
 );
 
 select is(

@@ -8,6 +8,7 @@ import 'technical_configuration_page.dart';
 import 'technical_health_page.dart';
 import 'technical_branding_page.dart';
 import 'technical_local_ports_page.dart';
+import 'technical_category_manager_page.dart';
 
 class TechnicalShell extends StatefulWidget {
   const TechnicalShell({required this.email, super.key});
@@ -35,6 +36,14 @@ class _TechnicalShellState extends State<TechnicalShell> {
   void _openAppearance() {
     Navigator.of(context).push(
       MaterialPageRoute<void>(builder: (_) => const TechnicalBrandingPage()),
+    );
+  }
+
+  void _openCategories() {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+        builder: (_) => const TechnicalCategoryManagerPage(),
+      ),
     );
   }
 
@@ -323,6 +332,7 @@ class _TechnicalShellState extends State<TechnicalShell> {
                     canManageAppearance: canManageAppearance,
                     onAppearance: _openAppearance,
                     onLocalPorts: _openLocalPorts,
+                    onCategories: _openCategories,
                     onOverview: () {
                       setState(() {
                         _showAccessManagement = false;
@@ -362,6 +372,10 @@ class _TechnicalShellState extends State<TechnicalShell> {
                 onAppearance: () {
                   Navigator.of(context).pop();
                   _openAppearance();
+                },
+                onCategories: () {
+                  Navigator.of(context).pop();
+                  _openCategories();
                 },
                 onLocalPorts: () {
                   Navigator.of(context).pop();
@@ -432,6 +446,12 @@ class _TechnicalShellState extends State<TechnicalShell> {
           ),
         if (canManageAppearance)
           IconButton(
+            tooltip: 'Service categories',
+            onPressed: _openCategories,
+            icon: const Icon(Icons.category_outlined),
+          ),
+        if (canManageAppearance)
+          IconButton(
             tooltip: 'Local applications & ports',
             onPressed: _openLocalPorts,
             icon: const Icon(Icons.hub_outlined),
@@ -460,6 +480,7 @@ class _TechnicalSidebar extends StatelessWidget {
     required this.canManageAppearance,
     required this.onAppearance,
     required this.onLocalPorts,
+    required this.onCategories,
     required this.onOverview,
     required this.onAccessManagement,
     required this.onModule,
@@ -471,6 +492,7 @@ class _TechnicalSidebar extends StatelessWidget {
   final bool canManageAppearance;
   final VoidCallback onAppearance;
   final VoidCallback onLocalPorts;
+  final VoidCallback onCategories;
   final VoidCallback onOverview;
   final VoidCallback onAccessManagement;
   final ValueChanged<String> onModule;
@@ -502,6 +524,13 @@ class _TechnicalSidebar extends StatelessWidget {
               label: 'Theme & Media',
               selected: false,
               onTap: onAppearance,
+            ),
+          if (canManageAppearance)
+            _SideTile(
+              icon: Icons.category_outlined,
+              label: 'Service categories',
+              selected: false,
+              onTap: onCategories,
             ),
           if (canManageAppearance)
             _SideTile(

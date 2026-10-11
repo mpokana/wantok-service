@@ -2,6 +2,19 @@
 
 **Updated:** 2026-10-11
 
+## CX1 — Backend-governed categories and Technical Control editing (11 October)
+
+- [x] Preserve previous 23 categories and records; insert 6 additional service families as **inactive drafts** (`it-electronics`, `automotive-repair`, `agriculture-farming`, `pets-animal-care`, `cleaning-maintenance`, `construction-trades`). Do not enable vendor booking or payment flows.
+- [x] Add database-controlled `show_on_home`, `show_in_services`, category `image_path` columns; preserve all existing active entries, enforce admin-only RPC, audit, record locking, slug immutability and archive/delete safety. Local migration applied after full custom PostgreSQL backup. **41 files / 828 pgTAP assertions PASS**.
+- [x] Remove Home's hardcoded six-card limit and duplicate Travel tile. App and Web use backend flags and source-ordered category list; Services follows its independent visibility control. New service slugs must have category-specific media, never the More image.
+- [x] Implement authenticated Technical Platform Administrator **Service categories** editor (create, edit, sort, Home/Services visibility, image upload/replace, archive/remove unused draft) reusing existing immutable branded image bucket. Technical manager focused widgets PASS on desktop and mobile.
+- [x] Compile Client/Technical Web releases and deploy to independently hashed staging **3300 and 3400**. No mutation of customer data or main apps during staging.
+- [ ] Complete distinct realistic Pacific/PNG-themed image assets for six new service families. Generation attempt returned an unsuitable complete dashboard composite; do not insert it as a low-resolution category picture. Approve media **before enabling** any draft.
+- [x] Promote verified staging builds to Client **3000** / Technical **3100**, with SHA-256 checks, immutable rollback copies and five ports HTTP 200. Authenticated Technical browser shows **Service categories** sidebar and **29 of 29 category rows**; Client Chrome Home renders the expanded backend-driven grid. Operations **3200** unchanged.
+- [x] Update Android offline-demo emulator safely in place: matching Flutter build **4006**, APK independently SHA-256 verified, `adb install -r` Success, package 4006 and original user-data installation date retained.
+- [ ] Real authorised browser **create/edit/archive/delete/image-upload transactions** not yet accepted; do not mutate existing production-like provider/category settings merely for testing. PostgreSQL transactional pgTAP CRUD/RBAC PASS.
+- [ ] Continue CX1 Web Morobe→Lae/provider detail/Saved, Account/Inbox/Track/Wallet/Agent, physical HONOR approval. T2.4 deferred.
+
 ## CX1 11 October — Full backend category image coverage (not activation)
 
 - [x] Audited active and inactive slugs through a **read-only PostgreSQL query**: **23 actual backend categories**, including 3 inactive. All 20 active categories already have distinct mapped photographs. Both missing media identities were inactive: `bus-coach` incorrectly fell back to More; `flights` reused `travel-flights` image.

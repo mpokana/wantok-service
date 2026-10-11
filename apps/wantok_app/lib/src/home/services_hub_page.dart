@@ -549,7 +549,7 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
         future: _future,
         builder: (context, snapshot) {
           final services = (snapshot.data ?? const <WantokServiceCategory>[])
-              .where((service) => service.isActive)
+              .where((service) => service.isActive && service.showInServices)
               .toList(growable: false);
           final query = _query.trim().toLowerCase();
           final filtered = services
@@ -1134,7 +1134,11 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
               key: ValueKey('catalogue-category-${service.slug}'),
               compact: true,
               label: service.name,
-              style: WantokCategoryStyles.bySlug(service.slug),
+              style: WantokCategoryStyles.forService(
+                service.slug,
+                service.name,
+              ),
+              imagePath: service.imagePath,
               badge: _badgeFor(service.slug),
               saved: _savedCategoryIds.contains(service.id),
               onSavedToggle: () => _toggleSaved(service),

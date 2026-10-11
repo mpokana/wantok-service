@@ -16,10 +16,8 @@ import '../services/water_transport_page.dart';
 import 'png_visuals.dart';
 import 'explore_page.dart';
 import 'provider_discovery_page.dart';
-import 'service_catalog_taxonomy.dart';
 import 'wantok_category_ui.dart';
 import 'public_services_page.dart';
-import 'screenshot_service_tiles.dart';
 import 'adaptive_category_grid.dart';
 import 'services_hub_page.dart';
 import 'wantok_pay_preview_page.dart';
@@ -124,16 +122,6 @@ class _ClientHomeState extends State<ClientHome> {
   void _openAgent() {
     final callback = widget.onAgentTap;
     if (callback != null) callback();
-  }
-
-  void _openPlannedGlobalService(String label) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          '$label is part of Wantok global travel and is being connected.',
-        ),
-      ),
-    );
   }
 
   void _openWantokPay() {
@@ -249,50 +237,21 @@ class _ClientHomeState extends State<ClientHome> {
                   ),
                   child: LayoutBuilder(
                     builder: (context, constraints) {
-                      final categoryCount = quickServices.length + 1;
-                      final travelIndex = quickServices.length >= 5
-                          ? 5
-                          : quickServices.length;
+                      final categoryCount = quickServices.length;
                       Widget tile(BuildContext context, int index) {
-                        if (index != travelIndex) {
-                          final service =
-                              quickServices[index > travelIndex
-                                  ? index - 1
-                                  : index];
-                          final art = ScreenshotServiceArt.items[service.slug];
-                          if (constraints.maxWidth < 700 && art != null) {
-                            return ScreenshotHomeTile(
-                              key: ValueKey('home-category-${service.slug}'),
-                              art: art,
-                              onTap: () => _openService(service),
-                            );
-                          }
-                          return WantokCategoryTile(
-                            key: ValueKey('home-category-${service.slug}'),
-                            compact: constraints.maxWidth < 700,
-                            style: WantokCategoryStyles.bySlug(service.slug),
-                            mediaSlot: 'homeIcon',
-                            label: _shortLabel(service),
-                            badge: _badgeFor(service.slug),
-                            onTap: () => _openService(service),
-                          );
-                        }
-
-                        if (constraints.maxWidth < 700) {
-                          return ScreenshotHomeTile(
-                            key: const ValueKey('home-category-travel-flights'),
-                            art: ScreenshotServiceArt.items['travel-flights']!,
-                            onTap: () =>
-                                _openPlannedGlobalService('Travel & Flights'),
-                          );
-                        }
+                        final service = quickServices[index];
                         return WantokCategoryTile(
+                          key: ValueKey('home-category-${service.slug}'),
                           compact: constraints.maxWidth < 700,
-                          style: WantokCategoryStyles.travel,
+                          style: WantokCategoryStyles.forService(
+                            service.slug,
+                            service.name,
+                          ),
                           mediaSlot: 'homeIcon',
-                          label: 'Travel & Flights',
-                          onTap: () =>
-                              _openPlannedGlobalService('Travel & Flights'),
+                          imagePath: service.imagePath,
+                          label: _shortLabel(service),
+                          badge: _badgeFor(service.slug),
+                          onTap: () => _openService(service),
                         );
                       }
 
@@ -454,24 +413,13 @@ class _ClientHomeState extends State<ClientHome> {
   List<WantokServiceCategory> _quickAccessServices(
     List<WantokServiceCategory> services,
   ) {
-    final bySlug = <String, WantokServiceCategory>{
-      for (final service in services) service.slug: service,
-    };
-    final selected = wantokHomeQuickAccessOrder
-        .map((slug) => bySlug[slug])
-        .whereType<WantokServiceCategory>()
-        .toList();
-
-    if (selected.length >= 6 || selected.length == services.length) {
-      return selected;
-    }
-
-    for (final service in services) {
-      if (selected.any((item) => item.id == service.id)) continue;
-      selected.add(service);
-      if (selected.length == 6) break;
-    }
-    return selected;
+    // Backend editorial visibility drives BOTH Web and Android Home cards.
+    // The catalogue remains sorted by the backend order, with no hardcoded
+    // 6-card limit or duplicated Travel & Flights tile.
+    final result = services
+        .where((category) => category.isActive && category.showOnHome)
+        .toList(growable: false);
+    return result;
   }
 
   List<Widget> _spotlights(List<WantokServiceCategory> services) {

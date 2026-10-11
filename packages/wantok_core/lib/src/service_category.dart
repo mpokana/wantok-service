@@ -9,6 +9,9 @@ class WantokServiceCategory {
     this.iconKey,
     this.isActive = true,
     this.sortOrder = 0,
+    this.showOnHome = true,
+    this.showInServices = true,
+    this.imagePath,
   });
 
   final String id;
@@ -20,6 +23,9 @@ class WantokServiceCategory {
   final String? iconKey;
   final bool isActive;
   final int sortOrder;
+  final bool showOnHome;
+  final bool showInServices;
+  final String? imagePath;
 
   factory WantokServiceCategory.fromMap(Map<String, dynamic> map) {
     return WantokServiceCategory(
@@ -32,6 +38,9 @@ class WantokServiceCategory {
       iconKey: map['icon_key'] as String?,
       isActive: map['is_active'] as bool? ?? true,
       sortOrder: map['sort_order'] as int? ?? 0,
+      showOnHome: map['show_on_home'] as bool? ?? true,
+      showInServices: map['show_in_services'] as bool? ?? true,
+      imagePath: map['image_path'] as String?,
     );
   }
 }
