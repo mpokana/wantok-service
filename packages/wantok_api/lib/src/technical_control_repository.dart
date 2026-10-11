@@ -618,6 +618,21 @@ class TechnicalControlRepository {
         .toList(growable: false);
   }
 
+  /// Read-only T2.4 log adapter, explicitly requiring module.logs and view
+  /// at the PostgreSQL function boundary. No raw summary or probe IDs.
+  Future<List<TechnicalHealthHistoryEntry>> loadModuleLogEvents(
+    String moduleKey, {
+    int limit = 30,
+  }) async {
+    final result = await WantokBackend.client.rpc(
+      'list_technical_module_log_events',
+      params: {'p_module_key': moduleKey, 'p_limit': limit.clamp(1, 30)},
+    );
+    return _maps(result)
+        .map(TechnicalHealthHistoryEntry.fromMap)
+        .toList(growable: false);
+  }
+
   Future<TechnicalModuleImpact> loadModuleImpact(String moduleKey) async {
     final result = await WantokBackend.client.rpc(
       'get_technical_module_state_impact',

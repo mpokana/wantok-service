@@ -85,7 +85,7 @@ class _TechnicalObservabilityPageState
       (widget.loadDiagnostics ?? _readDiagnostics)(widget.module.moduleKey),
     TechnicalObservabilitySection.logs =>
       (widget.loadTransitions ??
-          (key) => _repository.loadModuleHealthHistory(key, limit: 30))(
+          (key) => _repository.loadModuleLogEvents(key, limit: 30))(
         widget.module.moduleKey,
       ),
     TechnicalObservabilitySection.jobs => Future<Object>.value(
