@@ -6,7 +6,7 @@
 
 - [x] Explicitly block enterprise applicant from gaining internal case scope on their own application even when granted reviewer, evidence or safety duties.
 - [x] Block identity reviewer/final approving officer from reading their original vendor clearance through a later investigator grant; preserve independent safety review.
-- [x] Rollback-only local tests **106/106 PASS** across 051/052/056/057, with zero persistent local schema or sample data changes.
+- [x] Rollback-only local tests **106/106 PASS** across 051/052/056/057, with zero persistent local schema or sample data changes; detached E6H checkout seven Flutter analyses, **132 Client / 43 Operations / 28 Technical widgets PASS**. `docs/E6H_INDEPENDENT_INTEGRATION_QA_20261011.md`.
 - [ ] Apply E6H to designated environment only after separately owned T2.4 migration compatibility/backups are approved; rerun full combined SQL suite.
 - [ ] Formal E6 human/witness gates G1–G10 and E7/VM production authorisation remain OPEN. Detail `docs/E6H_ENTERPRISE_CASE_INDEPENDENCE_20261011.md`.
 
