@@ -8,12 +8,12 @@
 - [x] Preserve atomic revocation/pause/audit, deny prior reviewer/approver conflict, introduce server-role-only emergency stop for unclassified historic providers, keep expiry maintenance service-only.
 - [x] Reject all `active` transitions through legacy admin service-status RPC and seal old provider accept/reject decision; no new clearance or payment is issued.
 - [x] Restrict safety staff to isolated Operations safety tab; local SQL migration PASS, **52 files / 1,043 assertions PASS**; Operations analysis clean and **38 widgets PASS**.
-- [ ] Continue E6: independent dual-authorised staff provisioning, broad staged/provider RPC audit, signed-in multi-role browser checks, extended COI and official jurisdiction-source proof. Full package and integration QA reported separately.
+- [ ] Continue E6: independent dual-authorised staff provisioning, broad staged/provider RPC audit, signed-in multi-role browser checks, extended COI and official jurisdiction-source proof. Clean `8604ea2` checkout passed seven analyses / 132 Client / 38 Operations / 16 Technical tests; evidence safety 101/101 PASS. Package and GitHub proof reported separately in `docs/E6C_INDEPENDENT_INTEGRATION_QA_20261011.md`.
 - [ ] E7–E12 remain gated; no VM deployment or operational identity/evidence access. Detail `docs/E6C_SCOPED_CLEARANCE_SAFETY_20261011.md`.
 
 ---
 
-## E6C — Clearance monitoring and emergency safety (11 October; SOURCE REVIEW ONLY)
+## E6C — Clearance monitoring and emergency safety (11 October; HISTORICAL SOURCE REVIEW, SUPERSEDED BY E6C1)
 
 - [x] Audit existing broad-admin clearance-status listing, emergency revoke/audit, provider service transitions and old provider review functions; record case-to-provider binding risk and test design.
 - [ ] Implement a fail-closed, independently scoped safety-investigator path for classified cases, retaining a trusted service-only emergency stop for unclassified legacy cases.

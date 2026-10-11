@@ -14,7 +14,7 @@
 - Additive local migration `20261011220000`: applied PASS; no local reset or production migration.
 - PostgreSQL pgTAP: **52 files / 1,043 assertions PASS**. Existing synthetic fixtures 044/045 updated to explicit safety duty and case scope; new `052_operations_clearance_safety_scope.test.sql` verifies **34 assertions**, including wrong country/category, expired/revoked duty, no-grant admins, identity-reviewer and approver conflicts, misbound provider-case references, server emergency pause, audit isolation and no new activation.
 - Operations Flutter: static analysis clean, **38/38 widget tests PASS** including read-only emergency-action hiding and retry-safe refresh.
-- Node evidence-safety and cross-application Flutter regression, final independent checkout, GitHub branch and signed source archive verification are recorded separately when completed; a focused test is not a production sign-off.
+- Node evidence-safety **101/101 PASS**. Detached checkout `D:\\Wantok_E6C_Independent_QA_20261011` at `8604ea2`: seven Flutter analyses, **132 Client, 38 Operations, 16 Technical** widget tests PASS. See `docs/E6C_INDEPENDENT_INTEGRATION_QA_20261011.md`. GitHub push and release verification are separately recorded when completed; regression is not a production sign-off.
 
 ## Remaining E6 work (do not claim the full milestone complete)
 1. Staff-duty issue/revoke needs independent provisioning authorisation, dual approval, credential custody, conflict review and audited country/subdivision source provenance.
