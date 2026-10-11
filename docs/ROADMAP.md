@@ -4,6 +4,8 @@
 
 ## 11 October CX1 — preserve new Public Services and category imagery
 
+- [x] Verified GitHub fast-forward containing `3199499`, `6508781`, `a83d1b0`, and `7487c8c`; independent full-history source bundle `D:\Wantok_Project_Backups\wantok-services-cx1-public-media-7487c8c-20261011.bundle` passed `git bundle verify`. GitHub publication is **not a production rollout or module toggle**.
+
 - [x] Recognise current local source commits `3199499` Public Services, `6508781` category image mapping, and `a83d1b0` shared Theme & Media appearance workflow. Do not revert to 10 October client worktree or mix Public Services informational pages with commercial booking/dispatch.
 - [x] Validate new Client Web asset delivery on `:3000`: Public Services icon and photo, Emergency icon, Government photo and Specialist photo each HTTP 200; served JS includes Public Services. Technical `:3100` JS includes Theme & Media. Test environments `:3300/:3400` respond; no production release action was taken.
 - [x] Database contract **37/789 PASS**, source Client **102 widget tests PASS**, Admin **17 widget tests PASS**, and all 7 Flutter analyses after a brace-only lint correction. Technical **4 tests PASS** in isolated worktree because main worktree's `build/unit_test_assets` is locked on EAGLT02; do not forcibly delete the running build directory.

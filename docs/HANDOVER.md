@@ -4,6 +4,8 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+**11 October source recovery/checkpoint verified:** local new commits `3199499`, `6508781`, `a83d1b0`, plus braces-only lint and acceptance notes in `7487c8c`, were pushed by **fast-forward** to GitHub `feature/flutter-platform-v1`; verified remote HEAD matched `7487c8c12e3f046085309f1aa1f077d780bf3cbd`. Independent complete-history bundle `D:\Wantok_Project_Backups\wantok-services-cx1-public-media-7487c8c-20261011.bundle` verified, 12,046,992 bytes, SHA-256 `AB49922715F0E734104EFF240CD7225526C66318BF5EB71C6E8DEC1139CFC400`. This is **source backup and documentation**, not a newly deployed Admin module, uploaded official contact directory or visual user approval.
+
 ## 11 October 2026 — CX1 continuation with new Public Services/media preserved (LATEST)
 
 - **Baseline and separation:** Main development source on EAGLT02 is `D:\Project-M.2\wantok-service-recovery` at local HEAD `a83d1b0` before this QA repair, containing `3199499` (**Public Services** directory/module control), `6508781` (**no duplicated category images**) and `a83d1b0` (**Technical Theme & Media draft/preview/publish**). Do **not** reset those commits, replace their media with older screenshots, or switch the active web apps back to dated detached checkouts. The three changes were locally committed ahead of GitHub feature branch `b2dbc55` when inspected; verify remote equality before any push. Untracked `supabase/snippets/` remains unrelated and excluded.
