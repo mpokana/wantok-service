@@ -5,6 +5,7 @@ import 'package:wantok_ui/wantok_ui.dart';
 import 'staged_provider_review_page.dart';
 import 'vendor_intake_queue_page.dart';
 import 'vendor_clearance_status_page.dart';
+import 'vendor_policy_governance_page.dart';
 
 /// Read-only verification cockpit. These counts are not a KYC certification.
 class VerificationKycSnapshot {
@@ -175,6 +176,19 @@ class _VerificationKycPageState extends State<VerificationKycPage> {
               ),
               icon: const Icon(Icons.gpp_bad_outlined),
               label: const Text('Clearance monitoring & emergency revocation'),
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: OutlinedButton.icon(
+              key: const ValueKey('kyc-policy-governance-link'),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const VendorPolicyGovernancePage(),
+                ),
+              ),
+              icon: const Icon(Icons.policy_outlined),
+              label: const Text('International compliance policy proposals'),
             ),
           ),
           const SizedBox(height: 14),
