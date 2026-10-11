@@ -219,6 +219,22 @@ class _VendorListingsPageState extends State<VendorListingsPage> {
                 style: TextStyle(color: WantokColors.muted),
               ),
               const SizedBox(height: 12),
+              Card(
+                color: const Color(0xFFE8F5EC),
+                child: const ListTile(
+                  leading: Icon(
+                    Icons.public_rounded,
+                    color: WantokColors.primaryDark,
+                  ),
+                  title: Text('International service settings'),
+                  subtitle: Text(
+                    'Country, State/Province/Region, Town and ISO currency '
+                    'are managed under Edit on each draft or rejected service. '
+                    'Approved listings are locked until reviewed for changes.',
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
               if (data.services.isEmpty)
                 const _EmptyCard(
                   icon: Icons.storefront_outlined,
@@ -341,8 +357,18 @@ class _ServiceCard extends StatelessWidget {
               category['name'] as String? ?? 'Service',
               style: const TextStyle(color: WantokColors.primaryDark),
             ),
+            Text(
+              'Service country: ${service['coverage_country_code'] ?? 'Not set'}'
+              '  •  Region: ${service['coverage_province'] ?? 'Not set'}'
+              '  •  Town: ${service['coverage_town'] ?? 'Not set'}',
+              style: const TextStyle(fontSize: 12, color: WantokColors.muted),
+            ),
             if (price != null)
-              Text('${service['currency'] ?? 'PGK'} $price • ${service['pricing_model'] ?? 'quote'}'),
+              Text(
+                '${service['currency'] ?? 'PGK'} $price • ${service['pricing_model'] ?? 'quote'}',
+              )
+            else
+              Text('Currency: ${service['currency'] ?? 'Not set'}'),
             const SizedBox(height: 10),
             Wrap(
               spacing: 8,
@@ -352,7 +378,7 @@ class _ServiceCard extends StatelessWidget {
                   OutlinedButton.icon(
                     onPressed: busy ? null : onEdit,
                     icon: const Icon(Icons.edit_outlined),
-                    label: const Text('Edit'),
+                    label: const Text('Edit country, currency & service'),
                   ),
                 if (editable)
                   FilledButton.icon(

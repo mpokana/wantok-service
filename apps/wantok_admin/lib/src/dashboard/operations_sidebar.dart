@@ -24,7 +24,7 @@ class OperationsSidebar extends StatelessWidget {
   ];
 
   @override
-  Widget build(BuildContext context) => ColoredBox(
+  Widget build(BuildContext context) => Material(
     color: WantokColors.primaryDark,
     child: SafeArea(
       top: false,

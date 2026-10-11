@@ -78,6 +78,20 @@ class _AdminShellState extends State<AdminShell> {
         ),
         actions: [
           if (desktop)
+            TextButton.icon(
+              key: const ValueKey('operations-kyc-header-link'),
+              onPressed: () => setState(() => _index = 8),
+              icon: const Icon(Icons.verified_user_outlined),
+              label: const Text('Verification & KYC'),
+            )
+          else
+            IconButton(
+              key: const ValueKey('operations-kyc-header-link'),
+              tooltip: 'Open Verification & KYC',
+              onPressed: () => setState(() => _index = 8),
+              icon: const Icon(Icons.verified_user_outlined),
+            ),
+          if (desktop)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Center(
@@ -325,7 +339,7 @@ class _ServiceReviewPageState extends State<_ServiceReviewPage> {
     final rows = await WantokBackend.client
         .from('provider_services')
         .select(
-          'id, provider_id, category_id, title, description, pricing_model, base_price, currency, status, created_at, service_categories(name)',
+          'id, provider_id, category_id, title, description, pricing_model, base_price, currency, coverage_country_code, coverage_province, coverage_town, delivery_mode, status, created_at, service_categories(name)',
         )
         .eq('status', 'pending_review')
         .order('created_at');
@@ -400,8 +414,25 @@ class _ServiceReviewPageState extends State<_ServiceReviewPage> {
                   ),
                   subtitle: Padding(
                     padding: const EdgeInsets.only(top: 6),
-                    child: Text(
-                      '${category?['name'] as String? ?? 'Service'} • ${row['pricing_model'] as String? ?? 'pricing not set'}',
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${category?['name'] as String? ?? 'Service'} • ${row['pricing_model'] as String? ?? 'pricing not set'}',
+                        ),
+                        const SizedBox(height: 5),
+                        Text(
+                          'Country: ${row['coverage_country_code'] ?? 'Not set'}'
+                          '  •  Region: ${row['coverage_province'] ?? 'Not set'}'
+                          '  •  Town: ${row['coverage_town'] ?? 'Not set'}',
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                        Text(
+                          'Currency: ${row['currency'] ?? 'Not set'}'
+                          '  •  Mode: ${row['delivery_mode'] ?? 'onsite'}',
+                          style: const TextStyle(fontSize: 12),
+                        ),
+                      ],
                     ),
                   ),
                   trailing: Row(
