@@ -19,6 +19,7 @@
     "test:evidence": "node --test --test-reporter=tap ./packages/evidence_scanner/test/scan.test.mjs ./packages/evidence_scanner/test/quarantine.test.mjs ./packages/evidence_scanner/test/admission.test.mjs ./packages/evidence_scanner/test/freshness.test.mjs ./packages/evidence_scanner/test/custody.test.mjs ./packages/evidence_scanner/test/custody-reconcile.test.mjs ./packages/evidence_scanner/test/preflight.test.mjs ./packages/evidence_scanner/test/trusted-reconciliation.test.mjs",
     "test:evidence:real": "node --test --test-reporter=tap ./packages/evidence_scanner/test/real-clamd.test.mjs",
     "test:e6:auth-local": "node ./scripts/qa/e6-auth-boundary.mjs --local",
+    "test:e6:independence-local": "node ./scripts/qa/e6-independent-case-review.mjs --local",
     "db:stop": "node ./scripts/supabase-local.js stop"
   },
   "dependencies": {

@@ -2,6 +2,16 @@
 
 **Updated:** 2026-10-11
 
+## E6H — Enterprise self-review and clearance read independence (11 October; CODE QA ONLY)
+
+- [x] Explicitly block enterprise applicant from gaining internal case scope on their own application even when granted reviewer, evidence or safety duties.
+- [x] Block identity reviewer/final approving officer from reading their original vendor clearance through a later investigator grant; preserve independent safety review.
+- [x] Rollback-only local tests **106/106 PASS** across 051/052/056/057, with zero persistent local schema or sample data changes.
+- [ ] Apply E6H to designated environment only after separately owned T2.4 migration compatibility/backups are approved; rerun full combined SQL suite.
+- [ ] Formal E6 human/witness gates G1–G10 and E7/VM production authorisation remain OPEN. Detail `docs/E6H_ENTERPRISE_CASE_INDEPENDENCE_20261011.md`.
+
+---
+
 ## E6G — Formal acceptance checks (11 October; human sign-off pending)
 
 - [x] E6-only SQL 56 files / 1,139 assertions PASS and evidence 101/101 PASS; combined 57-file SQL runner blocked by separately owned T2.4 migration not yet applied.

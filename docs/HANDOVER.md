@@ -4,6 +4,15 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 11 October — E6H independent case review safety (SOURCE QA PASS; NOT MIGRATED)
+
+- Audited E6F enterprise case scope against staged intake and found enterprise applicant self-review missing at **RLS helper** level; individual mutating RPCs already had further checks. Updated case-scope SQL to reject the applicant regardless of assigned Operations duty.
+- E6 clearance safety helper now excludes original identity reviewer and approval officer from **read scope** (not only revocation), preserving independent investigator access. Migration `20261011233000_operations_independent_case_review.sql` remains unapplied to shared DB pending T2.4 migration coordination.
+- Rollback-only E6H `npm run test:e6:independence-local` PASS: 051 35/35, 052 34/34, 056 18/18, new 057 19/19 = **106/106**. No synthetic records or DDL persisted. Full inherited SQL runner still blocked by independently owned T2.4 migrations.
+- Formal E6 G1–G10 human/witness gates still OPEN, E7 not authorised, no production VM, uploads, KYC issuance or vendor activation. See `docs/E6H_ENTERPRISE_CASE_INDEPENDENCE_20261011.md`.
+
+---
+
 ## 11 October — E6G authenticated HTTP negative acceptance and formal human handover (NEW; E6 OPEN)
 
 - Local E6-only SQL rerun **56 files / 1,139 assertions PASS**, evidence scanner **101/101 PASS**. The full shared 57-file SQL runner is **blocked by an unapplied T2.4-only migration** (`20261011240000`), not an E6 assertion; do not apply another developer's migration unilaterally.

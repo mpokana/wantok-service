@@ -20,6 +20,10 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-11-23 — E6H case and clearance independent read scope
+
+**Status:** Added unapplied additive E6H migration denying a provider acting as their own enterprise case reviewer/evidence/safety officer, and denying prior clearance identity/final reviewers access via later investigator role. Rollback-only 051/052/056/057 SQL tests **106/106 PASS**; all DDL/fixture effects rolled back, EAGLT02 only. E6 formal sign-off still blocked; combined migrations must be coordinated with T2.4 before applying E6H. `docs/E6H_ENTERPRISE_CASE_INDEPENDENCE_20261011.md`.
+
 ## FILLER-2026-10-11-21 — T2.4 scoped health log adapter
 
 **Status:** Committed/pushed `0ba95ef`, local SQL 12/12 negative tests PASS in rollback-only transaction; seven Flutter analyses and 132 Client / 38 Operations / 22 Technical widgets PASS. New module-scoped backend log RPC requires module.view AND module.logs, sanitises text and caps 30 records. Running Technical preview unchanged; no database migration applied, no raw central logs or queue controls. Existing broader view-authorised Health history API remains a separate hardening task. Linux source release and local Git bundle verified; combined E6D/T2.4 seven Flutter analyses and 132 Client / 43 Operations / 22 Technical tests PASS on `0ad0fde`. `docs/T24_SCOPED_HEALTH_LOG_ADAPTER_20261011.md`.
