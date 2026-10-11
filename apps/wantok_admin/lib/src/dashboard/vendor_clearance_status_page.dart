@@ -5,8 +5,13 @@ import 'package:wantok_ui/wantok_ui.dart';
 /// View issued clearances and revoke unsafe ones.
 /// Issuance, document reading and KYC certification are NOT provided.
 class VendorClearanceStatusPage extends StatefulWidget {
-  const VendorClearanceStatusPage({super.key, this.loadStatus});
+  const VendorClearanceStatusPage({
+    super.key,
+    this.loadStatus,
+    this.canRevoke = true,
+  });
   final Future<List<Map<String, dynamic>>> Function()? loadStatus;
+  final bool canRevoke;
   @override
   State<VendorClearanceStatusPage> createState() =>
       _VendorClearanceStatusPageState();
@@ -23,7 +28,12 @@ class _VendorClearanceStatusPageState extends State<VendorClearanceStatusPage> {
         .toList();
   }
 
-  void _refresh() => setState(() => _future = _load());
+  void _refresh() {
+    setState(() {
+      _future = _load();
+    });
+  }
+
   void _notice(String text) =>
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
 
@@ -202,7 +212,8 @@ class _VendorClearanceStatusPageState extends State<VendorClearanceStatusPage> {
                               'Revoked: ${row['revoked_at']}',
                               style: const TextStyle(color: Colors.red),
                             ),
-                          if (row['revoked_at'] == null) ...[
+                          if (widget.canRevoke &&
+                              row['revoked_at'] == null) ...[
                             const SizedBox(height: 8),
                             OutlinedButton.icon(
                               onPressed: _busy == null

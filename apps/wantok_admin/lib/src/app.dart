@@ -8,6 +8,7 @@ import 'auth/admin_password_reset_page.dart';
 import 'auth/admin_sign_in_page.dart';
 import 'dashboard/admin_shell.dart';
 import 'dashboard/vendor_intake_queue_page.dart';
+import 'dashboard/vendor_clearance_status_page.dart';
 import 'dashboard/vendor_policy_governance_page.dart';
 
 class WantokAdminApp extends StatelessWidget {
@@ -102,6 +103,7 @@ Future<Set<String>> _loadScopedDuties() async {
           'policy_reviewer',
           'case_reviewer',
           'evidence_officer',
+          'safety_investigator',
         ]);
     final now = DateTime.now().toUtc();
     final active = <String>{};
@@ -134,13 +136,14 @@ class _ScopedPolicyWorkspace extends StatelessWidget {
         duties.contains('policy_author') || duties.contains('policy_reviewer');
     final cases =
         duties.contains('case_reviewer') || duties.contains('evidence_officer');
-    if (!policy && !cases) {
+    final safety = duties.contains('safety_investigator');
+    if (!policy && !cases && !safety) {
       return const Scaffold(
         body: Center(child: Text('No authorised workspace')),
       );
     }
     return DefaultTabController(
-      length: (policy ? 1 : 0) + (cases ? 1 : 0),
+      length: (policy ? 1 : 0) + (cases ? 1 : 0) + (safety ? 1 : 0),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Wantok Operations · Scoped Compliance'),
@@ -157,6 +160,7 @@ class _ScopedPolicyWorkspace extends StatelessWidget {
             tabs: [
               if (policy) const Tab(text: 'Policy drafts'),
               if (cases) const Tab(text: 'Vendor cases'),
+              if (safety) const Tab(text: 'Safety clearances'),
             ],
           ),
         ),
@@ -169,6 +173,7 @@ class _ScopedPolicyWorkspace extends StatelessWidget {
                 canReviewChecks: duties.contains('case_reviewer'),
                 canRequestEvidence: duties.contains('evidence_officer'),
               ),
+            if (safety) const VendorClearanceStatusPage(),
           ],
         ),
       ),

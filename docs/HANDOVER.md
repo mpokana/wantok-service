@@ -4,6 +4,24 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 11 October — E6C1 scoped clearance and safety controls (CURRENT IMPLEMENTATION)
+
+- EAGLT02 additive E6C migration introduced case-bound `safety_investigator` lookup, scoped clearance monitoring, auditor RLS and independent emergency clearance revocation. Conflicted identity/approval officers, unknown case links, expired grants, wrong countries/categories and broad admins cannot authorise staff action.
+- A distinct trusted **service-role-only** emergency stop retains safety capability for historical unclassified providers; it does not grant browser privileges or enable clearance issuance. The legacy service-status RPC now rejects all activation and permits only verified safety pausing; the old global-admin provider acceptance decision is sealed.
+- The restricted Operations workspace offers safety-only duty tabs; read-only controls and the clearance refresh lifecycle bug are covered. Local DB **52/1,043 assertions PASS**; Operations analysis clean, **38/38 widgets PASS**. Full integrated regression/release evidence to be recorded separately.
+- **E6 remains OPEN** pending complete legacy-route scoping, staff provisioning, COI and live signed-in acceptance. No real identity uploads, payments, vendor activation, production VM or unrelated device actions. See `docs/E6C_SCOPED_CLEARANCE_SAFETY_20261011.md`.
+
+---
+
+## 11 October — E6C clearance permissions source review (IMPLEMENTATION BLOCKED)
+
+- EAGLT02 source inspected; prior E6B/CX1 work intact and only unrelated `supabase/snippets/` was untracked at session start.
+- Found broad-admin clearance list, clearance revocation, revocation audit read, service-status and legacy provider application decisions; original clearance case ID must be verified against the actual provider account before granting scoped access.
+- Prepared the required scoped investigator design, independent conflict controls, trusted server-only emergency stop and negative test matrix. The remote tool blocked attempted SQL migration creation **before any code file was written**; no E6C SQL changes were applied, and no regression suite was claimed rerun.
+- E6 remains **OPEN**; no online VM accessed, no documents uploaded, no final approval or provider activation. See `docs/E6C_CLEARANCE_SECURITY_REVIEW_20261011.md`.
+
+---
+
 ## 11 October — CX1 Technical category photograph staging (SOURCE/TEST CHECKPOINT)
 
 - **Safer editor behaviour:** newly selected category image bytes stay local in Technical Control until **Save category**. Cancel now discards selection without upload; type/header/3 MiB size checks and preview added. Existing Technical admin storage/RPC security paths unchanged. No published category or customer data changed.

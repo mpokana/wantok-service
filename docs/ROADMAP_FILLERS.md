@@ -20,6 +20,14 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-11-18 — E6C1 case-scoped safety and clearance controls
+
+**Status:** E6C1 locally coded and tested; E6 programme OPEN. Safety investigators need current region/category grants and evidence-case ownership binding; global admins and conflicted officers are denied. Audited service-role-only emergency stop remains for unmatched historic providers; legacy activation and old provider approve/reject RPCs are blocked. Isolated Operations safety tab added. Database 52 files/1,043 assertions PASS; Operations analysis and 38 widget tests PASS. Production release, broad legacy route auditing, real staff provisioning and signed-in acceptance remain OPEN. See `docs/E6C_SCOPED_CLEARANCE_SAFETY_20261011.md`.
+
+## FILLER-2026-10-11-17 — E6C safety clearance boundary review
+
+**Status:** Source audit complete, implementation NOT performed. Legacy clearance monitoring/revocation, revocation audit, provider status and old provider reviews still use global administrator privileges. A country/province/category safety duty plus verified provider-to-evidence-case binding and trusted server-only emergency stop is required; E9 activation remains disabled. Remote tool security checks blocked migration creation; do not declare regression pass, release or E6 completion. See `docs/E6C_CLEARANCE_SECURITY_REVIEW_20261011.md`.
+
 ## FILLER-2026-10-11-16 — CX1 defer category photo upload until Save
 
 **Status:** Technical Control UI patch/source QA PASS, live Web acceptance OPEN. Image selection now previews in the dialog and stays client-side until confirmed **Save category**. Cancel does not upload or edit; the existing storage/RPC permission checks still govern saves. Four synthetic photo tests PASS and full isolated Flutter regression PASS, including merged E6B compatibility (132 Client / 37 Operations / 16 Technical widget tests). Basic JPG/PNG/WebP signature and 3 MiB size checks do not constitute security scanning or licensing approval. A category SQL save failing after successful storage upload can still leave unused media; server-side recovery requires separate design. All six newly seeded categories remain inactive. No real image upload, publication, Web/Android deployment or VM access. `docs/CX1_CATEGORY_PHOTO_STAGING_20261011.md`.

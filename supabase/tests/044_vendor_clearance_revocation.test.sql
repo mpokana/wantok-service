@@ -10,7 +10,8 @@ SELECT has_function('public','revoke_vendor_activation_clearance',
 INSERT INTO auth.users(id,aud,role,email,created_at,updated_at) VALUES
 ('d7000000-0000-0000-0000-000000000001','authenticated','authenticated','clearance-test-provider@wantok.local',now(),now()),
 ('d7000000-0000-0000-0000-000000000002','authenticated','authenticated','clearance-test-officer@wantok.local',now(),now()),
-('d7000000-0000-0000-0000-000000000003','authenticated','authenticated','clearance-test-reviewer@wantok.local',now(),now());
+('d7000000-0000-0000-0000-000000000003','authenticated','authenticated','clearance-test-reviewer@wantok.local',now(),now()),
+('d7000000-0000-0000-0000-000000000004','authenticated','authenticated','clearance-test-investigator@wantok.local',now(),now());
 UPDATE public.profiles SET is_admin=true
  WHERE id='d7000000-0000-0000-0000-000000000002';
 SET LOCAL ROLE authenticated;
@@ -22,6 +23,24 @@ SELECT lives_ok($$SELECT public.submit_vendor_intake_case(
  '{"trade_speciality":"Electrical"}'::jsonb)$$,
  'Synthetic application can be staged for rollback-only revocation test');
 RESET ROLE;
+SELECT public.map_operations_service_category(
+ (SELECT category_id FROM public.vendor_intake_cases
+  WHERE applicant_id='d7000000-0000-0000-0000-000000000001'),'trades',
+ 'd7000000-0000-0000-0000-000000000004',
+ 'Synthetic taxonomy certified only for transaction rollback test');
+SELECT public.register_operations_region('PG-MPL','Morobe',
+ 'd7000000-0000-0000-0000-000000000004',
+ 'Synthetic approved region for clearance safety regression');
+SELECT public.register_operations_case_jurisdiction(
+ (SELECT id FROM public.vendor_intake_cases
+  WHERE applicant_id='d7000000-0000-0000-0000-000000000001'),
+ 'PG-MPL','d7000000-0000-0000-0000-000000000004',
+ 'Synthetic verified clearance jurisdiction for rollback-only test');
+INSERT INTO public.operations_duty_grants
+ (staff_user_id,duty,country_code,region_code,category_scope,assignment_reason)
+ VALUES('d7000000-0000-0000-0000-000000000004',
+ 'safety_investigator','PG','PG-MPL','trades',
+ 'Synthetic clearance safety investigator for rollback only');
 INSERT INTO public.provider_profiles
  (provider_id,display_name,is_active,verification_status)
  VALUES ('d7000000-0000-0000-0000-000000000001',
@@ -42,19 +61,21 @@ INSERT INTO public.provider_services
  FROM public.vendor_intake_cases
  WHERE applicant_id='d7000000-0000-0000-0000-000000000001';
 SET LOCAL ROLE authenticated;
-SELECT set_config('request.jwt.claim.sub','d7000000-0000-0000-0000-000000000002',true);
+SELECT set_config('request.jwt.claim.sub','d7000000-0000-0000-0000-000000000004',true);
 SELECT is(public.revoke_vendor_activation_clearance(
  'd7000000-0000-0000-0000-000000000001',
  'Mandatory safety investigation and emergency suspension'),1,
  'Revocation pauses the active service in one transaction');
+RESET ROLE;
 SELECT is((SELECT status FROM public.provider_services
  WHERE provider_id='d7000000-0000-0000-0000-000000000001'),
  'paused','Revoked provider service is paused');
+SET LOCAL ROLE authenticated;
 SELECT throws_ok($$SELECT public.admin_set_provider_service_status(
  (SELECT id FROM public.provider_services
  WHERE provider_id='d7000000-0000-0000-0000-000000000001'),'active')$$,
  '42501',
- 'Unexpired, non-revoked independent clearance required before activation',
+ 'New service activation disabled pending independent release',
  'Revoked provider cannot reactivate the service');
 SELECT throws_ok($$SELECT public.revoke_vendor_activation_clearance(
  'd7000000-0000-0000-0000-000000000001',

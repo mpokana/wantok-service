@@ -2,6 +2,26 @@
 
 **Updated:** 2026-10-11
 
+## E6C1 — Clearance safety and legacy activation guard (11 October; LOCAL PASS, E6 OPEN)
+
+- [x] Scoped `safety_investigator` access to existing verified case / region / service family, and checked clearance provider ownership against the original applicant; replaced broad admin reads and emergency revoke access.
+- [x] Preserve atomic revocation/pause/audit, deny prior reviewer/approver conflict, introduce server-role-only emergency stop for unclassified historic providers, keep expiry maintenance service-only.
+- [x] Reject all `active` transitions through legacy admin service-status RPC and seal old provider accept/reject decision; no new clearance or payment is issued.
+- [x] Restrict safety staff to isolated Operations safety tab; local SQL migration PASS, **52 files / 1,043 assertions PASS**; Operations analysis clean and **38 widgets PASS**.
+- [ ] Continue E6: independent dual-authorised staff provisioning, broad staged/provider RPC audit, signed-in multi-role browser checks, extended COI and official jurisdiction-source proof. Full package and integration QA reported separately.
+- [ ] E7–E12 remain gated; no VM deployment or operational identity/evidence access. Detail `docs/E6C_SCOPED_CLEARANCE_SAFETY_20261011.md`.
+
+---
+
+## E6C — Clearance monitoring and emergency safety (11 October; SOURCE REVIEW ONLY)
+
+- [x] Audit existing broad-admin clearance-status listing, emergency revoke/audit, provider service transitions and old provider review functions; record case-to-provider binding risk and test design.
+- [ ] Implement a fail-closed, independently scoped safety-investigator path for classified cases, retaining a trusted service-only emergency stop for unclassified legacy cases.
+- [ ] Prevent new activation before E9, preserve expiry maintenance, add negative pgTAP and signed-in UI isolation acceptance.
+- [ ] **Implementation blocked:** remote tool safety checks rejected the proposed SQL file write; no migration or tests were applied in this checkpoint. E6 remains open. See `docs/E6C_CLEARANCE_SECURITY_REVIEW_20261011.md`.
+
+---
+
 ## CX1 — Safe Technical category image staging (11 October; CODE PASS, BROWSER OPEN)
 
 - [x] Retain selected image locally until explicit **Save category**, so Cancel does not orphan a storage upload; show selected preview and validate image file extension, header and 3 MiB maximum before initiating the existing authorised upload.

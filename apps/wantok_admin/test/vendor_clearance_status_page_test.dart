@@ -32,4 +32,39 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
+  testWidgets(
+    'Read-only clearance view has no revocation action and can refresh',
+    (tester) async {
+      tester.view.physicalSize = const Size(390, 1000);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      var reads = 0;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: VendorClearanceStatusPage(
+            canRevoke: false,
+            loadStatus: () async {
+              reads++;
+              return [
+                {
+                  'provider_id': 'scope-only-provider',
+                  'display_name': 'Scope-limited historical vendor',
+                  'expires_at': '2026-11-22T00:00:00Z',
+                  'revoked_at': null,
+                },
+              ];
+            },
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.text('Scope-limited historical vendor'), findsOneWidget);
+      expect(find.text('Emergency revoke & pause services'), findsNothing);
+      await tester.tap(find.byTooltip('Refresh clearances'));
+      await tester.pumpAndSettle();
+      expect(reads, 2);
+      expect(tester.takeException(), isNull);
+    },
+  );
 }
