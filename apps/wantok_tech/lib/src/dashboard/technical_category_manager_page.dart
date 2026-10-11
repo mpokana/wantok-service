@@ -126,17 +126,49 @@ class _TechnicalCategoryManagerPageState
         child: ListView(
           padding: const EdgeInsets.all(20),
           children: [
-            Text(
-              'Category management',
-              style: Theme.of(context).textTheme.headlineSmall
-                  ?.copyWith(fontWeight: FontWeight.w900),
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(22),
+                gradient: LinearGradient(
+                  colors: [
+                    Theme.of(context).colorScheme.primary
+                        .withValues(alpha: .98),
+                    const Color(0xFF087453),
+                  ],
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'WANTOK PLATFORM ENGINEERING',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.0,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Service category management',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 26,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                  const SizedBox(height: 7),
+                  const Text(
+                    'One governed catalogue, consistent photographs '
+                    'and visibility across Client Web and Android.',
+                    style: TextStyle(color: Colors.white70),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 8),
-            const Text(
-              'Manage the shared app and Web catalogue. New categories remain '
-              'inactive until their images and services are reviewed. '
-              'Deleting referenced categories is blocked; use Archive instead.',
-            ),
+            const SizedBox(height: 15),
             const SizedBox(height: 14),
             Wrap(
               spacing: 12,
@@ -197,12 +229,37 @@ class _TechnicalCategoryManagerPageState
                         style: const TextStyle(color: WantokColors.muted),
                       ),
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 12),
+                    Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: [
+                        _CategoryMetric(
+                          label: 'All categories',
+                          value: snapshot.data!.length,
+                          icon: Icons.category_outlined,
+                        ),
+                        _CategoryMetric(
+                          label: 'Active services',
+                          value: snapshot.data!.where((c) => c.isActive).length,
+                          icon: Icons.check_circle_outline,
+                        ),
+                        _CategoryMetric(
+                          label: 'Pending review',
+                          value: snapshot.data!
+                              .where((c) => !c.isActive)
+                              .length,
+                          icon: Icons.pending_actions_outlined,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 15),
                     for (final item in shown)
                       Card(
                         key: ValueKey('category-${item.slug}'),
+                        color: Theme.of(context).cardTheme.color,
                         child: Padding(
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(12),
                           child: LayoutBuilder(
                             builder: (context, limits) {
                               final details = Column(
@@ -222,12 +279,39 @@ class _TechnicalCategoryManagerPageState
                                       color: WantokColors.muted,
                                     ),
                                   ),
+                                  const SizedBox(height: 5),
+                                  Wrap(
+                                    spacing: 6,
+                                    runSpacing: 4,
+                                    children: [
+                                      _CategoryStatusChip(
+                                        label: item.isActive
+                                            ? 'Active'
+                                            : 'Draft',
+                                        highlighted: item.isActive,
+                                      ),
+                                      _CategoryStatusChip(
+                                        label:
+                                            'Home ${item.showOnHome ? 'On' : 'Off'}',
+                                        highlighted:
+                                            item.isActive && item.showOnHome,
+                                      ),
+                                      _CategoryStatusChip(
+                                        label:
+                                            'Services ${item.showInServices ? 'On' : 'Off'}',
+                                        highlighted:
+                                            item.isActive &&
+                                            item.showInServices,
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 4),
                                   Text(
-                                    '${item.bookingMode} · Order ${item.sortOrder} · '
-                                    '${item.isActive ? 'Active' : 'Inactive'} · '
-                                    'Home ${item.showOnHome ? 'Yes' : 'No'} · '
-                                    'Services ${item.showInServices ? 'Yes' : 'No'}',
-                                    style: const TextStyle(fontSize: 12),
+                                    '${item.bookingMode} · Display order ${item.sortOrder}',
+                                    style: const TextStyle(
+                                      fontSize: 11,
+                                      color: WantokColors.muted,
+                                    ),
                                   ),
                                 ],
                               );
@@ -255,26 +339,25 @@ class _TechnicalCategoryManagerPageState
                                   ),
                                 ],
                               );
-                              final photo = item.imagePath;
+                              final scope = WantokBrandingScope.maybeOf(
+                                context,
+                              );
+                              final published =
+                                  scope?.mediaUrl(item.slug, 'homeIcon') ??
+                                  scope?.mediaUrl(item.slug, 'cardImage');
+                              final photo =
+                                  published ??
+                                  (item.imagePath == null
+                                      ? null
+                                      : BrandingRepository.imageUrl(
+                                          item.imagePath!,
+                                        ));
                               final preview = SizedBox(
-                                width: 94,
-                                height: 65,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: photo == null
-                                      ? const ColoredBox(
-                                          color: Color(0xFFDFEEE8),
-                                          child: Center(
-                                            child: Icon(Icons.photo_outlined),
-                                          ),
-                                        )
-                                      : Image.network(
-                                          BrandingRepository.imageUrl(photo),
-                                          fit: BoxFit.cover,
-                                          errorBuilder: (_, _, _) => const Icon(
-                                            Icons.broken_image_outlined,
-                                          ),
-                                        ),
+                                width: limits.maxWidth < 650 ? 100 : 142,
+                                height: limits.maxWidth < 650 ? 70 : 86,
+                                child: WantokCategoryMedia.picture(
+                                  item.slug,
+                                  uploadedUrl: photo,
                                 ),
                               );
                               if (limits.maxWidth < 650) {
@@ -287,7 +370,10 @@ class _TechnicalCategoryManagerPageState
                                         Expanded(child: details),
                                       ],
                                     ),
-                                    controls,
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: controls,
+                                    ),
                                   ],
                                 );
                               }
@@ -550,5 +636,81 @@ class _CategoryEditorDialogState extends State<_CategoryEditorDialog> {
         child: const Text('Save category'),
       ),
     ],
+  );
+}
+
+class _CategoryMetric extends StatelessWidget {
+  const _CategoryMetric({
+    required this.label,
+    required this.value,
+    required this.icon,
+  });
+  final String label;
+  final int value;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) => Container(
+    width: 215,
+    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 13),
+    decoration: BoxDecoration(
+      color: Theme.of(context).cardTheme.color,
+      borderRadius: BorderRadius.circular(16),
+      border: Border.all(
+        color: Theme.of(context).colorScheme.primary.withValues(alpha: .11),
+      ),
+    ),
+    child: Row(
+      children: [
+        Icon(icon, size: 25, color: Theme.of(context).colorScheme.primary),
+        const SizedBox(width: 9),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '$value',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(fontSize: 11, color: WantokColors.muted),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+class _CategoryStatusChip extends StatelessWidget {
+  const _CategoryStatusChip({required this.label, required this.highlighted});
+  final String label;
+  final bool highlighted;
+  @override
+  Widget build(BuildContext context) => Container(
+    padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+    decoration: BoxDecoration(
+      color: highlighted
+          ? Theme.of(context).colorScheme.primary.withValues(alpha: .09)
+          : Theme.of(context).colorScheme.onSurface.withValues(alpha: .055),
+      borderRadius: BorderRadius.circular(9),
+    ),
+    child: Text(
+      label,
+      style: TextStyle(
+        fontWeight: FontWeight.w700,
+        fontSize: 11,
+        color: highlighted
+            ? Theme.of(context).colorScheme.primary
+            : Theme.of(context).colorScheme.onSurface.withValues(alpha: .7),
+      ),
+    ),
   );
 }

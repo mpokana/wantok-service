@@ -93,20 +93,20 @@ void main() {
       expect(find.byType(GridView), findsWidgets);
       expect(
         find.image(
-          const AssetImage('assets/images/categories/category_taxi.webp'),
+          const AssetImage('packages/wantok_ui/assets/images/categories/category_taxi.webp'),
         ),
         findsWidgets,
       );
       expect(
         find.image(
-          const AssetImage('assets/images/categories/category_food.webp'),
+          const AssetImage('packages/wantok_ui/assets/images/categories/category_food.webp'),
         ),
         findsWidgets,
       );
       expect(
         find.image(
           const AssetImage(
-            'assets/images/categories/category_groceries.webp',
+            'packages/wantok_ui/assets/images/categories/category_groceries.webp',
           ),
         ),
         findsWidgets,

@@ -34,7 +34,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFFD99500),
     surface: Color(0xFFFFF7DD),
     badgeSurface: Color(0xFFFFEAB0),
-    photoAsset: 'assets/images/categories/category_taxi.webp',
+    photoAsset: 'packages/wantok_ui/assets/images/categories/category_taxi.webp',
   );
   static const food = WantokCategoryStyle(
     slug: 'food',
@@ -43,7 +43,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFFF25B36),
     surface: Color(0xFFFFEEE8),
     badgeSurface: Color(0xFFFFD8C7),
-    photoAsset: 'assets/images/categories/category_food.webp',
+    photoAsset: 'packages/wantok_ui/assets/images/categories/category_food.webp',
   );
   static const groceries = WantokCategoryStyle(
     slug: 'groceries',
@@ -52,7 +52,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFF0AAB63),
     surface: Color(0xFFEAF9F1),
     badgeSurface: Color(0xFFCAEFDC),
-    photoAsset: 'assets/images/categories/category_groceries.webp',
+    photoAsset: 'packages/wantok_ui/assets/images/categories/category_groceries.webp',
   );
   static const shopping = WantokCategoryStyle(
     slug: 'shopping-retail',
@@ -61,7 +61,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFF8D42E4),
     surface: Color(0xFFF5ECFF),
     badgeSurface: Color(0xFFEAD9FF),
-    photoAsset: 'assets/images/categories/category_shopping.webp',
+    photoAsset: 'packages/wantok_ui/assets/images/categories/category_shopping.webp',
   );
   static const home = WantokCategoryStyle(
     slug: 'home-services',
@@ -70,7 +70,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFF1574E7),
     surface: Color(0xFFEBF3FF),
     badgeSurface: Color(0xFFD6E8FF),
-    photoAsset: 'assets/images/categories/category_home_services.webp',
+    photoAsset: 'packages/wantok_ui/assets/images/categories/category_home_services.webp',
   );
   static const beauty = WantokCategoryStyle(
     slug: 'beauty-wellness',
@@ -79,7 +79,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFFE13EA9),
     surface: Color(0xFFFFEFF9),
     badgeSurface: Color(0xFFFFD9EF),
-    photoAsset: 'assets/images/categories/category_beauty.webp',
+    photoAsset: 'packages/wantok_ui/assets/images/categories/category_beauty.webp',
   );
   static const health = WantokCategoryStyle(
     slug: 'health-medical',
@@ -88,7 +88,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFF0DAE9F),
     surface: Color(0xFFE9F9F6),
     badgeSurface: Color(0xFFCBF0E9),
-    photoAsset: 'assets/images/categories/category_health.webp',
+    photoAsset: 'packages/wantok_ui/assets/images/categories/category_health.webp',
   );
   static const travel = WantokCategoryStyle(
     slug: 'travel-flights',
@@ -97,7 +97,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFF216AF1),
     surface: Color(0xFFEDF3FF),
     badgeSurface: Color(0xFFD7E6FF),
-    photoAsset: 'assets/images/categories/category_travel.webp',
+    photoAsset: 'packages/wantok_ui/assets/images/categories/category_travel.webp',
   );
   // Future flights-only catalogue entry. Distinct from Travel & Flights.
   // Kept dormant in the database until business activation is authorised.
@@ -108,7 +108,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFF2876B9),
     surface: Color(0xFFEDF5FF),
     badgeSurface: Color(0xFFD8EBFB),
-    photoAsset: 'assets/images/categories/category_flights.webp',
+    photoAsset: 'packages/wantok_ui/assets/images/categories/category_flights.webp',
   );
   static const events = WantokCategoryStyle(
     slug: 'events',
@@ -117,7 +117,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFFE74992),
     surface: Color(0xFFFFEFF5),
     badgeSurface: Color(0xFFFFD8E8),
-    photoAsset: 'assets/images/categories/category_events.webp',
+    photoAsset: 'packages/wantok_ui/assets/images/categories/category_events.webp',
   );
   static const professional = WantokCategoryStyle(
     slug: 'specialist-services',
@@ -126,7 +126,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFF3867DC),
     surface: Color(0xFFEDF0FF),
     badgeSurface: Color(0xFFDCE3FF),
-    photoAsset: 'assets/images/categories/category_professional.webp',
+    photoAsset: 'packages/wantok_ui/assets/images/categories/category_professional.webp',
   );
   static const automotive = WantokCategoryStyle(
     slug: 'vehicle-hire',
@@ -135,7 +135,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFF2468DB),
     surface: Color(0xFFECF2FE),
     badgeSurface: Color(0xFFD8E6FB),
-    photoAsset: 'assets/images/categories/category_automotive.webp',
+    photoAsset: 'packages/wantok_ui/assets/images/categories/category_automotive.webp',
   );
   static const more = WantokCategoryStyle(
     slug: 'more',
@@ -144,7 +144,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFF41638D),
     surface: Color(0xFFEFF2F8),
     badgeSurface: Color(0xFFDEE7F3),
-    photoAsset: 'assets/images/categories/category_more.webp',
+    photoAsset: 'packages/wantok_ui/assets/images/categories/category_more.webp',
   );
 
   // Existing backend categories stay in the same catalogue and use a
@@ -156,7 +156,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFF0D88CB),
     surface: Color(0xFFE8F6FF),
     badgeSurface: Color(0xFFD1EDFF),
-    photoAsset: 'assets/images/categories/category_delivery.webp',
+    photoAsset: 'packages/wantok_ui/assets/images/categories/category_delivery.webp',
   );
   static const errands = WantokCategoryStyle(
     slug: 'errands',
@@ -165,7 +165,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFFB57209),
     surface: Color(0xFFFFF4E4),
     badgeSurface: Color(0xFFFFE8BD),
-    photoAsset: 'assets/images/categories/category_errands.webp',
+    photoAsset: 'packages/wantok_ui/assets/images/categories/category_errands.webp',
   );
   // Future scheduled bus and coach catalogue entry. Not enabled by artwork.
   static const busCoach = WantokCategoryStyle(
@@ -175,7 +175,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFF217B89),
     surface: Color(0xFFE8F7F8),
     badgeSurface: Color(0xFFCEEBEE),
-    photoAsset: 'assets/images/categories/category_bus_coach.webp',
+    photoAsset: 'packages/wantok_ui/assets/images/categories/category_bus_coach.webp',
   );
   static const boatHire = WantokCategoryStyle(
     slug: 'boat-hire',
@@ -184,7 +184,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFF087E95),
     surface: Color(0xFFE8F7F9),
     badgeSurface: Color(0xFFD1F0F4),
-    photoAsset: 'assets/images/categories/category_boat_hire.webp',
+    photoAsset: 'packages/wantok_ui/assets/images/categories/category_boat_hire.webp',
   );
   static const waterRides = WantokCategoryStyle(
     slug: 'boat-ship-rides',
@@ -193,7 +193,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFF067A91),
     surface: Color(0xFFE8F7F9),
     badgeSurface: Color(0xFFCCEDF3),
-    photoAsset: 'assets/images/categories/category_water_transport.webp',
+    photoAsset: 'packages/wantok_ui/assets/images/categories/category_water_transport.webp',
   );
   static const labour = WantokCategoryStyle(
     slug: 'general-labour',
@@ -202,7 +202,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFF7A53BA),
     surface: Color(0xFFF3EDFF),
     badgeSurface: Color(0xFFE5DAFA),
-    photoAsset: 'assets/images/categories/category_labour.webp',
+    photoAsset: 'packages/wantok_ui/assets/images/categories/category_labour.webp',
   );
   static const venue = WantokCategoryStyle(
     slug: 'venue-booking',
@@ -211,7 +211,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFF8E56AA),
     surface: Color(0xFFF8EFFE),
     badgeSurface: Color(0xFFEEDCF9),
-    photoAsset: 'assets/images/categories/category_venue.webp',
+    photoAsset: 'packages/wantok_ui/assets/images/categories/category_venue.webp',
   );
   static const hotels = WantokCategoryStyle(
     slug: 'accommodation',
@@ -220,7 +220,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFFD04C7B),
     surface: Color(0xFFFFEFF4),
     badgeSurface: Color(0xFFFFD9E6),
-    photoAsset: 'assets/images/categories/category_hotels.webp',
+    photoAsset: 'packages/wantok_ui/assets/images/categories/category_hotels.webp',
   );
 
   // Distinct, licensed photographs cover real service categories; More is a navigation symbol.
@@ -231,7 +231,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFFBC693E),
     surface: Color(0xFFFFEDE6),
     badgeSurface: Color(0xFFFFDACC),
-    photoAsset: 'assets/images/categories/category_education.webp',
+    photoAsset: 'packages/wantok_ui/assets/images/categories/category_education.webp',
   );
   static const financial = WantokCategoryStyle(
     slug: 'financial-services',
@@ -240,7 +240,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFF13856A),
     surface: Color(0xFFE9F8F0),
     badgeSurface: Color(0xFFD0F1E3),
-    photoAsset: 'assets/images/categories/category_financial.webp',
+    photoAsset: 'packages/wantok_ui/assets/images/categories/category_financial.webp',
   );
 
   static const publicServices = WantokCategoryStyle(
@@ -250,7 +250,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFF005337),
     surface: Color(0xFFFFF2C6),
     badgeSurface: Color(0xFFFFE49B),
-    photoAsset: 'assets/images/reference/services_public_photo.jpg',
+    photoAsset: 'packages/wantok_ui/assets/images/reference/services_public_photo.jpg',
   );
 
   static const reference = <WantokCategoryStyle>[

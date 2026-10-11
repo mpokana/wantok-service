@@ -56,11 +56,11 @@ void main() {
     }
     expect(
       WantokCategoryStyles.bySlug('flights').photoAsset,
-      'assets/images/categories/category_flights.webp',
+      'packages/wantok_ui/assets/images/categories/category_flights.webp',
     );
     expect(
       WantokCategoryStyles.bySlug('bus-coach').photoAsset,
-      'assets/images/categories/category_bus_coach.webp',
+      'packages/wantok_ui/assets/images/categories/category_bus_coach.webp',
     );
     expect(
       WantokCategoryStyles.bySlug('travel-flights').photoAsset,
@@ -121,13 +121,13 @@ void main() {
     await tester.pumpAndSettle();
     expect(
       find.image(
-        const AssetImage('assets/images/categories/category_bus_coach.webp'),
+        const AssetImage('packages/wantok_ui/assets/images/categories/category_bus_coach.webp'),
       ),
       findsOneWidget,
     );
     expect(
       find.image(
-        const AssetImage('assets/images/categories/category_flights.webp'),
+        const AssetImage('packages/wantok_ui/assets/images/categories/category_flights.webp'),
       ),
       findsOneWidget,
     );

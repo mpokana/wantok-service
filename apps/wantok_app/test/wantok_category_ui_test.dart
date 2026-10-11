@@ -26,7 +26,7 @@ void main() {
         // A meaningful icon illustration is preferable to an unrelated photo.
         expect(styles[i].icon, isNotNull);
       } else {
-        expect(styles[i].photoAsset, startsWith('assets/images/'));
+        expect(styles[i].photoAsset, startsWith('packages/wantok_ui/assets/images/'));
         expect(
           styles[i].photoAsset,
           anyOf(endsWith('.webp'), endsWith('.png'), endsWith('.jpg')),
@@ -39,7 +39,7 @@ void main() {
     final styles = WantokCategoryStyles.reference;
     for (final style in styles.where((entry) => entry.slug != 'more')) {
       expect(style.photoAsset, isNotNull, reason: style.slug);
-      expect(style.photoAsset, startsWith('assets/images/'));
+      expect(style.photoAsset, startsWith('packages/wantok_ui/assets/images/'));
     }
     expect(WantokCategoryStyles.more.slug, 'more');
     // More is a navigation choice, rather than a service or a fake photo.
@@ -48,11 +48,11 @@ void main() {
     expect(WantokCategoryStyles.financial.icon, Icons.payments_rounded);
     expect(
       WantokCategoryStyles.publicServices.photoAsset,
-      'assets/images/reference/services_public_photo.jpg',
+      'packages/wantok_ui/assets/images/reference/services_public_photo.jpg',
     );
     expect(
       WantokCategoryStyles.hotels.photoAsset,
-      'assets/images/categories/category_hotels.webp',
+      'packages/wantok_ui/assets/images/categories/category_hotels.webp',
     );
   });
 
@@ -88,13 +88,13 @@ void main() {
     await tester.pumpAndSettle();
     expect(
       find.image(
-        const AssetImage('assets/images/categories/category_education.webp'),
+        const AssetImage('packages/wantok_ui/assets/images/categories/category_education.webp'),
       ),
       findsOneWidget,
     );
     expect(
       find.image(
-        const AssetImage('assets/images/categories/category_labour.webp'),
+        const AssetImage('packages/wantok_ui/assets/images/categories/category_labour.webp'),
       ),
       findsOneWidget,
     );
@@ -121,7 +121,7 @@ void main() {
       await tester.pumpAndSettle();
       expect(
         find.image(
-          const AssetImage('assets/images/reference/services_public_photo.jpg'),
+          const AssetImage('packages/wantok_ui/assets/images/reference/services_public_photo.jpg'),
         ),
         findsOneWidget,
       );
@@ -241,7 +241,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(
       find.image(
-        const AssetImage('assets/images/categories/category_food.webp'),
+        const AssetImage('packages/wantok_ui/assets/images/categories/category_food.webp'),
       ),
       findsNWidgets(2),
     );

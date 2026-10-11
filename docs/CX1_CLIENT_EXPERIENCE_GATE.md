@@ -5,6 +5,16 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## 11 October — Technical photo parity and global theme fix
+
+**BROWSER / SOURCE PASS:** The missing Technical pictures were caused by Client-only bundled image assets, not by missing database uploads. Existing 23 category WebP images plus the separate Public Services JPG have been moved to the common `wantok_ui` package; Client Web/Android and Technical previews now reference exactly the same packaged photo assets. The shared theme is now sourced globally from published Wantok Branding for Technical app routes as well as Client. The category manager uses engineering header, responsive metrics, elevated photo-rich cards and status chips matching Technical Control's visual system.
+
+**WEB ROLLOUT PASS:** isolated staging Client 3300 / Technical 3400 and main Client 3000 / Technical 3100 serve verified shared photo URLs, with SHA-256 source/candidate/canonical copies and independent rollback folders. Signed-in browser screenshot `.wantok/cx1-global-category-manager-list-20261011.png` shows Taxi, Hire Car, Boat Hire and Water Transport photos and the green branded dashboard heading. No database state changed: 29 categories, 20 active, nine inactive; Operations 3200 unchanged.
+
+**ANDROID SHARED PHOTO PASS:** x64 offline-demo APK **4007** built with `wantok_ui` photo package, checksum-backed up and upgraded via `adb install -r` without clearing app state or changing first-install timestamp. Screenshot `.wantok/cx1-shared-photo-android-4007.png` confirms the handset category tiles use the original real photographs, including Public Services. App remains explicitly offline demonstration with no sign-in or transactions.
+
+**OPEN:** Six new inactive category photos still need individual real PNG/Pacific-oriented approved assets; image upload/save end-to-end acceptance, physical Android/HONOR photo parity and prior CX1 provider/Saved/Account flows remain open. T2.4 deferred.
+
 ## CX1 category administration and multi-platform visibility (11 Oct 2026)
 
 **SOURCE + LOCAL DATABASE PASS:** Backend `service_categories` now has Home/Services visibility and category image reference fields, with 6 future categories seeded **inactive**. Client Home uses dynamic category list rather than a 6-item hard-coded shortlist; no duplicate Travel tile. Services follows the same source with a separate flag. Technical Control has a role-gated CRUD/image editor; each mutation is independently Technical Platform Administrator-checked and audit logged, with proper archival instead of destroying provider or booking history. SQL migration applied locally only after a verified custom pg_dump backup. **41 SQL files / 828 assertions PASS**; 7 Flutter analyses and pre-existing widget regression PASS; new category manager mobile/desktop tests PASS.

@@ -7,20 +7,44 @@ import 'package:wantok_ui/wantok_ui.dart';
 import 'auth/tech_sign_in_page.dart';
 import 'dashboard/technical_shell.dart';
 
-class WantokTechnicalControlApp extends StatelessWidget {
+class WantokTechnicalControlApp extends StatefulWidget {
   const WantokTechnicalControlApp({required this.backendConfigured, super.key});
 
   final bool backendConfigured;
 
   @override
+  State<WantokTechnicalControlApp> createState() =>
+      _WantokTechnicalControlAppState();
+}
+
+class _WantokTechnicalControlAppState extends State<WantokTechnicalControlApp> {
+  late final Future<Map<String, dynamic>> _published = widget.backendConfigured
+      ? const BrandingRepository().getPublished().catchError(
+          (_) => BrandingRepository.defaultDocument,
+        )
+      : Future<Map<String, dynamic>>.value(BrandingRepository.defaultDocument);
+
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Wantok Technical Control',
-      debugShowCheckedModeBanner: false,
-      theme: WantokTheme.light(),
-      home: backendConfigured
-          ? const _TechnicalAuthGate()
-          : const _TechnicalConfigurationPage(),
+    return FutureBuilder<Map<String, dynamic>>(
+      future: _published,
+      builder: (context, snapshot) {
+        final document = snapshot.data ?? BrandingRepository.defaultDocument;
+        return WantokBrandingScope(
+          document: document,
+          resolveMediaUrl: BrandingRepository.imageUrl,
+          child: MaterialApp(
+            title: 'Wantok Technical Control',
+            debugShowCheckedModeBanner: false,
+            theme: WantokBrandingTheme.from(document),
+            darkTheme: WantokBrandingTheme.from(document, dark: true),
+            themeMode: WantokBrandingTheme.mode(document),
+            home: widget.backendConfigured
+                ? const _TechnicalAuthGate()
+                : const _TechnicalConfigurationPage(),
+          ),
+        );
+      },
     );
   }
 }

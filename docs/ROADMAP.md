@@ -2,6 +2,17 @@
 
 **Updated:** 2026-10-11
 
+## CX1 — Fix Technical category picture placeholders; unify global theme (11 October)
+
+- [x] Transfer all **23 existing category WebPs** and distinct Public Services JPG out of Client-only assets into common `wantok_ui` Flutter package, without duplicating photographs; keep the Client and Technical categories visually identical across Web/Android.
+- [x] Add shared category-slug media registry and thumbnail widget to Technical. Reuse published media overrides and category-level uploaded `image_path`; use canonical shared asset as fallback. Drafts missing real pictures remain marked for upload.
+- [x] Make Technical use the **global published branding theme**, and restyle category management to match main panel: engineering header gradient, cards, status tags, responsive metrics, and theme-derived accents and radii.
+- [x] Isolated Flutter analyses and Client/Operations/Technical widget tests PASS; new tests confirm original Taxi/Public Services images appear on Technical and no narrow-screen overflow.
+- [x] Stage/release Client and Technical Web with SHA-256, HTTP photo checks and tested recovery backups; both 3000 and 3100 promoted, 3300 and 3400 staging, Operations 3200 unchanged. Signed-in browser screenshot confirms matching pictures and theme.
+- [ ] Complete separately generated **distinct PNG/Pacific-specific images for six still-inactive new categories**, only after individual editorial review. No unrelated artwork or image clones introduced by this correction.
+- [x] Install and verify matching Android WebP package: x64 offline-demo versionCode **4007** upgraded in place, first-install timestamp and app data unchanged, screenshot proves shared photographic category tiles. Original Web, Android and Technical image identities remain equal.
+- [ ] Continue authenticated Client provider/Saved/Account journeys and physical HONOR acceptance. **CX1 in progress; T2.4 deferred.**
+
 ## CX1 — Backend-governed categories and Technical Control editing (11 October)
 
 - [x] Preserve previous 23 categories and records; insert 6 additional service families as **inactive drafts** (`it-electronics`, `automotive-repair`, `agriculture-farming`, `pets-animal-care`, `cleaning-maintenance`, `construction-trades`). Do not enable vendor booking or payment flows.
