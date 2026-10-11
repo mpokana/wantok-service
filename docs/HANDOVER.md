@@ -4,6 +4,13 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 11 October CX1 — LIVE Client Web category-first acceptance + Saved read QA (LATEST)
+
+- **First complete authenticated Client WEB category-first PASS:** In live Chrome on EAGLT02 `:3000`, used **Services → Browse providers → Explore providers**, left keyword query completely blank, applied **Specialist Services → Morobe → Lae**, and opened genuine existing **Wantok QA Plumbing Services** provider. Filter choices persisted, sourcing **5.0 (1)** rating; provider detail contains approved **QA Plumber & Maintenance**, `Specialist Services · Lae, Morobe · Quote`. This does not narrow Specialist Services into the plumbing trade. Private screenshots `.wantok/cx1-web-category-morobe-lae-pass.png`, `.wantok/cx1-web-provider-detail-pass.png`; committed descriptive evidence only at `docs/CX1_WEB_DISCOVERY_ACCEPTANCE_20261011.md`.
+- **Read-only and focus safety:** Saved icon shown already green, **never clicked**; no booking, job request, provider mutation, review, payment or message. Follow-up browser automation refused unfocused clicks after Windows switched to Operations, so Web Account → Saved and other secondary flows remain OPEN (don't claim them from existing Android or test evidence).
+- **Saved reliability test additions:** `SavedItemsPage` optional read-only test loader, default production repository unchanged; four focused widget tests for provider list 390/1240, empty and retry, **no write calls**. Check full regression before acceptance and commit. Existing unrelated vendor-verification working files and `supabase/snippets/` must remain untouched.
+- **CX1 IN PROGRESS, T2.4 DEFERRED.** Web provider search/detail gate PASSED; Saved persistence, Account/Inbox/Track/Wallet/Agent, image uploads and physical HONOR still open.
+
 ## 11 October CX1 — Global Technical theme and shared real category photos (LATEST)
 
 - **Owner screenshot correction fixed:** Technical category manager was plain and showed generic photo symbols for already photographed categories because those photo files were bundled only inside the Client Flutter app. Moved all **23 category WebP assets and Public Services JPG** to the common `packages/wantok_ui/assets` Flutter asset bundle with a shared `WantokCategoryMedia` lookup. Client styles and Technical previews now reference the same immutable original image assets, no duplicate photo files in the repository; existing user-approved images unchanged. The six unphotographed, disabled draft categories rightly keep an upload-needed placeholder.

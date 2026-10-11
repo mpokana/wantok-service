@@ -278,7 +278,11 @@ class _LinkedAccountsPageState extends State<LinkedAccountsPage> {
 }
 
 class SavedItemsPage extends StatefulWidget {
-  const SavedItemsPage({super.key});
+  const SavedItemsPage({super.key, this.loadSavedItems});
+
+  /// Optional read-only loader for CX1 rendering/retry tests.
+  /// Production continues using the authenticated repository and current RLS.
+  final Future<List<SavedClientItem>> Function()? loadSavedItems;
 
   @override
   State<SavedItemsPage> createState() => _SavedItemsPageState();
@@ -292,11 +296,14 @@ class _SavedItemsPageState extends State<SavedItemsPage> {
   @override
   void initState() {
     super.initState();
-    _future = _repository.loadSavedItems();
+    _future = _load();
   }
 
+  Future<List<SavedClientItem>> _load() =>
+      widget.loadSavedItems?.call() ?? _repository.loadSavedItems();
+
   Future<void> _refresh() async {
-    final next = _repository.loadSavedItems();
+    final next = _load();
     setState(() {
       _future = next;
     });

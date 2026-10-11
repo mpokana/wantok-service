@@ -5,6 +5,14 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## 11 October — authenticated Client WEB category-first gate PASSED (latest CX1 checkpoint)
+
+**LIVE WEB PASS — primary CX1F path:** Authorised EAGLT02 Chrome Client Web `:3000`, **Services → Browse providers → Explore providers → blank text search → Specialist Services → Morobe → Lae → real existing Wantok QA Plumbing Services → Provider Details**. The province, town and category filters remained selected simultaneously with the free-text field empty. Provider detail shows verified Business, **5.0 (1)** sourced rating and approved **QA Plumber & Maintenance · Specialist Services · Lae, Morobe · Quote**. This is a verified QA business *within the broad Specialist Services category*; not a claim that the category means plumbing. Exact screenshot evidence stays only in ignored `.wantok/cx1-web-*-20261011.png`. Details in `docs/CX1_WEB_DISCOVERY_ACCEPTANCE_20261011.md`. No booking, Saved toggle, payment, review, request, handoff or record mutation.
+
+**Saved test improvements:** Add optional injectable **read-only** Saved loader; default production path still uses `ClientExperienceRepository` and Supabase RLS. Four focused Flutter widget cases PASS on 390/1240 px, empty state and Retry after failed read. **Live Web Saved persistence still OPEN**: the directory's filled bookmark was observed, not tapped, and Account → Saved was not completed because another desktop window took focus and multiple Wantok Chrome windows were minimised; click helper safely refused off-target input. No assertion of real account Saved acceptance from an icon or mock test.
+
+**NEXT:** repeat authenticated Account → Saved read-only display (no remove toggle), then Inbox, Track, Wallet, Agent and physical HONOR approval. Six new inactive category pictures are a separate visual gate. **CX1 IN PROGRESS; T2.4 DEFERRED.**
+
 ## 11 October — Technical photo parity and global theme fix
 
 **BROWSER / SOURCE PASS:** The missing Technical pictures were caused by Client-only bundled image assets, not by missing database uploads. Existing 23 category WebP images plus the separate Public Services JPG have been moved to the common `wantok_ui` package; Client Web/Android and Technical previews now reference exactly the same packaged photo assets. The shared theme is now sourced globally from published Wantok Branding for Technical app routes as well as Client. The category manager uses engineering header, responsive metrics, elevated photo-rich cards and status chips matching Technical Control's visual system.

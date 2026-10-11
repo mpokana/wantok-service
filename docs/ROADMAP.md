@@ -2,6 +2,13 @@
 
 **Updated:** 2026-10-11
 
+## CX1 — Signed-in Client Web category discovery and Saved QA (11 October)
+
+- [x] **Real authenticated Web primary discovery PASS** on `:3000`: Services → Browse providers → Explore providers → Specialist Services → Morobe → Lae → QA provider result/detail, **no keyword entered**. Read-only provider detail includes sourced **5.0 (1)** and approved Quote listing. Private screenshots preserved, no profile/bookings/payments changed. See `docs/CX1_WEB_DISCOVERY_ACCEPTANCE_20261011.md`.
+- [x] Add four **read-only Saved page** widget acceptance cases at mobile/desktop, empty collection and Retry after a failed read; optional test loader preserves production RLS/data path. No bookmarks changed.
+- [ ] Genuine signed-in browser Account → Saved collection verification, read-only. Existing green bookmark in directory is not by itself proof of Saved persistence. Browser automation safety stopped on focus changes, no blind clicks.
+- [ ] Authenticated Web Account, Inbox/Support, Track, Wallet preview and Wantok Agent, plus physical HONOR acceptance and six inactive category image reviews. **CX1 in progress; T2.4 deferred.**
+
 ## CX1 — Fix Technical category picture placeholders; unify global theme (11 October)
 
 - [x] Transfer all **23 existing category WebPs** and distinct Public Services JPG out of Client-only assets into common `wantok_ui` Flutter package, without duplicating photographs; keep the Client and Technical categories visually identical across Web/Android.
