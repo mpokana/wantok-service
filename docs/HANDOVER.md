@@ -4,6 +4,17 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 11 October — E6B scoped vendor intake & evidence controls (NEW SECURITY CHECKPOINT)
+
+- Added country/subdivision/category **verified case classification**, independently maintained region and service-family registries (service-role-only), and explicit **case_reviewer** and **evidence_officer** duties, without backfilling applicant free-text regions. Unclassified, incorrectly categorised, invalid-region and unassigned-admin access is denied.
+- Replaced broad-admin enterprise intake/verification/evidence request RLS and triage/review/request/cancellation guards with case-bound grants; applicant ownership and two-person preliminary check history retained. Revoked duty, changed category mapping and disabled subdivision immediately fail closed.
+- Scoped staff enter a narrow Operations workspace; checklists and evidence metadata are visible according to the active granted duty, not a global admin menu. Existing intake refresh `setState` Future bug fixed by new widget coverage.
+- E6B **local SQL PASS 51 files / 1,008 assertions** including 35 new privilege/isolation checks; three new restricted-role widget tests passed, followed by complete Operations **37/37 widget tests PASS** with clean analysis. Full cross-app regression, commit/push, and QA archive are separately recorded when verified.
+- **E6 is NOT finished**: legacy staged provider routes, clearance reading/revocation, provider activation/status, old provider approval, service-role classification governance, strong COI and independent provisioning still need scoped controls. No E7 consent, identity upload, KYC outcome, service activation, payment or online VM deployment was approved.
+- Handover detail: `docs/E6B_CASE_JURISDICTION_SCOPED_REVIEW_20261011.md`.
+
+---
+
 ## 11 October — CX1 narrow-width and route-safety QA (LATEST)
 
 - **Tests added without application behaviour changes:** 320 px coverage in Saved/Inbox/Track reload tests, plus six focused 320/1440 px NavigatorObserver checks that a refresh reads again without opening another Flutter route. Isolated 16 existing/expanded tests plus six route tests PASS. All seven Flutter analyses and full Client (132), Operations (33), Technical (12) test suites PASS from clean CX1 baseline `735452c`; see `docs/CX1_REFRESH_ROUTE_SAFETY_QA_20261011.md`.

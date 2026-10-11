@@ -25,8 +25,28 @@ SELECT is((SELECT count(*)::integer FROM public.vendor_evidence_requests),0,
  'No unsolicited applicant-visible requirements');
 SELECT throws_ok($$SELECT public.request_vendor_evidence(
 (SELECT id FROM public.vendor_verification_checks WHERE requirement_key='identity_check'),
-'Please show a valid identity document')$$,'42501','Operations reviewer required',
+'Please show a valid identity document')$$,'42501','Scoped evidence officer required',
 'Applicant cannot request evidence');
+RESET ROLE;
+SELECT public.map_operations_service_category(
+ (SELECT category_id FROM public.vendor_intake_cases LIMIT 1),'trades',
+ 'd8000000-0000-0000-0000-000000000012'::uuid,
+ 'Synthetic category taxonomic review for offline regression only');
+SELECT public.register_operations_region('PG-MPL','Morobe',
+ 'd8000000-0000-0000-0000-000000000012'::uuid,
+ 'Synthetic subdivision registry for local test only');
+SELECT public.register_operations_case_jurisdiction(
+ (SELECT id FROM public.vendor_intake_cases LIMIT 1),'PG-MPL',
+ 'd8000000-0000-0000-0000-000000000012'::uuid,
+ 'Synthetic case and province verification for offline test');
+INSERT INTO public.operations_duty_grants(
+ staff_user_id,duty,country_code,region_code,category_scope,assignment_reason)
+VALUES
+ ('d8000000-0000-0000-0000-000000000012','case_reviewer','PG','PG-MPL','trades',
+ 'Preliminary case review duty for synthetic test only'),
+ ('d8000000-0000-0000-0000-000000000012','evidence_officer','PG','PG-MPL','trades',
+ 'Metadata evidence officer duty for synthetic test only');
+SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','d8000000-0000-0000-0000-000000000012',true);
 SELECT lives_ok($$SELECT public.triage_vendor_intake_case(
  (SELECT id FROM public.vendor_intake_cases LIMIT 1),

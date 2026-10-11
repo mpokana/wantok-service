@@ -7,6 +7,7 @@ import 'package:wantok_ui/wantok_ui.dart';
 import 'auth/admin_password_reset_page.dart';
 import 'auth/admin_sign_in_page.dart';
 import 'dashboard/admin_shell.dart';
+import 'dashboard/vendor_intake_queue_page.dart';
 import 'dashboard/vendor_policy_governance_page.dart';
 
 class WantokAdminApp extends StatelessWidget {
@@ -66,18 +67,22 @@ class _AdminAuthGate extends StatelessWidget {
             }
 
             // A scoped officer cannot inherit the broad administrator shell.
-            return FutureBuilder<bool>(
-              future: _canOpenScopedPolicyWorkspace(),
+            return FutureBuilder<Set<String>>(
+              future: _loadScopedDuties(),
               builder: (context, dutySnapshot) {
                 if (dutySnapshot.connectionState != ConnectionState.done) {
                   return const Scaffold(
                     body: Center(child: CircularProgressIndicator()),
                   );
                 }
-                if (dutySnapshot.data != true) {
+                final duties = dutySnapshot.data ?? const <String>{};
+                if (duties.isEmpty) {
                   return _AccessDeniedPage(email: session.user.email);
                 }
-                return _ScopedPolicyWorkspace(email: session.user.email);
+                return _ScopedPolicyWorkspace(
+                  email: session.user.email,
+                  duties: duties,
+                );
               },
             );
           },
@@ -87,47 +92,88 @@ class _AdminAuthGate extends StatelessWidget {
   }
 }
 
-Future<bool> _canOpenScopedPolicyWorkspace() async {
+Future<Set<String>> _loadScopedDuties() async {
   try {
     final response = await WantokBackend.client
         .from('operations_duty_grants')
         .select('duty,issued_at,expires_at,revoked_at')
-        .inFilter('duty', ['policy_author', 'policy_reviewer']);
+        .inFilter('duty', [
+          'policy_author',
+          'policy_reviewer',
+          'case_reviewer',
+          'evidence_officer',
+        ]);
     final now = DateTime.now().toUtc();
-    return (response as List).any((record) {
+    final active = <String>{};
+    for (final record in (response as List)) {
       final row = Map<String, dynamic>.from(record as Map);
       final start = DateTime.tryParse(row['issued_at']?.toString() ?? '');
       final end = DateTime.tryParse(row['expires_at']?.toString() ?? '');
-      return row['revoked_at'] == null &&
-          start != null && !start.toUtc().isAfter(now) &&
-          (end == null || end.toUtc().isAfter(now));
-    });
+      if (row['revoked_at'] == null &&
+          start != null &&
+          !start.toUtc().isAfter(now) &&
+          (end == null || end.toUtc().isAfter(now))) {
+        active.add(row['duty'].toString());
+      }
+    }
+    return active;
   } catch (_) {
     // Older backends or unavailable scope data must not grant entry.
-    return false;
+    return <String>{};
   }
 }
 
 class _ScopedPolicyWorkspace extends StatelessWidget {
-  const _ScopedPolicyWorkspace({required this.email});
+  const _ScopedPolicyWorkspace({required this.email, required this.duties});
   final String? email;
+  final Set<String> duties;
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      title: const Text('Wantok Operations · Compliance'),
-      actions: [
-        if (email != null)
-          Center(child: Text(email!, overflow: TextOverflow.ellipsis)),
-        IconButton(
-          tooltip: 'Sign out',
-          onPressed: () => const WantokAuthService().signOut(),
-          icon: const Icon(Icons.logout),
+  Widget build(BuildContext context) {
+    final policy =
+        duties.contains('policy_author') || duties.contains('policy_reviewer');
+    final cases =
+        duties.contains('case_reviewer') || duties.contains('evidence_officer');
+    if (!policy && !cases) {
+      return const Scaffold(
+        body: Center(child: Text('No authorised workspace')),
+      );
+    }
+    return DefaultTabController(
+      length: (policy ? 1 : 0) + (cases ? 1 : 0),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Wantok Operations · Scoped Compliance'),
+          actions: [
+            if (email != null)
+              Center(child: Text(email!, overflow: TextOverflow.ellipsis)),
+            IconButton(
+              tooltip: 'Sign out',
+              onPressed: () => const WantokAuthService().signOut(),
+              icon: const Icon(Icons.logout),
+            ),
+          ],
+          bottom: TabBar(
+            tabs: [
+              if (policy) const Tab(text: 'Policy drafts'),
+              if (cases) const Tab(text: 'Vendor cases'),
+            ],
+          ),
         ),
-      ],
-    ),
-    body: const VendorPolicyGovernancePage(),
-  );
+        body: TabBarView(
+          children: [
+            if (policy) const VendorPolicyGovernancePage(),
+            if (cases)
+              VendorIntakeQueuePage(
+                canTriage: duties.contains('case_reviewer'),
+                canReviewChecks: duties.contains('case_reviewer'),
+                canRequestEvidence: duties.contains('evidence_officer'),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 class _AccessDeniedPage extends StatelessWidget {

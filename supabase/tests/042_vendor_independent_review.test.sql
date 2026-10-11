@@ -21,6 +21,26 @@ SELECT lives_ok($$SELECT public.submit_vendor_intake_case(
  '{"trade_speciality":"Plumbing"}'::jsonb)$$,'Applicant submits a case');
 SELECT is((SELECT count(*)::integer FROM public.vendor_verification_checks),0,
  'Applicant cannot read internal verification tasks');
+RESET ROLE;
+SELECT public.map_operations_service_category(
+ (SELECT category_id FROM public.vendor_intake_cases LIMIT 1),'trades',
+ 'd9000000-0000-0000-0000-000000000002'::uuid,
+ 'Synthetic category taxonomic review for offline regression only');
+SELECT public.register_operations_region('PG-MPL','Morobe',
+ 'd9000000-0000-0000-0000-000000000002'::uuid,
+ 'Synthetic subdivision registry for local test only');
+SELECT public.register_operations_case_jurisdiction(
+ (SELECT id FROM public.vendor_intake_cases LIMIT 1),'PG-MPL',
+ 'd9000000-0000-0000-0000-000000000002'::uuid,
+ 'Synthetic case and province verification for offline test');
+INSERT INTO public.operations_duty_grants(
+ staff_user_id,duty,country_code,region_code,category_scope,assignment_reason)
+VALUES
+ ('d9000000-0000-0000-0000-000000000002','case_reviewer','PG','PG-MPL','trades',
+ 'Preliminary case review duty for synthetic test only'),
+ ('d9000000-0000-0000-0000-000000000003','case_reviewer','PG','PG-MPL','trades',
+ 'Independent secondary review duty for synthetic test only');
+SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub','d9000000-0000-0000-0000-000000000002',true);
 SELECT ok((SELECT count(*)>=4 FROM public.vendor_verification_checks),
  'Category and baseline checklist seeded');

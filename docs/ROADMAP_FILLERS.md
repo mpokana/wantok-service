@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-11-15 — E6B scoped case and evidence duties
+
+**Status:** Partial E6 security checkpoint only. Explicit `case_reviewer` and `evidence_officer` staff duties require trusted per-case country, ISO subdivision and service-family classification with verified region registry; applicant free-text regions cannot be guessed. Internal intake/verification/evidence metadata RLS and RPCs now reject broad-admin access without a scoped duty, prevent country/province/category leakage and preserve original two-person procedural checks. Operations non-admin shows only authorised case and policy tabs; inappropriate actions hidden, server authority enforced. SQL 51/1,008 passed and Operations 37/37 widget tests passed; remaining clearance, legacy provider/staged routes, staff governance and legal/browser gates leave E6 OPEN. See `docs/E6B_CASE_JURISDICTION_SCOPED_REVIEW_20261011.md`.
+
+---
+
 ## FILLER-2026-10-11-14 — CX1 safe Refresh navigation at narrow widths
 
 **Status:** Implemented automated test expansion only. All three labelled Refresh buttons now have explicit tests at 320px as well as larger devices; six 320/1440px observer tests verify that centre taps trigger a second read without navigating to another Flutter route. Isolated 22 focused tests PASS; complete Flutter analyses/widget regression PASS, including a second combined E6A/CX1 integration worktree (132 Client/34 Operations/12 Technical tests). Five localhost endpoints, Web parity and emulator 4010 reverified. No live signed-in Chrome button click accepted (the dedicated Client window lost ownership/focus), no Web/Android redeployment or account data change. CX1 OPEN; T2.4 DEFERRED. See `docs/CX1_REFRESH_ROUTE_SAFETY_QA_20261011.md`.

@@ -14,7 +14,11 @@ class VendorVerificationReviewPage extends StatefulWidget {
     this.loadChecks,
     this.loadEvents,
     this.recordAction,
+    this.canRecordReviews = true,
+    this.canModifyEvidence = true,
   });
+  final bool canRecordReviews;
+  final bool canModifyEvidence;
   final String caseId;
   final String applicantName;
   final Future<List<Map<String, dynamic>>> Function(String caseId)? loadChecks;
@@ -233,6 +237,7 @@ class _VendorVerificationReviewPageState
                         builder: (_) => VendorEvidenceRequestsPage(
                           caseId: widget.caseId,
                           applicantName: widget.applicantName,
+                          canModifyRequests: widget.canModifyEvidence,
                         ),
                       ),
                     ),
@@ -365,20 +370,22 @@ class _VendorVerificationReviewPageState
               spacing: 9,
               runSpacing: 8,
               children: [
-                if (status == 'pending' || status == 'needs_followup')
+                if (widget.canRecordReviews &&
+                    (status == 'pending' || status == 'needs_followup'))
                   OutlinedButton(
                     key: ValueKey('review-start-$id'),
                     onPressed: _busyId == null ? () => _act(id, 'start') : null,
                     child: const Text('Start review'),
                   ),
-                if (status == 'pending' || status == 'in_review')
+                if (widget.canRecordReviews &&
+                    (status == 'pending' || status == 'in_review'))
                   OutlinedButton(
                     onPressed: _busyId == null
                         ? () => _act(id, 'followup')
                         : null,
                     child: const Text('Needs follow-up'),
                   ),
-                if (status == 'in_review')
+                if (widget.canRecordReviews && status == 'in_review')
                   FilledButton(
                     key: ValueKey('review-first-$id'),
                     onPressed: _busyId == null
@@ -386,7 +393,8 @@ class _VendorVerificationReviewPageState
                         : null,
                     child: const Text('Record first review'),
                   ),
-                if (status == 'first_review_recorded')
+                if (widget.canRecordReviews &&
+                    status == 'first_review_recorded')
                   FilledButton(
                     key: ValueKey('review-second-$id'),
                     onPressed: _busyId == null

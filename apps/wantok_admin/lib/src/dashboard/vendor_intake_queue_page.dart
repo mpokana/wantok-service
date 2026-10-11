@@ -5,9 +5,19 @@ import 'package:wantok_ui/wantok_ui.dart';
 import 'vendor_verification_review_page.dart';
 
 /// Preliminary review queue. Identity clearance and final approval do not
-/// occur here. All actions run through an admin-only audited database RPC.
+/// occur here. All decisions pass through the scoped, audited database RPC.
 class VendorIntakeQueuePage extends StatefulWidget {
-  const VendorIntakeQueuePage({super.key});
+  const VendorIntakeQueuePage({
+    super.key,
+    this.canTriage = true,
+    this.canReviewChecks = true,
+    this.canRequestEvidence = true,
+    this.loadCases,
+  });
+  final Future<List<Map<String, dynamic>>> Function()? loadCases;
+  final bool canTriage;
+  final bool canReviewChecks;
+  final bool canRequestEvidence;
   @override
   State<VendorIntakeQueuePage> createState() => _VendorIntakeQueuePageState();
 }
@@ -23,8 +33,14 @@ class _VendorIntakeQueuePageState extends State<VendorIntakeQueuePage> {
     _reload();
   }
 
-  void _reload() => setState(() => _future = _load());
+  void _reload() {
+    setState(() {
+      _future = _load();
+    });
+  }
+
   Future<List<Map<String, dynamic>>> _load() async {
+    if (widget.loadCases != null) return widget.loadCases!();
     final rows = await WantokBackend.client
         .from('vendor_intake_cases')
         .select(
@@ -369,13 +385,15 @@ class _VendorIntakeQueuePageState extends State<VendorIntakeQueuePage> {
                         caseId: id,
                         applicantName:
                             row['display_name']?.toString() ?? 'Applicant',
+                        canRecordReviews: widget.canReviewChecks,
+                        canModifyEvidence: widget.canRequestEvidence,
                       ),
                     ),
                   ),
                   icon: const Icon(Icons.fact_check_outlined),
                   label: const Text('Verification review tasks'),
                 ),
-                if (status == 'submitted')
+                if (widget.canTriage && status == 'submitted')
                   FilledButton.icon(
                     onPressed: _busy == null
                         ? () => _review(id, 'start_review')
@@ -383,14 +401,15 @@ class _VendorIntakeQueuePageState extends State<VendorIntakeQueuePage> {
                     icon: const Icon(Icons.fact_check_outlined),
                     label: const Text('Begin review'),
                   ),
-                if (status == 'submitted' || status == 'in_review')
+                if (widget.canTriage &&
+                    (status == 'submitted' || status == 'in_review'))
                   OutlinedButton(
                     onPressed: _busy == null
                         ? () => _review(id, 'request_information')
                         : null,
                     child: const Text('Request information'),
                   ),
-                if (status != 'declined')
+                if (widget.canTriage && status != 'declined')
                   TextButton(
                     onPressed: _busy == null
                         ? () => _review(id, 'decline')

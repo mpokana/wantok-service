@@ -2,6 +2,17 @@
 
 **Updated:** 2026-10-11
 
+## E6B — Case-jurisdiction, verification and evidence metadata (11 October; CODE PASS, E6 OPEN)
+
+- [x] Maintain verified jurisdiction and service-family classification separately from applicant free-text region, with trusted registry, service-role-only changes and durable case events. **No automatic old-case classification.**
+- [x] Enforce signed-in `case_reviewer` and `evidence_officer` duty at PostgreSQL RLS and RPC boundaries for enterprise vendor intake, events, preliminary verification and metadata-only evidence requests/cancellation.
+- [x] Preserve applicant read/response, two-person preliminary procedural review, and deny global admins, wrong province/category, unknown cases and expired/revoked grants without a matching authorised duty.
+- [x] Add isolated Operations staff tabs and read-only/action separation for evidence-only and reviewer-only accounts; fix intake Flutter setState refresh bug. SQL locally **51 files / 1,008 assertions PASS**, plus Operations static analysis clean and full **37/37 widget tests PASS** (three new restricted-role UI cases).
+- [ ] Remaining E6: clearance/read/revoke, legacy provider services and staged provider routes, officially sourced ISO mapping and two-person staff provisioning approvals, full COI/case assignments, browser signed-in negative journey and integration/packaging.
+- [ ] E7+ remain gated, **no upload, final KYC, activation, payment or VM deployment**. Detail `docs/E6B_CASE_JURISDICTION_SCOPED_REVIEW_20261011.md`.
+
+---
+
 ## CX1 — 320px Refresh navigation regression (11 October; TEST PASS, BROWSER OPEN)
 
 - [x] Add 320px Saved/Inbox/Track click and read-only reload cases and six 320/1440px route-observer tests to ensure Refresh stays on its Flutter screen. Clean CX1 baseline: 16 expanded tests + six route safety tests PASS; seven Flutter analyses and complete Client/Operations/Technical widget suites PASS.

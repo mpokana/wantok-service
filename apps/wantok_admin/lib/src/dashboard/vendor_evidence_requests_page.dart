@@ -10,7 +10,9 @@ class VendorEvidenceRequestsPage extends StatefulWidget {
     required this.caseId,
     required this.applicantName,
     this.loadRequests,
+    this.canModifyRequests = true,
   });
+  final bool canModifyRequests;
   final String caseId, applicantName;
   final Future<(List<Map<String, dynamic>>, List<Map<String, dynamic>>)>
   Function()?
@@ -241,14 +243,15 @@ class _VendorEvidenceRequestsPageState
                                 ),
                               ),
                               const SizedBox(height: 9),
-                              OutlinedButton(
-                                onPressed: _busy == null
-                                    ? () => _request(check['id'].toString())
-                                    : null,
-                                child: const Text(
-                                  'Request evidence (metadata)',
+                              if (widget.canModifyRequests)
+                                OutlinedButton(
+                                  onPressed: _busy == null
+                                      ? () => _request(check['id'].toString())
+                                      : null,
+                                  child: const Text(
+                                    'Request evidence (metadata)',
+                                  ),
                                 ),
-                              ),
                             ],
                           ),
                         ),
@@ -275,10 +278,11 @@ class _VendorEvidenceRequestsPageState
                           ),
                           isThreeLine: true,
                           trailing:
-                              const {
-                                'requested',
-                                'acknowledged',
-                              }.contains(request['status'])
+                              widget.canModifyRequests &&
+                                  const {
+                                    'requested',
+                                    'acknowledged',
+                                  }.contains(request['status'])
                               ? TextButton(
                                   onPressed: _busy == null
                                       ? () => _cancel(request['id'].toString())
