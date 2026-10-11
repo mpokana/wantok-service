@@ -24,7 +24,9 @@ Existing Phase 2E immutable policy drafts, revisions, preview, submission, indep
 - Baseline: 49 pgTAP files / 937 assertions PASS.
 - E6A: 50 pgTAP files / **973 assertions PASS**, including the new 33-check negative-access suite.
 - Operations: static analysis clean, 34 Flutter widget tests PASS including scoped read-only control at 390px and existing 390/900/1440px policy tests.
-- Evidence scanner/custody Node regression **101/101 PASS**. Full Flutter check performed 7 analyses and Client/Operations test stages; Technical Control testing hit an existing Windows lock on `apps/wantok_tech/build/unit_test_assets` (no forced delete). The original `ProgramFiles(x86)` variable was absent in the remote process and was corrected **process-locally** for the retry. Run an isolated QA checkout to close the Technical regression without disturbing the active files. Do not infer runtime or security certification from source tests.
+- Evidence scanner/custody Node regression **101/101 PASS**. The direct full Flutter run encountered the existing Windows lock on `apps/wantok_tech/build/unit_test_assets` (no forced deletion). Remote process `ProgramFiles(x86)` environment was temporarily corrected only within the session.
+- Isolated detached checkout `D:\Wantok_E6A_Independent_QA_20261011` at `e6c8594` passed **all 7 analyses, 122 Client, 34 Operations and 12 Technical widget tests**. This is source regression, not a live signed-in multi-staff browser or production security acceptance.
+- GitHub branch `feature/flutter-platform-v1` was verified at commit `e6c8594f3b08cb6c01281a95f17a03051130f5dc`. Locally built and verified versioned source archive `.wantok/releases/wantok-vps-e6c8594f3b08.tar.gz` (64 migrations, 11,688,559 bytes, SHA-256 `121f1242314043b43a7e304a50761813dfbf30ee8f4f6061e0892f5706beca2f`). No deployment and no production approval.
 - No external signing, restore drill, independent penetration test or signed-in multi-staff browser acceptance yet.
 
 ## Dependency-safe next steps

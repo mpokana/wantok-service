@@ -7,7 +7,8 @@
 - [x] Add isolated country/subdivision/category/expiry staff duty grants; deny unauthorised self-provisioning and grant administration; preserve existing roles and database content.
 - [x] Replace Phase 2E broad administrator policy access with RLS and server-checked author/reviewer duty scopes, explicit COI recusal and independent review; existing draft/revision state machine remains non-operative.
 - [x] Add restricted scoped-compliance entry in Operations without admitting its officers to full administrator menus; preserve Client and Technical applications.
-- [x] Local migration applied; database 50/973 PASS; Operations analysis clean and 34 tests PASS.
+- [x] Local migrations applied; database 50/973 PASS, Node evidence 101/101 PASS; Operations analysis clean, 34 widgets PASS.
+- [x] Detached isolated checkout at `e6c8594` passed all 7 Flutter analyses, 122 Client / 34 Operations / 12 Technical widgets without disturbing the locked live Technical build folder. Source release `wantok-vps-e6c8594f3b08.tar.gz` verified (64 migrations, SHA-256 recorded in E6 handover). Feature commit `e6c8594` matched the remote GitHub branch after normal fast-forward push; **not deployed to VM**.
 - [ ] E6 remaining: vendor intake/verifications/evidence/revocation scoped RPCs and case-bound RLS; approved role provisioning and additional COI/independence rules; signed-in multi-user/browser negative tests; full cross-app regression and package verification.
 - [ ] E6 migration of legacy admin staff to explicit scopes requires authorised provisioning. **No automatic all-country grandfathering.** No uploaded IDs, final KYC, vendor activation or VM deployment.
 - Detail: `docs/E6_SCOPED_OPERATIONS_POLICY_DUTIES_20261011.md`.
