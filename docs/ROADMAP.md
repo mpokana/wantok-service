@@ -2,6 +2,15 @@
 
 **Updated:** 2026-10-11
 
+## CX1 — Authenticated Saved and Inbox/Track usability (11 October)
+
+- [x] Signed-in real Client Web Account → Saved displayed the previously saved QA provider; no add/remove action. Category-first Specialist Services → Morobe → Lae and provider detail were already accepted.
+- [x] Add accessible Refresh Inbox and Refresh activity in the existing enterprise green headers, with guarded read-only reloads on mobile and desktop. Six new focused widget cases plus the complete seven-analysis Flutter regression PASS.
+- [x] Promote matching Client Web build to 3000 and Client staging 3300 with full independent SHA-verified recovery copies; keep Technical 3100 and Operations 3200 unchanged.
+- [x] Deploy matching offline-demo Android emulator build **4009** in place (adb install -r Success, firstInstallTime unchanged, app launched). SHA-256 E6E529939F6F44D938BD98F94DDF5CA57C72288B7D63081B047576DBF08DB06F, APK D:\Wantok_Project_Backups\wantok-client-cx1-inbox-track-android-preview-4009-20261011.apk. This is not signed-in Android or physical HONOR acceptance.
+- [ ] Verify post-browser-reload Saved account collection and actual signed-in Inbox, Track, Wallet and Wantok Agent views. Input was blocked after the reload, so those live gates remain OPEN.
+- [ ] Physical HONOR, signed-in Android, media CRUD and six inactive categories' distinct PNG/Pacific photo approvals. CX1 IN PROGRESS; T2.4 DEFERRED.
+
 ## CX1 — Saved read-only Web usability / Android parity (11 October)
 
 - [x] Add **Refresh saved items** toolbar button in authenticated Account → Saved page, preserving original pull-to-refresh and Retry and all existing bookmark write permissions. Repeated overlapping refresh requests are suppressed.

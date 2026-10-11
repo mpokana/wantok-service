@@ -35,6 +35,7 @@ class _MessagesPageState extends State<MessagesPage> {
 
   late Future<_InboxData> _future;
   InboxCategory _category = InboxCategory.services;
+  bool _reloading = false;
 
   @override
   void initState() {
@@ -71,11 +72,17 @@ class _MessagesPageState extends State<MessagesPage> {
   }
 
   Future<void> _reload() async {
+    if (_reloading) return;
     final next = _loadInbox();
     setState(() {
+      _reloading = true;
       _future = next;
     });
-    await next;
+    try {
+      await next;
+    } finally {
+      if (mounted) setState(() => _reloading = false);
+    }
   }
 
   Future<void> _openServiceConversation(Map<String, dynamic> row) async {
@@ -221,7 +228,23 @@ class _MessagesPageState extends State<MessagesPage> {
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(14, 10, 14, 28),
             children: [
-              const _InboxHeader(),
+              Stack(
+                children: [
+                  const _InboxHeader(),
+                  Positioned(
+                    top: 14,
+                    right: 14,
+                    child: IconButton(
+                      tooltip: 'Refresh Inbox',
+                      onPressed: _reloading ? null : _reload,
+                      icon: const Icon(
+                        Icons.refresh_rounded,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               if (WantokSmokeData.enabled)
                 const SmokePreviewSection(
                   scene: SmokeScene.inbox,

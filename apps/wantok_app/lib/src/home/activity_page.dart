@@ -28,6 +28,7 @@ class _ActivityPageState extends State<ActivityPage> {
   static const _experience = ClientExperienceRepository();
   late Future<List<Map<String, dynamic>>> _future;
   String? _busyId;
+  bool _refreshing = false;
 
   @override
   void initState() {
@@ -36,14 +37,18 @@ class _ActivityPageState extends State<ActivityPage> {
   }
 
   Future<void> _refresh() async {
+    if (_refreshing) return;
     final next = (widget.loadReservations ?? _repository.loadMyReservations)();
     setState(() {
+      _refreshing = true;
       _future = next;
     });
     try {
       await next;
     } catch (_) {
       // The FutureBuilder presents the retryable error state.
+    } finally {
+      if (mounted) setState(() => _refreshing = false);
     }
   }
 
@@ -185,7 +190,10 @@ class _ActivityPageState extends State<ActivityPage> {
             return ListView(
               padding: const EdgeInsets.all(20),
               children: [
-                const _TrackHeader(),
+                _TrackRefreshHeader(
+                  onRefresh: _refresh,
+                  enabled: !_refreshing && _busyId == null,
+                ),
                 const SizedBox(height: 12),
                 if (widget.demoMode)
                   const _OfflineTrackNotice()
@@ -218,7 +226,10 @@ class _ActivityPageState extends State<ActivityPage> {
             return ListView(
               padding: const EdgeInsets.fromLTRB(14, 10, 14, 28),
               children: [
-                const _TrackHeader(),
+                _TrackRefreshHeader(
+                  onRefresh: _refresh,
+                  enabled: !_refreshing && _busyId == null,
+                ),
                 const SizedBox(height: 12),
                 if (widget.demoMode)
                   const _OfflineTrackNotice()
@@ -270,7 +281,12 @@ class _ActivityPageState extends State<ActivityPage> {
             itemCount: entries.length + 2 + (WantokSmokeData.enabled ? 1 : 0),
             separatorBuilder: (_, _) => const SizedBox(height: 11),
             itemBuilder: (context, index) {
-              if (index == 0) return const _TrackHeader();
+              if (index == 0) {
+                return _TrackRefreshHeader(
+                  onRefresh: _refresh,
+                  enabled: !_refreshing && _busyId == null,
+                );
+              }
               if (index == 1) {
                 return widget.demoMode
                     ? const _OfflineTrackNotice()
@@ -954,6 +970,29 @@ class _TrackSectionHeader extends StatelessWidget {
       ),
     );
   }
+}
+
+/// A non-transactional reload affordance for desktop as well as phones.
+class _TrackRefreshHeader extends StatelessWidget {
+  const _TrackRefreshHeader({required this.onRefresh, required this.enabled});
+  final Future<void> Function() onRefresh;
+  final bool enabled;
+
+  @override
+  Widget build(BuildContext context) => Stack(
+    children: [
+      const _TrackHeader(),
+      Positioned(
+        top: 14,
+        right: 14,
+        child: IconButton(
+          tooltip: 'Refresh activity',
+          onPressed: enabled ? onRefresh : null,
+          icon: const Icon(Icons.refresh_rounded, color: Colors.white),
+        ),
+      ),
+    ],
+  );
 }
 
 class _TrackHeader extends StatelessWidget {

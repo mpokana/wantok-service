@@ -4,6 +4,14 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 11 October CX1 — Live Saved list and read-only Inbox/Track refresh (LATEST)
+
+- Signed-in Client Web at 3000 opened My Settings → Account and profile → Saved. The existing Wantok QA Plumbing Services entry was visible in the actual account collection. No bookmark was added/removed or any booking/payment/review/message submitted. Private screenshot is retained only in the ignored .wantok directory. The previously accepted Specialist Services → Morobe → Lae category-first discovery remains PASS. Hard reload later returned the in-memory route to Home; further browser input was blocked, so post-reload Saved is not yet accepted.
+- New Refresh Inbox and Refresh activity header controls are implemented for Web and Android using the existing owner-scoped, read-only loaders. Concurrent requests are guarded; Track is disabled during an existing booking/review action. No database, permission or payment rail changes.
+- Six focused responsive widget tests PASS at 390px/1440px and failure recovery. Final isolated full Flutter regression PASS across seven analyses and all Client/Operations/Technical suites. Client Web deployed on 3000 and staging 3300, hash AB18B9EB8F0733482B396E3C122EB0B726AB9CF2823A79458B0F34AB9178C51D, with original release backed up under D:\Wantok_Project_Backups\wantok-client-web-pre-inbox-track-refresh-20261011. Technical 3100, Operations 3200 and Technical staging 3400 unchanged.
+- **Matching Android offline-demo PASS:** x64 APK build 4009 installed over 4008 with adb install -r Success. SHA-256 E6E529939F6F44D938BD98F94DDF5CA57C72288B7D63081B047576DBF08DB06F, saved at D:\Wantok_Project_Backups\wantok-client-cx1-inbox-track-android-preview-4009-20261011.apk. Existing emulator firstInstallTime 2026-10-05 23:44:14 unchanged and launch PASS; no user data wipe, live payment or booking. Signed-in Android and physical HONOR are separately OPEN.
+- Other real browser journeys, signed-in Android, HONOR and six inactive category photographs remain pending. Details: docs/CX1_LIVE_SAVED_INBOX_TRACK_20261011.md. CX1 IN PROGRESS; T2.4 DEFERRED.
+
 ## 11 October CX1 — Saved desktop refresh control (LATEST)
 
 - **Web Client release PASS:** a visible, accessible **Refresh saved items** AppBar control is implemented for the authenticated Account → Saved page. It invokes only the existing `ClientExperienceRepository.loadSavedItems` read under Supabase RLS; the existing bookmark/remove action is **not** invoked, and the async refresh is guarded against repeated overlapping calls. The original pull-to-refresh and Retry remain supported. No schema or role changes.

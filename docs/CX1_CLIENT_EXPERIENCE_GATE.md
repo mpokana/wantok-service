@@ -5,6 +5,16 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## 11 October — Actual signed-in Saved list PASS; Inbox/Track read-only refresh source/deploy PASS
+
+LIVE AUTHENTICATED SAVED LIST PASS: On EAGLT02 Client Web 3000, opened My Settings → Account and profile → Saved and observed the existing Wantok QA Plumbing Services provider bookmark in the list. Did not toggle/remove it. Evidence .wantok/cx1-live-saved-readonly-20261011.png is Git-ignored. A hard reload later returned to Home; further UI input was blocked by safety checks, so cross-reload persistence and actual Inbox/Track/Wallet/Agent screen acceptance are NOT claimed.
+
+WEB/QA PASS: Added Refresh Inbox and Refresh activity to existing headers, with owner-scoped reads, concurrency guards, responsive 390px/1440px layouts and six new passing tests, including error recovery. Final seven analyses and complete Client/Operations/Technical tests PASS. Client 3000 + staging 3300 safely deployed JS SHA256 AB18B9EB8F0733482B396E3C122EB0B726AB9CF2823A79458B0F34AB9178C51D with recovery backups. No new database migrations or transaction writes. Details: docs/CX1_LIVE_SAVED_INBOX_TRACK_20261011.md.
+
+**ANDROID 4009 PASS:** Matching offline-demo x64 APK versionCode 4009 installed in place via adb install -r Success, original first-install timestamp retained, app launched; backup D:\Wantok_Project_Backups\wantok-client-cx1-inbox-track-android-preview-4009-20261011.apk, SHA-256 E6E529939F6F44D938BD98F94DDF5CA57C72288B7D63081B047576DBF08DB06F. This is not physical HONOR or a signed-in payment/customer workflow acceptance.
+
+CX1 remains IN PROGRESS; T2.4 remains DEFERRED.
+
 ## 11 October — Saved refresh control on Web (latest deployment)
 
 **RELEASE / TEST PASS:** Account → Saved has a visible **Refresh saved items** action (desktop and phone) which reads under the current authenticated user's RLS using the existing Saved repository. It does not trigger Saved/remove writes, and avoids concurrent reloads. **Six focused widget tests PASS**, including mobile+desktop refresh plus empty and network Retry. The isolated complete Flutter test script passes all 7 analyses and the full Client, Operations and Technical widget suites. Client Web `:3000` and Client staging `:3300` updated with a verified release hash `2DE1432750358A432FA32FCDCDC71DB03534B12A95BD162547EEC5C50C507033`; rollback copy retained. Technical `:3100` and Operations `:3200` not modified.
