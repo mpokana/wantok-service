@@ -32,7 +32,7 @@ void main() {
     createdAt: null,
   );
 
-  for (final width in [390.0, 1240.0]) {
+  for (final width in [320.0, 390.0, 1240.0]) {
     testWidgets(
       'CX1 Saved shows previously saved provider read-only at $width',
       (tester) async {
@@ -52,7 +52,7 @@ void main() {
     );
   }
 
-  for (final width in [390.0, 1240.0]) {
+  for (final width in [320.0, 390.0, 1240.0]) {
     testWidgets(
       'CX1 Saved toolbar refresh updates read-only results at $width',
       (tester) async {

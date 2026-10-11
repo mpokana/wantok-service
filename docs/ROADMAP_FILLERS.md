@@ -20,6 +20,10 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-11-14 — CX1 safe Refresh navigation at narrow widths
+
+**Status:** Implemented automated test expansion only. All three labelled Refresh buttons now have explicit tests at 320px as well as larger devices; six 320/1440px observer tests verify that centre taps trigger a second read without navigating to another Flutter route. Isolated 22 focused tests PASS; complete Flutter analyses/widget regression PASS, including a second combined E6A/CX1 integration worktree (132 Client/34 Operations/12 Technical tests). Five localhost endpoints, Web parity and emulator 4010 reverified. No live signed-in Chrome button click accepted (the dedicated Client window lost ownership/focus), no Web/Android redeployment or account data change. CX1 OPEN; T2.4 DEFERRED. See `docs/CX1_REFRESH_ROUTE_SAFETY_QA_20261011.md`.
+
 ## FILLER-2026-10-11-13 — E6A policy jurisdiction duty isolation
 
 **Status:** Partial E6 implementation on EAGLT02, **not** total E6 completion or production approval. Explicit scoped country/province/category `policy_author` and `policy_reviewer` checked by database RLS and RPC; administrative policy reviewer must be different from author and not named recusant. Duty grants are issued only by trusted `service_role`, not self-issued, and expire/revoke; no existing admin inherits country-wide rights. Additional `evidence_officer`, `final_approver`, `safety_investigator` duty names are reserved but **do not yet authorise** evidence access or clearance. Separate read-only scoped Operations workspace avoids full administrator shell. Locally tested 50 SQL/973 assertions and 34 Operations widgets; broader legacy-case scoping and E7 onward remain outstanding. No online VM usage, identity uploads, KYC issuance or activation. See `docs/E6_SCOPED_OPERATIONS_POLICY_DUTIES_20261011.md`.

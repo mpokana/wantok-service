@@ -4,6 +4,13 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 11 October — CX1 narrow-width and route-safety QA (LATEST)
+
+- **Tests added without application behaviour changes:** 320 px coverage in Saved/Inbox/Track reload tests, plus six focused 320/1440 px NavigatorObserver checks that a refresh reads again without opening another Flutter route. Isolated 16 existing/expanded tests plus six route tests PASS. All seven Flutter analyses and full Client (132), Operations (33), Technical (12) test suites PASS from clean CX1 baseline `735452c`; see `docs/CX1_REFRESH_ROUTE_SAFETY_QA_20261011.md`.
+- **Integrated E6A + CX1 full regression PASS:** clean `D:\\Wantok_CX1_Refresh_E6_Integration_QA_20261011` at E6A `e6c8594` with CX1-only tests; seven analyses, 132 Client, 34 Operations, 12 Technical tests passed. In-place main Technical runner was temporarily blocked by `build/unit_test_assets` Windows lock, not a failed assertion; do not force-delete live build. See detailed QA record.
+- **Local parity reverified:** five HTTP 200 apps; main/staging Client JS SHA `2207D8BBCCC5BE261B7C7A77498F4E801829E0D7B13378F56B61A06F3E3B2E66`; Android emulator build 4010 with original install date. No deployment, database write, payment, booking or VM change.
+- **Chrome acceptance remains OPEN:** a dedicated window was visibly showing Public Services but window ownership/focus changed to a separate Chrome session before any Saved/Inbox/Track click. Do not infer the cause of prior vendor-onboarding misnavigation. Browser and physical HONOR gates remain OPEN; T2.4 deferred; E6 Operations work and unrelated snippets preserved.
+
 ## 11 October — E6A scoped Operations policy permissions (CURRENT CODING STREAM)
 
 - On EAGLT02, `feature/flutter-platform-v1` followed concurrent Client commit `735452c`; the existing parallel CX1 changes and untracked `supabase/snippets/` were preserved.

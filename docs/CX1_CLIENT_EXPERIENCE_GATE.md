@@ -5,6 +5,14 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## 11 October — Narrow Refresh route guard and real browser boundary (LATEST)
+
+**SOURCE/WIDGET PASS:** CX1 320px coverage added to existing Saved/Inbox/Track read-only centre-tap tests. Six new NavigatorObserver cases (320 and 1440px) verify Refresh triggers an existing repository reload but pushes no Flutter navigation route. Isolated 22 focused tests PASS; seven analyses and complete Client (132), Operations (33), Technical (12) widget suites PASS on CX1 baseline. Second isolated full-project check at E6A `e6c8594` plus CX1 tests also PASS: seven analyses, Client 132, Operations 34, Technical 12. The live checkout's Technical runner encountered a Windows `build/unit_test_assets` lock (environment-only), so no forced cleanup was attempted. Existing application source/behaviour and customer data unchanged.
+
+**LOCAL RELEASE PARITY PASS:** repeat `scripts/qa/verify-cx1-local.ps1 -CheckAndroid` exit 0, five ports HTTP 200, bundled Client refresh markers and image parity, emulator versionCode 4010. No Web/Android deployment.
+
+**BROWSER OPEN:** a dedicated Chrome Client app window showed Public Services, but focus/window changed to a separate session before Saved/Inbox/Track navigation or Refresh interactions. No wrong-target click attempted; no signed-in button acceptance claimed, and the original vendor-onboarding misnavigation cause remains unknown. Physical HONOR, signed-in Android and category image/editor approval remain OPEN. `docs/CX1_REFRESH_ROUTE_SAFETY_QA_20261011.md`. CX1 IN PROGRESS; T2.4 DEFERRED.
+
 ## 11 October — Labeled Refresh buttons, centre-hit tests and release (LATEST)
 
 **SOURCE / TEST / WEB DEPLOY PASS:** Saved, Inbox and Track now show **Refresh** text beside their icons, with explicit 96×48 logical-pixel buttons, tooltips and stable widget keys. Their existing read-only loaders, error/Retry UX and safety guards remain unchanged. **12 focused widget tests PASS** using actual button-centre taps at mobile/desktop widths; all seven Flutter analyses plus full Client/Operations/Technical regressions PASS. Web release JS SHA256 `2207D8BBCCC5BE261B7C7A77498F4E801829E0D7B13378F56B61A06F3E3B2E66` deployed to Client 3000 and 3300 with verified rollback copies. No database, vendor, booking, wallet, Saved or support-status mutations.

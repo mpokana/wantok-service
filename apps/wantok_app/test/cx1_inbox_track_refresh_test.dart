@@ -23,7 +23,7 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  for (final width in [390.0, 1440.0]) {
+  for (final width in [320.0, 390.0, 1440.0]) {
     testWidgets('CX1 Inbox toolbar reload is read-only at $width px', (
       tester,
     ) async {

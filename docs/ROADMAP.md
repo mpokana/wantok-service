@@ -2,6 +2,14 @@
 
 **Updated:** 2026-10-11
 
+## CX1 — 320px Refresh navigation regression (11 October; TEST PASS, BROWSER OPEN)
+
+- [x] Add 320px Saved/Inbox/Track click and read-only reload cases and six 320/1440px route-observer tests to ensure Refresh stays on its Flutter screen. Clean CX1 baseline: 16 expanded tests + six route safety tests PASS; seven Flutter analyses and complete Client/Operations/Technical widget suites PASS.
+- [x] Re-test against E6A scoped Operations RBAC in a fresh worktree: seven analyses, 132 Client, 34 Operations, 12 Technical widget tests PASS; active checkout Technical temporary-build Windows lock separately documented, no forced clean-up.
+- [x] Repeat read-only local release parity: five HTTP 200 shells, matching main/staging bundles and unchanged shared artwork, existing emulator build 4010. No redeployment or user data mutation.
+- [ ] Authenticate and visibly exercise Saved/Inbox/Track Refresh in an identified Chrome Client window at desktop and narrow sizes; avoid unrelated sessions and speculative root-cause fixes. Signed-in Android, HONOR, category photography and safe Technical image workflows still open. CX1 IN PROGRESS; T2.4 DEFERRED.
+- Evidence: `docs/CX1_REFRESH_ROUTE_SAFETY_QA_20261011.md`.
+
 ## E6A — Country-scoped internal policy duties (11 October; IN PROGRESS)
 
 - [x] Add isolated country/subdivision/category/expiry staff duty grants; deny unauthorised self-provisioning and grant administration; preserve existing roles and database content.
