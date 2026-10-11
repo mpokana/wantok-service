@@ -5,6 +5,14 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## 11 October — CX1G live Web journey checks (LATEST)
+
+**PASS actual signed-in browser:** Track existing completed Specialist Services booking record; Wallet K0.00 preview with no active payment rails; Inbox real Services(0) / Help & support(1) owner-private Open QA request; Wantok Agent landing/capabilities with model AI chat explicitly not connected. No provider messaging, support request, booking, reviews, money or user-data writes.
+
+**SAVED AFTER HARD RELOAD PASS:** Full Chrome reload reset route to Home, then signed-in navigation back through My Settings → Account/profile → Saved again showed the pre-existing QA provider. This is same logged-in browser state after reload, NOT fresh sign-in or cross-device persistence.
+
+**OPEN:** Live toolbar refresh click acceptance. A subsequent attempted Saved toolbar click unexpectedly opened vendor onboarding, with no input or submission; browser input stopped. Inbox/Track live screenshots do not demonstrate refresh buttons despite previously passing widget tests. Do not infer defect cause. Details and private screenshot paths in docs/CX1_WEB_READONLY_ACCEPTANCE_20261011.md. Source, backend and deployment unchanged this pass. Physical HONOR, signed-in Android and inactive-category image work remain open. **CX1 IN PROGRESS; T2.4 DEFERRED.**
+
 ## 11 October — Actual signed-in Saved list PASS; Inbox/Track read-only refresh source/deploy PASS
 
 LIVE AUTHENTICATED SAVED LIST PASS: On EAGLT02 Client Web 3000, opened My Settings → Account and profile → Saved and observed the existing Wantok QA Plumbing Services provider bookmark in the list. Did not toggle/remove it. Evidence .wantok/cx1-live-saved-readonly-20261011.png is Git-ignored. A hard reload later returned to Home; further UI input was blocked by safety checks, so cross-reload persistence and actual Inbox/Track/Wallet/Agent screen acceptance are NOT claimed.

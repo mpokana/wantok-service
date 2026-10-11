@@ -2,6 +2,16 @@
 
 **Updated:** 2026-10-11
 
+## CX1 — Actual signed-in Web read-only journey acceptance (11 October)
+
+- [x] Authenticated live Client Web Track displayed existing completed QA record without editing it.
+- [x] Authenticated live Wallet displayed K0.00 preview with inactive payment rails; no transaction attempted.
+- [x] Authenticated Inbox displayed Services (0) and one previously existing owner-private Open QA help request; no write/reply.
+- [x] Authenticated Wantok Agent showed provider-search and human-help entry points, explicitly **AI chat not connected**; no handoff submitted.
+- [x] Account → Saved reopened after a FULL hard Chrome reload and retained the existing QA provider bookmark. Same-session post-reload visibility PASS, not account logout/login or multi-device persistence.
+- [ ] Browser click acceptance of Saved, Inbox and Track toolbar refresh actions in an isolated/focus-stable window. An attempted Saved toolbar click landed on vendor onboarding; no data was changed and automation was stopped. Do not mark this passed from source/widget tests.
+- [ ] Physical HONOR, signed-in Android, six inactive categories' PNG/Pacific art and actual Technical category-image upload lifecycle. CX1 IN PROGRESS; T2.4 DEFERRED.
+
 ## CX1 — Authenticated Saved and Inbox/Track usability (11 October)
 
 - [x] Signed-in real Client Web Account → Saved displayed the previously saved QA provider; no add/remove action. Category-first Specialist Services → Morobe → Lae and provider detail were already accepted.

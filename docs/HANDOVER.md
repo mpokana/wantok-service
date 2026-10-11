@@ -4,6 +4,13 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 11 October — CX1 live Client Web screens and Saved after reload (LATEST)
+
+- Authenticated read-only Web checks on EAGLT02 Client 3000 PASS for Track (existing completed Specialist Services record), Wallet (K0.00 explicitly preview only), Inbox (Services 0; Help & support 1 existing Open QA request), and Wantok Agent (provider discovery/human help entry points present; AI chat provider NOT connected).
+- Saved remained visible after a full hard Chrome refresh: Home → My Settings → Account and profile → Saved again showed the existing QA provider. This closes SAME-SESSION post-reload Saved listing, not logout/login or multi-device sync. No bookmarks, messages, help requests, bookings, reviews or payments modified.
+- **Acceptance boundary:** attempted click after post-reload Saved unexpectedly navigated to the vendor form. No form input/submission. Browser automation stopped immediately; actual live toolbar refresh clicks for Saved/Inbox/Track remain OPEN even though prior Flutter widget regressions PASSED. Current Inbox/Track screenshots do not establish visible refresh controls.
+- Private screenshots stored only in Git-ignored .wantok, never committed. Details: docs/CX1_WEB_READONLY_ACCEPTANCE_20261011.md. No code/database/deployment changes in this acceptance-only pass. Other vendor work remains untouched. **CX1 IN PROGRESS; T2.4 DEFERRED.**
+
 ## 11 October CX1 — Live Saved list and read-only Inbox/Track refresh (LATEST)
 
 - Signed-in Client Web at 3000 opened My Settings → Account and profile → Saved. The existing Wantok QA Plumbing Services entry was visible in the actual account collection. No bookmark was added/removed or any booking/payment/review/message submitted. Private screenshot is retained only in the ignored .wantok directory. The previously accepted Specialist Services → Morobe → Lae category-first discovery remains PASS. Hard reload later returned the in-memory route to Home; further browser input was blocked, so post-reload Saved is not yet accepted.
