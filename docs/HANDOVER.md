@@ -4,6 +4,16 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 11 October — E6G authenticated HTTP negative acceptance and formal human handover (NEW; E6 OPEN)
+
+- Local E6-only SQL rerun **56 files / 1,139 assertions PASS**, evidence scanner **101/101 PASS**. The full shared 57-file SQL runner is **blocked by an unapplied T2.4-only migration** (`20261011240000`), not an E6 assertion; do not apply another developer's migration unilaterally.
+- Added a **read-only loopback-only Supabase REST test** (`npm run test:e6:auth-local`) which creates two short-lived synthetic signed JWTs but **no accounts/fixtures/SQL writes**, and checks 23 denial/empty RLS/legacy-activation cases. All **23/23 PASS**. No staff provisioned; tokens are not witnessed GoTrue sign-ins.
+- Built formal E6 acceptance runbook `docs/E6G_FORMAL_ACCEPTANCE_RUNBOOK_20261011.md` with ten independently auditable gates (staff verification, dual-person appointment, initial trusted key custody, ISO country/subdivision proof, service taxonomy/legal, conflicts, browser role matrix, legacy RPC review, recovery and owner security release). All remain **BLOCKED** without externally witnessed evidence. ISO OBP and PNG government sources identified for human cross-check, **not auto-loaded** or certified.
+- Kept E7–E12, production release and VM work **closed**; no real people, documents, live settings, provider/service activation or payments changed. Scope strictly EAGLT02 and the shared clean worktree; `supabase/snippets/` preserved.
+- Integrated SQL/Flutter and published GitHub/source package status to be recorded with exact commit after current validation.
+
+---
+
 ## 11 October — E6D–F staff, staged-case and conflict-scoping checkpoint (NEW)
 
 - Added country-authorised two-person **Operations staff duty provisioning**: only independently authorised requesters and different approvers can request/approve bounded category/region duties, with explicit reason and atomic issue/revoke audit. Trusted service-only bootstrap remains sealed from browser and existing admins get no automatic authority.

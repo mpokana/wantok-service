@@ -2,6 +2,14 @@
 
 **Updated:** 2026-10-11
 
+## E6G — Formal acceptance checks (11 October; human sign-off pending)
+
+- [x] E6-only SQL 56 files / 1,139 assertions PASS and evidence 101/101 PASS; combined 57-file SQL runner blocked by separately owned T2.4 migration not yet applied.
+- [x] Added read-only local REST/JWT negative acceptance checks: 23 of 23 passed; zero users or records created.
+- [x] Documented ten formal human witness gates in `docs/E6G_FORMAL_ACCEPTANCE_RUNBOOK_20261011.md`.
+- [ ] Independently verify authority, country codes, conflicts, signed-in user-role scenarios and recovery evidence before closing E6.
+- [ ] Do not advance production deployment or E7 without explicit accepted sign-off.
+
 ## E6D–F — Dual staff approval, staged case isolation & COI (11 October; CODE PASS, FORMAL SIGN-OFF OPEN)
 
 - [x] Separate country-authorised provisioning requester from independent approver and subject; enforce country/subdivision/category, 366-day maximum expiry, audited grant/revoke, pending does not confer authority, no implicit administrator duties.
