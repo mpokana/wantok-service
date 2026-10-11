@@ -1,8 +1,16 @@
 # Wantok Services — Living Handover
 
-**Updated:** 2026-10-11
+**Updated:** 2026-10-12
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
+
+## 12 October — T2.4 scoped Technical Activity audit (SOURCE SECURITY PASS, NO DEPLOY)
+
+- Implemented `list_technical_module_activity` as a distinct **read-only, per-module, 30-record** adapter to existing technical `audit_events` actions. PostgreSQL enforces `module.view` AND `module.logs`; exact technical action/entity pairs and `metadata.module_key` are allowlisted. Only event ID, timestamp and fixed action code returned, with no actor/target/metadata/customer/Operations data.
+- Added typed `TechnicalActivityEvent`, accessible **Technical activity** module card/page, generic fail-closed errors and Refresh. **14 new negative/allowlist pgTAP assertions PASS**; extended isolated `t24-isolated-staging.ps1` runs 3 migrations + **39/39** tests with full rollback/cleanup and checks the shared database remains un-migrated.
+- Isolated full `scripts/flutter/check.ps1` PASS: **7 analyses / 132 Client / 43 Operations / 34 Technical widget tests**; six new activity tests cover responsive UI, permissions, retry and data validation.
+- Shared `npm run db:test` is **NOT GREEN**: E6H 057 and T2.4 090–092 require unapplied migrations. Staging Postgres uses test ownership/ACL grants, not exact production parity; no real GoTrue/PostgREST role acceptance or browser user sign-in.
+- Source-only checkpoint `0064f09`; no local database changes, online VM, central log collector, live worker heartbeat, real job actions, payments or provider changes. `docs/T24_SCOPED_TECHNICAL_ACTIVITY_20261012.md`.
 
 ## 11 October — T2.4 disposable isolated staging QA (SOURCE/TEST PASS; NO LIVE MIGRATION)
 

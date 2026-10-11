@@ -1,6 +1,13 @@
 # Wantok Services — Living Roadmap
 
-**Updated:** 2026-10-11
+**Updated:** 2026-10-12
+
+## T2.4 — Module-scoped Technical Activity audit (12 October; SOURCE QA PASS)
+
+- [x] Reuse `audit_events` safely via a separate, bounded read-only module action-history RPC: explicit `module.view` + `module.logs` PostgreSQL permission, allowlisted action/entity pairs, module-key equality, no actor/target/metadata/customer payload. Distinguish activity from central/container logs.
+- [x] Add typed Technical Activity page with fixed safe labels and read-only Refresh; 6 new widget tests PASS. Updated isolated staging script applies three T2.4 migrations and **39/39** SQL assertions PASS; full seven Flutter analyses / 132 Client / 43 Operations / 34 Technical tests PASS.
+- [ ] Full shared SQL runner is still blocked by separately unapplied E6H 057 and T2.4 090–092 migrations. Exact staging ownership/ACL parity, signed-in API/browser role matrix, audit retention/source-integrity/large-table query review and controlled migration sequencing OPEN. No live deployment, job actions or online VM.
+- [ ] Continue safe central log-source design and real worker-health adapters, then separately approve auditable and idempotent operational job actions. `docs/T24_SCOPED_TECHNICAL_ACTIVITY_20261012.md`.
 
 ## T2.4 — Reproducible isolated staging SQL acceptance (11 October; QA PASS, LIVE MIGRATION OPEN)
 
