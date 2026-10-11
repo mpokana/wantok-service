@@ -20,6 +20,10 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-11-16 — CX1 defer category photo upload until Save
+
+**Status:** Technical Control UI patch/source QA PASS, live Web acceptance OPEN. Image selection now previews in the dialog and stays client-side until confirmed **Save category**. Cancel does not upload or edit; the existing storage/RPC permission checks still govern saves. Four synthetic photo tests PASS and full isolated Flutter regression PASS, including merged E6B compatibility (132 Client / 37 Operations / 16 Technical widget tests). Basic JPG/PNG/WebP signature and 3 MiB size checks do not constitute security scanning or licensing approval. A category SQL save failing after successful storage upload can still leave unused media; server-side recovery requires separate design. All six newly seeded categories remain inactive. No real image upload, publication, Web/Android deployment or VM access. `docs/CX1_CATEGORY_PHOTO_STAGING_20261011.md`.
+
 ## FILLER-2026-10-11-15 — E6B scoped case and evidence duties
 
 **Status:** Partial E6 security checkpoint only. Explicit `case_reviewer` and `evidence_officer` staff duties require trusted per-case country, ISO subdivision and service-family classification with verified region registry; applicant free-text regions cannot be guessed. Internal intake/verification/evidence metadata RLS and RPCs now reject broad-admin access without a scoped duty, prevent country/province/category leakage and preserve original two-person procedural checks. Operations non-admin shows only authorised case and policy tabs; inappropriate actions hidden, server authority enforced. SQL 51/1,008 passed and Operations 37/37 widget tests passed; remaining clearance, legacy provider/staged routes, staff governance and legal/browser gates leave E6 OPEN. See `docs/E6B_CASE_JURISDICTION_SCOPED_REVIEW_20261011.md`.

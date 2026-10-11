@@ -2,6 +2,13 @@
 
 **Updated:** 2026-10-11
 
+## CX1 — Safe Technical category image staging (11 October; CODE PASS, BROWSER OPEN)
+
+- [x] Retain selected image locally until explicit **Save category**, so Cancel does not orphan a storage upload; show selected preview and validate image file extension, header and 3 MiB maximum before initiating the existing authorised upload.
+- [x] Test cancellation (zero storage/SQL calls), exactly-once upload-and-save of an inactive draft, unsupported extension and spoofed signature with injected callbacks. Full isolated E6B/CX1 integration PASS: seven Flutter analyses and **132 Client / 37 Operations / 16 Technical** suites.
+- [ ] Actual signed-in Technical browser select/cancel/upload/replace, Web/Android photo parity and the six distinct editorially approved draft photographs; do not activate categories. Server-side cleanup for upload-success/save-failure remains an unapproved hardening task.
+- [ ] Signed-in Client Refresh browser acceptance and physical HONOR remain open; T2.4 Diagnostics, Logs and Jobs DEFERRED. Evidence: `docs/CX1_CATEGORY_PHOTO_STAGING_20261011.md`.
+
 ## E6B — Case-jurisdiction, verification and evidence metadata (11 October; CODE PASS, E6 OPEN)
 
 - [x] Maintain verified jurisdiction and service-family classification separately from applicant free-text region, with trusted registry, service-role-only changes and durable case events. **No automatic old-case classification.**

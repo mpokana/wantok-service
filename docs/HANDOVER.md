@@ -4,6 +4,13 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 11 October — CX1 Technical category photograph staging (SOURCE/TEST CHECKPOINT)
+
+- **Safer editor behaviour:** newly selected category image bytes stay local in Technical Control until **Save category**. Cancel now discards selection without upload; type/header/3 MiB size checks and preview added. Existing Technical admin storage/RPC security paths unchanged. No published category or customer data changed.
+- **CX1 widget QA:** four new synthetic image tests PASS (cancel zero writes, save uploads once for inactive draft and carries the resulting path, unsupported/forged image rejected); clean isolated Flutter seven analyses and 132 Client / 34 Operations / 16 Technical test suites PASS based on CX1 commit `6611556`. Final E6B merged-branch integration QA will be recorded separately.
+- **E6B/CX1 integration PASS:** clean `D:\\Wantok_CX1_Image_E6B_Integration_QA_20261011` at E6B `f620c7b` plus CX1-only Technical changes: seven analyses, **132 Client / 37 Operations / 16 Technical widget tests**, all PASS. No production/staging deployment.
+- **Boundary:** this does not make storage upload+SQL update atomic; a save failure after upload can still create an orphan. No browser image-save sign-off, photo approvals, deployments, Android install or VM access. Six new draft families remain inactive. See `docs/CX1_CATEGORY_PHOTO_STAGING_20261011.md`. **CX1 IN PROGRESS; T2.4 DEFERRED.**
+
 ## 11 October — E6B scoped vendor intake & evidence controls (NEW SECURITY CHECKPOINT)
 
 - Added country/subdivision/category **verified case classification**, independently maintained region and service-family registries (service-role-only), and explicit **case_reviewer** and **evidence_officer** duties, without backfilling applicant free-text regions. Unclassified, incorrectly categorised, invalid-region and unassigned-admin access is denied.

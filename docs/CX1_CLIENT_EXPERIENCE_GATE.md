@@ -5,6 +5,12 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## 11 October — Technical category photo upload-on-save staging (SOURCE/QA PASS)
+
+**SOURCE BEHAVIOUR:** The category editor now retains a selected photo locally until **Save category**; Cancel has zero storage/database side effects. Existing authorised upload and server-guarded category write paths are used after Save. JPEG/PNG/WebP basic signatures and 3 MiB size limits are checked before staging. A failure *after* upload may still leave an unused object; no atomic rollback/garbage collector is claimed.
+
+**ISOLATED QA PASS:** four synthetic selection/cancel/save/type tests, seven Flutter analyses and complete **132 Client / 34 Operations / 16 Technical** widget suites PASS in `D:\Wantok_CX1_Image_Stage_QA_20261011`; subsequent clean E6B/CX1 combined QA also PASS, seven analyses and **132 Client / 37 Operations / 16 Technical** tests at E6B `f620c7b`. No real file upload, database write, APK update, Web deployment or VM changes. Actual browser upload/replace and six inactive-category editorial photographs remain OPEN, as do signed-in Chrome Refresh click acceptance, Android/HONOR. See `docs/CX1_CATEGORY_PHOTO_STAGING_20261011.md`. **CX1 IN PROGRESS; T2.4 DEFERRED.**
+
 ## 11 October — Narrow Refresh route guard and real browser boundary (LATEST)
 
 **SOURCE/WIDGET PASS:** CX1 320px coverage added to existing Saved/Inbox/Track read-only centre-tap tests. Six new NavigatorObserver cases (320 and 1440px) verify Refresh triggers an existing repository reload but pushes no Flutter navigation route. Isolated 22 focused tests PASS; seven analyses and complete Client (132), Operations (33), Technical (12) widget suites PASS on CX1 baseline. Second isolated full-project check at E6A `e6c8594` plus CX1 tests also PASS: seven analyses, Client 132, Operations 34, Technical 12. The live checkout's Technical runner encountered a Windows `build/unit_test_assets` lock (environment-only), so no forced cleanup was attempted. Existing application source/behaviour and customer data unchanged.

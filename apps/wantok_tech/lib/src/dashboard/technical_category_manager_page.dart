@@ -1,14 +1,38 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+// Test seam for local photo selection; real users still use ImagePicker.
+typedef CategoryPickedPicture = ({String name, Uint8List bytes});
+
 /// Editorial control lives in Technical only. RPCs verify the authenticated
 /// Technical Platform Administrator even when UI routes are opened directly.
 class TechnicalCategoryManagerPage extends StatefulWidget {
-  const TechnicalCategoryManagerPage({super.key, this.loadCategories});
+  const TechnicalCategoryManagerPage({
+    super.key,
+    this.loadCategories,
+    this.pickCategoryPicture,
+    this.uploadCategoryPicture,
+    this.saveCategory,
+  });
 
   final Future<List<ManagedServiceCategory>> Function()? loadCategories;
+  // Injected only by QA; production retains Technical repository authorisation.
+  final Future<CategoryPickedPicture?> Function()? pickCategoryPicture;
+  final Future<String> Function({
+    required String slug,
+    required String extension,
+    required Uint8List bytes,
+  })?
+  uploadCategoryPicture;
+  final Future<void> Function(
+    Map<String, dynamic> fields,
+    ManagedServiceCategory? existing,
+  )?
+  saveCategory;
 
   @override
   State<TechnicalCategoryManagerPage> createState() =>
@@ -42,14 +66,38 @@ class _TechnicalCategoryManagerPageState
 
   Future<void> _edit(ManagedServiceCategory? item) async {
     if (_busy) return;
-    final fields = await showDialog<Map<String, dynamic>>(
+    final selection = await showDialog<_CategoryEditorResult>(
       context: context,
-      builder: (_) => _CategoryEditorDialog(initial: item),
+      builder: (_) => _CategoryEditorDialog(
+        initial: item,
+        pickPicture: widget.pickCategoryPicture,
+      ),
     );
-    if (fields == null || !mounted) return;
+    if (selection == null || !mounted) return;
     setState(() => _busy = true);
     try {
-      await _repo.save(fields, existing: item);
+      final fields = selection.fields;
+      if (selection.bytes != null) {
+        // No storage write occurs while the editor is open. Cancellation
+        // discards the local selection without leaving unused media objects.
+        final path = widget.uploadCategoryPicture == null
+            ? await _repo.uploadPicture(
+                slug: fields['slug'] as String,
+                extension: selection.extension!,
+                bytes: selection.bytes!,
+              )
+            : await widget.uploadCategoryPicture!(
+                slug: fields['slug'] as String,
+                extension: selection.extension!,
+                bytes: selection.bytes!,
+              );
+        fields['image_path'] = path;
+      }
+      if (widget.saveCategory == null) {
+        await _repo.save(fields, existing: item);
+      } else {
+        await widget.saveCategory!(fields, item);
+      }
       _notice(
         item == null
             ? 'Category added as configured.'
@@ -400,9 +448,18 @@ class _TechnicalCategoryManagerPageState
   );
 }
 
+class _CategoryEditorResult {
+  const _CategoryEditorResult(this.fields, this.bytes, this.extension);
+
+  final Map<String, dynamic> fields;
+  final Uint8List? bytes;
+  final String? extension;
+}
+
 class _CategoryEditorDialog extends StatefulWidget {
-  const _CategoryEditorDialog({required this.initial});
+  const _CategoryEditorDialog({required this.initial, this.pickPicture});
   final ManagedServiceCategory? initial;
+  final Future<CategoryPickedPicture?> Function()? pickPicture;
 
   @override
   State<_CategoryEditorDialog> createState() => _CategoryEditorDialogState();
@@ -423,7 +480,9 @@ class _CategoryEditorDialogState extends State<_CategoryEditorDialog> {
   bool _home = false;
   bool _services = false;
   String? _path;
-  bool _uploading = false;
+  Uint8List? _selectedBytes;
+  String? _selectedExtension;
+  bool _selecting = false;
   String? _error;
 
   @override
@@ -446,38 +505,74 @@ class _CategoryEditorDialogState extends State<_CategoryEditorDialog> {
     super.dispose();
   }
 
+  // Check the actual file signature as well as the extension. Upload
+  // validation on the server remains the authoritative security boundary.
+  bool _isImage(Uint8List bytes, String extension) {
+    if (extension == 'jpg') {
+      return bytes.length >= 3 &&
+          bytes[0] == 0xff &&
+          bytes[1] == 0xd8 &&
+          bytes[2] == 0xff;
+    }
+    if (extension == 'png') {
+      const header = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+      return bytes.length >= header.length &&
+          List.generate(
+            header.length,
+            (i) => bytes[i] == header[i],
+          ).every((matched) => matched);
+    }
+    if (extension == 'webp') {
+      return bytes.length >= 12 &&
+          String.fromCharCodes(bytes.sublist(0, 4)) == 'RIFF' &&
+          String.fromCharCodes(bytes.sublist(8, 12)) == 'WEBP';
+    }
+    return false;
+  }
+
   Future<void> _pickPicture() async {
     final slug = _slug.text.trim().toLowerCase();
     if (!RegExp(r'^[a-z0-9]+(?:-[a-z0-9]+)*$').hasMatch(slug)) {
       setState(() => _error = 'Enter a valid category slug first.');
       return;
     }
-    final file = await ImagePicker().pickImage(source: ImageSource.gallery);
-    if (file == null) return;
-    final extension = file.name.split('.').last.toLowerCase();
-    if (!const {'jpg', 'png', 'webp'}.contains(extension)) {
-      setState(() => _error = 'Choose JPG, PNG or WebP.');
-      return;
-    }
-    setState(() => _uploading = true);
+    setState(() => _selecting = true);
     try {
-      final bytes = await file.readAsBytes();
-      final path = await const BrandingRepository().upload(
-        slug: slug,
-        slot: 'cardImage',
-        extension: extension,
-        bytes: bytes,
-      );
-      if (mounted) {
-        setState(() {
-          _path = path;
-          _error = null;
-        });
+      final CategoryPickedPicture? picture;
+      if (widget.pickPicture == null) {
+        final file = await ImagePicker().pickImage(source: ImageSource.gallery);
+        picture = file == null
+            ? null
+            : (name: file.name, bytes: await file.readAsBytes());
+      } else {
+        picture = await widget.pickPicture!();
       }
+      if (picture == null || !mounted) return;
+      final rawExtension = picture.name.split('.').last.toLowerCase();
+      final extension = rawExtension == 'jpeg' ? 'jpg' : rawExtension;
+      if (!const {'jpg', 'png', 'webp'}.contains(extension)) {
+        setState(() => _error = 'Choose JPG, PNG or WebP.');
+        return;
+      }
+      final bytes = picture.bytes;
+      if (!mounted) return;
+      if (bytes.isEmpty || bytes.length > 3 * 1024 * 1024) {
+        setState(() => _error = 'Choose a picture under 3 MB.');
+        return;
+      }
+      if (!_isImage(bytes, extension)) {
+        setState(() => _error = 'The picture does not match its image type.');
+        return;
+      }
+      setState(() {
+        _selectedBytes = bytes;
+        _selectedExtension = extension;
+        _error = null;
+      });
     } catch (error) {
-      if (mounted) setState(() => _error = 'Image not uploaded: $error');
+      if (mounted) setState(() => _error = 'Could not read picture: $error');
     } finally {
-      if (mounted) setState(() => _uploading = false);
+      if (mounted) setState(() => _selecting = false);
     }
   }
 
@@ -493,18 +588,24 @@ class _CategoryEditorDialogState extends State<_CategoryEditorDialog> {
       setState(() => _error = 'Valid slug, name and order are required.');
       return;
     }
-    Navigator.of(context).pop(<String, dynamic>{
-      'slug': slug,
-      'name': name,
-      'description': _description.text.trim(),
-      'vertical': _vertical,
-      'booking_mode': _booking,
-      'is_active': _active,
-      'show_on_home': _home,
-      'show_in_services': _services,
-      'sort_order': order,
-      'image_path': _path,
-    });
+    Navigator.of(context).pop(
+      _CategoryEditorResult(
+        <String, dynamic>{
+          'slug': slug,
+          'name': name,
+          'description': _description.text.trim(),
+          'vertical': _vertical,
+          'booking_mode': _booking,
+          'is_active': _active,
+          'show_on_home': _home,
+          'show_in_services': _services,
+          'sort_order': order,
+          'image_path': _path,
+        },
+        _selectedBytes,
+        _selectedExtension,
+      ),
+    );
   }
 
   @override
@@ -518,8 +619,9 @@ class _CategoryEditorDialogState extends State<_CategoryEditorDialog> {
           children: [
             const Text(
               'Categories are shared between app and Web. New slugs '
-              'cannot be changed after creation. Upload a unique category photo '
-              'before enabling a new service.',
+              'cannot be changed after creation. Select a unique category photo '
+              'and confirm Save category to upload it. Cancel discards the selection. '
+              'Do not enable a new service before editorial approval.',
             ),
             const SizedBox(height: 12),
             TextField(
@@ -596,19 +698,29 @@ class _CategoryEditorDialogState extends State<_CategoryEditorDialog> {
               onChanged: (v) => setState(() => _services = v),
             ),
             OutlinedButton.icon(
-              onPressed: _uploading ? null : _pickPicture,
+              onPressed: _selecting ? null : _pickPicture,
               icon: const Icon(Icons.add_photo_alternate_outlined),
               label: Text(
-                _uploading
-                    ? 'Uploading…'
-                    : _path == null
-                    ? 'Upload category picture'
-                    : 'Replace picture',
+                _selecting
+                    ? 'Reading picture…'
+                    : _selectedBytes != null || _path != null
+                    ? 'Replace selected picture'
+                    : 'Choose category picture',
               ),
             ),
-            if (_path != null) ...[
+            if (_selectedBytes != null) ...[
+              const Text(
+                'Selected picture — not uploaded until Save category.',
+                key: ValueKey('category-picture-staged'),
+                style: TextStyle(fontSize: 12),
+              ),
+              SizedBox(
+                height: 105,
+                child: Image.memory(_selectedBytes!, fit: BoxFit.contain),
+              ),
+            ] else if (_path != null) ...[
               Text(
-                'Uploaded: $_path',
+                'Current picture: $_path',
                 maxLines: 2,
                 style: const TextStyle(fontSize: 11),
               ),
@@ -628,11 +740,11 @@ class _CategoryEditorDialogState extends State<_CategoryEditorDialog> {
     ),
     actions: [
       TextButton(
-        onPressed: _uploading ? null : () => Navigator.pop(context),
+        onPressed: _selecting ? null : () => Navigator.pop(context),
         child: const Text('Cancel'),
       ),
       FilledButton(
-        onPressed: _uploading ? null : _save,
+        onPressed: _selecting ? null : _save,
         child: const Text('Save category'),
       ),
     ],
