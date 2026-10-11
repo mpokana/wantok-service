@@ -4,7 +4,7 @@
 
 ## Outcome and scope
 
-A repeatable disposable, network-disabled, no-exposed-port PostgreSQL stage successfully installs the four pending additive security/observability migrations in their real version sequence, then executes seven existing transactional pgTAP suites. **145/145 assertions PASS.** This is E6+T2.4 migration compatibility evidence only, **not** the full source database's 59-file suite, production permission equivalence, signed-in API/browser acceptance or human E6 approval.
+A repeatable disposable, network-disabled, no-exposed-port PostgreSQL stage successfully installs the four pending additive security/observability migrations in their real version sequence, then executes seven existing transactional pgTAP suites. **145/145 assertions PASS.** This is E6+T2.4 migration compatibility evidence only, **not** the full source database's 60-file suite, production permission equivalence, signed-in API/browser acceptance or human E6 approval.
 
 ### Source-only migrations tested in a separate PostgreSQL container
 
