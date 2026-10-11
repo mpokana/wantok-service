@@ -52,6 +52,27 @@ void main() {
     );
   }
 
+  for (final width in [390.0, 1240.0]) {
+    testWidgets(
+      'CX1 Saved toolbar refresh updates read-only results at $width',
+      (tester) async {
+        var reads = 0;
+        await _show(tester, () async {
+          reads++;
+          return reads == 1 ? [provider()] : <SavedClientItem>[];
+        }, width: width);
+        expect(find.text('Wantok QA Plumbing Services'), findsOneWidget);
+        expect(find.byTooltip('Refresh saved items'), findsOneWidget);
+        await tester.tap(find.byTooltip('Refresh saved items'));
+        await tester.pumpAndSettle();
+        expect(reads, 2);
+        expect(find.text('Nothing saved yet'), findsOneWidget);
+        expect(find.byTooltip('Remove from saved'), findsNothing);
+        expect(tester.takeException(), isNull);
+      },
+    );
+  }
+
   testWidgets('CX1 Saved gracefully shows no existing bookmarks', (
     tester,
   ) async {

@@ -5,6 +5,16 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## 11 October — Saved refresh control on Web (latest deployment)
+
+**RELEASE / TEST PASS:** Account → Saved has a visible **Refresh saved items** action (desktop and phone) which reads under the current authenticated user's RLS using the existing Saved repository. It does not trigger Saved/remove writes, and avoids concurrent reloads. **Six focused widget tests PASS**, including mobile+desktop refresh plus empty and network Retry. The isolated complete Flutter test script passes all 7 analyses and the full Client, Operations and Technical widget suites. Client Web `:3000` and Client staging `:3300` updated with a verified release hash `2DE1432750358A432FA32FCDCDC71DB03534B12A95BD162547EEC5C50C507033`; rollback copy retained. Technical `:3100` and Operations `:3200` not modified.
+
+**ANDROID EMULATOR PASS:** VersionCode **4008** generated from the same release source and safely installed with `adb install -r`, no data reset; old first-install time preserved, launch verified. APK backed up at `D:\Wantok_Project_Backups\wantok-client-cx1-saved-refresh-android-preview-4008-20261011.apk` and SHA-256 `93FBE7C5FF01DC52AF9113943BF99124C2D7BC3763BC0CEE4FFA2F72327B15A8`. Emulator remains OFFLINE DEMONSTRATION, not verified signed-in Web.
+
+**DO NOT CLOSE LIVE SAVED:** Account → Saved signed-in browser contents and persistence were **not** independently witnessed because the user's other Chrome/Operations windows are active. This is a real source/test and deploy achievement, **not** a claim that the genuine account Saved list was opened. Prior primary signed-in Client Web Specialist Services → Morobe → Lae → approved provider/detail PASS remains valid. No bookmark changes, bookings, payments or support submissions. Android offline-demo/physical HONOR gates tracked independently.
+
+**CX1 IN PROGRESS; T2.4 DEFERRED.** Details: `docs/CX1_SAVED_REFRESH_ACCEPTANCE_20261011.md`.
+
 ## 11 October — authenticated Client WEB category-first gate PASSED (latest CX1 checkpoint)
 
 **LIVE WEB PASS — primary CX1F path:** Authorised EAGLT02 Chrome Client Web `:3000`, **Services → Browse providers → Explore providers → blank text search → Specialist Services → Morobe → Lae → real existing Wantok QA Plumbing Services → Provider Details**. The province, town and category filters remained selected simultaneously with the free-text field empty. Provider detail shows verified Business, **5.0 (1)** sourced rating and approved **QA Plumber & Maintenance · Specialist Services · Lae, Morobe · Quote**. This is a verified QA business *within the broad Specialist Services category*; not a claim that the category means plumbing. Exact screenshot evidence stays only in ignored `.wantok/cx1-web-*-20261011.png`. Details in `docs/CX1_WEB_DISCOVERY_ACCEPTANCE_20261011.md`. No booking, Saved toggle, payment, review, request, handoff or record mutation.

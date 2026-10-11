@@ -2,6 +2,15 @@
 
 **Updated:** 2026-10-11
 
+## CX1 — Saved read-only Web usability / Android parity (11 October)
+
+- [x] Add **Refresh saved items** toolbar button in authenticated Account → Saved page, preserving original pull-to-refresh and Retry and all existing bookmark write permissions. Repeated overlapping refresh requests are suppressed.
+- [x] Validate six isolated widget cases: pre-existing provider list, actual toolbar reload at mobile and desktop widths, empty state, error/retry. Full clean Flutter regression PASS across seven analyses and all existing Client, Operations and Technical tests.
+- [x] Build, hash-verify and deploy matching Client Web on **3000** and independent Client staging **3300**. Full backup and candidate snapshot saved to `D:\Wantok_Project_Backups`; Technical/Operations not redeployed.
+- [x] Package and install matching **Android offline-demo build 4008** in-place; APK SHA-256 backed up, original first-install time unchanged, app launched. Physical HONOR and signed-in phone mode NOT claimed.
+- [ ] **Live signed-in Web Account → Saved** content/persistence acceptance still required, preferably with desktop focus isolated; do not change/remove existing bookmarks to manufacture success.
+- [ ] Re-check remaining Account / Inbox / Track / Wallet / Agent read-only browser routes, physical HONOR acceptance and six inactive categories' approved PNG/Pacific artwork. **CX1 in progress; T2.4 deferred.**
+
 ## CX1 — Signed-in Client Web category discovery and Saved QA (11 October)
 
 - [x] **Real authenticated Web primary discovery PASS** on `:3000`: Services → Browse providers → Explore providers → Specialist Services → Morobe → Lae → QA provider result/detail, **no keyword entered**. Read-only provider detail includes sourced **5.0 (1)** and approved Quote listing. Private screenshots preserved, no profile/bookings/payments changed. See `docs/CX1_WEB_DISCOVERY_ACCEPTANCE_20261011.md`.

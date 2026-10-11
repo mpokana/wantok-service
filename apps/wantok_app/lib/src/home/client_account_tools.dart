@@ -292,6 +292,7 @@ class _SavedItemsPageState extends State<SavedItemsPage> {
   static const _repository = ClientExperienceRepository();
   late Future<List<SavedClientItem>> _future;
   String? _busyId;
+  bool _refreshing = false;
 
   @override
   void initState() {
@@ -303,13 +304,19 @@ class _SavedItemsPageState extends State<SavedItemsPage> {
       widget.loadSavedItems?.call() ?? _repository.loadSavedItems();
 
   Future<void> _refresh() async {
+    if (_refreshing) return;
     final next = _load();
     setState(() {
+      _refreshing = true;
       _future = next;
     });
     try {
       await next;
-    } catch (_) {}
+    } catch (_) {
+      // FutureBuilder owns the error display and offers Retry.
+    } finally {
+      if (mounted) setState(() => _refreshing = false);
+    }
   }
 
   Future<void> _remove(SavedClientItem item) async {
@@ -334,7 +341,16 @@ class _SavedItemsPageState extends State<SavedItemsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Saved')),
+      appBar: AppBar(
+        title: const Text('Saved'),
+        actions: [
+          IconButton(
+            tooltip: 'Refresh saved items',
+            onPressed: _refreshing || _busyId != null ? null : _refresh,
+            icon: const Icon(Icons.refresh_rounded),
+          ),
+        ],
+      ),
       body: RefreshIndicator(
         onRefresh: _refresh,
         child: FutureBuilder<List<SavedClientItem>>(
