@@ -8,6 +8,7 @@ class VendorPolicyGovernancePage extends StatefulWidget {
   const VendorPolicyGovernancePage({
     super.key,
     this.loadPolicies,
+    this.loadMyDuties,
     this.createDraft,
     this.reviseDraft,
     this.userIdOverride,
@@ -15,6 +16,7 @@ class VendorPolicyGovernancePage extends StatefulWidget {
     this.reviewDraft,
   });
   final Future<List<Map<String, dynamic>>> Function()? loadPolicies;
+  final Future<List<Map<String, dynamic>>> Function()? loadMyDuties;
   final Future<void> Function(Map<String, dynamic>)? createDraft;
   final Future<void> Function(String, Map<String, dynamic>)? reviseDraft;
   final String? userIdOverride;
@@ -27,6 +29,7 @@ class VendorPolicyGovernancePage extends StatefulWidget {
 
 class _VendorPolicyGovernancePageState
     extends State<VendorPolicyGovernancePage> {
+  List<Map<String, dynamic>> _duties = [];
   late Future<List<Map<String, dynamic>>> _future = _load();
   String? _busy;
   String _filter = 'all';
@@ -59,7 +62,18 @@ class _VendorPolicyGovernancePageState
   }
 
   Future<List<Map<String, dynamic>>> _load() async {
-    if (widget.loadPolicies != null) return widget.loadPolicies!();
+    if (widget.loadPolicies != null) {
+      // Test-only loaders also inject duties; production always uses server RLS.
+      _duties = await (widget.loadMyDuties?.call() ?? Future.value([]));
+      return widget.loadPolicies!();
+    }
+    final grants = await WantokBackend.client
+        .from('operations_duty_grants')
+        .select('duty,country_code,region_code,category_scope,'
+            'issued_at,expires_at,revoked_at');
+    _duties = (grants as List)
+        .map((value) => Map<String, dynamic>.from(value as Map))
+        .toList();
     final rows = await WantokBackend.client
         .from('vendor_policy_drafts')
         .select(
@@ -75,6 +89,29 @@ class _VendorPolicyGovernancePageState
         .map((x) => Map<String, dynamic>.from(x as Map))
         .toList();
   }
+
+  bool _hasDuty(String duty, String country, String? region, String category) {
+    final now = DateTime.now().toUtc();
+    return _duties.any((grant) {
+      final expiry = DateTime.tryParse(grant['expires_at']?.toString() ?? '');
+      final issued = DateTime.tryParse(grant['issued_at']?.toString() ?? '');
+      return grant['duty'] == duty &&
+          grant['country_code'] == country &&
+          grant['revoked_at'] == null &&
+          (issued == null || !issued.toUtc().isAfter(now)) &&
+          (expiry == null || expiry.toUtc().isAfter(now)) &&
+          (grant['region_code'] == null || grant['region_code'] == region) &&
+          (grant['category_scope'] == 'all' ||
+              grant['category_scope'] == category);
+    });
+  }
+
+  bool get _canAuthor => _duties.any((grant) {
+    final country = grant['country_code']?.toString() ?? '';
+    return _hasDuty('policy_author', country,
+        grant['region_code']?.toString(),
+        grant['category_scope']?.toString() ?? 'all');
+  });
 
   void _refresh() => setState(() => _future = _load());
   void _noticeMessage(String message) =>
@@ -622,7 +659,7 @@ class _VendorPolicyGovernancePageState
                     ),
                   ),
                 ),
-                ExpansionTile(
+                if (_canAuthor) ExpansionTile(
                   key: ValueKey(
                     'policy-create-expansion-${_revisingPolicyId ?? 'new'}',
                   ),
@@ -771,6 +808,18 @@ class _VendorPolicyGovernancePageState
                     ),
                   ],
                 ),
+                if (!_canAuthor)
+                  const Card(
+                    child: ListTile(
+                      leading: Icon(Icons.admin_panel_settings_outlined),
+                      title: Text('Read-only jurisdiction access'),
+                      subtitle: Text(
+                        'Draft authoring requires an explicit, unexpired '
+                        'policy_author assignment for the selected country, '
+                        'province and service category.',
+                      ),
+                    ),
+                  ),
                 const SizedBox(height: 14),
                 Wrap(
                   spacing: 8,
@@ -862,7 +911,12 @@ class _VendorPolicyGovernancePageState
                                 icon: const Icon(Icons.history),
                                 label: const Text('Audit trail'),
                               ),
-                              if (row['state'] == 'draft')
+                              if (row['state'] == 'draft' &&
+                                  current == row['created_by'] &&
+                                  _hasDuty('policy_author',
+                                    row['country_code']?.toString() ?? '',
+                                    row['region_code']?.toString(),
+                                    row['category_scope']?.toString() ?? 'all'))
                                 OutlinedButton(
                                   key: ValueKey('policy-submit-${row['id']}'),
                                   onPressed: _busy == null
@@ -873,7 +927,11 @@ class _VendorPolicyGovernancePageState
                                   ),
                                 ),
                               if (row['state'] == 'revision_requested' &&
-                                  current == row['created_by'])
+                                  current == row['created_by'] &&
+                                  _hasDuty('policy_author',
+                                    row['country_code']?.toString() ?? '',
+                                    row['region_code']?.toString(),
+                                    row['category_scope']?.toString() ?? 'all'))
                                 OutlinedButton.icon(
                                   key: ValueKey('policy-revise-${row['id']}'),
                                   onPressed: () => _editRevision(row),
@@ -882,7 +940,11 @@ class _VendorPolicyGovernancePageState
                                     'Prepare numbered revision',
                                   ),
                                 ),
-                              if (row['state'] == 'submitted')
+                              if (row['state'] == 'submitted' &&
+                                  _hasDuty('policy_reviewer',
+                                    row['country_code']?.toString() ?? '',
+                                    row['region_code']?.toString(),
+                                    row['category_scope']?.toString() ?? 'all'))
                                 FilledButton(
                                   key: ValueKey('policy-review-${row['id']}'),
                                   onPressed:

@@ -2,6 +2,18 @@
 
 **Updated:** 2026-10-11
 
+## E6A — Country-scoped internal policy duties (11 October; IN PROGRESS)
+
+- [x] Add isolated country/subdivision/category/expiry staff duty grants; deny unauthorised self-provisioning and grant administration; preserve existing roles and database content.
+- [x] Replace Phase 2E broad administrator policy access with RLS and server-checked author/reviewer duty scopes, explicit COI recusal and independent review; existing draft/revision state machine remains non-operative.
+- [x] Add restricted scoped-compliance entry in Operations without admitting its officers to full administrator menus; preserve Client and Technical applications.
+- [x] Local migration applied; database 50/973 PASS; Operations analysis clean and 34 tests PASS.
+- [ ] E6 remaining: vendor intake/verifications/evidence/revocation scoped RPCs and case-bound RLS; approved role provisioning and additional COI/independence rules; signed-in multi-user/browser negative tests; full cross-app regression and package verification.
+- [ ] E6 migration of legacy admin staff to explicit scopes requires authorised provisioning. **No automatic all-country grandfathering.** No uploaded IDs, final KYC, vendor activation or VM deployment.
+- Detail: `docs/E6_SCOPED_OPERATIONS_POLICY_DUTIES_20261011.md`.
+
+---
+
 ## CX1 — Clearly labelled refresh actions and responsive tap QA (11 October)
 
 - [x] Convert Saved, Inbox and Track icon-only refresh affordances into visible labelled **Refresh** buttons with 48px minimum tap targets, accessibility tooltips and stable UI test keys. Existing read-only owner-scoped data paths and concurrency guards retained.

@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-11-13 — E6A policy jurisdiction duty isolation
+
+**Status:** Partial E6 implementation on EAGLT02, **not** total E6 completion or production approval. Explicit scoped country/province/category `policy_author` and `policy_reviewer` checked by database RLS and RPC; administrative policy reviewer must be different from author and not named recusant. Duty grants are issued only by trusted `service_role`, not self-issued, and expire/revoke; no existing admin inherits country-wide rights. Additional `evidence_officer`, `final_approver`, `safety_investigator` duty names are reserved but **do not yet authorise** evidence access or clearance. Separate read-only scoped Operations workspace avoids full administrator shell. Locally tested 50 SQL/973 assertions and 34 Operations widgets; broader legacy-case scoping and E7 onward remain outstanding. No online VM usage, identity uploads, KYC issuance or activation. See `docs/E6_SCOPED_OPERATIONS_POLICY_DUTIES_20261011.md`.
+
+---
+
 ## FILLER-2026-10-11-12 — Enterprise trust handover; packageable, NO VM rollout (LATEST)
 
 **Status:** OWNER DIRECTIVE CONFIRMED; **documentation/Git/GitHub handover only**. Stop implementation in this chat. Complete the enterprise platform on **EAGLT02** before any VM operation; never log into, synchronise, upgrade or reinstall the online VM until a separate explicit instruction. Preserve a versioned installable/upgradable Linux source-release boundary throughout development. Read `docs/START_NEXT_CHAT_20261011.md`, `docs/ENTERPRISE_RELEASE_READINESS_GATES.md` and the new **top** sections of `docs/HANDOVER.md` and `docs/ROADMAP.md`.

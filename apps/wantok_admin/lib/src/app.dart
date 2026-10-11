@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wantok_api/wantok_api.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wantok_auth/wantok_auth.dart';
 import 'package:wantok_ui/wantok_ui.dart';
@@ -6,6 +7,7 @@ import 'package:wantok_ui/wantok_ui.dart';
 import 'auth/admin_password_reset_page.dart';
 import 'auth/admin_sign_in_page.dart';
 import 'dashboard/admin_shell.dart';
+import 'dashboard/vendor_policy_governance_page.dart';
 
 class WantokAdminApp extends StatelessWidget {
   const WantokAdminApp({required this.backendConfigured, super.key});
@@ -59,16 +61,73 @@ class _AdminAuthGate extends StatelessWidget {
             }
 
             final roles = roleSnapshot.data ?? const <String>{};
-            if (!roles.contains('admin')) {
-              return _AccessDeniedPage(email: session.user.email);
+            if (roles.contains('admin')) {
+              return AdminShell(roles: roles, email: session.user.email);
             }
 
-            return AdminShell(roles: roles, email: session.user.email);
+            // A scoped officer cannot inherit the broad administrator shell.
+            return FutureBuilder<bool>(
+              future: _canOpenScopedPolicyWorkspace(),
+              builder: (context, dutySnapshot) {
+                if (dutySnapshot.connectionState != ConnectionState.done) {
+                  return const Scaffold(
+                    body: Center(child: CircularProgressIndicator()),
+                  );
+                }
+                if (dutySnapshot.data != true) {
+                  return _AccessDeniedPage(email: session.user.email);
+                }
+                return _ScopedPolicyWorkspace(email: session.user.email);
+              },
+            );
           },
         );
       },
     );
   }
+}
+
+Future<bool> _canOpenScopedPolicyWorkspace() async {
+  try {
+    final response = await WantokBackend.client
+        .from('operations_duty_grants')
+        .select('duty,issued_at,expires_at,revoked_at')
+        .inFilter('duty', ['policy_author', 'policy_reviewer']);
+    final now = DateTime.now().toUtc();
+    return (response as List).any((record) {
+      final row = Map<String, dynamic>.from(record as Map);
+      final start = DateTime.tryParse(row['issued_at']?.toString() ?? '');
+      final end = DateTime.tryParse(row['expires_at']?.toString() ?? '');
+      return row['revoked_at'] == null &&
+          start != null && !start.toUtc().isAfter(now) &&
+          (end == null || end.toUtc().isAfter(now));
+    });
+  } catch (_) {
+    // Older backends or unavailable scope data must not grant entry.
+    return false;
+  }
+}
+
+class _ScopedPolicyWorkspace extends StatelessWidget {
+  const _ScopedPolicyWorkspace({required this.email});
+  final String? email;
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    appBar: AppBar(
+      title: const Text('Wantok Operations · Compliance'),
+      actions: [
+        if (email != null)
+          Center(child: Text(email!, overflow: TextOverflow.ellipsis)),
+        IconButton(
+          tooltip: 'Sign out',
+          onPressed: () => const WantokAuthService().signOut(),
+          icon: const Icon(Icons.logout),
+        ),
+      ],
+    ),
+    body: const VendorPolicyGovernancePage(),
+  );
 }
 
 class _AccessDeniedPage extends StatelessWidget {

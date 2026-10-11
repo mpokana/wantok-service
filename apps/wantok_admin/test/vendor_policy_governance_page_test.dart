@@ -48,6 +48,20 @@ void main() {
         MaterialApp(
           home: VendorPolicyGovernancePage(
             loadPolicies: () async => fixture,
+            loadMyDuties: () async => [
+              {
+                'duty': 'policy_author',
+                'country_code': 'PG',
+                'region_code': null,
+                'category_scope': 'trades',
+              },
+              {
+                'duty': 'policy_reviewer',
+                'country_code': 'PG',
+                'region_code': 'PG-MPL',
+                'category_scope': 'transport',
+              },
+            ],
             userIdOverride: 'test-officer',
           ),
         ),
@@ -85,4 +99,30 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   }
+  testWidgets('Scoped staff without duties cannot author or review',
+      (tester) async {
+    tester.view.physicalSize = const Size(390, 1400);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(MaterialApp(
+      home: VendorPolicyGovernancePage(
+        loadPolicies: () async => fixture,
+        loadMyDuties: () async => [],
+        userIdOverride: 'test-officer',
+      ),
+    ));
+    await tester.pumpAndSettle();
+    expect(find.text('Read-only jurisdiction access'), findsOneWidget);
+    expect(find.byKey(const ValueKey('policy-preview-button')), findsNothing);
+    await tester.scrollUntilVisible(
+      find.text('Preview proposal').last,
+      150,
+      scrollable: find.byType(Scrollable).last,
+    );
+    expect(find.byKey(const ValueKey('policy-review-new-policy')), findsNothing);
+    expect(find.byKey(const ValueKey('policy-revise-older-policy')), findsNothing);
+    expect(find.text('Preview proposal'), findsWidgets);
+    expect(tester.takeException(), isNull);
+  });
 }

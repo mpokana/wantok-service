@@ -14,6 +14,9 @@ VALUES('c4900000-0000-4000-8000-000000000001','authenticated','authenticated',
 UPDATE public.profiles SET is_admin=true WHERE id IN(
  'c4900000-0000-4000-8000-000000000001',
  'c4900000-0000-4000-8000-000000000002');
+INSERT INTO public.operations_duty_grants (staff_user_id,duty,country_code,region_code,category_scope,assignment_reason)
+VALUES ('c4900000-0000-4000-8000-000000000001','policy_author','PG',NULL,'trades','Test-only explicitly authorised policy author'),
+ ('c4900000-0000-4000-8000-000000000002','policy_reviewer','PG',NULL,'trades','Test-only explicitly authorised independent reviewer');
 SET LOCAL ROLE authenticated;
 SELECT set_config('request.jwt.claim.sub',
  'c4900000-0000-4000-8000-000000000001',true);

@@ -4,6 +4,17 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 11 October — E6A scoped Operations policy permissions (CURRENT CODING STREAM)
+
+- On EAGLT02, `feature/flutter-platform-v1` followed concurrent Client commit `735452c`; the existing parallel CX1 changes and untracked `supabase/snippets/` were preserved.
+- **E6A local policy RBAC:** distinct `policy_author`, `policy_reviewer`, `evidence_officer`, `final_approver` and `safety_investigator` scoped duties with country/province/category/expiry; explicit trusted provisioning only, revocation/recusal audit, policy RLS and guarded draft/revision/review RPCs. Technical Control receives no implied Operations authority.
+- Admin-only Operations entry remains; authorised scoped non-admin compliance officers receive an isolated policy workspace rather than the general administrator shell. PostgreSQL is authoritative, not Flutter button visibility.
+- Local SQL regression **50 files / 973 assertions PASS**, Operations analysis clean and **34 widget tests PASS**. Full cross-project regression, packaging and commit should be recorded separately after they finish.
+- **E6 still OPEN**: older vendor intake, verification, evidence and clearance pathways use broad admin access; existing case `region` is free-form and must not be guessed into an ISO subdivision. Duty provisioning policy and real signed-in browser/staff isolation acceptance remain unapproved. No historical admins are automatically granted broad-scoped policy author/review powers; explicit provisioning is required.
+- See `docs/E6_SCOPED_OPERATIONS_POLICY_DUTIES_20261011.md`. **No online VM access or deployment.** E7 consent, evidence gateway, final KYC and enterprise Helpdesk are subsequent gated milestones.
+
+---
+
 ## 11 October CX1 — Visible refresh buttons and tested tap targets (LATEST)
 
 - **Client UX improvement delivered:** Saved, Inbox and Track refresh actions now have visible **Refresh** text alongside the icon, stable keys `cx1-saved-refresh`, `cx1-inbox-refresh`, `cx1-track-refresh` and minimum 96×48 logical-pixel target. Existing authenticated read-only data loaders, guards and RLS unchanged. This addresses ambiguous icon-only presentation; it does not prove the cause of an earlier wrong-screen click.
