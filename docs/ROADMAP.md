@@ -2,6 +2,22 @@
 
 **Updated:** 2026-10-12
 
+## PROGRAM PRIORITY OVERRIDE — E-series → CX1 → T2.4 (12 October; SINGLE CHAT)
+
+**Owner decision:** continue all three workstreams here, **strictly prioritised**: **P0 E-series Enterprise/Operations security and governance**, followed by **P1 CX1 Client Experience completion**, then **P2 T2.4 Technical Control**. Previous T2.4 commits are preserved, but **further T2.4 implementation is PAUSED**. This header supersedes outdated historical text below that presented T2.4 as the active next task; historical milestones and test evidence remain factual.
+
+- [x] **P0 E6J initial read-only inventory:** 19 selected E6 functions and 20 operational tables audited; all selected RLS enabled and explicit function search paths. Public marketplace SELECT grants on `provider_profiles`/`provider_services` and implicit temp-schema ordering require independent review, not automatic vulnerability claims. Zero database writes.
+- [x] **P0 E6J five-migration isolated integration:** pending E6H plus **four** T2.4 source migrations tested together: **164/164 pgTAP** across 051/052/056/057/090/091/092/093; all synthetic fixtures rolled back and shared database unchanged.
+- [ ] **P0 E-series next:** independently review policy/column exposure, function-owner and SECURITY DEFINER search-path decisions, prepare real role-bound GoTrue/PostgREST staging witness and documented backup/restore approval; the persistent full 61-file database suite remains blocked by unapplied migrations. Details `docs/E6J_TRUST_CATALOG_AND_CROSSSTREAM_QA_20261012.md`.
+- [ ] **P0 formal E6-G1–G10:** independently witnessed staff delegations, two-person grants, ISO country/subdivision and sector legal sources, beneficial-owner COI, real GoTrue/PostgREST/browser roles, revocation, independent security audit, DR and owner approvals. **All remain BLOCKED. E7+ production/KYC/activation stays gated.**
+- [ ] **P1 CX1F/CX1 acceptance:** reproduce blank-keyword signed-in Web provider category → Morobe → Lae → storefront/detail/Saved; prove Saved/Inbox/Track Refresh stays on correct route, Account/Wallet/Agent read-only flows; verify six inactive category photographs/editor, Android/HONOR and owner visual evidence. Distinguish previous signed-in Android PASS from unverified Web/browser clicks.
+- [ ] **P1 CX1 closure:** collect direct evidence and explicit CX1 owner acceptance. E6 formal external blockers must remain visible, but do not prevent separately safe read-only CX1 QA after P0 engineering is exhausted. Do not turn CX1 acceptance into E6 security sign-off.
+- [ ] **P2 T2.4:** after earlier priorities, resume real central-log provenance/retention/redaction and genuine worker heartbeat; job actions remain disabled pending specific approval. Four Technical SQL migrations remain unapplied to shared DB. T2.4E source tests **58/58**, clean Flutter 7 analyses and 132/43/38 widgets; not a live collector or release.
+
+**Working register and dependencies:** `docs/PROGRAM_EXECUTION_PLAN_20261012.md`. Shared `docs/HANDOVER.md`, `docs/ROADMAP_FILLERS.md`, `AGENTS.md` and database require one writer; only this conversation coordinates work going forward. Preserve source, other worktrees and `supabase/snippets/`. No user/customer changes, online VM, payments or release approval.
+
+---
+
 ## T2.4E — Centralised log-source readiness contract (12 October; CODE ONLY)
 
 - [x] Introduced metadata-only trusted source registry with safe provenance ticket, bounded retention and non-connected state; no collector or credential fields and no live event ingestion.

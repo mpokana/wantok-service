@@ -112,7 +112,8 @@ try {
     '20261011233000_operations_independent_case_review.sql',
     '20261011240000_technical_scoped_health_log_adapter.sql',
     '20261011241000_technical_messaging_queue_snapshot.sql',
-    '20261011242000_technical_scoped_activity_audit.sql'
+    '20261011242000_technical_scoped_activity_audit.sql',
+    '20261011243000_technical_central_log_source_contract.sql'
   )
   foreach ($migration in $migrations) {
     $file = Join-Path $root "supabase\migrations\$migration"
@@ -130,7 +131,8 @@ try {
     @{ name='057_operations_independent_case_review.test.sql'; count=19 },
     @{ name='090_technical_scoped_health_log_adapter.test.sql'; count=12 },
     @{ name='091_technical_messaging_queue_snapshot.test.sql'; count=13 },
-    @{ name='092_technical_scoped_activity_audit.test.sql'; count=14 }
+    @{ name='092_technical_scoped_activity_audit.test.sql'; count=14 },
+    @{ name='093_technical_central_log_source_contract.test.sql'; count=19 }
   )
   foreach ($test in $tests) {
     $name = $test.name
@@ -148,17 +150,17 @@ try {
     Write-Output "E6I_STAGE_TEST_PASS=$name assertions=$ok"
   }
 
-  $isolatedSql = "select (to_regprocedure('public.has_operations_clearance_scope(text,uuid)') is not null) and (to_regprocedure('public.list_technical_module_log_events(text,integer)') is not null) and (to_regprocedure('public.get_technical_messaging_queue_snapshot(text)') is not null) and (to_regprocedure('public.list_technical_module_activity(text,integer)') is not null) and ((select count(*) from auth.users)=0) and ((select count(*) from public.vendor_intake_cases)=0) and ((select count(*) from public.notification_outbox)=0) and ((select count(*) from public.audit_events)=0)"
+  $isolatedSql = "select (to_regprocedure('public.has_operations_clearance_scope(text,uuid)') is not null) and (to_regprocedure('public.list_technical_module_log_events(text,integer)') is not null) and (to_regprocedure('public.get_technical_messaging_queue_snapshot(text)') is not null) and (to_regprocedure('public.list_technical_module_activity(text,integer)') is not null) and (to_regprocedure('public.get_technical_central_log_readiness(text)') is not null) and ((select count(*) from public.technical_log_source_contracts)=0) and ((select count(*) from auth.users)=0) and ((select count(*) from public.vendor_intake_cases)=0) and ((select count(*) from public.notification_outbox)=0) and ((select count(*) from public.audit_events)=0)"
   $check = @(& docker exec $target psql -X -U supabase_admin -d e6i_stage -t -A -c $isolatedSql)
   if ($LASTEXITCODE -ne 0 -or ($check -join '').Trim() -ne 't') {
     throw 'Isolated migration or test rollback verification failed.'
   }
-  $sharedSql = "select (to_regprocedure('public.list_technical_module_log_events(text,integer)') is null) and (to_regprocedure('public.get_technical_messaging_queue_snapshot(text)') is null) and (to_regprocedure('public.list_technical_module_activity(text,integer)') is null) and (to_regprocedure('public.list_technical_module_activity(text,integer)') is null) and (not exists (select 1 from supabase_migrations.schema_migrations where version in ('20261011233000','20261011240000','20261011241000','20261011242000')))"
+  $sharedSql = "select (to_regprocedure('public.list_technical_module_log_events(text,integer)') is null) and (to_regprocedure('public.get_technical_messaging_queue_snapshot(text)') is null) and (to_regprocedure('public.list_technical_module_activity(text,integer)') is null) and (to_regprocedure('public.get_technical_central_log_readiness(text)') is null) and (not exists (select 1 from supabase_migrations.schema_migrations where version in ('20261011233000','20261011240000','20261011241000','20261011242000','20261011243000')))"
   $shared = @(& docker exec $source psql -X -U postgres -d postgres -t -A -c $sharedSql)
   if ($LASTEXITCODE -ne 0 -or ($shared -join '').Trim() -ne 't') {
     throw 'Shared Supabase database has unexpected T2.4 schema state.'
   }
-  Write-Output 'E6I_STAGING_PASS=4 migrations,145 assertions,fixtures rolled back'
+  Write-Output 'E6J_STAGING_PASS=5 migrations,164 assertions,fixtures rolled back'
   Write-Output 'E6I_SHARED_DB_UNCHANGED=true'
   if ($KeepContainer) { Write-Output "E6I_DEBUG_CONTAINER=$target" }
 }

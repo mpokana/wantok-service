@@ -4,6 +4,19 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 12 October — Owner priority and single-chat consolidation (CURRENT INSTRUCTION)
+
+- **One coordinated conversation for all three workstreams**, in order **P0 E-series Operations/Enterprise → P1 CX1 Client Experience → P2 T2.4 Technical Control**. Stop parallel writers; prefer detached, isolated validation and serialise shared repository changes. See `docs/PROGRAM_EXECUTION_PLAN_20261012.md` (current execution authority).
+- **P0 ACTIVE:** E6A–I source/security foundations preserved. E6J **read-only metadata inventory** examined 19 selected E6 functions and 20 operational tables: all 19 explicit `SECURITY DEFINER` paths and 20 RLS enabled; anon SELECT on `provider_profiles`/`provider_services` and `pg_temp` search-path ordering require independent review, *not* automatic security-breach claims. No shared DB writes.
+- **P0 E6J isolated regression PASS:** pending E6H + **four** T2.4 SQL migrations coexist in disposable network-disabled PostgreSQL, **164/164 pgTAP assertions** (eight suites 051/052/056/057/090–093); fixtures rolled back, shared Supabase unchanged and container removed. Prior E6I **145/145** was the earlier four-migration checkpoint, not this latest five-migration run. `docs/E6J_TRUST_CATALOG_AND_CROSSSTREAM_QA_20261012.md`.
+- **P0 next:** review existing public-marketplace RLS/column and owner/ACL scope, independently prepare GoTrue/PostgREST role matrix, backup/rollback and formal staged witnesses. **E6-G1–G10 remain BLOCKED** without independently authorised human/legal/COI/security/DR evidence; E7+ sealed.
+- **P1 QUEUED:** CX1 local Flutter/Android source QA achieved, but authenticated Web blank-search provider filters/detail/Saved, actual Saved/Inbox/Track Refresh button click/route safety, six inactive category photos/editor, physical HONOR and final owner acceptance remain open. Existing signed-in Android evidence does **not** close Web gates.
+- **P2 PAUSED:** T2.4 A–E source includes scoped diagnostics/logs, Messaging queue, action audit and central-log source-contract **not_connected** readiness. Latest source milestone `0250bf9` + coordination `53a75e2`. Four T2.4 migrations `20261011240000`–`243000` unapplied, no collector, heartbeat or job actions. Previous 58 SQL assertions and 7 Flutter analyses / Client 132 / Operations 43 / Technical 38 source checks PASS, **not deployed**.
+- **Critical:** main shared SQL 61-file suite is NOT GREEN because E6H/T2.4 migrations deliberately remain unapplied. Do not migrate local/live shared Supabase, reset, provision fake staff, activate providers, collect identity documents or move payments. `supabase/snippets/` is another untracked pre-existing path and must not be staged.
+- Historical T2.4 / CX1 / E6 notes below remain archival evidence, not priority instructions. User-supplied T2.4 handover acknowledged and placed on hold.
+
+---
+
 ## 12 October — T2.4E central-log source readiness (SOURCE QA; NO INGESTION)
 
 - Owner handed over T2.4 after checkpoint `da2e42d`. Reconciled latest E6I shared branch at `b5b060c`; worked in detached `D:\Wantok_T24_Log_Source_20261012` so shared E6 and untracked coordination changes remained untouched. Another ChatGPT session may still be able to resume; no concurrency lock is assumed.

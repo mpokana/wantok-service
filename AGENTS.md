@@ -16,9 +16,9 @@ For every new coding session, agent handover, Codex task, Desktop Commander task
 7. Use migrations for every database/security change.
 8. Do not mix Wantok Services with GVE systems or Wantok Neurons implementation details. Wantok Neurons may later integrate only through approved API boundaries documented for Wantok Services.
 
-## Active parallel workstream safety — E6 / T2.4 (12 October 2026)
+## Owner-directed single-chat phase order — 12 October 2026
 
-**Read `docs/E6_T24_PARALLEL_HANDOFF_20261012.md` before ANY source write, shared documentation edit, migration, commit or push.** The owner has supplied the earlier T2.4 handover and authorised this T2.4 continuation run; E6 must remain paused on shared files and T2.4-owned code until a future explicit `READY_FOR_TRANSFER` and verified stop/commit checks. This authorisation does not establish that a different ChatGPT session has stopped. Shared files (`docs/HANDOVER.md`, `docs/ROADMAP.md`, `docs/ROADMAP_FILLERS.md`, `AGENTS.md`, `package.json`) require serialised writes. Never apply either stream's pending migrations to shared Supabase merely to make combined tests green; use the disposable integrated staging runner instead. A current clean Git status is not proof that a parallel AI session has stopped.
+**Read `docs/PROGRAM_EXECUTION_PLAN_20261012.md` before EVERY code change, migration, documentation checkpoint or push.** This conversation coordinates all three workstreams in priority order **E-series Enterprise/Operations (ACTIVE) → CX1 Client (QUEUED) → T2.4 Technical (PAUSED)**. User supplied the previous T2.4 handover; T2.4E source has been preserved and implementation is paused. The old `docs/E6_T24_PARALLEL_HANDOFF_20261012.md` is retained for history and updated with current status. Never assume another ChatGPT session has stopped solely from clean Git status. Serialise shared-file writes, preserve detached worktrees, do not combine Operations and Technical permissions, and use disposable staging instead of changing shared Supabase merely to make tests green.
 
 ## Safe-change rule
 

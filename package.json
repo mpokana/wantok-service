@@ -21,6 +21,7 @@
     "test:e6:auth-local": "node ./scripts/qa/e6-auth-boundary.mjs --local",
     "test:e6:independence-local": "node ./scripts/qa/e6-independent-case-review.mjs --local",
     "test:e6:crossstream-local": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./scripts/qa/e6-crossstream-isolated-staging.ps1",
+    "test:e6:catalog-local": "node ./scripts/qa/e6-trust-inventory.mjs --local",
     "db:stop": "node ./scripts/supabase-local.js stop"
   },
   "dependencies": {

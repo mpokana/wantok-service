@@ -20,6 +20,16 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-12-05 — E6J local trust catalogue and five-migration integration
+
+**Status:** Read-only E6J catalogue scanned 19 selected `SECURITY DEFINER` functions, 20 selected Operations tables and all five pending migration version IDs. Existing anonymous SELECT on public marketplace `provider_profiles`/`provider_services` and definer `pg_temp` search-path ordering are **review items, not confirmed exploits**. Disposable PostgreSQL with E6H + four T2.4 SQL migrations passed **164/164 pgTAP assertions** across eight suites; all test data rolled back and shared DB unchanged. Independent exact owner/ACL/policy and GoTrue witness remain pending; E6-G1–G10 blocked. See `docs/E6J_TRUST_CATALOG_AND_CROSSSTREAM_QA_20261012.md`.
+
+## FILLER-2026-10-12-04 — Owner single-chat execution order (SUPERSEDES PARALLEL PRIORITIES)
+
+**Decision:** This ChatGPT conversation coordinates **P0 E-series / E6 engineering and formal acceptance blockers → P1 CX1 signed-in Web/mobile client evidence → P2 T2.4 Technical Control**, in this order. T2.4 A–E source and earlier tests preserved; **new T2.4 engineering paused** until P0/P1 milestones. No automatic E6 human sign-offs, production or live schema migrations. One writer at a time for shared docs, permissions, UI and Git. See `docs/PROGRAM_EXECUTION_PLAN_20261012.md`.
+
+**Next E-series work:** read-only security function owner/ACL/RLS inventory, E6H plus all four T2.4 migrations in disposable staging, signed-in role matrix preparation. **CX1 next:** actual authenticated Web category-first provider journey, Refresh route clicks, photo/editor, HONOR/device and owner gate acceptance. T2.4 later: actual log source/worker provenance, retention, safe monitoring and separately approved job policies.
+
 ## FILLER-2026-10-12-03 — T2.4E central log-source readiness
 
 **Status:** Registered **source-contract readiness only**; trustworthy `not_connected` state, provenance ticket format, 1–90-day retention bounds, and server-enforced module.view+module.logs for reduced metadata. Technical Logs UI distinctly displays no central collector. Four migrations and pgTAP 090–093 **58/58 PASS** in disposable staging, shared DB untouched. No actual central log source or worker-heartbeat connected, no job actions or VM deployment. `docs/T24_CENTRAL_LOG_SOURCE_READINESS_20261012.md`.
