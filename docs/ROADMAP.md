@@ -2,6 +2,15 @@
 
 **Updated:** 2026-10-11
 
+## CX1 11 October — Full backend category image coverage (not activation)
+
+- [x] Audited active and inactive slugs through a **read-only PostgreSQL query**: **23 actual backend categories**, including 3 inactive. All 20 active categories already have distinct mapped photographs. Both missing media identities were inactive: `bus-coach` incorrectly fell back to More; `flights` reused `travel-flights` image.
+- [x] Prepared unique photographs `category_bus_coach.webp` (bus exterior) and `category_flights.webp` (airport check-in) using separately licensed source photography and WebP cropping. Rejected image-generator outputs that contained whole-page mock-ups. Existing images preserved; provenance recorded in `docs/CATEGORY_PHOTO_ASSETS.md`.
+- [x] Add canonical Flutter styles/slug routing for both inactive categories, plus a backend-category registry, avoiding duplicate artwork and incorrect More fallback. No database category state/transactions changed.
+- [x] **Full independent QA PASS:** 7 analyses, 106 Client, 21 Operations, 8 Technical tests. Every one of the 23 backend photo assets loads and has unique bytes.
+- [x] **Deploy shared Web and Android code:** Client Web 3000 serves both new files (HTTP 200) and has a verified rollback copy; canonical build directory re-synchronised after a denied rename. Android offline demonstration safely upgraded in place to versionCode **4005** (user data retained), APK hash backed up in `D:\Wantok_Project_Backups`. No activation of either inactive category, no change to 3200/3100/3300/3400.
+- [ ] Continue authenticated CX1 Web Morobe → Lae/category details/Saved and user journeys; physical HONOR acceptance; separate Operations activation review. **T2.4 deferred**.
+
 ## CX1 11 October — Photo-forward categories and shared Web/Android media
 
 - [x] **Public Services** plain government icon replaced by existing project PNG government-building photograph; same Flutter category media renderer on Web/mobile. No fake agency information, emergency contact or public-service state change.

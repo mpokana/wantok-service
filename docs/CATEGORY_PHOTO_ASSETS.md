@@ -26,6 +26,21 @@
 
 Unsplash licence information: https://unsplash.com/license. Images are bundled copies, not third-party hotlinks. Keep source references with the project and obtain any additional clearance required for future campaigns, especially if a business or government agency might appear to be endorsing Wantok Services.
 
+## CX1 follow-up — complete backend category photo coverage (11 October 2026)
+
+An actual read-only query to the local `public.service_categories` table returned **23 distinct backend slugs** (20 active, 3 inactive). All 20 active categories were already mapped to existing, individually distinct photographs. Two dormant slugs had a media identity gap: `bus-coach` used the navigation-only `More` fallback, while `flights` reused `travel-flights` imagery. Neither was enabled during this update.
+
+Two distinct, bundled 960×610 WebP photographic assets were created from externally sourced photographs, rather than using the image generator's unsuitable whole-dashboard mock-ups:
+
+| Backend category | Asset | Visual identity | Original licensed source |
+| --- | --- | --- | --- |
+| `bus-coach` (inactive) | `category_bus_coach.webp` | Passenger touring coach, broad view of the vehicle on the road | [Unsplash CDN photo-1570125909232-eb263c188f7e](https://images.unsplash.com/photo-1570125909232-eb263c188f7e), [Unsplash licence](https://unsplash.com/license); visible operator livery is illustrative, not a Wantok provider |
+| `flights` (inactive) | `category_flights.webp` | Airport self check-in terminal, visually distinct from `travel-flights` aircraft-in-sky picture; airline logo region blurred | [Anna Shvets / Pexels](https://www.pexels.com/photo/person-checking-in-at-the-airport-3943950/), [Pexels licence](https://www.pexels.com/license/) |
+
+In `WantokCategoryStyles` both are now first-class, slug-matched style entries, and `backendCatalogue` explicitly enumerates all 23 backend slugs. **No two backend slugs use the same bundled photograph path**. `backend_category_media_test.dart` additionally checks every image is loadable from Flutter's asset bundle and rejects byte-for-byte image duplicates. New future slugs must be added to the backend artwork audit before being publicly shown; never silently map a service to the `More` navigation image.
+
+The 23-category audit includes inactive `bus-coach`, `accommodation` and `flights`. The two newly created images were downloaded/cropped and encoded as WebP, **not AI-generated photographs**. Both failed attempts at AI generation produced full dashboard mock-ups, were rejected and **were not added to the project**. Inactive services remain inactive.
+
 ## UX/operational safeguards
 
 - The Home **Public Services** and other real service category cards now display photographic art on both form factors, using the same media fallback. New artwork only changes visual presentation: no module enabled/disabled, data inserted, payment activated or booking changed.

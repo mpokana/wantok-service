@@ -5,6 +5,14 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## 11 October — Inactive-category media completion (no activation)
+
+**AUDIT PASS:** Read-only local PostgreSQL query confirms 23 backend category slugs, 20 currently active and 3 inactive. All 20 active slugs already had photo identities. The only actual gaps were inactive `bus-coach` (incorrect More fallback) and inactive `flights` (photo reused from `travel-flights`). Added two separate locally bundled WebP photos and canonical Flutter mapping without changing `is_active`, service booking modes or any data. AI image generation was attempted but yielded unsuitable dashboard mock-ups; these were rejected. Adopted licensed source photographs instead, not duplicating existing category images. See `docs/CATEGORY_PHOTO_ASSETS.md`.
+
+**WEB/ANDROID DEPLOYMENT PASS:** Client Web :3000 serves both new inactive-category WebP files with HTTP 200; original build backed up and canonical static directory hash-matched. An initial Windows folder-rename access error was safely bypassed with a controlled temporary server binding and canonical directory sync, then 3000 returned to the canonical folder. Offline-demo emulator upgraded in place to versionCode **4005** and launched, with original install date intact. APK preserved at `D:\Wantok_Project_Backups\wantok-client-complete-photos-android-preview-4005-20261011.apk`. No business flag activation or user records written. These inactive tiles are verified by tests, not claimed to have appeared in the active public catalogue.
+
+**REGRESSION PASS:** Isolated Flutter 7 analyses, 106 Client tests, 21 Operations tests and 8 Technical tests passed. New test rejects any missing, aliased or byte-identical photograph among the actual 23 backend slugs. This does not close the authenticated CX1 Web journey or HONOR physical-device gate. **CX1 IN PROGRESS; T2.4 DEFERRED.**
+
 ## 11 October — User-requested category photography / Web-Android parity
 
 **SOURCE + WEB BUILD PASS:** Existing plain Public Services symbol replaced with the repository's PNG public-building photograph. Seven additional unique, properly cropped bundled WebP photographs now cover Education & Training, Hotels, General Labour, Financial Services, Venue Booking, Errands and Boat Hire. All 18 service categories have distinct photographic assets; only the navigation-only **More** tile uses a symbol. Mobile gallery/home and Web home/catalogue share `WantokCategoryPicture`, resolving the published Theme & Media `homeIcon`/ `cardImage` overrides with a common bundled photograph fallback. No photo was AI-generated, no business/provider/agency identity is asserted.

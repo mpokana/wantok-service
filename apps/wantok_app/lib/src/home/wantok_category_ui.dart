@@ -98,6 +98,17 @@ abstract final class WantokCategoryStyles {
     badgeSurface: Color(0xFFD7E6FF),
     photoAsset: 'assets/images/categories/category_travel.webp',
   );
+  // Future flights-only catalogue entry. Distinct from Travel & Flights.
+  // Kept dormant in the database until business activation is authorised.
+  static const flights = WantokCategoryStyle(
+    slug: 'flights',
+    title: 'Flights',
+    icon: Icons.flight_takeoff_rounded,
+    accent: Color(0xFF2876B9),
+    surface: Color(0xFFEDF5FF),
+    badgeSurface: Color(0xFFD8EBFB),
+    photoAsset: 'assets/images/categories/category_flights.webp',
+  );
   static const events = WantokCategoryStyle(
     slug: 'events',
     title: 'Events\n& Tickets',
@@ -154,6 +165,16 @@ abstract final class WantokCategoryStyles {
     surface: Color(0xFFFFF4E4),
     badgeSurface: Color(0xFFFFE8BD),
     photoAsset: 'assets/images/categories/category_errands.webp',
+  );
+  // Future scheduled bus and coach catalogue entry. Not enabled by artwork.
+  static const busCoach = WantokCategoryStyle(
+    slug: 'bus-coach',
+    title: 'Bus & Coach',
+    icon: Icons.directions_bus_rounded,
+    accent: Color(0xFF217B89),
+    surface: Color(0xFFE8F7F8),
+    badgeSurface: Color(0xFFCEEBEE),
+    photoAsset: 'assets/images/categories/category_bus_coach.webp',
   );
   static const boatHire = WantokCategoryStyle(
     slug: 'boat-hire',
@@ -253,6 +274,35 @@ abstract final class WantokCategoryStyles {
     more,
   ];
 
+  /// Every distinct backend service_categories.slug, including inactive ones.
+  /// Adding a category requires its own photograph; do not map to More or
+  /// silently reuse another category's artwork.
+  static const backendCatalogue = <WantokCategoryStyle>[
+    taxi,
+    automotive,
+    boatHire,
+    waterRides,
+    professional,
+    labour,
+    venue,
+    events,
+    delivery,
+    errands,
+    food,
+    groceries,
+    shopping,
+    home,
+    beauty,
+    health,
+    travel,
+    education,
+    financial,
+    publicServices,
+    busCoach,
+    hotels,
+    flights,
+  ];
+
   static WantokCategoryStyle bySlug(String? slug) => switch (slug) {
     'taxi-ride' || 'taxi' => taxi,
     'food' || 'restaurants' => food,
@@ -261,13 +311,15 @@ abstract final class WantokCategoryStyles {
     'home-services' => home,
     'beauty' || 'wellness' || 'beauty-wellness' => beauty,
     'health' || 'medical' || 'health-medical' => health,
-    'travel' || 'flights' || 'travel-flights' => travel,
+    'travel' || 'travel-flights' => travel,
+    'flights' => flights,
     'events' => events,
     'professional-services' || 'specialist-services' => professional,
     'vehicle-hire' || 'automotive' => automotive,
     'delivery' => delivery,
     'errands' => errands,
     'boat-hire' => boatHire,
+    'bus-coach' => busCoach,
     'boat-ship-rides' => waterRides,
     'general-labour' => labour,
     'venue-booking' => venue,
