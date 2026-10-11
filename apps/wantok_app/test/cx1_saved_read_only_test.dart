@@ -63,7 +63,15 @@ void main() {
         }, width: width);
         expect(find.text('Wantok QA Plumbing Services'), findsOneWidget);
         expect(find.byTooltip('Refresh saved items'), findsOneWidget);
-        await tester.tap(find.byTooltip('Refresh saved items'));
+        final targetCx1SavedRefresh = find.byKey(
+          const ValueKey('cx1-saved-refresh'),
+        );
+        expect(targetCx1SavedRefresh, findsOneWidget);
+        expect(
+          tester.getSize(targetCx1SavedRefresh).height,
+          greaterThanOrEqualTo(44),
+        );
+        await tester.tapAt(tester.getCenter(targetCx1SavedRefresh));
         await tester.pumpAndSettle();
         expect(reads, 2);
         expect(find.text('Nothing saved yet'), findsOneWidget);

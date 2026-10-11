@@ -985,10 +985,20 @@ class _TrackRefreshHeader extends StatelessWidget {
       Positioned(
         top: 14,
         right: 14,
-        child: IconButton(
-          tooltip: 'Refresh activity',
-          onPressed: enabled ? onRefresh : null,
-          icon: const Icon(Icons.refresh_rounded, color: Colors.white),
+        child: Tooltip(
+          message: 'Refresh activity',
+          child: TextButton.icon(
+            key: const ValueKey('cx1-track-refresh'),
+            onPressed: enabled ? onRefresh : null,
+            icon: const Icon(Icons.refresh_rounded, size: 18),
+            label: const Text('Refresh'),
+            style: TextButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.white.withValues(alpha: .12),
+              minimumSize: const Size(96, 48),
+              padding: const EdgeInsets.symmetric(horizontal: 9),
+            ),
+          ),
         ),
       ),
     ],

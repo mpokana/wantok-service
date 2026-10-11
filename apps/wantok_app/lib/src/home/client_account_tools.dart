@@ -344,10 +344,18 @@ class _SavedItemsPageState extends State<SavedItemsPage> {
       appBar: AppBar(
         title: const Text('Saved'),
         actions: [
-          IconButton(
-            tooltip: 'Refresh saved items',
-            onPressed: _refreshing || _busyId != null ? null : _refresh,
-            icon: const Icon(Icons.refresh_rounded),
+          Tooltip(
+            message: 'Refresh saved items',
+            child: TextButton.icon(
+              key: const ValueKey('cx1-saved-refresh'),
+              onPressed: _refreshing || _busyId != null ? null : _refresh,
+              icon: const Icon(Icons.refresh_rounded, size: 19),
+              label: const Text('Refresh'),
+              style: TextButton.styleFrom(
+                minimumSize: const Size(96, 48),
+                padding: const EdgeInsets.symmetric(horizontal: 9),
+              ),
+            ),
           ),
         ],
       ),

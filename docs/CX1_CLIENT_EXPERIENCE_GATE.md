@@ -5,6 +5,14 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## 11 October — Labeled Refresh buttons, centre-hit tests and release (LATEST)
+
+**SOURCE / TEST / WEB DEPLOY PASS:** Saved, Inbox and Track now show **Refresh** text beside their icons, with explicit 96×48 logical-pixel buttons, tooltips and stable widget keys. Their existing read-only loaders, error/Retry UX and safety guards remain unchanged. **12 focused widget tests PASS** using actual button-centre taps at mobile/desktop widths; all seven Flutter analyses plus full Client/Operations/Technical regressions PASS. Web release JS SHA256 `2207D8BBCCC5BE261B7C7A77498F4E801829E0D7B13378F56B61A06F3E3B2E66` deployed to Client 3000 and 3300 with verified rollback copies. No database, vendor, booking, wallet, Saved or support-status mutations.
+
+**ANDROID OFFLINE DEMO 4010 PASS:** Matching Flutter build compiled, verified at `D:\Wantok_Project_Backups\wantok-client-cx1-labeled-refresh-android-preview-4010-20261011.apk` (SHA-256 `8FE01D17D5C11057B435686F0499D32EC09BE7B368D50CF3F433E696843C8591`), `adb install -r` returned Success, versionCode 4010, firstInstallTime unchanged and app launched. This does not establish signed-in Android or physical HONOR acceptance.
+
+**LIVE BROWSER STILL OPEN:** EAGLT02 Windows desktop was locked when this work resumed. Browser access was not forced and no authentication credentials, cookies or user session records accessed. UI source/test success cannot substitute for live Chrome visible button/click acceptance. An earlier Saved click had navigated to vendor onboarding without submission; that precise cause was not independently determined. No claim of fixed routing bug. See `docs/CX1_LABELED_REFRESH_ACCEPTANCE_20261011.md`. Physical HONOR, signed-in Android and six inactive category images remain open. **CX1 IN PROGRESS; T2.4 DEFERRED.**
+
 ## 11 October — Read-only CX1 deployment parity guard (LATEST)
 
 **PASS static/release integrity, NOT browser click-through:** reusable scripts/qa/verify-cx1-local.ps1 on EAGLT02 confirms five localhost HTTP shells, Client main/staging and Technical main/staging JS hashes match, three refresh labels in served Client JavaScript, identical original Taxi and Public Services images across app endpoints, and existing Android versionCode 4009. Final CX1_RELEASE_QA_PASS. Deliberately impossible Android build minimum correctly returned CX1_RELEASE_QA_FAIL with exit 1. See docs/CX1_RELEASE_PARITY_GUARD_20261011.md.

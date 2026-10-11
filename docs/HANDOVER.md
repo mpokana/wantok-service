@@ -4,6 +4,14 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 11 October CX1 — Visible refresh buttons and tested tap targets (LATEST)
+
+- **Client UX improvement delivered:** Saved, Inbox and Track refresh actions now have visible **Refresh** text alongside the icon, stable keys `cx1-saved-refresh`, `cx1-inbox-refresh`, `cx1-track-refresh` and minimum 96×48 logical-pixel target. Existing authenticated read-only data loaders, guards and RLS unchanged. This addresses ambiguous icon-only presentation; it does not prove the cause of an earlier wrong-screen click.
+- **Verification:** isolated `D:\Wantok_CX1_Labeled_Refresh_QA_20261011` completed 12 focused Saved/Inbox/Track tests with actual centre taps, including phone and desktop widths; all seven Flutter analyses and complete Client/Operations/Technical suites PASS. No provider, booking, saved, wallet or vendor data modified.
+- **Web deployment:** release SHA256 `2207D8BBCCC5BE261B7C7A77498F4E801829E0D7B13378F56B61A06F3E3B2E66`, source-matched and deployed to Client `:3000` and staging `:3300`. Old build safely backed up at `D:\Wantok_Project_Backups\wantok-client-web-pre-labeled-refresh-20261011`; candidate copy at `D:\Wantok_Project_Backups\wantok-client-web-labeled-refresh-candidate-20261011`. Technical `:3100`, Operations `:3200` and Technical staging `:3400` unchanged.
+- **Matching Android offline-demo PASS:** build 4010 backed up to `D:\Wantok_Project_Backups\wantok-client-cx1-labeled-refresh-android-preview-4010-20261011.apk` (SHA-256 `8FE01D17D5C11057B435686F0499D32EC09BE7B368D50CF3F433E696843C8591`), installed with `adb install -r` Success, versionCode 4010, same original firstInstallTime `2026-10-05 23:44:14`, app launched. Existing emulator data retained. Physical HONOR and authenticated Android remain OPEN.
+- **Windows session blocked GUI acceptance:** EAGLT02 desktop reported Windows Default Lock Screen. Did not bypass account security or inject clicks. Actual signed-in Chrome visual/click acceptance for the new labels remains OPEN. Details: `docs/CX1_LABELED_REFRESH_ACCEPTANCE_20261011.md`. CX1 IN PROGRESS; T2.4 DEFERRED.
+
 ## 11 October 2026 — NEW CHAT HANDOVER: ENTERPRISE TRUST, PACKAGING, NO VM DEPLOYMENT (CURRENT)
 
 **OWNER'S LATEST DIRECTIVE:** Do **not** deploy, synchronise or reinstall Wantok Services on the online VM yet. Complete outstanding enterprise-platform security and functional requirements on **EAGLT02** before VM work, while ensuring every change remains versioned, installable, upgradeable and tested as a package. **This task is documentation handover only: stop coding before the next chat.** The concise entry point for a new chat is **`docs/START_NEXT_CHAT_20261011.md`**. Also read `AGENTS.md`, this handover, `docs/ROADMAP.md`, `docs/ROADMAP_FILLERS.md` and `docs/ENTERPRISE_RELEASE_READINESS_GATES.md`.

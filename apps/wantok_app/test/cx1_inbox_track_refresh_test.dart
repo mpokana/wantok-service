@@ -48,7 +48,15 @@ void main() {
       expect(threadReads, 1);
       expect(supportReads, 1);
 
-      await tester.tap(find.byTooltip('Refresh Inbox'));
+      final targetCx1InboxRefresh = find.byKey(
+        const ValueKey('cx1-inbox-refresh'),
+      );
+      expect(targetCx1InboxRefresh, findsOneWidget);
+      expect(
+        tester.getSize(targetCx1InboxRefresh).height,
+        greaterThanOrEqualTo(44),
+      );
+      await tester.tapAt(tester.getCenter(targetCx1InboxRefresh));
       await tester.pumpAndSettle();
       expect(threadReads, 2);
       expect(supportReads, 2);
@@ -74,7 +82,15 @@ void main() {
       expect(find.text('No requests or reservations yet'), findsOneWidget);
       expect(reads, 1);
 
-      await tester.tap(find.byTooltip('Refresh activity'));
+      final targetCx1TrackRefresh = find.byKey(
+        const ValueKey('cx1-track-refresh'),
+      );
+      expect(targetCx1TrackRefresh, findsOneWidget);
+      expect(
+        tester.getSize(targetCx1TrackRefresh).height,
+        greaterThanOrEqualTo(44),
+      );
+      await tester.tapAt(tester.getCenter(targetCx1TrackRefresh));
       await tester.pumpAndSettle();
       expect(reads, 2);
       expect(find.text('No requests or reservations yet'), findsOneWidget);
@@ -99,7 +115,15 @@ void main() {
         width: 1240,
       );
       expect(find.text('Could not load service conversations'), findsOneWidget);
-      await tester.tap(find.byTooltip('Refresh Inbox'));
+      final targetCx1InboxRefresh = find.byKey(
+        const ValueKey('cx1-inbox-refresh'),
+      );
+      expect(targetCx1InboxRefresh, findsOneWidget);
+      expect(
+        tester.getSize(targetCx1InboxRefresh).height,
+        greaterThanOrEqualTo(44),
+      );
+      await tester.tapAt(tester.getCenter(targetCx1InboxRefresh));
       await tester.pumpAndSettle();
       expect(attempts, 2);
       expect(find.text('No service conversations yet'), findsOneWidget);
@@ -124,7 +148,15 @@ void main() {
       width: 1240,
     );
     expect(find.text('Could not load your activity'), findsOneWidget);
-    await tester.tap(find.byTooltip('Refresh activity'));
+    final targetCx1TrackRefresh = find.byKey(
+      const ValueKey('cx1-track-refresh'),
+    );
+    expect(targetCx1TrackRefresh, findsOneWidget);
+    expect(
+      tester.getSize(targetCx1TrackRefresh).height,
+      greaterThanOrEqualTo(44),
+    );
+    await tester.tapAt(tester.getCenter(targetCx1TrackRefresh));
     await tester.pumpAndSettle();
     expect(attempts, 2);
     expect(find.text('No requests or reservations yet'), findsOneWidget);

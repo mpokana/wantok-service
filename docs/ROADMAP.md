@@ -2,6 +2,15 @@
 
 **Updated:** 2026-10-11
 
+## CX1 — Clearly labelled refresh actions and responsive tap QA (11 October)
+
+- [x] Convert Saved, Inbox and Track icon-only refresh affordances into visible labelled **Refresh** buttons with 48px minimum tap targets, accessibility tooltips and stable UI test keys. Existing read-only owner-scoped data paths and concurrency guards retained.
+- [x] Test actual button-centre taps (not merely widget existence) in 12 responsive Saved/Inbox/Track tests; complete seven Flutter analyses and all widget regression suites PASS in detached QA worktree.
+- [x] Build and deploy Client Web release to `:3000` / staging `:3300` after SHA-checked rollback and source-candidate snapshot; no Technical/Operations deployment.
+- [x] Matching offline-demo Android x64 build **4010** independently SHA-256 checked, installed in place over 4009 and launched, original app firstInstallTime retained. No signed-in or physical-device acceptance inferred.
+- [ ] Signed-in browser visual and click acceptance must wait until EAGLT02 Windows desktop is unlocked. Do not access account passwords or falsely claim Web runtime click acceptance because tests passed.
+- [ ] Physical HONOR, signed-in Android and six inactive service-family photo approvals and image-upload editor still open. CX1 IN PROGRESS; T2.4 DEFERRED.
+
 ## 11 October — ENTERPRISE DELIVERY PROGRAMME & RELEASE READINESS (CURRENT OWNER PRIORITY)
 
 **Latest owner instruction:** Complete the outstanding enterprise security, compliance, trust, Helpdesk and cross-platform acceptance work on **EAGLT02**, but design every increment to remain **versioned, packageable, installable and upgradeable** on a Linux VM. **Do NOT deploy, synchronise or reinstall on the online VM until the owner separately authorises it.** This roadmap checkpoint is documentation/handover only; subsequent feature work belongs to the **next chat**. Start there with `docs/START_NEXT_CHAT_20261011.md` and `docs/ENTERPRISE_RELEASE_READINESS_GATES.md`; retain all earlier CX1 and T2.4 scope without false completion claims.

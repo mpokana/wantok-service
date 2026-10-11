@@ -234,12 +234,19 @@ class _MessagesPageState extends State<MessagesPage> {
                   Positioned(
                     top: 14,
                     right: 14,
-                    child: IconButton(
-                      tooltip: 'Refresh Inbox',
-                      onPressed: _reloading ? null : _reload,
-                      icon: const Icon(
-                        Icons.refresh_rounded,
-                        color: Colors.white,
+                    child: Tooltip(
+                      message: 'Refresh Inbox',
+                      child: TextButton.icon(
+                        key: const ValueKey('cx1-inbox-refresh'),
+                        onPressed: _reloading ? null : _reload,
+                        icon: const Icon(Icons.refresh_rounded, size: 18),
+                        label: const Text('Refresh'),
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.white,
+                          backgroundColor: Colors.white.withValues(alpha: .12),
+                          minimumSize: const Size(96, 48),
+                          padding: const EdgeInsets.symmetric(horizontal: 9),
+                        ),
                       ),
                     ),
                   ),
