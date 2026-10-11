@@ -18,7 +18,7 @@
 
 - [x] Create an additive authenticated RPC for technical module log reads: require both module.view + module.logs, cap to 30 newest transitions, suppress untrusted summary/probe-key content and permit only the assigned module.
 - [x] Wire Technical Logs to the new server-enforced adapter, without adding raw log/queue/action privileges. Transactional migration + 12 pgTAP negative/read tests **PASS**, complete rollback confirmed. Seven analyses / 132 Client / 38 Operations / 22 Technical widgets **PASS** on isolated T2.4 code.
-- [x] Commit `0ba95ef` and verify GitHub feature branch, full Git-bundle backup, and signed-off-for-source-only Linux release archive. **Migration not applied** to shared development DB; port 3600 still serves the previous preview.
+- [x] Commit `0ba95ef` and verify GitHub feature branch, full Git-bundle backup and verified source-only Linux release archive; subsequent combined E6D/T2.4 checkout `0ad0fde` full Flutter check PASS (seven analyses, 132 Client / 43 Operations / 22 Technical). **Migration not applied** to shared development DB; port 3600 still serves the previous preview.
 - [ ] Audit original `list_technical_module_health_history` broader view-only API, implement separately authorised central/module log provider contracts and queue metadata adapters, then carefully approve executable jobs and dedicated audit trail. Full migrated SQL suite and authenticated UI acceptance remain OPEN. `docs/T24_SCOPED_HEALTH_LOG_ADAPTER_20261011.md`.
 
 ## T2.4 — Technical Diagnostics, Logs and Jobs (11 October; FIRST READ-ONLY MILESTONE)

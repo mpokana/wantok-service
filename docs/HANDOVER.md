@@ -19,7 +19,7 @@
 
 - **Commit `0ba95ef` verified on GitHub** adds `list_technical_module_log_events`: authenticated technical users require **both** module.view + module.logs on that module, server-capped to 30 health transitions, with free-text summaries/probe keys suppressed and transition reason restricted. Technical Control Logs now uses this new read-only RPC.
 - **SQL negative QA PASS (12/12 pgTAP):** anonymous, wrong module and view-only denied; cap/redaction and authorised role checked. Migration/test executed under a single **BEGIN/ROLLBACK** local DB transaction, and the function/test users were confirmed absent afterwards. No shared DB schema, VM or running Web update.
-- **Flutter full isolated regression PASS:** seven analyses, 132 Client / 38 Operations / 22 Technical widgets. A separate complete-history Git bundle and source Linux package for `0ba95ef` were verified; source package is **not production approved**.
+- **Flutter full isolated regression PASS:** seven analyses, 132 Client / 38 Operations / 22 Technical widgets; **combined E6D + T2.4 checkout `0ad0fde` also PASS:** seven analyses, 132 Client / 43 Operations / 22 Technical widgets. A separate complete-history Git bundle and source Linux package for `0ba95ef` were verified; source package is **not production approved**.
 - **Residual:** original `list_technical_module_health_history` retains existing module.view authority for legacy Health & dependencies; this new adapter does not remove that broad legacy read. Secure central application logs, queue registry, approved job actions, audit trail and browser staging validation remain open. See `docs/T24_SCOPED_HEALTH_LOG_ADAPTER_20261011.md`.
 
 ## 11 October — T2.4 first read-only observability milestone (OWNER-AUTHORISED; IN PROGRESS)
