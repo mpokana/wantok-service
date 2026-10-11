@@ -42,7 +42,7 @@ const localWantokApplications = <LocalWantokApplication>[
   ),
   LocalWantokApplication(
     port: 3200,
-    name: 'Operations Admin',
+    name: 'Operations',
     description:
         'Business operations, provider approvals and Support & Inquiries.',
     environment: 'Main development',

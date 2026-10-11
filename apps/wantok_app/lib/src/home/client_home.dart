@@ -271,6 +271,7 @@ class _ClientHomeState extends State<ClientHome> {
                             key: ValueKey('home-category-${service.slug}'),
                             compact: constraints.maxWidth < 700,
                             style: WantokCategoryStyles.bySlug(service.slug),
+                            mediaSlot: 'homeIcon',
                             label: _shortLabel(service),
                             badge: _badgeFor(service.slug),
                             onTap: () => _openService(service),
@@ -288,6 +289,7 @@ class _ClientHomeState extends State<ClientHome> {
                         return WantokCategoryTile(
                           compact: constraints.maxWidth < 700,
                           style: WantokCategoryStyles.travel,
+                          mediaSlot: 'homeIcon',
                           label: 'Travel & Flights',
                           onTap: () =>
                               _openPlannedGlobalService('Travel & Flights'),

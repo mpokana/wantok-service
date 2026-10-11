@@ -8,7 +8,7 @@
 | --- | --- | --- | --- | --- |
 | 3000 | Wantok Services Client | http://127.0.0.1:3000/ | Customer-facing Client site, catalogue, provider discovery, Inbox, Track and Wallet preview | Main local Client |
 | 3100 | Technical Control | http://127.0.0.1:3100/ | Technical modules, permissions, Theme & Media, application links | Main local Technical |
-| 3200 | Operations Admin | http://127.0.0.1:3200/ | Operations management and Support & Inquiries | Main local Operations (previous `a69d366` Admin build) |
+| 3200 | Operations | http://127.0.0.1:3200/ | Operations management and Support & Inquiries | Main local Operations (previous `a69d366` Admin build) |
 | 3300 | Client staging | http://127.0.0.1:3300/ | Independent Client preview for testing before deployment to 3000 | Staging snapshot |
 | 3400 | Technical staging | http://127.0.0.1:3400/ | Independent Technical preview for testing before deployment to 3100 | Staging snapshot |
 

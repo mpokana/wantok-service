@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wantok_app/src/home/wantok_category_ui.dart';
 import 'package:wantok_app/src/home/reference_services_gallery.dart';
+import 'package:wantok_app/src/home/screenshot_service_tiles.dart';
 
 void main() {
   test('Nineteen catalogue entries share the category style registry', () {
@@ -28,34 +29,34 @@ void main() {
         expect(styles[i].photoAsset, startsWith('assets/images/'));
         expect(
           styles[i].photoAsset,
-          anyOf(endsWith('.webp'), endsWith('.png')),
+          anyOf(endsWith('.webp'), endsWith('.png'), endsWith('.jpg')),
         );
       }
     }
   });
 
-  test('Missing category photographs use their own relevant icons', () {
-    expect(WantokCategoryStyles.education.photoAsset, isNull);
+  test('Every real service category has a unique bundled photograph', () {
+    final styles = WantokCategoryStyles.reference;
+    for (final style in styles.where((entry) => entry.slug != 'more')) {
+      expect(style.photoAsset, isNotNull, reason: style.slug);
+      expect(style.photoAsset, startsWith('assets/images/'));
+    }
+    expect(WantokCategoryStyles.more.slug, 'more');
+    // More is a navigation choice, rather than a service or a fake photo.
     expect(WantokCategoryStyles.education.icon, Icons.school_rounded);
-    expect(WantokCategoryStyles.labour.photoAsset, isNull);
     expect(WantokCategoryStyles.labour.icon, Icons.handyman_rounded);
-    expect(WantokCategoryStyles.financial.photoAsset, isNull);
     expect(WantokCategoryStyles.financial.icon, Icons.payments_rounded);
-    expect(WantokCategoryStyles.hotels.photoAsset, isNull);
-    expect(WantokCategoryStyles.hotels.icon, Icons.hotel_rounded);
-    expect(WantokCategoryStyles.errands.photoAsset, isNull);
-    expect(WantokCategoryStyles.boatHire.photoAsset, isNull);
     expect(
-      WantokCategoryStyles.professional.photoAsset,
-      'assets/images/categories/category_professional.webp',
+      WantokCategoryStyles.publicServices.photoAsset,
+      'assets/images/reference/services_public_photo.jpg',
     );
     expect(
-      WantokCategoryStyles.home.photoAsset,
-      'assets/images/categories/category_home_services.webp',
+      WantokCategoryStyles.hotels.photoAsset,
+      'assets/images/categories/category_hotels.webp',
     );
   });
 
-  testWidgets('Education and Labour tiles render different illustrated icons', (
+  testWidgets('Education and Labour show their own distinct photo assets', (
     tester,
   ) async {
     await tester.pumpWidget(
@@ -85,16 +86,48 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    expect(find.byIcon(Icons.school_rounded), findsOneWidget);
-    expect(find.byIcon(Icons.handyman_rounded), findsOneWidget);
     expect(
       find.image(
-        const AssetImage('assets/images/categories/category_professional.webp'),
+        const AssetImage('assets/images/categories/category_education.webp'),
       ),
-      findsNothing,
+      findsOneWidget,
+    );
+    expect(
+      find.image(
+        const AssetImage('assets/images/categories/category_labour.webp'),
+      ),
+      findsOneWidget,
     );
     expect(tester.takeException(), isNull);
   });
+
+  testWidgets(
+    'Home mobile tile uses the same category card photograph as Web',
+    (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: SizedBox(
+              width: 150,
+              height: 190,
+              child: ScreenshotHomeTile(
+                art: ScreenshotServiceArt.items['public-services']!,
+                onTap: () {},
+              ),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(
+        find.image(
+          const AssetImage('assets/images/reference/services_public_photo.jpg'),
+        ),
+        findsOneWidget,
+      );
+      expect(tester.takeException(), isNull);
+    },
+  );
 
   test('Backend categories resolve the same identity throughout app', () {
     expect(

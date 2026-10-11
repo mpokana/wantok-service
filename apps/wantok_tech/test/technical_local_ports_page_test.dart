@@ -27,6 +27,10 @@ void main() {
           .length,
       2,
     );
+    expect(
+      localWantokApplications.singleWhere((entry) => entry.port == 3200).name,
+      'Operations',
+    );
   });
 
   for (final width in [390.0, 1200.0]) {

@@ -54,7 +54,7 @@ class _ProviderApplicationPageState extends State<ProviderApplicationPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text(
-              'Application submitted. Wantok Admin will review it.',
+              'Application submitted. Wantok Operations will review it.',
             ),
           ),
         );
@@ -624,7 +624,7 @@ String _statusMessage(String status) => switch (status) {
   'approved' => 'Approved. Your vendor capabilities and draft service listing are available.',
   'rejected' =>
     'Not approved. You can correct the details and submit a new application.',
-  _ => 'Under review by Wantok Admin.',
+  _ => 'Under review by Wantok Operations.',
 };
 
 String _humanise(String value) => value

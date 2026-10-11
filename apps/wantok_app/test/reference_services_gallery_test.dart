@@ -79,7 +79,7 @@ void main() {
   }
 
   testWidgets(
-    'Reference category grid opens matching icon category and All Services',
+    'Reference category grid opens shared photo category and All Services',
     (tester) async {
       ReferenceCategorySpec? selected;
       var allServices = false;
@@ -93,20 +93,20 @@ void main() {
       expect(find.byType(GridView), findsWidgets);
       expect(
         find.image(
-          const AssetImage('assets/images/reference/services_taxi_photo.jpg'),
+          const AssetImage('assets/images/categories/category_taxi.webp'),
         ),
         findsWidgets,
       );
       expect(
         find.image(
-          const AssetImage('assets/images/reference/services_food_photo.jpg'),
+          const AssetImage('assets/images/categories/category_food.webp'),
         ),
         findsWidgets,
       );
       expect(
         find.image(
           const AssetImage(
-            'assets/images/reference/services_groceries_photo.jpg',
+            'assets/images/categories/category_groceries.webp',
           ),
         ),
         findsWidgets,

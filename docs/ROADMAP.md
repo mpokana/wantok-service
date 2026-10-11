@@ -2,6 +2,19 @@
 
 **Updated:** 2026-10-11
 
+## CX1 11 October — Photo-forward categories and shared Web/Android media
+
+- [x] **Public Services** plain government icon replaced by existing project PNG government-building photograph; same Flutter category media renderer on Web/mobile. No fake agency information, emergency contact or public-service state change.
+- [x] **All actual service-category pictures audited:** seven unique, locally bundled Unsplash-licensed photographic WebP files added for Hotels, Education & Training, General Labour, Financial Services, Boat Hire, Errands and Venue Booking. Existing category pictures preserved. The **More** navigation entry intentionally remains an ellipsis symbol; distinct category photos are asserted in tests. Provenance in `docs/CATEGORY_PHOTO_ASSETS.md`; commercial/photo-release verification remains a separate editorial gate.
+- [x] **Consistent media slots:** Web and Android Home use published Theme & Media `homeIcon` → published `cardImage` → same bundled photograph fallback. Other category cards use `cardImage` → identical bundle. Existing independent appearance settings retained.
+- [x] **Visible Operations naming** changed in port directory and applicant UI without renaming internal `wantok_admin` package/RLS/roles. Existing 3200 older Operations runtime is not newly deployed or toggled.
+- [x] **Full source tests PASS:** 7 Flutter analysis targets, 103 Client, 20 Operations and 8 Technical widget tests, database 38 SQL files/800 assertions.
+- [x] **Web Client release on 3000:** isolated Web release build passed; public government-building image and seven WebP category assets present and respond HTTP 200; previous served files copied and hash-verified for rollback. 3300 staging untouched.
+- [x] **Technical 3100 label deployed:** port 3200 labelled Operations in new Technical build with verified pre-change backup; 3400 staging untouched.
+- [x] **Android offline-demo update DEPLOYED AND VISUALLY VERIFIED:** recovered emulator Package Manager by a graceful stop/relaunch without data wipe; version 3 was correctly refused as downgrade against installed build 4003, so rebuilt 4004 without app identity change. `adb install -r` Success; installed versionCode **4004**, original first-install date retained. Updated Public Services photographic Home tile and Hotels/Education/Financial/Labour catalogue photographed tiles observed in actual emulator screenshots. APK saved as `D:\Wantok_Project_Backups\wantok-client-photo-parity-android-preview-4004-20261011.apk` (SHA-256 in handover). App remains OFFLINE DEMONSTRATION; no sign-in/bookings/money. HONOR physical-device acceptance still OPEN.
+- [x] **Web + Android photographic screenshot checks PASS:** Chrome Web :3000 Home now shows the Public Services government-building photograph and consistent desktop category tiles. Android offline-demo build 4004 shows the same Public Services photo and new education/hotels/labour/financial service images in its real catalogue.
+- [ ] **Remaining CX1 acceptance:** owner final visual sign-off on Web and Android; HONOR physical testing; authenticated Web provider-discovery Morobe → Lae/detail/read-only Saved plus Account/Inbox/Track/Wallet/Wantok Agent. No module approval, emergency dispatch, money, live chat or provider status changes. **T2.4 deferred**.
+
 ## 11 October — Technical Control local port directory and staged delivery
 
 - [x] Add **Local applications & ports** to the existing authenticated Technical Platform Administrator sidebar and toolbar on `:3100`, listing five distinct development/staging addresses with purposes and clickable manual-open links: Client 3000, Technical 3100, Operations Admin 3200, Client staging 3300, Technical staging 3400. No spurious online indicator, cross-device localhost routing or backend roles.

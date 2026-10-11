@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import 'wantok_category_ui.dart';
+
 typedef ServiceArt = ({
   String icon,
   String photo,
@@ -79,19 +81,14 @@ abstract final class ScreenshotServiceArt {
     required bool icon,
     BoxFit fit = BoxFit.cover,
   }) {
+    // Web and Android now use the SAME photo and published cardImage slot,
+    // including the existing Public Services photograph.
     final slug = items.entries.firstWhere((entry) => entry.value == art).key;
-    final url = WantokBrandingScope.maybeOf(context)
-        ?.mediaUrl(slug, icon ? 'homeIcon' : 'cardImage');
-    final fallback = asset(icon ? art.icon : art.photo);
-    if (url == null) {
-      return Image.asset(fallback, fit: fit, width: double.infinity);
-    }
-    return Image.network(
-      url,
-      fit: fit,
-      width: double.infinity,
-      errorBuilder: (_, _, _) =>
-          Image.asset(fallback, fit: fit, width: double.infinity),
+    return WantokCategoryPicture(
+      style: WantokCategoryStyles.bySlug(slug),
+      compact: icon,
+      mediaSlot: icon ? 'homeIcon' : 'cardImage',
+      borderRadius: 0,
     );
   }
 }

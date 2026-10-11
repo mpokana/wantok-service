@@ -153,6 +153,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFFB57209),
     surface: Color(0xFFFFF4E4),
     badgeSurface: Color(0xFFFFE8BD),
+    photoAsset: 'assets/images/categories/category_errands.webp',
   );
   static const boatHire = WantokCategoryStyle(
     slug: 'boat-hire',
@@ -161,6 +162,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFF087E95),
     surface: Color(0xFFE8F7F9),
     badgeSurface: Color(0xFFD1F0F4),
+    photoAsset: 'assets/images/categories/category_boat_hire.webp',
   );
   static const waterRides = WantokCategoryStyle(
     slug: 'boat-ship-rides',
@@ -178,6 +180,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFF7A53BA),
     surface: Color(0xFFF3EDFF),
     badgeSurface: Color(0xFFE5DAFA),
+    photoAsset: 'assets/images/categories/category_labour.webp',
   );
   static const venue = WantokCategoryStyle(
     slug: 'venue-booking',
@@ -186,7 +189,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFF8E56AA),
     surface: Color(0xFFF8EFFE),
     badgeSurface: Color(0xFFEEDCF9),
-    photoAsset: 'assets/images/hero_events.png',
+    photoAsset: 'assets/images/categories/category_venue.webp',
   );
   static const hotels = WantokCategoryStyle(
     slug: 'accommodation',
@@ -195,9 +198,10 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFFD04C7B),
     surface: Color(0xFFFFEFF4),
     badgeSurface: Color(0xFFFFD9E6),
+    photoAsset: 'assets/images/categories/category_hotels.webp',
   );
 
-  // Category-specific illustrated icons replace unrelated/repeated photos.
+  // Distinct, licensed photographs cover real service categories; More is a navigation symbol.
   static const education = WantokCategoryStyle(
     slug: 'education-training',
     title: 'Education &\nTraining',
@@ -205,6 +209,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFFBC693E),
     surface: Color(0xFFFFEDE6),
     badgeSurface: Color(0xFFFFDACC),
+    photoAsset: 'assets/images/categories/category_education.webp',
   );
   static const financial = WantokCategoryStyle(
     slug: 'financial-services',
@@ -213,6 +218,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFF13856A),
     surface: Color(0xFFE9F8F0),
     badgeSurface: Color(0xFFD0F1E3),
+    photoAsset: 'assets/images/categories/category_financial.webp',
   );
 
   static const publicServices = WantokCategoryStyle(
@@ -222,6 +228,7 @@ abstract final class WantokCategoryStyles {
     accent: Color(0xFF005337),
     surface: Color(0xFFFFF2C6),
     badgeSurface: Color(0xFFFFE49B),
+    photoAsset: 'assets/images/reference/services_public_photo.jpg',
   );
 
   static const reference = <WantokCategoryStyle>[
@@ -280,16 +287,22 @@ class WantokCategoryPicture extends StatelessWidget {
     required this.style,
     this.compact = false,
     this.borderRadius = 13,
+    this.mediaSlot = 'cardImage',
   });
 
   final WantokCategoryStyle style;
   final bool compact;
   final double borderRadius;
+  final String mediaSlot;
 
   @override
   Widget build(BuildContext context) {
-    final publishedPhoto = WantokBrandingScope.maybeOf(context)
-        ?.mediaUrl(style.slug, 'cardImage');
+    final media = WantokBrandingScope.maybeOf(context);
+    final publishedPhoto =
+        media?.mediaUrl(style.slug, mediaSlot) ??
+        (mediaSlot == 'homeIcon'
+            ? media?.mediaUrl(style.slug, 'cardImage')
+            : null);
     return ClipRRect(
       borderRadius: BorderRadius.circular(borderRadius),
       child: ColoredBox(
@@ -300,8 +313,14 @@ class WantokCategoryPicture extends StatelessWidget {
                 fit: BoxFit.cover,
                 width: double.infinity,
                 height: double.infinity,
-                errorBuilder: (_, _, _) =>
-                    _CategoryIconIllustration(style: style, compact: compact),
+                errorBuilder: (_, _, _) => style.photoAsset == null
+                    ? _CategoryIconIllustration(style: style, compact: compact)
+                    : Image.asset(
+                        style.photoAsset!,
+                        width: double.infinity,
+                        height: double.infinity,
+                        fit: BoxFit.cover,
+                      ),
               )
             : style.slug == 'more'
             ? Center(
@@ -472,6 +491,7 @@ class WantokCategoryTile extends StatelessWidget {
     this.badge,
     this.saved,
     this.onSavedToggle,
+    this.mediaSlot = 'cardImage',
   });
 
   final WantokCategoryStyle style;
@@ -481,6 +501,7 @@ class WantokCategoryTile extends StatelessWidget {
   final String? badge;
   final bool? saved;
   final VoidCallback? onSavedToggle;
+  final String mediaSlot;
 
   @override
   Widget build(BuildContext context) => Material(
@@ -519,6 +540,7 @@ class WantokCategoryTile extends StatelessWidget {
                       child: WantokCategoryPicture(
                         style: style,
                         compact: compact,
+                        mediaSlot: mediaSlot,
                         borderRadius: compact ? 13 : 16,
                       ),
                     ),
