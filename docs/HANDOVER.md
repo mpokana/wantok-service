@@ -4,6 +4,13 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 11 October CX1 — Local release parity guard and T2.4 scope (LATEST)
+
+- Created scripts/qa/verify-cx1-local.ps1, a **read-only local release QA guard**. It checks all five localhost Web shells, Client 3000=3300 and Technical 3100=3400 JavaScript SHA-256 parity, original Taxi and Public Services artwork byte parity, and the served Client build containing the Saved/Inbox/Track refresh labels. Optional Android check reads the existing emulator's app version only; no installations or data changes.
+- **EAGLT02 PASS:** five endpoints HTTP 200; Client JS SHA AB18B9EB8F0733482B396E3C122EB0B726AB9CF2823A79458B0F34AB9178C51D; Technical JS SHA 1D0E6DE096EC54D7D189A798B756A23EAE4F4B7CD32C4AAFE4E30DB905AD67A1; both reference photos identical across four build endpoints; Android build 4009. An intentionally impossible Android minimum 999999 failed with exit code 1 as required. No Web/database/Android redeployment.
+- **Important boundary:** compiled JavaScript containing toolbar labels does not prove a particular Chrome tab rendered them or clicked them. Previous live Inbox/Track screenshots did not visually establish refresh icons; a previous Saved click navigated to vendor onboarding with no input/submission. Browser click acceptance remains OPEN; no speculative Chrome profile/cache repair performed.
+- Roadmap T2.4 is **Diagnostics, logs and jobs**, after CX1: diagnostics adapters; central/module log adapters; background jobs/queue visibility; approved job actions; richer technical audit views. This CX1 release parity check does NOT begin T2.4. See docs/CX1_RELEASE_PARITY_GUARD_20261011.md. CX1 IN PROGRESS; T2.4 DEFERRED.
+
 ## 11 October — CX1 live Client Web screens and Saved after reload (LATEST)
 
 - Authenticated read-only Web checks on EAGLT02 Client 3000 PASS for Track (existing completed Specialist Services record), Wallet (K0.00 explicitly preview only), Inbox (Services 0; Help & support 1 existing Open QA request), and Wantok Agent (provider discovery/human help entry points present; AI chat provider NOT connected).

@@ -2,6 +2,14 @@
 
 **Updated:** 2026-10-11
 
+## CX1 — Repeatable read-only local release parity gate (11 October)
+
+- [x] Add scripts/qa/verify-cx1-local.ps1: verify localhost ports 3000/3100/3200/3300/3400; Client and Technical staging/main JS hashes; real Taxi/Public Services pictures; compiled Saved/Inbox/Track refresh labels; optional existing Android package version. Never authenticate to user APIs or mutate data.
+- [x] Validate EAGLT02 five HTTP responses, matching main/staging JS, photographs, Android 4009. Fail-closed test requiring version 999999 returned exit 1 without changing emulator state.
+- [ ] Controlled signed-in real browser click acceptance for the Saved, Inbox and Track refresh controls. Current served bundle has all labels; previous real screenshots do not establish the actual buttons or interactions. Do not assume cache staleness as the root cause.
+- [ ] HONOR physical device, signed-in Android, and six inactive category photographs with actual Technical picture-upload lifecycle remain open.
+- **T2.4 (after CX1)**: Diagnostics, logs and jobs — adapters for diagnostics/logs, background job/queue visibility, approved job actions and richer audit views. Not started by this CX1 checker. T2.4 DEFERRED.
+
 ## CX1 — Actual signed-in Web read-only journey acceptance (11 October)
 
 - [x] Authenticated live Client Web Track displayed existing completed QA record without editing it.

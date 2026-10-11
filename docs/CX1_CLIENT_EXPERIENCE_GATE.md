@@ -5,6 +5,14 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## 11 October — Read-only CX1 deployment parity guard (LATEST)
+
+**PASS static/release integrity, NOT browser click-through:** reusable scripts/qa/verify-cx1-local.ps1 on EAGLT02 confirms five localhost HTTP shells, Client main/staging and Technical main/staging JS hashes match, three refresh labels in served Client JavaScript, identical original Taxi and Public Services images across app endpoints, and existing Android versionCode 4009. Final CX1_RELEASE_QA_PASS. Deliberately impossible Android build minimum correctly returned CX1_RELEASE_QA_FAIL with exit 1. See docs/CX1_RELEASE_PARITY_GUARD_20261011.md.
+
+**OPEN live UI:** compiled labels do not prove Chrome actually rendered or clicked buttons. Earlier signed-in Inbox/Track screenshots did not show refresh buttons; attempted Saved toolbar click went to vendor onboarding with no form input or submission. Browser cache/render cause NOT verified; no speculative source, Chrome-profile or server changes made. No new data/permissions/payment/booking actions or deployments.
+
+**T2.4** means the later Technical Control milestone Diagnostics, logs and jobs: diagnostics/log adapters, background job/queue visibility, approved job actions and richer audit views. This CX1 static checker is not T2.4. CX1 IN PROGRESS; T2.4 DEFERRED.
+
 ## 11 October — CX1G live Web journey checks (LATEST)
 
 **PASS actual signed-in browser:** Track existing completed Specialist Services booking record; Wallet K0.00 preview with no active payment rails; Inbox real Services(0) / Help & support(1) owner-private Open QA request; Wantok Agent landing/capabilities with model AI chat explicitly not connected. No provider messaging, support request, booking, reviews, money or user-data writes.
