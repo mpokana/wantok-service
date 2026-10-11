@@ -5,8 +5,13 @@ import 'package:wantok_ui/wantok_ui.dart';
 /// Applicants only see their own metadata via database RLS.
 /// No uploader or consent-approval control is intentionally exposed.
 class VendorEvidenceInboxPage extends StatefulWidget {
-  const VendorEvidenceInboxPage({super.key, this.loadRequests});
+  const VendorEvidenceInboxPage({
+    super.key,
+    this.loadRequests,
+    this.checkReadiness,
+  });
   final Future<List<Map<String, dynamic>>> Function()? loadRequests;
+  final Future<Map<String, dynamic>> Function(String requestId)? checkReadiness;
   @override
   State<VendorEvidenceInboxPage> createState() =>
       _VendorEvidenceInboxPageState();
@@ -71,6 +76,54 @@ class _VendorEvidenceInboxPageState extends State<VendorEvidenceInboxPage> {
       _refresh();
     } catch (error) {
       if (mounted) _notice('Unable to record response: $error');
+    } finally {
+      if (mounted) setState(() => _busy = null);
+    }
+  }
+
+  Future<void> _checkReadiness(String requestId) async {
+    if (_busy != null) return;
+    setState(() => _busy = requestId);
+    try {
+      final Map<String, dynamic> state;
+      if (widget.checkReadiness != null) {
+        state = await widget.checkReadiness!(requestId);
+      } else {
+        final response = await WantokBackend.client.rpc(
+          'vendor_evidence_preflight',
+          params: {'p_request_id': requestId},
+        );
+        state = Map<String, dynamic>.from(response as Map);
+      }
+      if (!mounted) return;
+      // This preview contains no upload widget or endpoint, even if a remote
+      // service unexpectedly changes its policy.
+      if (state['upload_allowed'] != false ||
+          state['reviewer_access_allowed'] != false ||
+          state['identity_verified'] != false) {
+        _notice('Upload status unavailable. Please contact Wantok support.');
+        return;
+      }
+      await showDialog<void>(
+        context: context,
+        builder: (dialog) => AlertDialog(
+          title: const Text('Secure upload is not yet available'),
+          content: Text(
+            'Your request status: ${state['status'] ?? 'pending'}. '
+            'The approved privacy notice, secure gateway and document '
+            'verification process are not enabled. '
+            'Do not submit personal documents by chat or email.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialog),
+              child: const Text('Close'),
+            ),
+          ],
+        ),
+      );
+    } catch (error) {
+      if (mounted) _notice('Unable to check upload availability.');
     } finally {
       if (mounted) setState(() => _busy = null);
     }
@@ -184,6 +237,15 @@ class _VendorEvidenceInboxPageState extends State<VendorEvidenceInboxPage> {
                           Text(
                             'Expires: ${req['expires_at']}',
                             style: const TextStyle(fontSize: 12),
+                          ),
+                          const SizedBox(height: 8),
+                          OutlinedButton.icon(
+                            key: ValueKey('evidence-preflight-${req['id']}'),
+                            onPressed: _busy == null
+                                ? () => _checkReadiness(req['id'].toString())
+                                : null,
+                            icon: const Icon(Icons.lock_outline),
+                            label: const Text('Check secure upload status'),
                           ),
                           const SizedBox(height: 8),
                           if (DateTime.tryParse(

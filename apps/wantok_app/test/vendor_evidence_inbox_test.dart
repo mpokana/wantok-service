@@ -14,6 +14,13 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           home: VendorEvidenceInboxPage(
+            checkReadiness: (_) async => {
+              'request_id': 'test',
+              'status': 'requested',
+              'upload_allowed': false,
+              'reviewer_access_allowed': false,
+              'identity_verified': false,
+            },
             loadRequests: () async => [
               {
                 'id': 'test',
@@ -31,6 +38,10 @@ void main() {
       expect(find.text('Driving licence requirement'), findsOneWidget);
       expect(find.textContaining('No document upload'), findsOneWidget);
       expect(find.text('Acknowledge receipt'), findsOneWidget);
+      expect(find.text('Check secure upload status'), findsOneWidget);
+      await tester.tap(find.text('Check secure upload status'));
+      await tester.pumpAndSettle();
+      expect(find.text('Secure upload is not yet available'), findsOneWidget);
       expect(tester.takeException(), isNull);
     });
   }
