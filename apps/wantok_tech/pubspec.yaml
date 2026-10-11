@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
   supabase_flutter: ^2.18.0
   image_picker: ^1.2.4
+  url_launcher: ^6.3.2
   cupertino_icons: ^1.0.8
   wantok_api:
     path: ../../packages/wantok_api

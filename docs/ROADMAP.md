@@ -2,6 +2,15 @@
 
 **Updated:** 2026-10-11
 
+## 11 October — Technical Control local port directory and staged delivery
+
+- [x] Add **Local applications & ports** to the existing authenticated Technical Platform Administrator sidebar and toolbar on `:3100`, listing five distinct development/staging addresses with purposes and clickable manual-open links: Client 3000, Technical 3100, Operations Admin 3200, Client staging 3300, Technical staging 3400. No spurious online indicator, cross-device localhost routing or backend roles.
+- [x] Split previously shared Client/Technical static staging directories from main: independent `D:\Wantok_Staging_Builds_20261011\{Client,Technical}`, copied/hashes checked before staging-only rebind, all expected local ports serve HTTP 200; stage builds are snapshots, not a live copy.
+- [x] Validate read-only port page at 390/1200 px and link opening with simulated launcher; full isolated Flutter gate **7 analyses / 102 Client / 17 Admin / 8 Technical PASS**, pgTAP **37 files / 789 assertions PASS**. Safely compile and deploy **only Technical 3100**, retaining verified rollback copies and previous 3400 staging preview; authenticated Technical Chrome showed sidebar entry.
+- [x] **Partial Client Web CX1F PASS:** signed-in `:3000` opened Services → Explore providers, kept keyword search blank, selected **Specialist Services**, and displayed existing approved QA provider with sourced 5.0 (1) rating. Current Public Services imagery also visibly rendered.
+- [ ] **Remaining Client Web CX1F:** continue from category result → **province Morobe → town Lae → provider detail/Saved read-only**; then Account/Inbox/Track/Wallet/Wantok Agent, plus physical HONOR device acceptance. Foreground browser changed during QA; no force-click or sensitive-data inspection. A partial provider result does not close the full category-filter acceptance.
+- [ ] Review the **Public Services** module control in Operations Admin when a separate tested Admin build is approved for deployment; do not toggle public directory or publish official emergency contacts without explicit owner sign-off. CX1 IN PROGRESS; T2.4 DEFERRED.
+
 ## 11 October CX1 — preserve new Public Services and category imagery
 
 - [x] Verified GitHub fast-forward containing `3199499`, `6508781`, `a83d1b0`, and `7487c8c`; independent full-history source bundle `D:\Wantok_Project_Backups\wantok-services-cx1-public-media-7487c8c-20261011.bundle` passed `git bundle verify`. GitHub publication is **not a production rollout or module toggle**.

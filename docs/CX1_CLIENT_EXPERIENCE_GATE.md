@@ -5,6 +5,16 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## 11 October Technical Control local links — separate acceptance
+
+**PASS — authorised Technical Control browser:** authenticated `:3100` shows the new **Local applications & ports** navigation beside Theme & Media in the actual live EAGLT02 desktop layout. The read-only route registers localhost Client **3000**, Technical **3100**, Operations Admin **3200**, independent Client staging **3300**, independent Technical staging **3400**. Addresses are manual links, not real-time monitoring or public URLs. Both 3300 and 3400 were copied to separate SHA-256-verified staging build directories and their Python servers were rebound without touching main 3000/3100/3200 processes. The new Technical 3100 static build was deployed after separate clean-worktree tests and a local recovery copy. **8 Technical widget tests PASS** (including 390/1200 px and simulated link activation). Browser link click-through not independently claimed. No schema/role/theme-publish/paid-service mutations. See `docs/LOCAL_APPLICATION_PORTS.md`.
+
+**Partial authenticated Client Web PASS (11 Oct):** EAGLT02 Chrome signed-in `:3000` Home renders current Public Services/icon media; Services → Explore providers opens the real provider directory; blank search + **Specialist Services** filter returned verified Wantok QA Plumbing Services with sourced 5.0 (1). Browser focus switched to another Chrome window before choosing province/town, so do **not** mark Morobe/Lae, detail, Saved or account screens as accepted. Screenshots stored only in ignored `.wantok/cx1-web-*-20261011.png`, not Git. No bookings/Saved toggles/reviews/requests/payments touched.
+
+**Full technical/database regression:** isolated QA worktree 7 Flutter analyses clean, **102 Client + 17 Admin + 8 Technical** widget tests PASS; local database **37 files/789 pgTAP assertions PASS**. Main Technical 3100 serves the port directory, 3400 remains an independent older staging snapshot. No new backend roles or tables.
+
+**Does not close CX1F:** authenticated Client Web `:3000` province Morobe/town Lae filters, existing provider details/Saved, Account/Inbox/Track/Wallet/Agent are still OPEN; prior Android evidence is not Web acceptance. Operations Admin `:3200` is still the older `a69d366` runtime, so source-level Public Services module control should NOT be marked deployed or toggled. Physical HONOR / new media appearance remains a separate owner sign-off. **CX1 IN PROGRESS; T2.4 DEFERRED.**
+
 ## CX1 live-baseline checkpoint — 11 October 2026
 
 | Area | Grounded evidence | Current status |
