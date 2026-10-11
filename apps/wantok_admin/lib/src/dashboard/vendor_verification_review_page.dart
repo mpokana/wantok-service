@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import 'vendor_evidence_requests_page.dart';
+
 /// Operational two-person checklist review, never identity certification.
 /// No sensitive documents, media, or full ID numbers are accepted here.
 class VendorVerificationReviewPage extends StatefulWidget {
@@ -222,6 +224,22 @@ class _VendorVerificationReviewPageState
                   ),
                 ),
                 const SizedBox(height: 10),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: OutlinedButton.icon(
+                    key: const ValueKey('vendor-evidence-register'),
+                    onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute<void>(
+                        builder: (_) => VendorEvidenceRequestsPage(
+                          caseId: widget.caseId,
+                          applicantName: widget.applicantName,
+                        ),
+                      ),
+                    ),
+                    icon: const Icon(Icons.description_outlined),
+                    label: const Text('Evidence request register (no uploads)'),
+                  ),
+                ),
                 const Card(
                   child: ListTile(
                     leading: Icon(Icons.lock_outline, color: Colors.orange),

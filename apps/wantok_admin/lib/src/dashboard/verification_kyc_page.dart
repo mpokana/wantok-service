@@ -4,6 +4,7 @@ import 'package:wantok_ui/wantok_ui.dart';
 
 import 'staged_provider_review_page.dart';
 import 'vendor_intake_queue_page.dart';
+import 'vendor_clearance_status_page.dart';
 
 /// Read-only verification cockpit. These counts are not a KYC certification.
 class VerificationKycSnapshot {
@@ -161,6 +162,19 @@ class _VerificationKycPageState extends State<VerificationKycPage> {
               label: const Text(
                 'Vendor applications & two-person review tasks',
               ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: OutlinedButton.icon(
+              key: const ValueKey('kyc-clearance-monitor'),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const VendorClearanceStatusPage(),
+                ),
+              ),
+              icon: const Icon(Icons.gpp_bad_outlined),
+              label: const Text('Clearance monitoring & emergency revocation'),
             ),
           ),
           const SizedBox(height: 14),

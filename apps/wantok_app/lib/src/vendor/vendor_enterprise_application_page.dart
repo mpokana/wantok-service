@@ -5,6 +5,7 @@ import 'package:wantok_ui/wantok_ui.dart';
 
 import 'provider_application_page.dart';
 import 'vendor_case_reply_dialog.dart';
+import 'vendor_evidence_inbox_page.dart';
 
 /// International vendor intake. A submission is NOT KYC clearance, provider
 /// approval or a permission to offer rides, sell goods or receive payouts.
@@ -400,6 +401,15 @@ class _VendorEnterpriseApplicationPageState
     appBar: AppBar(
       title: const Text('Become a Wantok vendor'),
       actions: [
+        IconButton(
+          tooltip: 'My evidence requirements (no uploads)',
+          icon: const Icon(Icons.shield_outlined),
+          onPressed: () => Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (_) => const VendorEvidenceInboxPage(),
+            ),
+          ),
+        ),
         IconButton(
           tooltip: 'My application cases',
           icon: const Icon(Icons.assignment_turned_in_outlined),
