@@ -6,7 +6,7 @@ void main() {
     await tester.pumpWidget(const WantokAdminApp(backendConfigured: false));
 
     expect(
-      find.textContaining('Wantok Admin needs SUPABASE_URL'),
+      find.textContaining('Wantok Operations needs SUPABASE_URL'),
       findsOneWidget,
     );
   });

@@ -53,18 +53,20 @@ class StagedOnboardingRepository {
     required String applicantKind,
     required String province,
     required String town,
+    String countryCode = 'PG',
     required String summary,
   }) async {
     if (WantokBackend.client.auth.currentUser == null) {
       throw StateError('Sign in before submitting an application.');
     }
     await WantokBackend.client.rpc(
-      'submit_staged_provider_application',
+      'submit_staged_provider_application_international',
       params: {
         'p_category_slug': categorySlug,
         'p_applicant_name': applicantName,
         'p_applicant_kind': applicantKind,
-        'p_coverage_province': province,
+        'p_country_code': countryCode,
+        'p_coverage_region': province,
         'p_coverage_town': town,
         'p_service_summary': summary,
       },

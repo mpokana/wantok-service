@@ -64,7 +64,7 @@ class _AdminSignInPageState extends State<AdminSignInPage> {
                     Icon(Icons.hub_outlined, size: 72, color: Colors.white),
                     SizedBox(height: 22),
                     Text(
-                      'Wantok Admin',
+                      'Wantok Operations',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 38,

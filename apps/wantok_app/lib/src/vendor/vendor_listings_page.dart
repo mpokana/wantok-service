@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
@@ -64,6 +65,8 @@ class _VendorListingsPageState extends State<VendorListingsPage> {
         description: draft.description,
         pricingModel: draft.pricingModel,
         basePrice: draft.basePrice,
+        currency: draft.currency,
+        coverageCountryCode: draft.countryCode,
         unitLabel: draft.unitLabel,
         serviceAddress: draft.address,
         coverageProvince: draft.province,
@@ -339,7 +342,7 @@ class _ServiceCard extends StatelessWidget {
               style: const TextStyle(color: WantokColors.primaryDark),
             ),
             if (price != null)
-              Text('K$price • ${service['pricing_model'] ?? 'quote'}'),
+              Text('${service['currency'] ?? 'PGK'} $price • ${service['pricing_model'] ?? 'quote'}'),
             const SizedBox(height: 10),
             Wrap(
               spacing: 8,
@@ -469,6 +472,9 @@ class _ServiceEditorDialogState extends State<_ServiceEditorDialog> {
   late final TextEditingController _address;
   late final TextEditingController _province;
   late final TextEditingController _town;
+  late final TextEditingController _currency;
+  late String _countryCode;
+  late String _countryLabel;
   late String _pricingModel;
 
   static const _pricingModels = [
@@ -505,6 +511,11 @@ class _ServiceEditorDialogState extends State<_ServiceEditorDialog> {
     _town = TextEditingController(
       text: service['coverage_town']?.toString() ?? '',
     );
+    _countryCode = service['coverage_country_code']?.toString() ?? 'PG';
+    _countryLabel = _countryCode;
+    _currency = TextEditingController(
+      text: service['currency']?.toString() ?? 'PGK',
+    );
     _pricingModel = service['pricing_model']?.toString() ?? 'quote';
   }
 
@@ -521,7 +532,10 @@ class _ServiceEditorDialogState extends State<_ServiceEditorDialog> {
   }
 
   void _submit() {
-    if (_title.text.trim().isEmpty) return;
+    if (_title.text.trim().isEmpty ||
+        !RegExp(r'^[A-Za-z]{3}$').hasMatch(_currency.text.trim())) {
+      return;
+    }
     final basePrice = _price.text.trim().isEmpty
         ? null
         : double.tryParse(_price.text.trim());
@@ -535,6 +549,8 @@ class _ServiceEditorDialogState extends State<_ServiceEditorDialog> {
         address: _address.text.trim(),
         province: _province.text.trim(),
         town: _town.text.trim(),
+        countryCode: _countryCode,
+        currency: _currency.text.trim().toUpperCase(),
       ),
     );
   }
@@ -582,7 +598,16 @@ class _ServiceEditorDialogState extends State<_ServiceEditorDialog> {
                   decimal: true,
                 ),
                 decoration: const InputDecoration(
-                  labelText: 'Base price (Kina / K)',
+                  labelText: 'Base price (in selected currency)',
+                ),
+              ),
+              const SizedBox(height: 10),
+              TextField(
+                controller: _currency,
+                maxLength: 3,
+                textCapitalization: TextCapitalization.characters,
+                decoration: const InputDecoration(
+                  labelText: 'Currency (ISO 4217, e.g. PGK, AUD, USD)',
                 ),
               ),
               const SizedBox(height: 10),
@@ -599,11 +624,27 @@ class _ServiceEditorDialogState extends State<_ServiceEditorDialog> {
                 decoration: const InputDecoration(labelText: 'Service address'),
               ),
               const SizedBox(height: 10),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: OutlinedButton.icon(
+                  icon: const Icon(Icons.public_rounded),
+                  label: Text('Service country: $_countryLabel'),
+                  onPressed: () => showCountryPicker(
+                    context: context,
+                    showPhoneCode: false,
+                    onSelect: (country) => setState(() {
+                      _countryCode = country.countryCode;
+                      _countryLabel = country.name;
+                    }),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10),
               TextField(
                 controller: _province,
                 decoration: const InputDecoration(
-                  labelText: 'Province / region',
-                  hintText: 'Morobe Province',
+                  labelText: 'State / Province / Region',
+                  hintText: 'Enter your service region',
                 ),
               ),
               const SizedBox(height: 10),
@@ -970,6 +1011,8 @@ class _ServiceDraft {
     required this.address,
     required this.province,
     required this.town,
+    required this.countryCode,
+    required this.currency,
   });
 
   final String title;
@@ -980,6 +1023,8 @@ class _ServiceDraft {
   final String address;
   final String province;
   final String town;
+  final String countryCode;
+  final String currency;
 }
 
 class _ResourceDraft {

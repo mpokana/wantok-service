@@ -15,6 +15,7 @@ class ClientProviderDiscovery {
     required this.coverageProvinces,
     required this.coverageTowns,
     required this.organicScore,
+    this.countryCodes = const [],
   });
 
   final String providerId;
@@ -30,6 +31,7 @@ class ClientProviderDiscovery {
   final List<String> coverageProvinces;
   final List<String> coverageTowns;
   final double organicScore;
+  final List<String> countryCodes;
 
   bool get hasRatings => ratingCount > 0;
 
@@ -48,6 +50,7 @@ class ClientProviderDiscovery {
       coverageProvinces: _stringList(row['coverage_provinces']),
       coverageTowns: _stringList(row['coverage_towns']),
       organicScore: _toDouble(row['organic_score']) ?? 0,
+      countryCodes: _stringList(row['country_codes']),
     );
   }
 }
@@ -108,15 +111,23 @@ class ProviderDiscoveryRepository {
     String? categoryId,
     String? province,
     String? town,
+    String? countryCode,
+    String? providerType,
+    double? minRating,
+    bool remoteOnly = false,
     int limit = 30,
   }) async {
     final result = await WantokBackend.client.rpc(
-      'search_client_providers',
+      'search_client_providers_international',
       params: {
         'p_query': _emptyToNull(query),
         'p_category_id': _emptyToNull(categoryId),
-        'p_province': _emptyToNull(province),
+        'p_country_code': _emptyToNull(countryCode),
+        'p_region': _emptyToNull(province),
         'p_town': _emptyToNull(town),
+        'p_provider_type': _emptyToNull(providerType),
+        'p_min_rating': minRating,
+        'p_remote_only': remoteOnly,
         'p_limit': limit,
       },
     );
@@ -149,6 +160,42 @@ class ProviderDiscoveryRepository {
         .cast<Map<String, dynamic>>()
         .map(ClientProviderDiscovery.fromMap)
         .toList(growable: false);
+  }
+
+  /// Only locations with an approved and active provider service appear.
+  Future<List<Map<String, dynamic>>> listLocations() async {
+    final rows = await WantokBackend.client.rpc(
+      'list_client_provider_locations',
+    );
+    return (rows as List<dynamic>)
+        .map((e) => Map<String, dynamic>.from(e as Map))
+        .toList(growable: false);
+  }
+
+  Future<Map<String, dynamic>?> loadDiscoveryPreferences() async {
+    final user = WantokBackend.client.auth.currentUser;
+    if (user == null) return null;
+    return WantokBackend.client
+        .from('client_discovery_preferences')
+        .select('country_code,region,town')
+        .eq('user_id', user.id)
+        .maybeSingle();
+  }
+
+  Future<void> saveDiscoveryPreferences({
+    required String countryCode,
+    String? region,
+    String? town,
+  }) async {
+    final user = WantokBackend.client.auth.currentUser;
+    if (user == null) return;
+    await WantokBackend.client.from('client_discovery_preferences').upsert({
+      'user_id': user.id,
+      'country_code': countryCode,
+      'region': region,
+      'town': town,
+      'updated_at': DateTime.now().toUtc().toIso8601String(),
+    });
   }
 
   Future<List<ClientProviderService>> loadProviderServices(

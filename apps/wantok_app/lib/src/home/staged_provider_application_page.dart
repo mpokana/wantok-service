@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
@@ -40,12 +41,20 @@ class _StagedProviderApplicationPageState
   final _town = TextEditingController();
   final _summary = TextEditingController();
   String _kind = 'individual';
+  late String _countryCode;
+  late String _countryLabel;
   bool _sending = false;
   late Future<Map<String, dynamic>?> _existing;
 
   @override
   void initState() {
     super.initState();
+    _countryCode =
+        WidgetsBinding.instance.platformDispatcher.locale.countryCode
+            ?.toUpperCase() ??
+        'PG';
+    if (_countryCode.length != 2) _countryCode = 'PG';
+    _countryLabel = _countryCode;
     _existing = (widget.loadApplication ?? _repo.loadMyApplication)(
       widget.categoryId,
     );
@@ -79,6 +88,7 @@ class _StagedProviderApplicationPageState
           applicantName: _name.text.trim(),
           applicantKind: _kind,
           province: _province.text.trim(),
+          countryCode: _countryCode,
           town: _town.text.trim(),
           summary: _summary.text.trim(),
         );
@@ -348,6 +358,23 @@ class _StagedProviderApplicationPageState
                       ],
                       onChanged: (v) =>
                           setState(() => _kind = v ?? 'individual'),
+                    ),
+                    const SizedBox(height: 10),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: OutlinedButton.icon(
+                        key: const ValueKey('staged-applicant-country'),
+                        icon: const Icon(Icons.public_rounded),
+                        label: Text('Service country: $_countryLabel'),
+                        onPressed: () => showCountryPicker(
+                          context: context,
+                          showPhoneCode: false,
+                          onSelect: (country) => setState(() {
+                            _countryCode = country.countryCode;
+                            _countryLabel = country.name;
+                          }),
+                        ),
+                      ),
                     ),
                     const SizedBox(height: 10),
                     TextFormField(

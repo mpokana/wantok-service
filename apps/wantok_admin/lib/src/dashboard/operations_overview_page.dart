@@ -13,11 +13,15 @@ class OperationsSnapshot {
     required this.applications,
     required this.bookings,
     required this.audits,
+    this.pendingVerifications,
+    this.verificationCounts,
   });
   final int pendingApplications;
   final int pendingListings;
   final int activeBookings;
   final int recentAudits;
+  final int? pendingVerifications;
+  final Map<String, int>? verificationCounts;
   final List<Map<String, dynamic>> applications;
   final List<Map<String, dynamic>> bookings;
   final List<Map<String, dynamic>> audits;
@@ -68,7 +72,33 @@ class OperationsSnapshot {
                 .order('occurred_at', ascending: false)
                 .limit(8))
             .cast<Map<String, dynamic>>();
+    int? kycPending;
+    Map<String, int>? verificationCounts;
+    try {
+      final rows = await db
+          .from('provider_profiles')
+          .select('provider_id,verification_status')
+          .limit(1000);
+      final counts = <String, int>{
+        'verified': 0,
+        'pending': 0,
+        'rejected': 0,
+        'suspended': 0,
+      };
+      for (final item in rows) {
+        final key = item['verification_status']?.toString();
+        if (key != null && counts.containsKey(key)) {
+          counts[key] = counts[key]! + 1;
+        }
+      }
+      verificationCounts = counts;
+      kycPending = counts['pending'];
+    } catch (_) {
+      // KYC is subject to a distinct access policy; never invent a count.
+    }
     return OperationsSnapshot(
+      pendingVerifications: kycPending,
+      verificationCounts: verificationCounts,
       pendingApplications: pending.length,
       pendingListings: listings.length,
       activeBookings: active.length,
@@ -90,6 +120,7 @@ class OperationsOverviewPage extends StatefulWidget {
     this.onOpenListings,
     this.onOpenBookings,
     this.onOpenAudit,
+    this.onOpenVerification,
     super.key,
   });
   final Future<OperationsSnapshot> Function()? loader;
@@ -97,6 +128,7 @@ class OperationsOverviewPage extends StatefulWidget {
   final VoidCallback? onOpenListings;
   final VoidCallback? onOpenBookings;
   final VoidCallback? onOpenAudit;
+  final VoidCallback? onOpenVerification;
   @override
   State<OperationsOverviewPage> createState() => _OperationsOverviewPageState();
 }
@@ -255,10 +287,10 @@ class _OperationsOverviewPageState extends State<OperationsOverviewPage> {
                   ),
                   _metric(
                     metricWidth,
-                    'Recent audit events',
-                    data.recentAudits,
-                    Icons.shield_outlined,
-                    widget.onOpenAudit,
+                    'Verification & KYC',
+                    data.pendingVerifications,
+                    Icons.verified_user_outlined,
+                    widget.onOpenVerification,
                   ),
                 ],
               ),
@@ -350,6 +382,13 @@ class _OperationsOverviewPageState extends State<OperationsOverviewPage> {
                 ),
               ],
               const SizedBox(height: 12),
+              _panel(
+                'Verification & KYC',
+                'Current verification statuses from visible provider records (up to 1,000)',
+                _verificationSummary(data.verificationCounts),
+                widget.onOpenVerification,
+              ),
+              const SizedBox(height: 12),
               if (tablet)
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -406,7 +445,7 @@ class _OperationsOverviewPageState extends State<OperationsOverviewPage> {
   Widget _metric(
     double width,
     String label,
-    int value,
+    int? value,
     IconData icon,
     VoidCallback? onTap,
   ) => SizedBox(
@@ -432,7 +471,7 @@ class _OperationsOverviewPageState extends State<OperationsOverviewPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      value.toString(),
+                      value?.toString() ?? '—',
                       style: const TextStyle(
                         fontSize: 23,
                         fontWeight: FontWeight.w900,
@@ -495,6 +534,73 @@ class _OperationsOverviewPageState extends State<OperationsOverviewPage> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _verificationSummary(Map<String, int>? counts) {
+    if (counts == null) {
+      return const _PlannedPanel(
+        icon: Icons.lock_outline,
+        message: 'Verification status counts are restricted or unavailable.',
+      );
+    }
+    final items = [
+      (
+        'Verified',
+        counts['verified'] ?? 0,
+        Icons.verified_user,
+        Color(0xFF05724A),
+      ),
+      (
+        'Pending',
+        counts['pending'] ?? 0,
+        Icons.pending_actions,
+        Color(0xFFBA7B00),
+      ),
+      (
+        'Rejected',
+        counts['rejected'] ?? 0,
+        Icons.cancel_outlined,
+        Color(0xFFC54B49),
+      ),
+      (
+        'Suspended',
+        counts['suspended'] ?? 0,
+        Icons.pause_circle_outline,
+        Color(0xFF47648A),
+      ),
+    ];
+    return Wrap(
+      spacing: 10,
+      runSpacing: 10,
+      children: [
+        for (final item in items)
+          ConstrainedBox(
+            constraints: const BoxConstraints(minWidth: 145, maxWidth: 205),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  backgroundColor: item.$4.withValues(alpha: .13),
+                  child: Icon(item.$3, color: item.$4),
+                ),
+                const SizedBox(width: 9),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${item.$2}',
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    Text(item.$1, style: const TextStyle(fontSize: 11)),
+                  ],
+                ),
+              ],
+            ),
+          ),
+      ],
     );
   }
 

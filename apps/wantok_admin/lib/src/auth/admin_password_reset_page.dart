@@ -48,7 +48,7 @@ class _AdminPasswordResetPageState extends State<AdminPasswordResetPage> {
       if (!mounted) return;
       setState(() {
         _success = true;
-        _message = 'Password reset successfully. Return to Wantok Admin and sign in.';
+        _message = 'Password reset successfully. Return to Wantok Operations and sign in.';
       });
     } catch (error) {
       if (mounted) {
@@ -80,7 +80,7 @@ class _AdminPasswordResetPageState extends State<AdminPasswordResetPage> {
                     ),
                     const SizedBox(height: 14),
                     const Text(
-                      'Reset Wantok Admin password',
+                      'Reset Wantok Operations password',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: WantokColors.primaryDark,

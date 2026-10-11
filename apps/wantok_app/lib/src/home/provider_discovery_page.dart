@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
@@ -32,6 +33,13 @@ class _ProviderDiscoveryPageState extends State<ProviderDiscoveryPage> {
   final Set<String> _savedProviderIds = <String>{};
   final Set<String> _savingIds = <String>{};
   List<ClientServicePlace> _places = const <ClientServicePlace>[];
+  List<Map<String, dynamic>> _availableLocations = const [];
+  String? _countryCode;
+  String _countryLabel = 'Country';
+  String? _providerType;
+  double? _minRating;
+  bool _remoteOnly = false;
+  String _sort = 'recommended';
   String? _categoryId;
   String? _province;
   String? _town;
@@ -43,15 +51,20 @@ class _ProviderDiscoveryPageState extends State<ProviderDiscoveryPage> {
     final initialQuery = widget.initialQuery?.trim() ?? '';
     _search.text = initialQuery;
     _categoryId = widget.initialCategoryId;
-    _showingTop = initialQuery.isEmpty && _categoryId == null;
-    _future = _showingTop
-        ? _repository.loadTopProviders()
-        : _repository.searchProviders(
-            query: initialQuery,
-            categoryId: _categoryId,
-          );
+    // Browser/device locale is an initial suggestion, not GPS verification.
+    _countryCode = WidgetsBinding.instance.platformDispatcher.locale.countryCode
+        ?.toUpperCase();
+    if (_countryCode == null || _countryCode!.length != 2) _countryCode = 'PG';
+    _countryLabel = _countryCode!;
+    _showingTop = false;
+    _future = _repository.searchProviders(
+      query: initialQuery,
+      categoryId: _categoryId,
+      countryCode: _countryCode,
+    );
     _loadSaved();
     _loadFilterOptions();
+    _loadLocationPreference();
   }
 
   @override
@@ -79,10 +92,47 @@ class _ProviderDiscoveryPageState extends State<ProviderDiscoveryPage> {
   Future<void> _loadFilterOptions() async {
     try {
       final places = await _experience.loadServicePlaces(limit: 100);
-      if (mounted) setState(() => _places = places);
+      final locations = await _repository.listLocations();
+      if (mounted) {
+        setState(() {
+          _places = places;
+          _availableLocations = locations;
+        });
+      }
     } catch (_) {
       // Provider search remains usable if structured filter options cannot load.
     }
+  }
+
+  Future<void> _loadLocationPreference() async {
+    try {
+      final pref = await _repository.loadDiscoveryPreferences();
+      if (!mounted || pref == null) return;
+      setState(() {
+        _countryCode = pref['country_code'] as String?;
+        _countryLabel = _countryCode ?? 'All countries';
+        _province = pref['region'] as String?;
+        _town = pref['town'] as String?;
+      });
+      _runSearch();
+    } catch (_) {
+      // Locale remains a suggestion if preferences cannot load.
+    }
+  }
+
+  void _setCountry(String? value, [String? name]) {
+    setState(() {
+      _countryCode = value;
+      _countryLabel = name ?? value ?? 'All countries';
+      _province = null;
+      _town = null;
+    });
+    if (value != null) {
+      _repository
+          .saveDiscoveryPreferences(countryCode: value)
+          .catchError((Object _) {});
+    }
+    _runSearch();
   }
 
   Map<String, String> get _categoryOptions {
@@ -108,8 +158,12 @@ class _ProviderDiscoveryPageState extends State<ProviderDiscoveryPage> {
 
   Map<String, String> get _provinceOptions {
     final provinces =
-        _places
-            .map((place) => place.province.trim())
+        _availableLocations
+            .where(
+              (row) =>
+                  _countryCode == null || row['country_code'] == _countryCode,
+            )
+            .map((row) => (row['region']?.toString() ?? '').trim())
             .where((value) => value.isNotEmpty)
             .toSet()
             .toList()
@@ -121,13 +175,16 @@ class _ProviderDiscoveryPageState extends State<ProviderDiscoveryPage> {
 
   Map<String, String> get _townOptions {
     final towns =
-        _places
+        _availableLocations
             .where(
-              (place) =>
-                  _province == null ||
-                  place.province.toLowerCase() == _province!.toLowerCase(),
+              (row) =>
+                  (_countryCode == null ||
+                      row['country_code'] == _countryCode) &&
+                  (_province == null ||
+                      (row['region']?.toString() ?? '').toLowerCase() ==
+                          _province!.toLowerCase()),
             )
-            .map((place) => place.town?.trim())
+            .map((row) => row['town']?.toString().trim())
             .whereType<String>()
             .where((value) => value.isNotEmpty)
             .toSet()
@@ -137,7 +194,13 @@ class _ProviderDiscoveryPageState extends State<ProviderDiscoveryPage> {
   }
 
   bool get _hasFilters =>
-      _categoryId != null || _province != null || _town != null;
+      _categoryId != null ||
+      _countryCode != null ||
+      _province != null ||
+      _town != null ||
+      _providerType != null ||
+      _minRating != null ||
+      _remoteOnly;
 
   void _onSearchChanged(String value) {
     _debounce?.cancel();
@@ -158,11 +221,28 @@ class _ProviderDiscoveryPageState extends State<ProviderDiscoveryPage> {
         _town = null;
       }
     });
+    if (_countryCode != null) {
+      _repository
+          .saveDiscoveryPreferences(
+            countryCode: _countryCode!,
+            region: _province,
+          )
+          .catchError((Object _) {});
+    }
     _runSearch();
   }
 
   void _setTown(String? value) {
     setState(() => _town = value);
+    if (_countryCode != null) {
+      _repository
+          .saveDiscoveryPreferences(
+            countryCode: _countryCode!,
+            region: _province,
+            town: _town,
+          )
+          .catchError((Object _) {});
+    }
     _runSearch();
   }
 
@@ -170,8 +250,13 @@ class _ProviderDiscoveryPageState extends State<ProviderDiscoveryPage> {
     _search.clear();
     setState(() {
       _categoryId = null;
+      _countryCode = null;
+      _countryLabel = 'All countries';
       _province = null;
       _town = null;
+      _providerType = null;
+      _minRating = null;
+      _remoteOnly = false;
     });
     _runSearch('');
   }
@@ -179,14 +264,17 @@ class _ProviderDiscoveryPageState extends State<ProviderDiscoveryPage> {
   Future<void> _runSearch([String? value]) async {
     final query = (value ?? _search.text).trim();
     final showTop = query.isEmpty && !_hasFilters;
-    final next = showTop
-        ? _repository.loadTopProviders()
-        : _repository.searchProviders(
-            query: query,
-            categoryId: _categoryId,
-            province: _province,
-            town: _town,
-          );
+    final next = _repository.searchProviders(
+      query: query,
+      categoryId: _categoryId,
+      countryCode: _countryCode,
+      province: _province,
+      town: _town,
+      providerType: _providerType,
+      minRating: _minRating,
+      remoteOnly: _remoteOnly,
+      limit: 60,
+    );
 
     setState(() {
       _showingTop = showTop;
@@ -247,196 +335,362 @@ class _ProviderDiscoveryPageState extends State<ProviderDiscoveryPage> {
           style: TextStyle(fontWeight: FontWeight.w900),
         ),
       ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          await Future.wait([_runSearch(), _loadSaved(), _loadFilterOptions()]);
-        },
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
-          children: [
-            Container(
-              padding: const EdgeInsets.all(18),
-              decoration: BoxDecoration(
-                gradient: const LinearGradient(
-                  colors: [Color(0xFF075C3A), Color(0xFF0B79A8)],
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 1100),
+          child: RefreshIndicator(
+            onRefresh: () async {
+              await Future.wait([
+                _runSearch(),
+                _loadSaved(),
+                _loadFilterOptions(),
+              ]);
+            },
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(18),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF003E2D), Color(0xFF08694A)],
+                    ),
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: const Row(
+                    children: [
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Search people & businesses',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 21,
+                                fontWeight: FontWeight.w900,
+                              ),
+                            ),
+                            SizedBox(height: 6),
+                            Text(
+                              'Find approved Wantok providers by name, service or category.',
+                              style: TextStyle(
+                                color: Color(0xFFE4F4EE),
+                                height: 1.35,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(width: 12),
+                      CircleAvatar(
+                        radius: 27,
+                        backgroundColor: Color(0x33FFFFFF),
+                        child: Icon(
+                          Icons.manage_search_rounded,
+                          color: Colors.white,
+                          size: 31,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: const Row(
-                children: [
-                  Expanded(
+                const SizedBox(height: 14),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 760),
+                    child: TextField(
+                      controller: _search,
+                      onChanged: _onSearchChanged,
+                      onSubmitted: _runSearch,
+                      decoration: InputDecoration(
+                        labelText: 'Provider, service or category',
+                        hintText: 'e.g. plumber, vehicle hire, catering',
+                        prefixIcon: const Icon(Icons.search_rounded),
+                        suffixIcon: _search.text.isEmpty
+                            ? null
+                            : IconButton(
+                                tooltip: 'Clear',
+                                onPressed: () {
+                                  _search.clear();
+                                  _runSearch('');
+                                },
+                                icon: const Icon(Icons.close_rounded),
+                              ),
+                        filled: true,
+                        fillColor: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(14),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Search people & businesses',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 21,
-                            fontWeight: FontWeight.w900,
-                          ),
+                        Row(
+                          children: [
+                            const Icon(
+                              Icons.filter_alt_outlined,
+                              color: WantokColors.primaryDark,
+                            ),
+                            const SizedBox(width: 8),
+                            const Expanded(
+                              child: Text(
+                                'Filter providers',
+                                style: TextStyle(fontWeight: FontWeight.w900),
+                              ),
+                            ),
+                            if (_hasFilters)
+                              TextButton(
+                                onPressed: _clearAll,
+                                child: const Text('Clear all'),
+                              ),
+                          ],
                         ),
-                        SizedBox(height: 6),
-                        Text(
-                          'Find approved Wantok providers by name, service or category.',
-                          style: TextStyle(
-                            color: Color(0xFFE4F4EE),
-                            height: 1.35,
-                          ),
+                        const SizedBox(height: 10),
+                        LayoutBuilder(
+                          builder: (context, layout) {
+                            final columns = layout.maxWidth >= 780
+                                ? 3
+                                : layout.maxWidth >= 490
+                                ? 2
+                                : 1;
+                            final width =
+                                (layout.maxWidth - 12 * (columns - 1)) /
+                                columns;
+                            return Wrap(
+                              spacing: 12,
+                              runSpacing: 12,
+                              children: [
+                                SizedBox(
+                                  width: width,
+                                  child: OutlinedButton.icon(
+                                    icon: const Icon(Icons.public_rounded),
+                                    label: Text(
+                                      'Country: $_countryLabel',
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    onPressed: () => showCountryPicker(
+                                      context: context,
+                                      showPhoneCode: false,
+                                      onSelect: (country) => _setCountry(
+                                        country.countryCode,
+                                        country.name,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: width,
+                                  child: _ProviderFilterSelect(
+                                    label: 'Category',
+                                    allLabel: 'All categories',
+                                    value: _categoryId,
+                                    options: _categoryOptions,
+                                    onChanged: _setCategory,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: width,
+                                  child: _ProviderFilterSelect(
+                                    label: 'State / Province / Region',
+                                    allLabel: 'All regions',
+                                    value: _province,
+                                    options: _provinceOptions,
+                                    onChanged: _provinceOptions.isEmpty
+                                        ? null
+                                        : _setProvince,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: width,
+                                  child: _ProviderFilterSelect(
+                                    label: 'Town / City',
+                                    allLabel: 'All towns',
+                                    value: _town,
+                                    options: _townOptions,
+                                    onChanged: _townOptions.isEmpty
+                                        ? null
+                                        : _setTown,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: width,
+                                  child: _ProviderFilterSelect(
+                                    label: 'Provider type',
+                                    allLabel: 'All providers',
+                                    value: _providerType,
+                                    options: const {
+                                      'individual': 'Individuals',
+                                      'business': 'Businesses',
+                                      'organisation': 'Organisations',
+                                    },
+                                    onChanged: (value) {
+                                      setState(() => _providerType = value);
+                                      _runSearch();
+                                    },
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: width,
+                                  child: _ProviderFilterSelect(
+                                    label: 'Minimum rating',
+                                    allLabel: 'Any rating',
+                                    value: _minRating?.toStringAsFixed(1),
+                                    options: const {
+                                      '3.0': '3 stars & above',
+                                      '4.0': '4 stars & above',
+                                      '4.5': '4.5 stars & above',
+                                    },
+                                    onChanged: (value) {
+                                      setState(
+                                        () => _minRating = double.tryParse(
+                                          value ?? '',
+                                        ),
+                                      );
+                                      _runSearch();
+                                    },
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: width,
+                                  child: _ProviderFilterSelect(
+                                    label: 'Sort by',
+                                    allLabel: 'Recommended',
+                                    value: _sort == 'recommended'
+                                        ? null
+                                        : _sort,
+                                    options: const {
+                                      'rating': 'Highest rated',
+                                      'reviews': 'Most reviews',
+                                      'name': 'Provider name',
+                                    },
+                                    onChanged: (value) => setState(
+                                      () => _sort = value ?? 'recommended',
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: width,
+                                  child: SwitchListTile.adaptive(
+                                    contentPadding: EdgeInsets.zero,
+                                    title: const Text('Remote / Online'),
+                                    value: _remoteOnly,
+                                    onChanged: (value) {
+                                      setState(() => _remoteOnly = value);
+                                      _runSearch();
+                                    },
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                        const SizedBox(height: 5),
+                        Wrap(
+                          spacing: 8,
+                          children: [
+                            if (_countryCode != null)
+                              TextButton.icon(
+                                onPressed: () => _setCountry(null),
+                                icon: const Icon(Icons.travel_explore),
+                                label: const Text('Search all countries'),
+                              ),
+                            const Chip(
+                              avatar: Icon(
+                                Icons.verified_user_outlined,
+                                size: 16,
+                              ),
+                              label: Text('Verified providers only'),
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(width: 12),
-                  CircleAvatar(
-                    radius: 27,
-                    backgroundColor: Color(0x33FFFFFF),
-                    child: Icon(
-                      Icons.manage_search_rounded,
-                      color: Colors.white,
-                      size: 31,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 14),
-            TextField(
-              controller: _search,
-              onChanged: _onSearchChanged,
-              onSubmitted: _runSearch,
-              decoration: InputDecoration(
-                labelText: 'Provider, service or category',
-                hintText: 'e.g. plumber, vehicle hire, catering',
-                prefixIcon: const Icon(Icons.search_rounded),
-                suffixIcon: _search.text.isEmpty
-                    ? null
-                    : IconButton(
-                        tooltip: 'Clear',
-                        onPressed: () {
-                          _search.clear();
-                          _runSearch('');
-                        },
-                        icon: const Icon(Icons.close_rounded),
-                      ),
-                filled: true,
-                fillColor: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(14),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.filter_alt_outlined,
-                          color: WantokColors.primaryDark,
-                        ),
-                        const SizedBox(width: 8),
-                        const Expanded(
-                          child: Text(
-                            'Filter providers',
-                            style: TextStyle(fontWeight: FontWeight.w900),
-                          ),
-                        ),
-                        if (_hasFilters)
-                          TextButton(
-                            onPressed: _clearAll,
-                            child: const Text('Clear all'),
-                          ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    _ProviderFilterSelect(
-                      label: 'Service category',
-                      allLabel: 'All categories',
-                      value: _categoryId,
-                      options: _categoryOptions,
-                      onChanged: _setCategory,
-                    ),
-                    const SizedBox(height: 10),
-                    _ProviderFilterSelect(
-                      label: 'Province',
-                      allLabel: 'All provinces',
-                      value: _province,
-                      options: _provinceOptions,
-                      onChanged: _setProvince,
-                    ),
-                    const SizedBox(height: 10),
-                    _ProviderFilterSelect(
-                      label: 'Town',
-                      allLabel: 'All towns',
-                      value: _town,
-                      options: _townOptions,
-                      onChanged: _townOptions.isEmpty ? null : _setTown,
-                    ),
-                  ],
                 ),
-              ),
-            ),
-            const SizedBox(height: 18),
-            PngSectionTitle(
-              title: _showingTop ? 'Top Wantoks' : 'Search results',
-              subtitle: _showingTop
-                  ? 'A rotating selection from highly rated eligible providers.'
-                  : 'Only active verified providers with approved services appear.',
-            ),
-            const SizedBox(height: 10),
-            FutureBuilder<List<ClientProviderDiscovery>>(
-              future: _future,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState != ConnectionState.done) {
-                  return const Padding(
-                    padding: EdgeInsets.all(38),
-                    child: Center(child: CircularProgressIndicator()),
-                  );
-                }
+                const SizedBox(height: 18),
+                PngSectionTitle(
+                  title: _showingTop ? 'Top Wantoks' : 'Search results',
+                  subtitle: _showingTop
+                      ? 'A rotating selection from highly rated eligible providers.'
+                      : 'Only active verified providers with approved services appear.',
+                ),
+                const SizedBox(height: 10),
+                FutureBuilder<List<ClientProviderDiscovery>>(
+                  future: _future,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState != ConnectionState.done) {
+                      return const Padding(
+                        padding: EdgeInsets.all(38),
+                        child: Center(child: CircularProgressIndicator()),
+                      );
+                    }
 
-                if (snapshot.hasError) {
-                  return _StateCard(
-                    icon: Icons.cloud_off_outlined,
-                    title: 'Could not load providers',
-                    body: 'Check your connection and try again.',
-                    actionLabel: 'Retry',
-                    onAction: _runSearch,
-                  );
-                }
+                    if (snapshot.hasError) {
+                      return _StateCard(
+                        icon: Icons.cloud_off_outlined,
+                        title: 'Could not load providers',
+                        body: 'Check your connection and try again.',
+                        actionLabel: 'Retry',
+                        onAction: _runSearch,
+                      );
+                    }
 
-                final providers =
-                    snapshot.data ?? const <ClientProviderDiscovery>[];
-                if (providers.isEmpty) {
-                  return _StateCard(
-                    icon: Icons.search_off_rounded,
-                    title: 'No matching providers',
-                    body: 'Try another provider name, service or category. Wantok Agent can guide the next step when normal search cannot find a match.',
-                    actionLabel: _hasFilters ? 'Clear filters' : 'Clear search',
-                    onAction: _clearAll,
-                  );
-                }
+                    final providers = [
+                      ...snapshot.data ?? const <ClientProviderDiscovery>[],
+                    ];
+                    if (_sort != 'recommended') {
+                      providers.sort(
+                        (a, b) => switch (_sort) {
+                          'rating' => b.ratingAverage.compareTo(
+                            a.ratingAverage,
+                          ),
+                          'reviews' => b.ratingCount.compareTo(a.ratingCount),
+                          'name' => a.displayName.toLowerCase().compareTo(
+                            b.displayName.toLowerCase(),
+                          ),
+                          _ => 0,
+                        },
+                      );
+                    }
+                    if (providers.isEmpty) {
+                      return _StateCard(
+                        icon: Icons.search_off_rounded,
+                        title: 'No matching providers',
+                        body: 'Try another provider name, service or category. Wantok Agent can guide the next step when normal search cannot find a match.',
+                        actionLabel: _hasFilters
+                            ? 'Clear filters'
+                            : 'Clear search',
+                        onAction: _clearAll,
+                      );
+                    }
 
-                return Column(
-                  children: [
-                    for (final provider in providers) ...[
-                      _ProviderCard(
-                        provider: provider,
-                        isSaved: _savedProviderIds.contains(
-                          provider.providerId,
-                        ),
-                        saving: _savingIds.contains(provider.providerId),
-                        onSaved: () => _toggleSaved(provider),
-                        onTap: () => _openProvider(provider),
-                      ),
-                      const SizedBox(height: 10),
-                    ],
-                  ],
-                );
-              },
+                    return Column(
+                      children: [
+                        for (final provider in providers) ...[
+                          _ProviderCard(
+                            provider: provider,
+                            isSaved: _savedProviderIds.contains(
+                              provider.providerId,
+                            ),
+                            saving: _savingIds.contains(provider.providerId),
+                            onSaved: () => _toggleSaved(provider),
+                            onTap: () => _openProvider(provider),
+                          ),
+                          const SizedBox(height: 10),
+                        ],
+                      ],
+                    );
+                  },
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

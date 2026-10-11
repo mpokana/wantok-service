@@ -11,15 +11,16 @@ class OperationsSidebar extends StatelessWidget {
   });
   final int selected;
   final ValueChanged<int> onSelect;
-  static const entries = <(String, IconData)>[
-    ('Overview', Icons.dashboard_rounded),
-    ('Provider approvals', Icons.how_to_reg_outlined),
-    ('Services & listings', Icons.storefront_outlined),
-    ('Resources', Icons.inventory_2_outlined),
-    ('Bookings & orders', Icons.receipt_long_outlined),
-    ('Audit & activity', Icons.history_outlined),
-    ('Support & inquiries', Icons.support_agent_outlined),
-    ('Modules', Icons.tune_rounded),
+  static const entries = <(int, String, IconData)>[
+    (0, 'Overview', Icons.dashboard_rounded),
+    (4, 'Bookings & Orders', Icons.receipt_long_outlined),
+    (1, 'Providers', Icons.groups_outlined),
+    (2, 'Services & Categories', Icons.grid_view_rounded),
+    (3, 'Resources', Icons.inventory_2_outlined),
+    (8, 'Verification & KYC', Icons.verified_user_outlined),
+    (6, 'Support & Inquiries', Icons.support_agent_outlined),
+    (5, 'Audit & Activity', Icons.history_outlined),
+    (7, 'Settings & Modules', Icons.tune_rounded),
   ];
 
   @override
@@ -46,38 +47,38 @@ class OperationsSidebar extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(bottom: 5),
               child: ListTile(
-                key: ValueKey('operations-nav-$i'),
+                key: ValueKey('operations-nav-${entries[i].$1}'),
                 dense: true,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(11),
                 ),
-                selected: i == selected,
+                selected: entries[i].$1 == selected,
                 selectedTileColor: const Color(0xFFE0F3E8),
                 textColor: Colors.white,
                 iconColor: Colors.white,
                 selectedColor: WantokColors.primaryDark,
                 leading: Icon(
-                  entries[i].$2,
+                  entries[i].$3,
                   size: 21,
-                  color: i == selected
+                  color: entries[i].$1 == selected
                       ? WantokColors.primaryDark
                       : Colors.white,
                 ),
                 title: Text(
-                  entries[i].$1,
+                  entries[i].$2,
                   style: const TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                onTap: () => onSelect(i),
+                onTap: () => onSelect(entries[i].$1),
               ),
             ),
           const Divider(color: Colors.white24, height: 28),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 10),
             child: Text(
-              'PLANNED MODULES',
+              'ADDITIONAL CAPABILITIES',
               style: TextStyle(
                 color: Colors.white70,
                 fontSize: 10,
@@ -94,7 +95,7 @@ class OperationsSidebar extends StatelessWidget {
               color: Colors.white54,
             ),
             title: Text(
-              'Payments & settlements',
+              'Payments & Wallet',
               style: TextStyle(color: Colors.white60, fontSize: 12),
             ),
             subtitle: Text(
@@ -107,7 +108,7 @@ class OperationsSidebar extends StatelessWidget {
             enabled: false,
             leading: Icon(Icons.analytics_outlined, color: Colors.white54),
             title: Text(
-              'Advanced analytics',
+              'Analytics & Reports',
               style: TextStyle(color: Colors.white60, fontSize: 12),
             ),
             subtitle: Text(

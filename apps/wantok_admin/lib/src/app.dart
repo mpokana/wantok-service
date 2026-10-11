@@ -15,7 +15,7 @@ class WantokAdminApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Wantok Admin',
+      title: 'Wantok Operations',
       debugShowCheckedModeBanner: false,
       theme: WantokTheme.light(),
       home: backendConfigured
@@ -128,7 +128,7 @@ class _AdminConfigurationPage extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.all(28),
           child: Text(
-            'Wantok Admin needs SUPABASE_URL and '
+            'Wantok Operations needs SUPABASE_URL and '
             'SUPABASE_PUBLISHABLE_KEY supplied at build/run time.',
             textAlign: TextAlign.center,
           ),

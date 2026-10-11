@@ -169,7 +169,7 @@ class ReservationRepository {
     final rows = await WantokBackend.client
         .from('provider_services')
         .select(
-          'id, provider_id, category_id, title, description, pricing_model, base_price, minimum_charge, currency, unit_label, service_address, coverage_province, coverage_town, booking_notice_minutes, status, service_categories(name, slug)',
+          'id, provider_id, category_id, title, description, pricing_model, base_price, minimum_charge, currency, unit_label, service_address, coverage_country_code, coverage_province, coverage_town, booking_notice_minutes, status, service_categories(name, slug)',
         )
         .eq('provider_id', _userId)
         .order('created_at');
@@ -183,6 +183,8 @@ class ReservationRepository {
     String? description,
     required String pricingModel,
     double? basePrice,
+    String? currency,
+    String? coverageCountryCode,
     String? unitLabel,
     String? serviceAddress,
     String? coverageProvince,
@@ -195,6 +197,9 @@ class ReservationRepository {
           'description': _emptyToNull(description),
           'pricing_model': pricingModel,
           'base_price': basePrice,
+          if (currency != null) 'currency': currency.trim().toUpperCase(),
+          if (coverageCountryCode != null)
+            'coverage_country_code': coverageCountryCode.trim().toUpperCase(),
           'unit_label': _emptyToNull(unitLabel),
           'service_address': _emptyToNull(serviceAddress),
           'coverage_province': _emptyToNull(coverageProvince),

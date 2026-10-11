@@ -8,6 +8,7 @@ import 'provider_interest_queue_page.dart';
 import 'staged_provider_review_page.dart';
 import 'operations_overview_page.dart';
 import 'operations_sidebar.dart';
+import 'verification_kyc_page.dart';
 import 'support_inquiries_page.dart';
 import 'public_services_module_control_page.dart';
 
@@ -26,42 +27,6 @@ class _AdminShellState extends State<AdminShell> {
 
   int _index = 0;
 
-  static const _destinations = [
-    NavigationRailDestination(
-      icon: Icon(Icons.dashboard_outlined),
-      selectedIcon: Icon(Icons.dashboard),
-      label: Text('Overview'),
-    ),
-    NavigationRailDestination(
-      icon: Icon(Icons.how_to_reg_outlined),
-      label: Text('Providers'),
-    ),
-    NavigationRailDestination(
-      icon: Icon(Icons.storefront_outlined),
-      label: Text('Listings'),
-    ),
-    NavigationRailDestination(
-      icon: Icon(Icons.inventory_2_outlined),
-      label: Text('Resources'),
-    ),
-    NavigationRailDestination(
-      icon: Icon(Icons.receipt_long_outlined),
-      label: Text('Bookings'),
-    ),
-    NavigationRailDestination(
-      icon: Icon(Icons.history_outlined),
-      label: Text('Audit'),
-    ),
-    NavigationRailDestination(
-      icon: Icon(Icons.support_agent_outlined),
-      label: Text('Support'),
-    ),
-    NavigationRailDestination(
-      icon: Icon(Icons.tune_rounded),
-      label: Text('Modules'),
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
     final pages = [
@@ -70,6 +35,7 @@ class _AdminShellState extends State<AdminShell> {
         onOpenListings: () => setState(() => _index = 2),
         onOpenBookings: () => setState(() => _index = 4),
         onOpenAudit: () => setState(() => _index = 5),
+        onOpenVerification: () => setState(() => _index = 8),
       ),
       const _ProviderApplicationsPage(),
       const _ServiceReviewPage(),
@@ -78,14 +44,14 @@ class _AdminShellState extends State<AdminShell> {
       const _AuditPage(),
       const SupportInquiriesPage(),
       const PublicServicesModuleControlPage(),
+      const VerificationKycPage(),
     ];
 
     final width = MediaQuery.sizeOf(context).width;
-    final desktop = width >= 1200;
-    final tablet = width >= 760;
+    final desktop = width >= 1150;
     void selectSection(int index) {
       setState(() => _index = index);
-      if (!desktop && !tablet) Navigator.of(context).maybePop();
+      if (!desktop) Navigator.of(context).maybePop();
     }
 
     return Scaffold(
@@ -111,7 +77,7 @@ class _AdminShellState extends State<AdminShell> {
           ],
         ),
         actions: [
-          if (tablet)
+          if (desktop)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Center(
@@ -129,7 +95,7 @@ class _AdminShellState extends State<AdminShell> {
           const SizedBox(width: 8),
         ],
       ),
-      drawer: desktop || tablet
+      drawer: desktop
           ? null
           : Drawer(
               child: OperationsSidebar(
@@ -147,20 +113,6 @@ class _AdminShellState extends State<AdminShell> {
                     onSelect: selectSection,
                   ),
                 ),
-                Expanded(child: pages[_index]),
-              ],
-            )
-          : tablet
-          ? Row(
-              children: [
-                NavigationRail(
-                  selectedIndex: _index,
-                  labelType: NavigationRailLabelType.all,
-                  groupAlignment: -0.85,
-                  onDestinationSelected: selectSection,
-                  destinations: _destinations,
-                ),
-                const VerticalDivider(width: 1),
                 Expanded(child: pages[_index]),
               ],
             )

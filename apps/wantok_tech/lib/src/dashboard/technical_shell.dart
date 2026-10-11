@@ -486,7 +486,7 @@ class _TechnicalSidebar extends StatelessWidget {
     );
 
     return Material(
-      color: const Color(0xFFF8FAF9),
+      color: WantokColors.primaryDark,
       child: ListView(
         padding: const EdgeInsets.fromLTRB(10, 16, 10, 24),
         children: [
@@ -524,7 +524,7 @@ class _TechnicalSidebar extends StatelessWidget {
               child: Text(
                 _groupLabel(entry.key).toUpperCase(),
                 style: const TextStyle(
-                  color: WantokColors.muted,
+                  color: WantokColors.gold,
                   fontSize: 11,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 0.9,
@@ -578,6 +578,9 @@ class _SideTile extends StatelessWidget {
     return ListTile(
       selected: selected,
       selectedTileColor: const Color(0xFFDCEFE4),
+      textColor: Colors.white,
+      iconColor: Colors.white,
+      selectedColor: WantokColors.primaryDark,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       leading: Icon(icon, size: 21),
       title: Text(
@@ -611,14 +614,45 @@ class _OverviewPage extends StatelessWidget {
     return ListView(
       padding: const EdgeInsets.all(28),
       children: [
-        Text(
-          'Technical overview',
-          style: Theme.of(context).textTheme.headlineMedium
-              ?.copyWith(fontWeight: FontWeight.w900),
+        Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(18),
+            gradient: const LinearGradient(
+              colors: [Color(0xFF003B2C), Color(0xFF087453)],
+            ),
+          ),
+          child: const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'WANTOK PLATFORM ENGINEERING',
+                style: TextStyle(
+                  color: WantokColors.gold,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              SizedBox(height: 6),
+              Text(
+                'Technical Control',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 26,
+                  fontWeight: FontWeight.w900,
+                ),
+              ),
+              SizedBox(height: 6),
+              Text(
+                'Modules, health, configuration and authorised platform changes.',
+                style: TextStyle(color: Colors.white70),
+              ),
+            ],
+          ),
         ),
-        const SizedBox(height: 6),
+        const SizedBox(height: 10),
         const Text(
-          'Only service modules within your effective technical scope are shown.',
+          'Only modules within your effective technical scope are shown.',
           style: TextStyle(color: WantokColors.muted),
         ),
         const SizedBox(height: 24),
