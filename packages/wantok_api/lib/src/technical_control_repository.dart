@@ -1,5 +1,72 @@
 import 'wantok_backend.dart';
 
+/// A status aggregation, not a worker-liveness or delivery guarantee.
+class TechnicalQueueSnapshot {
+  const TechnicalQueueSnapshot({
+    required this.moduleKey,
+    required this.adapterKey,
+    required this.observedAt,
+    required this.lastActivityAt,
+    required this.total,
+    required this.pending,
+    required this.processing,
+    required this.sent,
+    required this.failed,
+    required this.cancelled,
+  });
+
+  final String moduleKey;
+  final String adapterKey;
+  final DateTime observedAt;
+  final DateTime? lastActivityAt;
+  final int total;
+  final int pending;
+  final int processing;
+  final int sent;
+  final int failed;
+  final int cancelled;
+
+  factory TechnicalQueueSnapshot.fromMap(Map<String, dynamic> map) {
+    if (map['module_key'] != 'core.messaging' ||
+        map['adapter_key'] != 'notification_outbox_status') {
+      throw StateError('Unsupported technical queue adapter.');
+    }
+    final observed = _dateTime(map['observed_at']);
+    if (observed == null) {
+      throw StateError('Queue snapshot lacks observation time.');
+    }
+    int number(String key) {
+      final value = map[key];
+      if (value is! num || value < 0 || value.toInt() != value) {
+        throw StateError('Queue snapshot contains invalid counts.');
+      }
+      return value.toInt();
+    }
+
+    final snapshot = TechnicalQueueSnapshot(
+      moduleKey: map['module_key'] as String,
+      adapterKey: map['adapter_key'] as String,
+      observedAt: observed,
+      lastActivityAt: _dateTime(map['last_activity_at']),
+      total: number('total'),
+      pending: number('pending'),
+      processing: number('processing'),
+      sent: number('sent'),
+      failed: number('failed'),
+      cancelled: number('cancelled'),
+    );
+    if (snapshot.total !=
+        snapshot.pending +
+            snapshot.processing +
+            snapshot.sent +
+            snapshot.failed +
+            snapshot.cancelled) {
+      throw StateError('Queue snapshot totals are inconsistent.');
+    }
+    return snapshot;
+  }
+}
+
 class TechnicalModuleAccess {
   const TechnicalModuleAccess({
     required this.moduleKey,
@@ -631,6 +698,18 @@ class TechnicalControlRepository {
     return _maps(result)
         .map(TechnicalHealthHistoryEntry.fromMap)
         .toList(growable: false);
+  }
+
+  /// Aggregate-only real notification-outbox monitor for core.messaging.
+  /// The server requires module.view and module.jobs; no recipient/job IDs.
+  Future<TechnicalQueueSnapshot> loadMessagingQueueSnapshot(
+    String moduleKey,
+  ) async {
+    final result = await WantokBackend.client.rpc(
+      'get_technical_messaging_queue_snapshot',
+      params: {'p_module_key': moduleKey},
+    );
+    return TechnicalQueueSnapshot.fromMap(_jsonMap(result));
   }
 
   Future<TechnicalModuleImpact> loadModuleImpact(String moduleKey) async {

@@ -983,11 +983,14 @@ class _ModuleWorkspace extends StatelessWidget {
               ),
             ),
           ),
-        if (module.hasPermission('module.jobs'))
+        if (module.hasPermission('module.view') &&
+            module.hasPermission('module.jobs'))
           _CapabilityCard(
             icon: Icons.work_history_outlined,
             title: 'Background jobs',
-            description: 'Inspect queue-adapter availability. No job actions or live job counts are available yet.',
+            description: module.moduleKey == 'core.messaging'
+                ? 'Read aggregate Messaging outbox statuses with no recipient data or job actions.'
+                : 'No queue adapter is connected for this module; job actions are unavailable.',
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute<void>(
                 builder: (_) => TechnicalObservabilityPage(

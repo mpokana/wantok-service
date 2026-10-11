@@ -24,6 +24,7 @@ typedef DiagnosticLoader = Future<TechnicalDiagnosticSnapshot> Function(
 typedef TransitionLoader = Future<List<TechnicalHealthHistoryEntry>> Function(
   String moduleKey,
 );
+typedef QueueLoader = Future<TechnicalQueueSnapshot> Function(String moduleKey);
 
 class TechnicalObservabilityPage extends StatefulWidget {
   const TechnicalObservabilityPage({
@@ -32,12 +33,14 @@ class TechnicalObservabilityPage extends StatefulWidget {
     required this.section,
     this.loadDiagnostics,
     this.loadTransitions,
+    this.loadQueue,
   });
 
   final TechnicalModuleAccess module;
   final TechnicalObservabilitySection section;
   final DiagnosticLoader? loadDiagnostics;
   final TransitionLoader? loadTransitions;
+  final QueueLoader? loadQueue;
 
   @override
   State<TechnicalObservabilityPage> createState() =>
@@ -56,9 +59,9 @@ class _TechnicalObservabilityPageState
     TechnicalObservabilitySection.logs =>
       widget.module.hasPermission('module.view') &&
           widget.module.hasPermission('module.logs'),
-    TechnicalObservabilitySection.jobs => widget.module.hasPermission(
-      'module.jobs',
-    ),
+    TechnicalObservabilitySection.jobs =>
+      widget.module.hasPermission('module.view') &&
+          widget.module.hasPermission('module.jobs'),
   };
 
   String get _title => switch (widget.section) {
@@ -88,9 +91,12 @@ class _TechnicalObservabilityPageState
           (key) => _repository.loadModuleLogEvents(key, limit: 30))(
         widget.module.moduleKey,
       ),
-    TechnicalObservabilitySection.jobs => Future<Object>.value(
-      const _NoQueueAdapter(),
-    ),
+    TechnicalObservabilitySection.jobs =>
+      widget.module.moduleKey == 'core.messaging'
+          ? (widget.loadQueue ?? _repository.loadMessagingQueueSnapshot)(
+              widget.module.moduleKey,
+            )
+          : Future<Object>.value(const _NoQueueAdapter()),
   };
 
   void _refresh() {
@@ -112,7 +118,9 @@ class _TechnicalObservabilityPageState
     appBar: AppBar(
       title: Text('${widget.module.name} · $_title'),
       actions: [
-        if (_allowed && widget.section != TechnicalObservabilitySection.jobs)
+        if (_allowed &&
+            (widget.section != TechnicalObservabilitySection.jobs ||
+                widget.module.moduleKey == 'core.messaging'))
           IconButton(
             key: const ValueKey('t24-refresh'),
             tooltip: 'Refresh read-only view',
@@ -181,6 +189,8 @@ class _TechnicalObservabilityPageState
                         _transitions(
                           snapshot.data! as List<TechnicalHealthHistoryEntry>,
                         ),
+                      if (snapshot.data is TechnicalQueueSnapshot)
+                        _queue(snapshot.data! as TechnicalQueueSnapshot),
                       if (snapshot.data is _NoQueueAdapter)
                         const _InfoPanel(
                           icon: Icons.hourglass_empty_outlined,
@@ -254,6 +264,51 @@ class _TechnicalObservabilityPageState
               ),
             ),
           ),
+      ],
+    );
+  }
+
+  Widget _queue(TechnicalQueueSnapshot data) {
+    final observed = data.observedAt.toUtc().toIso8601String();
+    final last = data.lastActivityAt?.toUtc().toIso8601String() ?? 'none';
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const _InfoPanel(
+          icon: Icons.mark_email_read_outlined,
+          text:
+              'Connected source: Messaging notification outbox status totals only. '
+              'Processing means database status, NOT confirmed worker activity. '
+              'Sent is a recorded status, NOT independent delivery proof. '
+              'No recipient identifiers, messages, actions or retry controls are exposed.',
+        ),
+        const SizedBox(height: 14),
+        _heading('Messaging notification queue'),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Observed UTC: $observed'),
+                Text('Last outbox update UTC: $last'),
+                const SizedBox(height: 10),
+                Text(
+                  'Total records: ${data.total}',
+                  key: const ValueKey('t24-queue-total'),
+                ),
+                Text('Pending: ${data.pending}'),
+                Text('Processing status: ${data.processing}'),
+                Text('Sent status: ${data.sent}'),
+                Text('Failed: ${data.failed}'),
+                Text('Cancelled: ${data.cancelled}'),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 12),
+        if (data.total == 0)
+          const Text('The outbox contains no records at the observation time.'),
       ],
     );
   }

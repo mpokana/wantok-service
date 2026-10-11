@@ -3,8 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_tech/src/dashboard/technical_observability_page.dart';
 
-TechnicalModuleAccess module(Set<String> permissions) => TechnicalModuleAccess(
-  moduleKey: 'core.catalog',
+TechnicalModuleAccess module(
+  Set<String> permissions, {
+  String moduleKey = 'core.catalog',
+}) => TechnicalModuleAccess(
+  moduleKey: moduleKey,
   name: 'Catalogue',
   description: null,
   groupCode: 'core',
@@ -68,6 +71,7 @@ void main() {
     required TechnicalObservabilitySection section,
     DiagnosticLoader? diagnostics,
     TransitionLoader? transitions,
+    QueueLoader? queue,
   }) async {
     tester.view.physicalSize = Size(width, 1000);
     tester.view.devicePixelRatio = 1;
@@ -80,6 +84,7 @@ void main() {
           section: section,
           loadDiagnostics: diagnostics,
           loadTransitions: transitions,
+          loadQueue: queue,
         ),
       ),
     );
@@ -184,7 +189,7 @@ void main() {
     await mount(
       tester,
       width: 390,
-      access: module({'module.jobs'}),
+      access: module({'module.view', 'module.jobs'}),
       section: TechnicalObservabilitySection.jobs,
     );
     expect(find.textContaining('No background queue adapter'), findsOneWidget);
@@ -195,6 +200,150 @@ void main() {
     expect(find.text('Run'), findsNothing);
     expect(find.byKey(const ValueKey('t24-refresh')), findsNothing);
     expect(tester.takeException(), isNull);
+  });
+
+  TechnicalQueueSnapshot snapshot({
+    int total = 6,
+    int pending = 2,
+    int processing = 1,
+    int sent = 2,
+    int failed = 1,
+    int cancelled = 0,
+  }) => TechnicalQueueSnapshot(
+    moduleKey: 'core.messaging',
+    adapterKey: 'notification_outbox_status',
+    observedAt: DateTime.utc(2026, 10, 11, 7),
+    lastActivityAt: DateTime.utc(2026, 10, 11, 6),
+    total: total,
+    pending: pending,
+    processing: processing,
+    sent: sent,
+    failed: failed,
+    cancelled: cancelled,
+  );
+
+  for (final width in [390.0, 1200.0]) {
+    testWidgets('messaging queue displays genuine source statuses at $width', (
+      tester,
+    ) async {
+      var reads = 0;
+      await mount(
+        tester,
+        width: width,
+        access: module({
+          'module.view',
+          'module.jobs',
+        }, moduleKey: 'core.messaging'),
+        section: TechnicalObservabilitySection.jobs,
+        queue: (key) async {
+          reads++;
+          expect(key, 'core.messaging');
+          return snapshot();
+        },
+      );
+      expect(find.text('Pending: 2'), findsOneWidget);
+      expect(find.text('Processing status: 1'), findsOneWidget);
+      expect(find.text('Failed: 1'), findsOneWidget);
+      expect(find.byKey(const ValueKey('t24-queue-total')), findsOneWidget);
+      expect(
+        find.textContaining('NOT confirmed worker activity'),
+        findsOneWidget,
+      );
+      expect(find.textContaining('No recipient identifiers'), findsOneWidget);
+      expect(find.text('Retry job'), findsNothing);
+      expect(reads, 1);
+      await tester.tap(find.byKey(const ValueKey('t24-refresh')));
+      await tester.pumpAndSettle();
+      expect(reads, 2);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  testWidgets('empty Messaging outbox is distinct from disconnected adapter', (
+    tester,
+  ) async {
+    await mount(
+      tester,
+      width: 390,
+      access: module({
+        'module.view',
+        'module.jobs',
+      }, moduleKey: 'core.messaging'),
+      section: TechnicalObservabilitySection.jobs,
+      queue: (_) async =>
+          snapshot(total: 0, pending: 0, processing: 0, sent: 0, failed: 0),
+    );
+    expect(find.textContaining('contains no records'), findsOneWidget);
+    expect(find.textContaining('No background queue adapter'), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('non-Messaging module never invokes Messaging queue loader', (
+    tester,
+  ) async {
+    var reads = 0;
+    await mount(
+      tester,
+      width: 390,
+      access: module({'module.view', 'module.jobs'}),
+      section: TechnicalObservabilitySection.jobs,
+      queue: (_) async {
+        reads++;
+        return snapshot();
+      },
+    );
+    expect(find.textContaining('No background queue adapter'), findsOneWidget);
+    expect(reads, 0);
+    expect(find.byKey(const ValueKey('t24-refresh')), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('module.jobs without view cannot read Messaging queue', (
+    tester,
+  ) async {
+    var reads = 0;
+    await mount(
+      tester,
+      width: 390,
+      access: module({'module.jobs'}, moduleKey: 'core.messaging'),
+      section: TechnicalObservabilitySection.jobs,
+      queue: (_) async {
+        reads++;
+        return snapshot();
+      },
+    );
+    expect(find.textContaining('not assigned'), findsOneWidget);
+    expect(reads, 0);
+    expect(tester.takeException(), isNull);
+  });
+
+  test('queue model rejects impossible totals and negative counts', () {
+    final valid = {
+      'module_key': 'core.messaging',
+      'adapter_key': 'notification_outbox_status',
+      'observed_at': '2026-10-11T07:00:00Z',
+      'last_activity_at': null,
+      'total': 1,
+      'pending': 1,
+      'processing': 0,
+      'sent': 0,
+      'failed': 0,
+      'cancelled': 0,
+    };
+    expect(TechnicalQueueSnapshot.fromMap(valid).total, 1);
+    expect(
+      () => TechnicalQueueSnapshot.fromMap({...valid, 'total': 99}),
+      throwsStateError,
+    );
+    expect(
+      () => TechnicalQueueSnapshot.fromMap({...valid, 'pending': -1}),
+      throwsStateError,
+    );
+    expect(
+      () =>
+          TechnicalQueueSnapshot.fromMap({...valid, 'module_key': 'payments'}),
+      throwsStateError,
+    );
   });
 
   testWidgets(
