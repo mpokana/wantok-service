@@ -2,6 +2,35 @@
 
 **Updated:** 2026-10-11
 
+## 11 October — ENTERPRISE DELIVERY PROGRAMME & RELEASE READINESS (CURRENT OWNER PRIORITY)
+
+**Latest owner instruction:** Complete the outstanding enterprise security, compliance, trust, Helpdesk and cross-platform acceptance work on **EAGLT02**, but design every increment to remain **versioned, packageable, installable and upgradeable** on a Linux VM. **Do NOT deploy, synchronise or reinstall on the online VM until the owner separately authorises it.** This roadmap checkpoint is documentation/handover only; subsequent feature work belongs to the **next chat**. Start there with `docs/START_NEXT_CHAT_20261011.md` and `docs/ENTERPRISE_RELEASE_READINESS_GATES.md`; retain all earlier CX1 and T2.4 scope without false completion claims.
+
+### Accomplished — local foundation / explicitly not production-ready
+
+- [x] **E1 — Individual & business vendor intake:** category-dependent transport/vehicle/licence, food, trades and machinery metadata; case traceability, contact/location and owner/staff read scoping; Operations review queue. Identifiers remain deliberately partial and documents are not accepted.
+- [x] **E2 — Two-person preliminary review:** separately assigned procedural reviews per checklist item, mandatory reasons and audit, information requests/withdrawal; no final KYC decision or provider activation.
+- [x] **E3 — Evidence safety foundations:** applicant-bound status preflight always denies upload; limited evidence-request register; isolated scanner/quarantine/custody synthetic lab and service-role-only current manifest comparison; emergency clearance revocation pauses active listings. No production upload/key custody/ID verification.
+- [x] **E4 — International policy proposal management (Phase 2E):** country + optional province/state code, service category, privacy notice draft, purpose and unverified legal basis, proposed retention/evidence fields, **mandatory preview**, internal submission, independent administrative review, immutable numbered revisions and audit. All states non-operative; no legal release or consent is implied.
+- [x] **Local E4 evidence:** `npm.cmd run db:test` **49 files / 937 assertions PASS**; Operations `flutter test --no-pub` **33 tests PASS**, analyzer clean, Web release build successful and `:3200` served feature checks. Not production, signed-in real-user regulatory acceptance or a penetration test.
+- [x] **E5 packaging foundation:** `deploy/vps/` source installer, versioned additive migrations, separate secret/runtime data, release-builder/verifier, backup/upgrade helpers; checked SHA-256 source tarball `.wantok/releases/wantok-vps-af632329546c.tar.gz` (**62 migrations; 11,685,311 bytes**). No VM rehearsal and no production sign-off. The package is a source release, not self-contained offline installer.
+
+### Next engineering sequence — DO NOT mark complete prematurely
+
+- [ ] **E6 (FIRST IN NEXT CHAT) — Country-scoped RBAC and staff trust policy.** Define distinct `policy_author`, `policy_reviewer`, `evidence_officer`, `final_approver`, `safety_investigator`, scopes `country_code`/subdivision/category, least-privilege read/write and immutable actor/decision audit. Replace broad all-country `is_admin` for sensitive paths through additive, backward-compatible migration only after contract review. Negative tests must prove cross-country and same-person actions fail.
+- [ ] **E7 — Legally approved notice/consent engine.** Maintain ISO country/subdivision catalogue and locale-specific legal references; require explicit jurisdictional approval, content version/hash, purpose and expiry, user-facing informed consent/withdrawal, data rights, deletion/legal hold and separate effective-date controls. Existing `internal_review_complete` is **not** legal approval.
+- [ ] **E8 — Hardened private document admission/custody.** Authenticate sessions, scanner freshness and sandbox, size/type/rate/anti-replay, private encrypted Storage with managed KMS keys, atomic off-host custody, audit, retention and restore drills. Public upload/storage access remains **disabled** until all security gates clear.
+- [ ] **E9 — Real KYC/verification and clearance.** Review evidence against authorised government/company/licence/vehicle/insurance sources, verify applicant roles/beneficial ownership and expiry, independent legal/Compliance final approval with denial/appeal, revocation, re-review and maintenance schedule. Never convert procedural review or evidence-request acknowledgement into an activation flag.
+- [ ] **E10 — Dedicated enterprise Helpdesk and trust incidents.** Ticket/case states, complaint/SLA/priority queue, assignment, escalation, safety/fraud/regulatory incidents, auditable contact history, restricted attachments, applicant appeals, reporting and on-call ownership. Existing Support Inquiries is not enterprise Helpdesk.
+- [ ] **E11 — International production capabilities:** country/region/city provider discovery and restrictions; sector-specific qualifications; currency/tax/time-zone/language/accessibility, anti-fraud, payment and settlement reconciliation; full browser/API/Android/HONOR and multi-role acceptance; critical observability, encrypted off-host backups and DR.
+- [ ] **E12 — Release hardening & Linux staging rehearsal:** dependency/image pinning/signatures, SBOM, isolated config/secrets, verified backup/restore/upgrade/downgrade runbooks and monitoring. **Wait for explicit VM test/deployment authorisation; owner said not now.** Never deploy from local `.wantok` data or copy test users into production.
+- [ ] **CX1 remaining, tracked in sections below:** actual Web refresh click acceptance for Saved/Inbox/Track; signed-in Android and physical HONOR; approved distinctive pictures and real Technical category image CRUD for six inactive categories; release and visual acceptance. **CX1 IN PROGRESS.**
+- [ ] **T2.4 deferred:** Technical Diagnostics, logs and jobs after the owner authorises the appropriate phase; do not treat completed compliance work as starting or completing T2.4.
+
+**Quality gate for every future task:** preserve existing roles, data and category imagery; no uncontrolled activation/payments; update tests/documentation; capture tested Git commit; push only reviewed files to GitHub; maintain source release compatibility. Do **not** bundle unrelated parallel `supabase/snippets/` or private screenshots. See `docs/INTERNATIONAL_VENDOR_POLICY_GOVERNANCE_PHASE2E.md`, `docs/WANTOK_VM_RELEASE_PACKAGING.md` and `docs/START_NEXT_CHAT_20261011.md`.
+
+---
+
 ## CX1 — Repeatable read-only local release parity gate (11 October)
 
 - [x] Add scripts/qa/verify-cx1-local.ps1: verify localhost ports 3000/3100/3200/3300/3400; Client and Technical staging/main JS hashes; real Taxi/Public Services pictures; compiled Saved/Inbox/Track refresh labels; optional existing Android package version. Never authenticate to user APIs or mutate data.

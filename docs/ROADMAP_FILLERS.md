@@ -20,6 +20,30 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-11-12 — Enterprise trust handover; packageable, NO VM rollout (LATEST)
+
+**Status:** OWNER DIRECTIVE CONFIRMED; **documentation/Git/GitHub handover only**. Stop implementation in this chat. Complete the enterprise platform on **EAGLT02** before any VM operation; never log into, synchronise, upgrade or reinstall the online VM until a separate explicit instruction. Preserve a versioned installable/upgradable Linux source-release boundary throughout development. Read `docs/START_NEXT_CHAT_20261011.md`, `docs/ENTERPRISE_RELEASE_READINESS_GATES.md` and the new **top** sections of `docs/HANDOVER.md` and `docs/ROADMAP.md`.
+
+### Latest verified enterprise work (Phase 2E; committed `af63232` prior to this docs handover)
+
+- **Operations → Verification & KYC → International compliance policy proposals**, served on EAGLT02 `:3200`. Internal-only country/region/category policy authoring includes a draft notice, data collection purpose, *proposed* legal basis/retention/document categories, mandatory preview, independently reviewed state machine, append-only policy audit and immutable revision lineage. Writer cannot self-review. Legal approval, consent, uploads and actual policy effect **not** added.
+- Backend migrations `20261011200500_vendor_policy_governance.sql` and `20261011201000_vendor_policy_revision_chain.sql`, tests `048_vendor_policy_governance.test.sql` and `049_vendor_policy_revision_chain.test.sql`; **49 database files / 937 pgTAP checks PASS**. Operations **33 Flutter tests PASS**, analyzer clean and browser-served code verified. Tests are local only; no real jurisdictional legal approval inferred.
+- Earlier controlled local foundations remain intact: individual/business vendor applications; category-specific eligibility metadata and address; two-person preliminary verification, owner-visible evidence requirement/withdrawal/preflight, scanner/quarantine **synthetic** custody, emergency clearance revocation, auditable staff operations. Upload, KYC issuance, live payments and vendor activation remain safety-gated.
+- Existing versioned source package `.wantok/releases/wantok-vps-af632329546c.tar.gz` includes the current tested `af63232` source checkpoint, has **62 migrations / 11,685,311 bytes**, SHA-256 `d62fc9b5ee3d1def087425a6482401cdd821d539bdfc32d4577774abb2fdca5b`; its manifest/checksum checked. Package is not a signed/offline production installer or VM staging acceptance.
+
+### Requirements added/clarified for next chat
+
+- **FILLER enterprise permission and jurisdiction contract (FIRST):** restrict Operations staff not only by role but by **country, state/province, category, conflict of interest and separation of duties**. Policy writers, independent policy reviewers, evidence staff, investigators, final clearance approvers and platform Technical Control must not share all powers. Current broad `is_admin` implementation is an interim administrative gate, not country-specific enterprise authorisation; implement an additive, testable migration.
+- **FILLER consent:** proposed notices must not silently become live. Add separately legally approved purpose-specific notices, stable content hashes/revision/effective dates, applicant informed consent, re-consent, withdrawal, lawful retention/delete/hold and international privacy reviews. Do not invent country-specific statutes.
+- **FILLER evidence:** production-grade, privately encrypted/sandboxed malware-scanned upload and custody cannot open until KMS/security, consent, durable audit and disaster recovery have passed; signed-in applicant preflight must continue to fail closed.
+- **FILLER independent decisions/appeals and Helpdesk:** distinguish procedural review from evidence-backed KYC clearance; handle expiration, re-verification, fraud/safety investigation, complaints, ticket SLAs and a **dedicated enterprise Helpdesk** distinct from current Support Inquiries.
+- **FILLER installation acceptance:** build from Git commit to a checksummed source package; keep immutable migration history, external config/secrets/persistent data, recovery backups, roles/tests and signed release compatibility; **Linux VM deployment tests require later owner permission**, not this or the next unauthorised coding step.
+- **CX1/T2.4 not overwritten:** signed-in toolbar click acceptance, physical HONOR/Android, new category photo editorial and actual image CRUD still open; Technical `T2.4` diagnostics/logs/jobs remains deferred. Never include unrelated untracked `supabase/snippets/` or private QA screenshots in a Git commit.
+
+**Next-chat action:** inspect EAGLT02, repository status and the top handover capsule; start **country-scoped Operations RBAC** (E6) as the first implementation task, keep the gateway and VM off, test and Git/GitHub backup after a reviewed feature increment.
+
+---
+
 ## FILLER-2026-10-07-01 — Provider & Service Search + Ratings
 
 **Status:** CX1F CLIENT FOUNDATION IMPLEMENTED; live Android/Web QA remains.

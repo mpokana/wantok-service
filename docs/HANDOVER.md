@@ -4,6 +4,49 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 11 October 2026 — NEW CHAT HANDOVER: ENTERPRISE TRUST, PACKAGING, NO VM DEPLOYMENT (CURRENT)
+
+**OWNER'S LATEST DIRECTIVE:** Do **not** deploy, synchronise or reinstall Wantok Services on the online VM yet. Complete outstanding enterprise-platform security and functional requirements on **EAGLT02** before VM work, while ensuring every change remains versioned, installable, upgradeable and tested as a package. **This task is documentation handover only: stop coding before the next chat.** The concise entry point for a new chat is **`docs/START_NEXT_CHAT_20261011.md`**. Also read `AGENTS.md`, this handover, `docs/ROADMAP.md`, `docs/ROADMAP_FILLERS.md` and `docs/ENTERPRISE_RELEASE_READINESS_GATES.md`.
+
+### Source of truth, environment and permissions
+
+- EAGLT02 online at handover (Remote Desktop Commander `5087a7f7-e618-4c84-b534-8dde28f6497f`), repo `D:\Project-M.2\wantok-service-recovery`; Git branch `feature/flutter-platform-v1`, remote `https://github.com/mpokana/wantok-service.git`.
+- Operations is the **business/admin operations app** `apps/wantok_admin` on **3200**; Technical Control is a **separate platform administration app** `apps/wantok_tech` on **3100**; Customer/Vendor app `apps/wantok_app` on **3000**; local Client/Tech staging **3300/3400**. These are EAGLT02-local loopback URLs, not remote VM sites. Do not merge the Operations and Technical Control authority or rename internal libraries without a controlled migration.
+- Flutter executable `D:\Development\flutter\bin\flutter.bat`, local Supabase Docker; repo commands `npm.cmd run db:migrate`, `npm.cmd run db:test`, `npm.cmd run test:evidence`. Never reset the local DB, wipe emulator, import test data into production, or mutate unrelated GVE/other remote desktops.
+- **Concurrent-work warning:** handover started with only untracked unrelated `supabase/snippets/`, but while staging documentation, unstaged changes appeared in `apps/wantok_app/lib/src/home/activity_page.dart`, `client_account_tools.dart` and `messages_page.dart` from another stream. These are **not part of the docs-only handover commit**. Do not overwrite/stage/delete these or `supabase/snippets/`; verify live `git status` in the next chat.
+- Prior enterprise implementation commit `af63232` (**not the docs handover commit**) introduced Phase 2E; see `docs/INTERNATIONAL_VENDOR_POLICY_GOVERNANCE_PHASE2E.md` for exact specifications and boundaries. Repo HEAD will advance after handover docs are committed.
+
+### Completed local enterprise development (not production certification)
+
+- Individual/business vendor intake with service category dependent transport/vehicle, food, trades, machinery metadata; case ID/owner-scope, staff review queue and audit; no raw NID, passport, TIN or licence document collection.
+- Two-person **procedural** verification tasks; first assigned case reviewer and independent second reviewer recorded and audited; requests for supporting evidence (metadata only), applicant acknowledgement/withdrawal and owner-bound preflight that always **blocks upload**.
+- Synthetic encrypted/quarantined custody/scanning lab with restricted current database reconciliation; monitored clearance read and emergency revocation that atomically pauses affected active services. **No new final clearance issuance, identity certification or production evidence upload.**
+- **Phase 2E (latest):** internal jurisdiction-specific compliance policy draft/workspace: ISO-style two-letter country + optional subdivision, service category, draft privacy notice, proposed retention duration, purpose, legal basis research and evidence categories; mandatory preview **before saving**, author submission, independent internal reviewer and immutable numbered revision lineage. Audit trail visible. Internal review never publishes a notice, grants legal approval, consent, upload access or vendor activation.
+- Local proof for Phase 2E: **49 SQL test files / 937 assertions PASS**; **33 Operations Flutter tests PASS** incl 390/900/1440 width, clean Operations analyzer, release Web build successful, served `:3200` JavaScript feature markers present. Existing earlier security evidence results: 101 offline/scanner tests; 6 real ClamAV test fixtures; client earlier 116 widgets — historical checkpoints, not rerun for this documentation-only task.
+- **CX1 is a parallel ongoing stream**, not implied finished by the vendor/trust work: shared official theme/category photos, Technical category manager, local Client Web and read-only acceptance; real signed-in toolbar refresh clicks, physical HONOR/signed-in Android, six inactive category pictures and category image CRUD remain open. **T2.4 Diagnostics/logs/jobs is still DEFERRED.** See CX1 handover sections and test reports below; do not mistake compiled feature labels for genuine click acceptance.
+
+### Existing Linux VM package (package-only, NOT deployment)
+
+- Installer/upgrade/backup scripts at `deploy/vps/`; source-release packager and verifier `scripts/build-vps-release.mjs`, `scripts/verify-vps-release.mjs`. Configuration and secrets must stay separate from versioned source and database/storage volumes.
+- Last **verified source-release tarball**: `.wantok/releases/wantok-vps-af632329546c.tar.gz` on EAGLT02, **11,685,311 bytes**, SHA-256 `d62fc9b5ee3d1def087425a6482401cdd821d539bdfc32d4577774abb2fdca5b`, 62 SQL migrations, `.sha256` and `.manifest.json`. Builds on the destination VM; **not an offline binary or signed/production-approved release**. Future commits need a new archive for source/HEAD parity.
+- No online VM touched. No Linux staging install, upgrade, rollback, or restore rehearsal authorised yet. Never copy EAGLT02 development users/database or private secrets to a production VM.
+
+### Next chat engineering order and strict blockers
+
+1. **Country/region-scoped Operations compliance RBAC**, explicit policy author/reviewer/evidence officer/final approver roles and negative cross-jurisdiction tests; today's broad `is_admin` is *not sufficient* for multinational enterprise operation.
+2. Approved, country-specific policy/consent/notice governance; authoritative jurisdiction catalogues/effective dates, purpose-limited consent/withdrawal and retention/legal-hold workflows. Current policy drafts are strictly **non-operative**, not a substitute for legal approval.
+3. Hardened private document gateway: authentication, malware sandbox, independently maintained scanner, KMS/encrypted quarantine, custody durability, off-host audit and restore tests. **Keep evidence-upload endpoints disabled** until passed.
+4. Independent ID/company/licence verification and clearance issuance/expiry/appeals; do not infer verified KYC from two procedural staff clicks or draft evidence.
+5. Separate enterprise Helpdesk/ticket lifecycle, SLAs, safety incidents, investigation, complaint/dispute escalation, audit; existing Support Inquiries is not a complete Helpdesk.
+6. International locale/currency/location, customer/mobile/Web acceptance, financial and operational security, fraud, observability/DR; preserve CX1 open checks and defer T2.4 until current owner-authorised work warrants it.
+7. Linux staging VM deployment/restore **only after a separate explicit owner request**. The owner explicitly said **not now**.
+
+### Hand-back protocol
+
+This handover is a **freeze point**: finish the three documentation updates and a docs-only Git + GitHub backup, then stop. In the new chat, inspect device/branch/status, read `docs/START_NEXT_CHAT_20261011.md`, rerun focused tests as needed, and begin with country-scoped compliance RBAC rather than VM deployment, real uploads or final clearance.
+
+---
+
 ## 11 October CX1 — Local release parity guard and T2.4 scope (LATEST)
 
 - Created scripts/qa/verify-cx1-local.ps1, a **read-only local release QA guard**. It checks all five localhost Web shells, Client 3000=3300 and Technical 3100=3400 JavaScript SHA-256 parity, original Taxi and Public Services artwork byte parity, and the served Client build containing the Saved/Inbox/Track refresh labels. Optional Android check reads the existing emulator's app version only; no installations or data changes.
