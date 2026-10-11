@@ -2,6 +2,16 @@
 
 **Updated:** 2026-10-12
 
+## T2.4E — Centralised log-source readiness contract (12 October; CODE ONLY)
+
+- [x] Introduced metadata-only trusted source registry with safe provenance ticket, bounded retention and non-connected state; no collector or credential fields and no live event ingestion.
+- [x] Added protected reduced per-module readiness RPC, typed Flutter repository, and explicit unconnected status in the Technical Control Logs page. No false worker or central log claims.
+- [x] T2.4 isolated staging now verifies four additive migrations and **58/58 pgTAP assertions**, rolls back synthetic fixtures and leaves shared Supabase unchanged.
+- [ ] Independently identify actual source collectors, verify provenance/redaction/retention and worker heartbeat, audit and performance before authorising any ingestion. Perform real GoTrue/PostgREST sign-in acceptance under production-equivalent ownership/ACL.
+- [ ] Full 61 SQL suites in an approved backed-up staging after E6H/T2.4 migrations; formal E6/Operations and Technical security gates, no online VM or production deployment. `docs/T24_CENTRAL_LOG_SOURCE_READINESS_20261012.md`.
+
+---
+
 ## E6I — Integrated E6H/T2.4 disposable SQL staging (12 October; PASS, NOT DEPLOYED)
 
 - [x] Applied pending E6H plus three T2.4 migrations together only to a network-disabled, no-port disposable PostgreSQL clone containing schema and seven non-personal reference tables.

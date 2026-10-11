@@ -25,6 +25,14 @@ typedef TransitionLoader = Future<List<TechnicalHealthHistoryEntry>> Function(
   String moduleKey,
 );
 typedef QueueLoader = Future<TechnicalQueueSnapshot> Function(String moduleKey);
+typedef CentralLogReadinessLoader =
+    Future<TechnicalCentralLogReadiness> Function(String moduleKey);
+
+class TechnicalLogSnapshot {
+  const TechnicalLogSnapshot(this.transitions, this.readiness);
+  final List<TechnicalHealthHistoryEntry> transitions;
+  final TechnicalCentralLogReadiness readiness;
+}
 
 class TechnicalObservabilityPage extends StatefulWidget {
   const TechnicalObservabilityPage({
@@ -34,6 +42,7 @@ class TechnicalObservabilityPage extends StatefulWidget {
     this.loadDiagnostics,
     this.loadTransitions,
     this.loadQueue,
+    this.loadCentralReadiness,
   });
 
   final TechnicalModuleAccess module;
@@ -41,6 +50,7 @@ class TechnicalObservabilityPage extends StatefulWidget {
   final DiagnosticLoader? loadDiagnostics;
   final TransitionLoader? loadTransitions;
   final QueueLoader? loadQueue;
+  final CentralLogReadinessLoader? loadCentralReadiness;
 
   @override
   State<TechnicalObservabilityPage> createState() =>
@@ -83,14 +93,29 @@ class _TechnicalObservabilityPageState
     );
   }
 
+  Future<Object> _loadLogs(String key) async {
+    final transitions =
+        await (widget.loadTransitions ??
+            (moduleKey) =>
+                _repository.loadModuleLogEvents(moduleKey, limit: 30))(key);
+    // Existing UI unit tests supply a transition mock only. Keep their
+    // preview detached from Supabase, without manufacturing collector data.
+    if (widget.loadTransitions != null && widget.loadCentralReadiness == null) {
+      return transitions;
+    }
+    final readiness =
+        await (widget.loadCentralReadiness ??
+            _repository.loadCentralLogReadiness)(key);
+    if (readiness.moduleKey != key) {
+      throw StateError('Central log readiness module mismatch.');
+    }
+    return TechnicalLogSnapshot(transitions, readiness);
+  }
+
   Future<Object> _load() => switch (widget.section) {
     TechnicalObservabilitySection.diagnostics =>
       (widget.loadDiagnostics ?? _readDiagnostics)(widget.module.moduleKey),
-    TechnicalObservabilitySection.logs =>
-      (widget.loadTransitions ??
-          (key) => _repository.loadModuleLogEvents(key, limit: 30))(
-        widget.module.moduleKey,
-      ),
+    TechnicalObservabilitySection.logs => _loadLogs(widget.module.moduleKey),
     TechnicalObservabilitySection.jobs =>
       widget.module.moduleKey == 'core.messaging'
           ? (widget.loadQueue ?? _repository.loadMessagingQueueSnapshot)(
@@ -185,6 +210,15 @@ class _TechnicalObservabilityPageState
                         _diagnostics(
                           snapshot.data! as TechnicalDiagnosticSnapshot,
                         ),
+                      if (snapshot.data is TechnicalLogSnapshot) ...[
+                        _centralLogReadiness(
+                          (snapshot.data! as TechnicalLogSnapshot).readiness,
+                        ),
+                        const SizedBox(height: 16),
+                        _transitions(
+                          (snapshot.data! as TechnicalLogSnapshot).transitions,
+                        ),
+                      ],
                       if (snapshot.data is List<TechnicalHealthHistoryEntry>)
                         _transitions(
                           snapshot.data! as List<TechnicalHealthHistoryEntry>,
@@ -206,6 +240,26 @@ class _TechnicalObservabilityPageState
             },
           ),
   );
+
+  Widget _centralLogReadiness(TechnicalCentralLogReadiness readiness) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _heading('Central log source readiness'),
+        Card(
+          child: ListTile(
+            leading: const Icon(Icons.link_off_outlined),
+            title: const Text('Central log collectors: not connected'),
+            subtitle: Text(
+              '${readiness.registeredSourceContracts} source contract(s) registered. '
+              'No verified collector, central log events or worker-health '
+              'feed is available. A source contract is not evidence of ingestion.',
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
   Widget _diagnostics(TechnicalDiagnosticSnapshot data) {
     final health = data.health;

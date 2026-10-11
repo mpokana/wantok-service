@@ -20,6 +20,10 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-12-03 — T2.4E central log-source readiness
+
+**Status:** Registered **source-contract readiness only**; trustworthy `not_connected` state, provenance ticket format, 1–90-day retention bounds, and server-enforced module.view+module.logs for reduced metadata. Technical Logs UI distinctly displays no central collector. Four migrations and pgTAP 090–093 **58/58 PASS** in disposable staging, shared DB untouched. No actual central log source or worker-heartbeat connected, no job actions or VM deployment. `docs/T24_CENTRAL_LOG_SOURCE_READINESS_20261012.md`.
+
 ## FILLER-2026-10-12-01 — T2.4 privacy-scoped Technical Activity feed
 
 **Status:** Source tested; module activity now reads only four allowlisted Technical Control change actions from real audit_events via a new module.view + module.logs RPC, hard server cap 30, and returns no person/target/meta/request fields. Typed Technical Activity page and six new widget tests PASS. Isolated staging runner now applies 3 T2.4 migrations; **39/39 pgTAP** PASS, original database unchanged, disposable container removed. Seven Flutter analyses, 132 Client / 43 Operations / 34 Technical tests PASS. Full shared SQL runner blocked by unapplied E6H/T2.4; production parity and browser acceptance open. No central logs, execution controls, live worker claims or VM deployment. `docs/T24_SCOPED_TECHNICAL_ACTIVITY_20261012.md`.

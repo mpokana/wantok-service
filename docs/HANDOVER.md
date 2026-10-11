@@ -4,6 +4,16 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 12 October — T2.4E central-log source readiness (SOURCE QA; NO INGESTION)
+
+- Owner handed over T2.4 after checkpoint `da2e42d`. Reconciled latest E6I shared branch at `b5b060c`; worked in detached `D:\Wantok_T24_Log_Source_20261012` so shared E6 and untracked coordination changes remained untouched. Another ChatGPT session may still be able to resume; no concurrency lock is assumed.
+- Added migration `20261011243000_technical_central_log_source_contract.sql`: trusted-only source contract metadata, ticket-format provenance, 1–90 day retention and permanently **not_connected** state; no collectors, raw lines, secrets or log ingest. PostgreSQL RPC `get_technical_central_log_readiness` requires `module.view` + `module.logs` and returns only reduced fixed metadata.
+- Typed repository and existing Technical Logs UI show a separate truthful **Central log collectors: not connected** panel, preserving health-transition history. No API/worker source presumed connected.
+- Disposable T2.4 staging applies four T2.4 migrations, pgTAP 090–093 **58/58 PASS**, fixture rollback, original local Supabase unchanged, disposable container removed. See `docs/T24_CENTRAL_LOG_SOURCE_READINESS_20261012.md`. Flutter, GitHub and release verification are tracked at this checkpoint independently.
+- E6H + T2.4 migration sequence remains unapplied to shared local DB; full 61-file SQL suite and independent witnessed role/provenance/key-custody acceptance remain blocked. No live VM, KYC, activation, payments, jobs or production approval.
+
+---
+
 ## 12 October — E6I isolated cross-stream security integration (PASS; NOT DEPLOYED)
 
 - Added repeatable `npm run test:e6:crossstream-local`: disposable no-network/no-host-port PostgreSQL clone of local *schema only* plus seven non-personal taxonomy/technical reference tables; applies **E6H + all three T2.4 pending SQL migrations** together **only inside the isolated DB**.

@@ -40,6 +40,42 @@ class TechnicalActivityEvent {
   }
 }
 
+/// Registration readiness is not a log feed or proof that a collector runs.
+class TechnicalCentralLogReadiness {
+  const TechnicalCentralLogReadiness({
+    required this.moduleKey,
+    required this.registeredSourceContracts,
+    required this.observedAt,
+  });
+
+  final String moduleKey;
+  final int registeredSourceContracts;
+  final DateTime observedAt;
+
+  factory TechnicalCentralLogReadiness.fromMap(Map<String, dynamic> data) {
+    final count = data['registered_source_contracts'];
+    final observed = _dateTime(data['observed_at']);
+    final moduleKey = data['module_key'];
+    if (moduleKey is! String ||
+        moduleKey.isEmpty ||
+        count is! int ||
+        count < 0 ||
+        observed == null ||
+        data['connection_state'] != 'not_connected' ||
+        data['source_health'] != 'unknown' ||
+        data['collector_verified'] != false ||
+        data['central_logs_available'] != false ||
+        data.length != 7) {
+      throw StateError('Central log readiness is not verified.');
+    }
+    return TechnicalCentralLogReadiness(
+      moduleKey: moduleKey,
+      registeredSourceContracts: count,
+      observedAt: observed,
+    );
+  }
+}
+
 /// A status aggregation, not a worker-liveness or delivery guarantee.
 class TechnicalQueueSnapshot {
   const TechnicalQueueSnapshot({
@@ -738,6 +774,21 @@ class TechnicalControlRepository {
     return _maps(result)
         .map(TechnicalHealthHistoryEntry.fromMap)
         .toList(growable: false);
+  }
+
+  /// Central logging is not connected. Registry counts are NOT log events.
+  Future<TechnicalCentralLogReadiness> loadCentralLogReadiness(
+    String moduleKey,
+  ) async {
+    final result = await WantokBackend.client.rpc(
+      'get_technical_central_log_readiness',
+      params: {'p_module_key': moduleKey},
+    );
+    final readiness = TechnicalCentralLogReadiness.fromMap(_jsonMap(result));
+    if (readiness.moduleKey != moduleKey) {
+      throw StateError('Central log readiness module mismatch.');
+    }
+    return readiness;
   }
 
   /// Privacy-minimised, per-module Technical actions from audit_events.
