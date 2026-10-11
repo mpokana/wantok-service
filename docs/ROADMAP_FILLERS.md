@@ -20,9 +20,13 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-11-21 — T2.4 scoped health log adapter
+
+**Status:** Committed/pushed `0ba95ef`, local SQL 12/12 negative tests PASS in rollback-only transaction; seven Flutter analyses and 132 Client / 38 Operations / 22 Technical widgets PASS. New module-scoped backend log RPC requires module.view AND module.logs, sanitises text and caps 30 records. Running Technical preview unchanged; no database migration applied, no raw central logs or queue controls. Existing broader view-authorised Health history API remains a separate hardening task. Linux source release and local Git bundle verified. `docs/T24_SCOPED_HEALTH_LOG_ADAPTER_20261011.md`.
+
 ## FILLER-2026-10-11-20 — E6D–F two-person grants and staged case recusals
 
-**Status:** Local E6 security engineering code implemented and regression tested, formal live E6 acceptance OPEN. Country-scoped signed-in requester and independent approver duty changes are audited, time-bound, denied to targets and unaffected by global administrator flags. Staged applications are registered against independent ISO subdivision/category mapping (no free-text guesses); review/evidence duty separation and applicant owner RLS are enforced. Staff case-specific recusals immediately invalidate enterprise/staged case authority. Legacy resource activation decision sealed and direct sensitive column grants tested. Local 56 SQL/1,139 assertions, Node evidence 101/101, five new Operations duty widget tests passed; integrated package QA separate. No real staff proof, signed-in browser witness, VM deployment, KYC, uploads, vendor activation or payment allowed. `docs/E6D_E6F_DUAL_STAFF_STAGED_CASE_RECUSAL_20261011.md`.
+**Status:** Local E6 security engineering code implemented and regression tested, formal live E6 acceptance OPEN. Country-scoped signed-in requester and independent approver duty changes are audited, time-bound, denied to targets and unaffected by global administrator flags. Staged applications are registered against independent ISO subdivision/category mapping (no free-text guesses); review/evidence duty separation and applicant owner RLS are enforced. Staff case-specific recusals immediately invalidate enterprise/staged case authority. Legacy resource activation decision sealed and direct sensitive column grants tested. Local 56 SQL/1,139 assertions, Node evidence 101/101, five new Operations duty widget tests passed; detached integrated QA seven analyses / 132 Client / 43 Operations / 22 Technical widgets PASS. `docs/E6DEF_INTEGRATED_SECURITY_ACCEPTANCE_20261011.md`. No real staff proof, signed-in browser witness, VM deployment, KYC, uploads, vendor activation or payment allowed. `docs/E6D_E6F_DUAL_STAFF_STAGED_CASE_RECUSAL_20261011.md`.
 
 ## FILLER-2026-10-11-19 — T2.4 owner-authorised read-only Technical observability
 

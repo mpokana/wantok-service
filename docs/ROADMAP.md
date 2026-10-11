@@ -8,11 +8,18 @@
 - [x] Restrict legacy staged-provider triage/verification and evidence planning/metadata RLS to independently classified, active scoped case/evidence officers; keep applicant reads and non-uploading intents. Wire staged queue/checklist/evidence action separation into restricted Operations tabs. Seal old resource activation moderation.
 - [x] Add staff self-declared and independently recorded immutable case recusal; PostgreSQL case-scope checks deny reviewer, evidence or investigator privileges after a conflict is recorded.
 - [x] Validate existing provider/driver and listing activation column-level grants and RPC denials; ensure profile owner cannot change verification flags through direct SQL.
-- [x] Local three migrations PASS, **56 pgTAP files / 1,139 assertions PASS**, evidence safety 101/101 PASS, new staff authorisation 5 widget tests PASS, full Operations **43/43 PASS** and app analyzer clean. Full integrated Flutter test and package proof documented separately.
+- [x] Local three migrations PASS, **56 pgTAP files / 1,139 assertions PASS**, evidence safety 101/101 PASS, new staff authorisation 5 widget tests PASS, full Operations **43/43 PASS** and app analyzer clean. Detached `0ad0fde` QA passed **7 analyses / 132 Client / 43 Operations / 22 Technical widgets**. See `docs/E6DEF_INTEGRATED_SECURITY_ACCEPTANCE_20261011.md`; package/GitHub proof separate.
 - [ ] **Formal E6 sign-off open:** real verified independent staff delegation and key custody; official source provenance for country subdivision/classification; COI/business relationship review; controlled signed-in multi-user browser matrix; security/recovery and E6 release runbook approval.
 - [ ] E7–E12 separately gated; no production/online VM deployment, KYC issuance, documents, vendor activation or money movement. Detail `docs/E6D_E6F_DUAL_STAFF_STAGED_CASE_RECUSAL_20261011.md`.
 
 ---
+
+## T2.4 — Server-scoped health-transition log adapter (11 October; SOURCE/SQL QA PASS)
+
+- [x] Create an additive authenticated RPC for technical module log reads: require both module.view + module.logs, cap to 30 newest transitions, suppress untrusted summary/probe-key content and permit only the assigned module.
+- [x] Wire Technical Logs to the new server-enforced adapter, without adding raw log/queue/action privileges. Transactional migration + 12 pgTAP negative/read tests **PASS**, complete rollback confirmed. Seven analyses / 132 Client / 38 Operations / 22 Technical widgets **PASS** on isolated T2.4 code.
+- [x] Commit `0ba95ef` and verify GitHub feature branch, full Git-bundle backup, and signed-off-for-source-only Linux release archive. **Migration not applied** to shared development DB; port 3600 still serves the previous preview.
+- [ ] Audit original `list_technical_module_health_history` broader view-only API, implement separately authorised central/module log provider contracts and queue metadata adapters, then carefully approve executable jobs and dedicated audit trail. Full migrated SQL suite and authenticated UI acceptance remain OPEN. `docs/T24_SCOPED_HEALTH_LOG_ADAPTER_20261011.md`.
 
 ## T2.4 — Technical Diagnostics, Logs and Jobs (11 October; FIRST READ-ONLY MILESTONE)
 

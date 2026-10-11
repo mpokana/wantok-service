@@ -9,11 +9,18 @@
 - Added country-authorised two-person **Operations staff duty provisioning**: only independently authorised requesters and different approvers can request/approve bounded category/region duties, with explicit reason and atomic issue/revoke audit. Trusted service-only bootstrap remains sealed from browser and existing admins get no automatic authority.
 - Existing staged-applicant workflows now use separately verified country/subdivision/service-family case classification (not guessed text) with distinct case-review and evidence-officer duties and owner-read RLS. The restricted Operations **Staged cases** tab hides triage/checklist and evidence planning actions according to individual duties; PostgreSQL remains authoritative. Resource moderation legacy `active` status RPC is sealed, with current column-level table permission checks preserved.
 - Staff may declare case-specific conflicts; independent trusted officers can record an investigated recusal. Enterprise and staged case scope instantly fails closed for conflicted staff, including reviewer/evidence/safety duties. Applicant-owned reads continue.
-- Local migrations 20261011230000/231000/232000 applied, **56 files / 1,139 pgTAP assertions PASS**, Node evidence safety **101/101 PASS**, new Operations provisioning UI five focused widget tests PASS; full Operations analysis and **43/43 widgets PASS**, including existing staged-screen coverage. Full detached integrated Flutter QA/push/release separately recorded when verified.
+- Local migrations 20261011230000/231000/232000 applied, **56 files / 1,139 pgTAP assertions PASS**, Node evidence safety **101/101 PASS**, new Operations provisioning UI five focused widget tests PASS; full Operations analysis and **43/43 widgets PASS**, including existing staged-screen coverage. Detached `0ad0fde` QA passed **7 analyses / 132 Client / 43 Operations / 22 Technical widget tests**; details `docs/E6DEF_INTEGRATED_SECURITY_ACCEPTANCE_20261011.md`. GitHub and release package separately verified at final checkout.
 - **E6 engineering controls advanced but final E6 human acceptance remains OPEN**: verified real staff and delegation, official regional source attestation, declared/undeclared related-party conflicts, signed-in cross-role/country browser verification, security audit and review of all inherited provider paths. No VM, real documents, money or activation enabled.
 - See `docs/E6D_E6F_DUAL_STAFF_STAGED_CASE_RECUSAL_20261011.md`.
 
 ---
+
+## 11 October — T2.4 server-scoped log adapter checkpoint (SECURITY QA PASS; MIGRATION NOT APPLIED)
+
+- **Commit `0ba95ef` verified on GitHub** adds `list_technical_module_log_events`: authenticated technical users require **both** module.view + module.logs on that module, server-capped to 30 health transitions, with free-text summaries/probe keys suppressed and transition reason restricted. Technical Control Logs now uses this new read-only RPC.
+- **SQL negative QA PASS (12/12 pgTAP):** anonymous, wrong module and view-only denied; cap/redaction and authorised role checked. Migration/test executed under a single **BEGIN/ROLLBACK** local DB transaction, and the function/test users were confirmed absent afterwards. No shared DB schema, VM or running Web update.
+- **Flutter full isolated regression PASS:** seven analyses, 132 Client / 38 Operations / 22 Technical widgets. A separate complete-history Git bundle and source Linux package for `0ba95ef` were verified; source package is **not production approved**.
+- **Residual:** original `list_technical_module_health_history` retains existing module.view authority for legacy Health & dependencies; this new adapter does not remove that broad legacy read. Secure central application logs, queue registry, approved job actions, audit trail and browser staging validation remain open. See `docs/T24_SCOPED_HEALTH_LOG_ADAPTER_20261011.md`.
 
 ## 11 October — T2.4 first read-only observability milestone (OWNER-AUTHORISED; IN PROGRESS)
 
