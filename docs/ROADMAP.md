@@ -2,6 +2,15 @@
 
 **Updated:** 2026-10-12
 
+## E6I — Integrated E6H/T2.4 disposable SQL staging (12 October; PASS, NOT DEPLOYED)
+
+- [x] Applied pending E6H plus three T2.4 migrations together only to a network-disabled, no-port disposable PostgreSQL clone containing schema and seven non-personal reference tables.
+- [x] Seven pgTAP suites **145/145 assertions PASS** (051/052/056/057/090/091/092); synthetic records rolled back, isolated container deleted and shared Supabase unchanged.
+- [ ] Full persistent database SQL migration/test still blocked until separately authorised backup, exact owner/ACL parity, controlled migration sequencing and signed-in GoTrue/API browser acceptance. Isolated test grants are *not* production parity.
+- [ ] E6 staff authority, official country classifications, COI and formal G1–G10 approvals remain pending; E7, live vendor activation, sensitive identity evidence and production VM prohibited. See `docs/E6I_ISOLATED_CROSSSTREAM_INTEGRATION_20261012.md`.
+
+---
+
 ## T2.4 — Module-scoped Technical Activity audit (12 October; SOURCE QA PASS)
 
 - [x] Reuse `audit_events` safely via a separate, bounded read-only module action-history RPC: explicit `module.view` + `module.logs` PostgreSQL permission, allowlisted action/entity pairs, module-key equality, no actor/target/metadata/customer payload. Distinguish activity from central/container logs.

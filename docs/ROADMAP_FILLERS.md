@@ -24,6 +24,10 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 **Status:** Source tested; module activity now reads only four allowlisted Technical Control change actions from real audit_events via a new module.view + module.logs RPC, hard server cap 30, and returns no person/target/meta/request fields. Typed Technical Activity page and six new widget tests PASS. Isolated staging runner now applies 3 T2.4 migrations; **39/39 pgTAP** PASS, original database unchanged, disposable container removed. Seven Flutter analyses, 132 Client / 43 Operations / 34 Technical tests PASS. Full shared SQL runner blocked by unapplied E6H/T2.4; production parity and browser acceptance open. No central logs, execution controls, live worker claims or VM deployment. `docs/T24_SCOPED_TECHNICAL_ACTIVITY_20261012.md`.
 
+## FILLER-2026-10-12-02 — E6I disposable E6H + T2.4 migration QA
+
+**Status:** Source-only E6I runner clones a non-personal schema/reference-only PostgreSQL stage, applies pending E6H and all three T2.4 migrations to that disposable database and passes **145/145 pgTAP assertions** across seven rollback-only case/security/observability suites. No shared DB migration, user records, external VM or activation; replica test ACLs do not establish production parity. `docs/E6I_ISOLATED_CROSSSTREAM_INTEGRATION_20261012.md`; E6 G1–G10 human gates OPEN.
+
 ## FILLER-2026-10-11-24 — T2.4 isolated staging automation
 
 **Status:** Repeatable local `scripts/qa/t24-isolated-staging.ps1` PASS: disposable network-disabled PostgreSQL, schema-only plus non-personal technical references, T2.4 Log and Messaging migrations applied together in separate staging, **12 + 13 pgTAP assertions PASS**, sample data rolled back, original DB unchanged and test container removed. Seven Flutter analyses and 132 Client / 43 Operations / 28 Technical widgets PASS. Shared default full SQL suite remains blocked at 090/091 pending unapplied T2.4 schema; no production grant/owner parity, GoTrue/browser acceptance, online VM, worker liveness or executable jobs. `docs/T24_ISOLATED_STAGING_INTEGRATION_20261011.md`.

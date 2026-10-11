@@ -4,6 +4,15 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 12 October — E6I isolated cross-stream security integration (PASS; NOT DEPLOYED)
+
+- Added repeatable `npm run test:e6:crossstream-local`: disposable no-network/no-host-port PostgreSQL clone of local *schema only* plus seven non-personal taxonomy/technical reference tables; applies **E6H + all three T2.4 pending SQL migrations** together **only inside the isolated DB**.
+- Seven pgTAP regressions pass **145/145 assertions**: 051=35, 052=34, 056=18, 057=19, 090=12, 091=13, 092=14. Synthetic fixtures rollback, test container removed, shared Supabase remains unmodified and four pending migrations absent there.
+- Staging reconstructs limited test ACLs because schema dump removes original grants/owners: **not** a production ACL/SECURITY DEFINER parity or GoTrue browser witness. Do not claim full shared `npm run db:test` passes; no real human E6 sign-offs. See `docs/E6I_ISOLATED_CROSSSTREAM_INTEGRATION_20261012.md`.
+- E6 acceptance G1–G10, E7, KYC/evidence ingestion, vendor activation, payments and online VM deployment remain **blocked**. Preserve concurrent T2.4 changes and untracked snippets.
+
+---
+
 ## 12 October — T2.4 scoped Technical Activity audit (SOURCE SECURITY PASS, NO DEPLOY)
 
 - Implemented `list_technical_module_activity` as a distinct **read-only, per-module, 30-record** adapter to existing technical `audit_events` actions. PostgreSQL enforces `module.view` AND `module.logs`; exact technical action/entity pairs and `metadata.module_key` are allowlisted. Only event ID, timestamp and fixed action code returned, with no actor/target/metadata/customer/Operations data.
