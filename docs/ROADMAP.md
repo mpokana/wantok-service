@@ -1,6 +1,16 @@
 # Wantok Services — Living Roadmap
 
-**Updated:** 2026-10-10
+**Updated:** 2026-10-11
+
+## 11 October CX1 — preserve new Public Services and category imagery
+
+- [x] Recognise current local source commits `3199499` Public Services, `6508781` category image mapping, and `a83d1b0` shared Theme & Media appearance workflow. Do not revert to 10 October client worktree or mix Public Services informational pages with commercial booking/dispatch.
+- [x] Validate new Client Web asset delivery on `:3000`: Public Services icon and photo, Emergency icon, Government photo and Specialist photo each HTTP 200; served JS includes Public Services. Technical `:3100` JS includes Theme & Media. Test environments `:3300/:3400` respond; no production release action was taken.
+- [x] Database contract **37/789 PASS**, source Client **102 widget tests PASS**, Admin **17 widget tests PASS**, and all 7 Flutter analyses after a brace-only lint correction. Technical **4 tests PASS** in isolated worktree because main worktree's `build/unit_test_assets` is locked on EAGLT02; do not forcibly delete the running build directory.
+- [ ] Verify new Public Services navigation and the Operations Admin module switch visually on authorised signed-in clients; leave the enabled state unchanged until owner explicitly requests a toggle. Official numbers and service links must be independently verified before publication.
+- [ ] Complete **signed-in Web** Client CX1F category-first flow at `:3000` with **empty search**: Services → Browse providers → Specialist Services → Morobe → Lae → provider details/rating and Saved **read-only** state; then Account/Inbox/Track/Wallet/Wantok Agent. Windows Search was covering active Chrome during this attempted session, so browser interactions were not falsely marked PASS.
+- [ ] Final visual checks of actual Android/HONOR appearance updates, mobile/tablet/browser widths and distinct icon/media slots; preserve originally supplied imagery and published-theme fallback.
+- [ ] T2.4, staff replies, real chat, money, approval changes, emergency operations and production evidence intake remain gated; CX1 **IN PROGRESS**.
 
 ## CX1 primary acceptance revised: category-first provider discovery — 10 October 2026
 

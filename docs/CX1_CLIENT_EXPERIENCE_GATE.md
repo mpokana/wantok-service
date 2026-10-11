@@ -5,6 +5,20 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## CX1 live-baseline checkpoint — 11 October 2026
+
+| Area | Grounded evidence | Current status |
+| --- | --- | --- |
+| Newly added Public Services | Present in EAGLT02 source commit `3199499`; Client `:3000` serves Public Services icon/photo and live JavaScript string; four informational sub-areas in source | **PASS — asset delivery/source; signed-in navigation still OPEN** |
+| Revised service pictures | Category image mapping changed in `6508781`; latest Client tests pass, Specialists image returns HTTP 200 | **PASS — automated/asset; final user visual OPEN** |
+| Shared appearance studio | `a83d1b0` has Technical Theme & Media and server-side draft/publish/rollback; `:3100` serves Theme & Media JS; no draft/publish action during QA | **PASS — source/contracts, interactive Admin publish not tested** |
+| Operations Admin module toggle | Source has guarded Public Services switch and audit; `:3200` still runs prior detached Admin version `a69d366` | **NOT ACCEPTED on live Admin; do not toggle** |
+| Authenticated Client **Web** provider discovery | `:3000` loaded current Client and assets; Windows Search overlay held foreground so browser click-through was not completed; no cookies/tokens exported | **OPEN — must repeat blank-search category/location/detail/Saved flow** |
+| Local database | Public Services + appearance contracts in current migrations, 37 files/789 pgTAP assertions | **PASS** |
+| Flutter source checks | 7 analyses pass after braces-only lint correction; Client 102 and Admin 17 pass, Technical 4 pass separately in clean isolated worktree after build-directory lock on main tree | **PASS with test-environment limitation documented** |
+
+Public Services is an **information directory**, not a dispatch service, booking, payment platform or verified source of emergency contacts. No URLs/numbers fabricated. New assets, module control and published-theme defaults have been preserved. No service/module toggle, appearance publish/upload, booking, payment, provider change or Saved modification. Existing Android category-first test remains a real prior PASS but cannot stand in for Web acceptance. **CX1 remains IN PROGRESS; T2.4 deferred.**
+
 ## CURRENT PRIMARY CX1F TEST — category-first, not plumber keyword (10 October 2026)
 
 **PASS — real signed-in Android, category-first read-only flow:** `Services → Browse providers → Specialist Services → Morobe → Lae → Provider Details`, **free-text search completely empty**. On the retained EAGLT02 emulator and existing Supabase data, filter choices all persisted and produced **Wantok QA Plumbing Services**, **5.0 (1)**, Specialist Services in Lae; detail opened and listed approved **QA Plumber & Maintenance**, `Specialist Services · Lae, Morobe · Quote`. This provider is an available non-commercial QA record, **not a claim that Specialist Services is the plumber category**. No Saved toggles, ratings/reviews, bookings, provider applications, payments or new records were written. Evidence stored privately in ignored `.wantok/cx1-categoryfirst-*.png`; no credential/screenshot committed.

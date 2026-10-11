@@ -25,8 +25,9 @@ class WantokBrandingScope extends InheritedWidget {
     if (path is! String ||
         !RegExp(
           r'^categories/[a-z0-9-]+/(homeIcon|cardImage|bannerImage)/[a-f0-9-]{36}[.](jpg|png|webp)$',
-        ).hasMatch(path))
+        ).hasMatch(path)) {
       return null;
+    }
     if (!path.startsWith('categories/$slug/$slot/')) return null;
     return resolveMediaUrl(path);
   }

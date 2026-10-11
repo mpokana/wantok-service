@@ -1,8 +1,17 @@
 # Wantok Services — Living Handover
 
-**Updated:** 2026-10-10
+**Updated:** 2026-10-11
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
+
+## 11 October 2026 — CX1 continuation with new Public Services/media preserved (LATEST)
+
+- **Baseline and separation:** Main development source on EAGLT02 is `D:\Project-M.2\wantok-service-recovery` at local HEAD `a83d1b0` before this QA repair, containing `3199499` (**Public Services** directory/module control), `6508781` (**no duplicated category images**) and `a83d1b0` (**Technical Theme & Media draft/preview/publish**). Do **not** reset those commits, replace their media with older screenshots, or switch the active web apps back to dated detached checkouts. The three changes were locally committed ahead of GitHub feature branch `b2dbc55` when inspected; verify remote equality before any push. Untracked `supabase/snippets/` remains unrelated and excluded.
+- **Deployed asset evidence:** EAGLT02 Client `:3000` returned HTTP 200 for the Public Services icon/photo, Emergency icon, Government photo and Specialists photo URLs; its served JS includes `Public Services`. Technical `:3100` served JS containing `Theme & Media`; independent staging builds answer at `:3300` and `:3400`. Operations Admin `:3200` remains the prior detached `a69d366` build; the new Public Services module switch exists in source, **not verified in the signed-in live Admin UI**. No runtime was restarted by this CX1 continuation.
+- **Public Services scope:** Screenshot-based artwork and informational directory **Emergency & Safety / Health Services / Government Services / Community Services**, with no invented official numbers/URLs and no dispatch, bookings, money or government transactions. Operations Admin module enable/disable has server RBAC, confirmation and audit, but was **not toggled**. Technical Theme & Media published/draft/restore code and default image fallback are present; **no settings were published or uploaded** in this QA.
+- **Latest source QA:** `npm run db:test` **PASS: 37 files / 789 assertions**, including Public Services and Theme & Media validation; latest Client **102 tests PASS**, Admin **17 tests PASS**, and 7 Flutter analysis targets after a **braces-only** lint correction in `packages/wantok_ui/lib/src/wantok_branding.dart`. The main-worktree Technical widget-test runner was blocked by a Windows lock on `apps/wantok_tech/build/unit_test_assets` (not an assertion failure). A clean isolated worktree `D:\Wantok_CX1_Tech_QA_20261011` ran the full Technical suite **4 tests PASS**, including all three responsive branding preview sizes; no live build/test directory was force-deleted.
+- **Web CX1F acceptance still OPEN:** Existing Chrome at `:3000` shows new visual assets and signed-in shell, but the foreground was Windows Search during attempted GUI review; did **not** manipulate someone's active tabs or collect cookies/tokens. Source/API asset checks and Android `Specialist Services → Morobe → Lae` PASS **do not establish signed-in Web category-filter/Details/Saved**. Repeat safely at `:3000` when a browser session is available. Android/HONOR published-appearance parity also remains separate.
+- **Security:** No provider records, Saved flags, support status, appearance publish/upload, module activation, payments, RLS or database migrations changed in this follow-up. CX1 **IN PROGRESS** and T2.4 deferred.
 
 ## CX1 category-first discovery acceptance — 10 October 2026 (LATEST GATE)
 
