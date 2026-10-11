@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
+import 'vendor_verification_review_page.dart';
+
 /// Preliminary review queue. Identity clearance and final approval do not
 /// occur here. All actions run through an admin-only audited database RPC.
 class VendorIntakeQueuePage extends StatefulWidget {
@@ -358,6 +360,20 @@ class _VendorIntakeQueuePageState extends State<VendorIntakeQueuePage> {
                   onPressed: () => _history(id),
                   icon: const Icon(Icons.history),
                   label: const Text('Audit trail'),
+                ),
+                OutlinedButton.icon(
+                  key: ValueKey('verification-tasks-$id'),
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute<void>(
+                      builder: (_) => VendorVerificationReviewPage(
+                        caseId: id,
+                        applicantName:
+                            row['display_name']?.toString() ?? 'Applicant',
+                      ),
+                    ),
+                  ),
+                  icon: const Icon(Icons.fact_check_outlined),
+                  label: const Text('Verification review tasks'),
                 ),
                 if (status == 'submitted')
                   FilledButton.icon(

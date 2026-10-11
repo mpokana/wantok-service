@@ -3,6 +3,7 @@ import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
 import 'staged_provider_review_page.dart';
+import 'vendor_intake_queue_page.dart';
 
 /// Read-only verification cockpit. These counts are not a KYC certification.
 class VerificationKycSnapshot {
@@ -147,6 +148,22 @@ class _VerificationKycPageState extends State<VerificationKycPage> {
             ),
           ),
           const SizedBox(height: 14),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: OutlinedButton.icon(
+              key: const ValueKey('kyc-vendor-cases-link'),
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => const VendorIntakeQueuePage(),
+                ),
+              ),
+              icon: const Icon(Icons.assignment_turned_in_outlined),
+              label: const Text(
+                'Vendor applications & two-person review tasks',
+              ),
+            ),
+          ),
+          const SizedBox(height: 14),
           LayoutBuilder(
             builder: (context, c) {
               final cols = c.maxWidth >= 760
@@ -157,7 +174,7 @@ class _VerificationKycPageState extends State<VerificationKycPage> {
               final width = (c.maxWidth - (cols - 1) * 10) / cols;
               final counts = [
                 (
-                  'Verified',
+                  'Legacy verified flag',
                   total('verified'),
                   Icons.verified_user,
                   const Color(0xFF086747),
