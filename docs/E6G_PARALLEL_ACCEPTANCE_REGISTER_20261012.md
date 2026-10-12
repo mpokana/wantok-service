@@ -4,6 +4,10 @@
 
 **Authority:** `docs/E6G_FORMAL_ACCEPTANCE_RUNBOOK_20261011.md` remains the controlling G1–G10 requirements. This new document organises evidence preparation **alongside** E-series source engineering, without silently assigning approvers or manufacturing evidence. No private witness/customer details, tokens, credentials or personal records belong in GitHub.
 
+## E6W read-only G8 caller privilege addendum (not independent acceptance)
+
+`docs/E6W_INSTALLED_CALLER_TRUST_AND_G8_PARITY_WORKSHEET_20261012.md` narrows E6V's 16 historical writer-calling definitions to 12 latest-by-name checked-in audit caller candidates. A local PostgreSQL READ ONLY `pg_catalog` comparison matched 14 selected installed signatures (12 callers + two privileged writers), all `SECURITY DEFINER` under local BYPASSRLS `postgres` owner and all with effective anonymous/authenticated SQL EXECUTE. This does **not** establish REST exposure or an authentication bypass; the status-change trigger is not an ordinary RPC. The shared local audit/notification direct writer grant issue E6O-01 remains **OPEN**, proposed E6O correction is still unapplied; actual trusted worker and nested audit continuity await separately authorised exact role-parity staging and independent G7-31 witnesses. **G7 31/31 NOT EXECUTED, G1–G10 0/10 accepted.** No change to paused Technical T2.4.
+
 ## Independent gate preparation workboard
 
 | Gate | What can be prepared safely now | Independent role(s) and required witness | Evidence reference | Decision | Next dependency |

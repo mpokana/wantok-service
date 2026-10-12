@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-12-18 — E6W installed-local trust parity evidence without mutation
+
+**Active E P0 non-mutating continuation:** Separate E6V's 16 historic writer-call candidates from latest checked-in **12** by-name candidates, then cross-check **14** selected local signatures and owner/ACL/SQL-reference Boolean metadata inside a `READ ONLY` `pg_catalog` transaction. New reproducible script: `scripts/qa/e6w-installed-caller-trust.mjs`; report: `docs/E6W_INSTALLED_CALLER_TRUST_AND_G8_PARITY_WORKSHEET_20261012.md`. Note important limitation: SQL `EXECUTE` is not a live HTTP vulnerability proof, trigger-return functions are not normal RPC, and no real service worker/notification path was run. The two writer grants are still open in persistent local DB, no migration applied, stage parity not proved. Parallel G7-31 test/evidence prepared only; G7 31/31 blocked, G1–G10 0/10, CX1 queued, T2.4 paused, production false.
+
+---
+
 ## FILLER-2026-10-12-17 — E6V internal audit/notification dependency compatibility
 
 **E-Series P0 safe additive review:** Inventory *historic source* calls to the two shared privileged writers without writing to the shared database, calling live RPCs, changing Technical source or promoting migrations. Results: 77 migration files scanned; 16 audit-writer candidate calls, no notification source call candidates or app JS/TS/Dart references. Treat scan as lexical, including superseded definitions; real notification workers may be external. Prepare approved dedicated-stage positive authorised nested audit + notification queue/delivery test and negative ordinary-role direct RPC under G7-31, with exact owner/ACL parity and independent Security/Operations witnesses. G1–G10 0/10; all 31 planned G7 cases blocked, CX1 queued, T2.4 paused, production false. See `docs/E6V_INTERNAL_WRITER_DEPENDENCY_AND_STAGE_COMPATIBILITY_20261012.md`.

@@ -2,6 +2,14 @@
 
 **Updated:** 2026-10-12
 
+## E6W — latest declared privileged caller and installed local trust snapshot (12 October)
+
+- [x] Added `scripts/qa/e6w-installed-caller-trust.mjs` with source-only and **READ ONLY** local PostgreSQL catalog modes; scanned 77 migrations, parsed 227 dollar-quoted declarations, narrowed **16 historical** writer-calling definitions to **12 latest-by-name** audit-writer caller candidates. Regex matching and pending SQL are not a full installed call graph.
+- [x] Found **14/14** installed local selected function signatures with `SECURITY DEFINER` and BYPASSRLS `postgres` owner; installed Boolean body-regex matches for all 12 selected audit callers, zero notification direct caller references. SQL EXECUTE on all 14 selected is effective for `anon` and `authenticated`; API exploitability not established.
+- [x] New `docs/E6W_INSTALLED_CALLER_TRUST_AND_G8_PARITY_WORKSHEET_20261012.md` maps distinct Operations, Technical, branding, category, trigger and notification continuity checks and future exact signature/ACL/role/RLS/REST parity evidence. **No staged data, approvals or migration deployment**.
+- [x] Source-only and local catalog scanner PASS; isolated SQL **301/301** (16 suites), synthetic auth **23/23**, E6 independence **106/106**, evidence **101/101**, E6S privacy validators PASS; clean detached baseline Flutter QA **7 analyses and Client 132 / Operations 43 / Technical 38 widgets PASS**. Shared `db:test` is not green because pending migrations remain unapplied.
+- [ ] **E6O-01 remains OPEN** on shared-local writer grants, G7-31 real witness remains NOT EXECUTED; G7 **31/31 blocked**, G1–G10 **0/10 approved** and E6S privacy D1–D5 unresolved. E-series active, CX1 queued, T2.4 paused, E7+/production sealed.
+
 ## E6V — internal writer dependency compatibility inventory (12 October)
 
 - [x] Added reproducible non-mutating `scripts/qa/e6v-internal-writer-dependency-map.mjs` across 77 SQL migrations and app JS/TS/Dart: 9 migrations match, **16 historical audit-writer candidate nested calls**, **0** notification writer SQL calls and **0** app named writer references. Lexical/historical only, not live call graph, route analysis or proof that a worker is unused.

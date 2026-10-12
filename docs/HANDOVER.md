@@ -4,7 +4,16 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 12 October — E6V: internal writer dependency review and dedicated-stage compatibility plan (LATEST P0)
+## 12 October — E6W: latest checked-in caller definitions and local trust parity worksheet (LATEST P0)
+
+- **Source and local catalogue (READ ONLY):** new `scripts/qa/e6w-installed-caller-trust.mjs` compares **77** migration files / **227** parsed dollar-quoted function definitions / **16** historical writer-calling definitions with **12 latest-by-name** checked-in audit-writer callers. Selected local `pg_catalog` finds **14/14** installed signatures (12 callers + two internal writers); all selected owner `postgres` with `SECURITY DEFINER` and BYPASSRLS; all selected have effective `anon`/`authenticated` SQL EXECUTE. Boolean local installed-definition checks find audit-writer references in the 12 caller routines; none in selected callers reference notification-writer. No function bodies exported, data rows queried or SQL writes. This is regex/name-keyed evidence, not exact installed source body parity or real RPC exploitability.
+- **G8 risk remains:** local `write_audit_event` and `enqueue_notification` direct untrusted grants **still OPEN E6O-01**; exact owner/ACL/role/RLS/function overload/PostgREST compatibility, authorised nested audit paths and real trusted notification worker delivery remain independent stage blockers. Current local `audit_status_change` trigger-return function is **not** an ordinary callable REST RPC. T2.4 remains PAUSED; no migrations, production, shared DB, or user identities changed.
+- **E6W regressions:** new scanner source/local READ ONLY checks PASS; unchanged disconnected seven-migration SQL **301/301** across **16** suites PASS, removed container, shared DB unchanged; synthetic HTTP negative **23/23**, independence **106/106**, evidence **101/101**, E6S privacy source/local checks PASS. Fresh detached Flutter source (`2476e10`) **7/7 clean analyses**, Client **132**, Operations **43**, Technical **38** widgets PASS, exit 0. Combined shared `db:test` not claimed green because approved pending migrations remain unapplied.
+- **Worksheet and continuation:** `docs/E6W_INSTALLED_CALLER_TRUST_AND_G8_PARITY_WORKSHEET_20261012.md` prepares exact future parity/witness matrix for G7-31, no invented sign-off. G1–G10 **0/10**; G7 **31/31 NOT EXECUTED**, D1–D5 NOT SUPPLIED. E active, CX1 queued, T2.4 paused, E7+/production blocked.
+
+---
+
+## 12 October — E6V: internal writer dependency review and dedicated-stage compatibility plan (PRIOR P0)
 
 - **SOURCE-ONLY E6V scanner:** `scripts/qa/e6v-internal-writer-dependency-map.mjs` examined **77** historical SQL migrations plus app sources: `write_audit_event` has **16 historical candidate nested SQL calls** in 9 migration files; `enqueue_notification` has **0** direct source call candidates; no scanned app JS/TS/Dart named references. This is **lexical historical evidence**, not 16 live callers, API exposure, active worker absence or a permission review PASS.
 - **G8 compatibility risk mapped:** candidate audit invocations include `audit_status_change`, role grants/revokes, Technical state/access/configuration, service switching, branding and category editor. Post-E6O direct untrusted denial and correct authorised nested audit/notification continuity still require **real owner/ACL/RLS-equivalent stage** and independent witnesses. The E6O-01 shared-local grant exposure remains OPEN; **no migrations applied**, no T2.4 changes.
