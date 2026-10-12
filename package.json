@@ -23,6 +23,7 @@
     "test:e6:crossstream-local": "powershell.exe -NoProfile -ExecutionPolicy Bypass -File ./scripts/qa/e6-crossstream-isolated-staging.ps1",
     "test:e6:catalog-local": "node ./scripts/qa/e6-trust-inventory.mjs --local",
     "test:e6:marketplace-local": "node ./scripts/qa/e6-marketplace-exposure.mjs --local",
+    "test:e6:function-trust-local": "node ./scripts/qa/e6-function-trust.mjs --local",
     "db:stop": "node ./scripts/supabase-local.js stop"
   },
   "dependencies": {

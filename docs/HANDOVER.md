@@ -4,7 +4,16 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 12 October — E6K: actual public marketplace RLS/column disclosure (LATEST P0)
+## 12 October — E6L: privileged-function audit + G1–G10 concurrent evidence preparation (LATEST P0)
+
+- **E6L read-only local catalog technical baseline PASS:** `scripts/qa/e6-function-trust.mjs --local` inspected only owner, role, schema and effective EXECUTE metadata for **19 selected** E6 SECURITY DEFINER functions. All owned by local `postgres` (BYPASSRLS); `anon` EXECUTE on selected functions **0**; seven trusted-only routines allowed to `authenticated` **0**; all 19 explicitly set `search_path=public, auth`. Ordinary roles cannot CREATE in inspected `public/auth/extensions` schemas, but can CREATE TEMP; all 19 lack explicit trailing `pg_temp`. **Review required**, not an exploit demonstration or verified full function-body security. No real records, secrets, roles or data modified.
+- **E6L verification:** catalog read-only baseline PASS; five-migration disposable cross-stream **181/181 PASS** with shared DB unchanged, signed-synthetic-JWT HTTP negatives **23/23 PASS**, independence **106/106 PASS**, evidence **101/101 PASS**; fresh E6L detached Flutter check exit **0** (seven analyses clean; Client **132**, Operations **43**, Technical **38** PASS). This is not authenticated witness/production permission parity.
+- **G-series in parallel:** prepared precise G1–G10 human evidence queue and **planned** positive/negative real GoTrue/PostgREST matrix, dedicated backed-up staged prerequisite list. **All human gates remain BLOCKED**, E7+/provider activation sealed. Follow `docs/E6L_PRIVILEGED_FUNCTION_OWNERSHIP_AND_GATES_20261012.md` and unchanged authoritative `docs/E6G_FORMAL_ACCEPTANCE_RUNBOOK_20261011.md`.
+- E-series remains P0 ACTIVE; CX1 P1 QUEUED, T2.4 P2 PAUSED. Respect single-chat serial Git writes and shared Supabase prohibition.
+
+---
+
+## 12 October — E6K: actual public marketplace RLS/column disclosure (PRIOR P0)
 
 - **Source/isolated QA PASS:** `058_public_marketplace_visibility_boundary.test.sql` adds **17/17** transaction-rollback synthetic assertions for anon versus signed-in visibility, verified+active provider/service requirements, no anonymous UPDATE and direct synthetic metadata exposure. Revised E6 cross-stream disposable staging tests E6H + four Technical source migrations with 051/052/056/057/**058**/090–093: **181/181 PASS** across 9 suites, original shared Supabase unchanged, fixture rollback and container removal confirmed.
 - **Read-only catalog PASS with privacy REVIEW OPEN:** `npm.cmd run test:e6:marketplace-local` inspects no actual business data; current table-level public grants mean **18/18 `provider_profiles` columns** and **23/23 `provider_services` columns** SELECTable to anon for rows passing RLS. The eight candidate address/coordinates/metadata columns require **separate privacy and API-contract sign-off**, not automatic revocation. RLS row restrictions and no anonymous writes remain intact.

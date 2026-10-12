@@ -2,6 +2,15 @@
 
 **Updated:** 2026-10-12
 
+## E6L — Privileged function trust + G1–G10 concurrent evidence readiness (12 October)
+
+- [x] Read-only local `pg_catalog` audit of **19 selected SECURITY DEFINER** E6 functions: all `postgres` owned/BYPASSRLS, 0 anon EXECUTE, 0 authenticated EXECUTE on seven trusted-only routines, 19 explicit paths, 0 normal-schema CREATE rights for anon/auth; `pg_temp` suffix absent on all 19 and TEMP allowed — **needs function-body/temp-name audit**, not proven exploit.
+- [x] Re-ran E6L regressions: detached Flutter **7 clean analyses**, **132 Client / 43 Operations / 38 Technical** PASS; disconnected SQL **181/181 PASS**; local auth **23/23**, E6 independence **106/106**, evidence **101/101** PASS. No migrations applied.
+- [x] Prepared gate-by-gate G1–G10 independent evidence queue; designed separate real GoTrue/PostgREST role, tenancy and legacy bypass matrix; staged authorisation/backups/owner-parity checklist. **Preparation is not approval**: G1–G10 all BLOCKED.
+- [ ] Inspect actual checked-in function bodies for unqualified relations/types, dynamic SQL, JWT identity source and definer bypass; propose safe `pg_temp` ordering and owner/ACL hardening in **disposable role-equivalent stage**, test before migration.
+- [ ] Real witnessed test accounts and independent G7/G8 review only after explicit dedicated staging approval; legal/HR/COI/DR sign-offs under G1–G10; E7+ locked.
+- Evidence: `docs/E6L_PRIVILEGED_FUNCTION_OWNERSHIP_AND_GATES_20261012.md`; human gate source of truth `docs/E6G_FORMAL_ACCEPTANCE_RUNBOOK_20261011.md`.
+
 ## E6K — Public marketplace disclosure and RLS boundary (12 October; SOURCE QA)
 
 - [x] Read-only PostgreSQL policy and per-column anonymous exposure audit: verified active profiles and services remain RLS restricted, `anon` has no table mutation rights, but **18/18 provider-profile** and **23/23 provider-service** columns are SELECTable when a public row qualifies. Eight address/coordinate/metadata fields require privacy review. No real data rows read.

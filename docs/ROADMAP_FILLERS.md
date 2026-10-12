@@ -20,6 +20,10 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-12-07 — E6L trust boundary and G1–G10 concurrent gate preparation
+
+**Priority:** E-series P0 with G1–G10 readiness prepared in parallel, serial shared writing, CX1 queued, T2.4 paused. **Technical baseline:** 19 selected SECURITY DEFINER functions owned by local postgres/BYPASSRLS; 0 anon EXECUTE; 0 of seven trusted-only routines signed-in EXECUTE; caller schema CREATE absent; database TEMP allowed and explicit trailing pg_temp missing, merits function-body review. A metadata-only source script and G1–G10 independent evidence/GoTrue testing plan were added. **All gates BLOCKED** pending authorised real staff/legal/ISO/COI/security/DR testimony; no accounts, migrations, service-role changes, shared DB or production modifications. `docs/E6L_PRIVILEGED_FUNCTION_OWNERSHIP_AND_GATES_20261012.md`.
+
 ## FILLER-2026-10-12-06 — E6K public marketplace disclosure review
 
 **Status:** Source/isolated security baseline only; 17/17 synthetic pgTAP RLS checks (new test 058), **181/181 total E6H+T2.4 disposable integration**, shared database unchanged. PostgreSQL catalogue confirms anon can SELECT all **18 profile** and **23 service** columns for otherwise public eligible provider records, including metadata and address/coordinates. Current public-row filters are active+verified; this is a field-disclosure/privacy decision, not proof of actual customer-data leakage. **BLOCKED:** independent metadata/public-field sign-off, safe API projection, multi-platform query migration, exact ACL/GoTrue testing. No live permissions, roles or T2.4 functions changed. `docs/E6K_PUBLIC_MARKETPLACE_RLS_AND_PRIVACY_BOUNDARY_20261012.md`.
