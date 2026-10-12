@@ -2,6 +2,16 @@
 
 **Updated:** 2026-10-12
 
+## E6S — Role-helper proposed API contract, migration-impact and staged acceptance (12 October)
+
+- [x] Machine-readable **PROPOSED, not approved** `docs/E6S_ROLE_PRIVACY_CONTRACT_PROPOSAL_20261012.json` specifies exact eight currently callable role/Technical helpers, separate anonymous vs self/delegated vs trusted internal outcomes, five D1–D5 independent decisions, signed human approvals **0/10**.
+- [x] E6S full validation: eight-helper contract source and READ ONLY local catalog **PASS**; disconnected stage **286/286** over 14 SQL suites, main synthetic auth negative **23/23**, independence **106/106**, evidence **101/101**, Flutter **7 clean analyses + 132/43/38 widget tests** PASS. Shared DB unchanged, real GoTrue witnesses absent.
+- [x] Reproducible `npm.cmd run test:e6s:privacy-contract` source-only and `test:e6s:privacy-contract-local` PostgreSQL **READ ONLY** catalog parity validators check eight function signatures/return types, current definer status, owners and EXECUTE grants, without touching user records or HTTP.
+- [x] `docs/E6S_ROLE_HELPER_PRIVACY_AND_STAGING_READINESS_20261012.md`: scoped migration-impact matrix for Operations RLS, Technical, Flutter, Taxi/booking and role workflows; **S-01..S-09 dedicated-stage preflight** requires approval, backup/restore, owner+ACL+RLS parity, independent GoTrue/REST witnesses, cleanup and signed go/no-go.
+- [ ] **G8 D1–D5 all NOT SUPPLIED**: confirm whether role/rank is sensitive metadata, define exact API isolation, approve safe nested/RLS contract and negative/positive stage evidence before ANY privacy migration. E6K/E6O/E6R findings stay OPEN.
+- [ ] Real G7 **28 cases NOT EXECUTED**; G1–G10 **0/10 independently approved**; no persistent SQL migrations, accounts, production or T2.4 work.
+- Report: `docs/E6S_ROLE_HELPER_PRIVACY_AND_STAGING_READINESS_20261012.md`.
+
 ## E6R — Role metadata callsite inventory and G8 decision pack (12 October)
 
 - [x] Read-only local pg_catalog check confirmed **eight selected definer role helpers** have effective `anon`, `authenticated` and `service_role` EXECUTE with local postgres owner; never assume this proves HTTP exploit/actual production grants.

@@ -94,6 +94,14 @@ Independent reviewers must confirm in a separately authorised backed-up stage th
 - **Independent G8 decisions D1–D5:** classify staff role/rank metadata, decide caller-only vs delegated API disclosure, prove nested SQL/RLS compatibility, stage authentic GoTrue positive/negative observations, and formally sign rollback/owner/ACL parity. No blanket `REVOKE` before independent review. Pack `docs/E6R_ROLE_METADATA_CALLGRAPH_AND_G8_DECISION_PACK_20261012.md`.
 - **G7 parallel:** **28** cases planned; G7-27/28 require anonymous REST role disclosure and real signed-in caller/other-subject checks after approved privacy contract. **0 executed/witnessed**. All formal G1–G10 **BLOCKED**.
 
+## E6S D1–D5 privacy/ACL and S-01..S-09 staging-preflight intake (NOT G8 sign-off)
+
+- Source contract `docs/E6S_ROLE_PRIVACY_CONTRACT_PROPOSAL_20261012.json` proposes no anonymous other-person staff role/Technical rank enumeration, ordinary signed-in caller-self status only unless real delegated authority is independently approved, and continued safe trusted internal subject checks. **Not an approved legal/security contract or executable migration.**
+- `scripts/qa/e6s-role-privacy-contract.mjs` has both source-only and READ ONLY local pg_catalog validation of eight exact function signatures/returns and current SQL privileges. Local SQL grants are not evidence that a PostgREST route is publicly exposed.
+- G8 independent **D1** classify role metadata, **D2** select compatibility-safe external vs internal helper boundary, **D3** witness genuine GoTrue/PostgREST anonymous/self/other/delegated outcomes, **D4** approve a narrow reversible migration and role/owner/RLS parity, **D5** final release only after independent gates. **All NOT SUPPLIED.**
+- Dedicated stage **S-01..S-09** still requires owner scope authorisation, proven backup/restore, exact grants and schema exposure, private real test identity custody, independent witnessed G7 cases (all **28 NOT EXECUTED**), cleanup and final signatures. No fake witness or evidence IDs.
+- **All G1–G10 formal decisions BLOCKED (0/10 approved)**. E6K/E6O/E6R privacy and writer risks remain OPEN. Detailed doc `docs/E6S_ROLE_HELPER_PRIVACY_AND_STAGING_READINESS_20261012.md`.
+
 ## G8 — Independent review worklist
 
 - [ ] Review **all relevant overloads and nested routines**, not only the 19 selected E6 `SECURITY DEFINER` sources (E6M).

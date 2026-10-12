@@ -4,7 +4,17 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 12 October — E6R: role-metadata callsite map and G8 privacy decision pack (LATEST P0)
+## 12 October — E6S: proposed role-helper privacy contract + G7/G8 stage checklist (LATEST P0)
+
+- **Resumed after EAGLT02 reconnection:** preserved existing E6S source-only `docs/E6S_ROLE_PRIVACY_CONTRACT_PROPOSAL_20261012.json` and `scripts/qa/e6s-role-privacy-contract.mjs`; validated **eight exact public helper signatures and current local postgres ownership + anon/auth/service EXECUTE** in a PostgreSQL READ ONLY transaction. All five D1–D5 decisions **NOT SUPPLIED**; contract explicitly marks `production_approved:false`, `human_gates_approved:0`, and no GoTrue/PostgREST witness.
+- **Migration-impact and stage preflight:** `docs/E6S_ROLE_HELPER_PRIVACY_AND_STAGING_READINESS_20261012.md` evaluates RLS/Client/T2.4/Taxi/Operations impact and **S-01..S-09 NOT SUPPLIED/NOT EXECUTED/BLOCKED** stage proof; no E6S schema/grant migration. This is a proposed policy only, not a security acceptance.
+- **G1–G10 acceptance in PARALLEL:** existing G7 **28** real-session witness cases remain unexecuted; **all 10 gates BLOCKED**. E6K public column issue, E6O writer permissions and E6R cross-person role metadata remain OPEN. Shared DB, accounts, GVE machines and production unchanged.
+- **E6S QA:** proposed eight-helper privacy contract **PASS** source-only and read-only local catalogue; disconnected seven-migration stage **286/286** across 14 pgTAP files, persistent shared DB untouched; synthetic HTTP negatives **23/23**, E6 independence **106/106**, evidence **101/101**, catalog 152/95 read-only. Detached Flutter **exit 0**: 7 clean analyses, Client **132/132**, Operations **43/43**, Technical **38/38** widgets. G7 28 cases and G1–G10 human acceptances remain completely blocked.
+- **Programme:** E-series active, G-series preparation parallel, CX1 queued, T2.4 paused, production false.
+
+---
+
+## 12 October — E6R: role-metadata callsite map and G8 privacy decision pack (PRIOR P0)
 
 - **E6R broader evidence:** local read-only PostgreSQL confirms **8/8** selected role/Technical helpers are EXECUTE-granted to `anon`, `authenticated`, `service_role` and owned by local postgres. Pure source-only script `scripts/qa/e6-role-helper-callsite-map.mjs` scanned **77 migration files**, found **242 lexical historical callsite references**, **19** subject-variable matches, **1** Dart repo named reference. These counts include superseded SQL and are **not a live call graph**. Specific delegated taxi admin check uses `v_user_id := auth.uid()`, a caller-bound reference, not obvious target impersonation.
 - **G8 privacy observation:** new `064_role_helper_anon_disclosure_reproduction.test.sql` **18/18 PASS** in rollback-only disconnected stage. Demonstrates anonymous SQL role can query other fake users' role/Technical-console flags with explicit subject UUID, but cannot gain admin; **this is an OPEN metadata disclosure decision, not a safety PASS or proven HTTP exploit**. First run failed one baseline assertion because ordinary user had automatic customer role; corrected test expected no privileged roles, then PASS.

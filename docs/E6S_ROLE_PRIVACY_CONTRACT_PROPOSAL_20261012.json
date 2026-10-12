@@ -1,0 +1,226 @@
+{
+  "title": "E6S role metadata API privacy contract — proposal, not approval",
+  "version": "2026-10-12-E6S-1",
+  "programme": "Wantok Services E6",
+  "repository_scope": "feature/flutter-platform-v1; authorised EAGLT02 only",
+  "status": "PROPOSED_FOR_INDEPENDENT_G8_REVIEW",
+  "human_gates_approved": 0,
+  "human_gate_status": "ALL_BLOCKED",
+  "production_approved": false,
+  "persistent_db_changes_authorised": false,
+  "privacy_default": "Do not expose arbitrary subject staff role, duty, rank or module entitlement to anonymous or ordinary authenticated API clients; permit only authorised self-status or lawful delegated scopes after human review.",
+  "source_compatibility": "Internal RLS/SECURITY DEFINER callers may evaluate non-caller subjects. No grant/rewrite until exact call graph, RLS, REST and role/owner/ACL parity are witnessed.",
+  "excluded_from_automation": [
+    "privacy/legal classification",
+    "approver identity",
+    "GoTrue account provisioning",
+    "production release",
+    "shared DB migration",
+    "service-role key rotation"
+  ],
+  "functions": [
+    {
+      "schema": "public",
+      "name": "has_role",
+      "identity_arg_types": "text,uuid",
+      "expected_return": "boolean",
+      "classification": "user role membership",
+      "subject_parameter": "subject_uuid",
+      "intended_consumers": "mixed (RLS, trusted routines)",
+      "observed_local_effective_exec": {
+        "anon": true,
+        "authenticated": true,
+        "service_role": true
+      },
+      "suggested_external_anonymous": "DENY_CROSS_SUBJECT_QUERY",
+      "suggested_external_authenticated": "SELF_ONLY_UNLESS_DELEGATED_AND_APPROVED",
+      "suggested_trusted_internal": "PRESERVE_AUTHORISED_SUBJECT_EVALUATION_AFTER_PARITY_TESTS",
+      "change_status": "NO_SQL_CHANGE_UNTIL_INDEPENDENT_G8",
+      "real_postgrest_test_status": "NOT_EXECUTED"
+    },
+    {
+      "schema": "public",
+      "name": "is_admin",
+      "identity_arg_types": "uuid",
+      "expected_return": "boolean",
+      "classification": "Operations administrator status",
+      "subject_parameter": "subject_uuid",
+      "intended_consumers": "mixed (RLS, privileged RPCs)",
+      "observed_local_effective_exec": {
+        "anon": true,
+        "authenticated": true,
+        "service_role": true
+      },
+      "suggested_external_anonymous": "DENY_CROSS_SUBJECT_QUERY",
+      "suggested_external_authenticated": "SELF_ONLY_UNLESS_DELEGATED_AND_APPROVED",
+      "suggested_trusted_internal": "PRESERVE_AUTHORISED_SUBJECT_EVALUATION_AFTER_PARITY_TESTS",
+      "change_status": "NO_SQL_CHANGE_UNTIL_INDEPENDENT_G8",
+      "real_postgrest_test_status": "NOT_EXECUTED"
+    },
+    {
+      "schema": "public",
+      "name": "is_technical_platform_admin",
+      "identity_arg_types": "uuid",
+      "expected_return": "boolean",
+      "classification": "Technical platform administrator status",
+      "subject_parameter": "subject_uuid",
+      "intended_consumers": "mixed (Technical controls)",
+      "observed_local_effective_exec": {
+        "anon": true,
+        "authenticated": true,
+        "service_role": true
+      },
+      "suggested_external_anonymous": "DENY_CROSS_SUBJECT_QUERY",
+      "suggested_external_authenticated": "SELF_ONLY_UNLESS_DELEGATED_AND_APPROVED",
+      "suggested_trusted_internal": "PRESERVE_AUTHORISED_SUBJECT_EVALUATION_AFTER_PARITY_TESTS",
+      "change_status": "NO_SQL_CHANGE_UNTIL_INDEPENDENT_G8",
+      "real_postgrest_test_status": "NOT_EXECUTED"
+    },
+    {
+      "schema": "public",
+      "name": "has_platform_permission",
+      "identity_arg_types": "text,uuid",
+      "expected_return": "boolean",
+      "classification": "platform-level permission membership",
+      "subject_parameter": "subject_uuid",
+      "intended_consumers": "trusted module guard",
+      "observed_local_effective_exec": {
+        "anon": true,
+        "authenticated": true,
+        "service_role": true
+      },
+      "suggested_external_anonymous": "DENY_CROSS_SUBJECT_QUERY",
+      "suggested_external_authenticated": "SELF_ONLY_UNLESS_DELEGATED_AND_APPROVED",
+      "suggested_trusted_internal": "PRESERVE_AUTHORISED_SUBJECT_EVALUATION_AFTER_PARITY_TESTS",
+      "change_status": "NO_SQL_CHANGE_UNTIL_INDEPENDENT_G8",
+      "real_postgrest_test_status": "NOT_EXECUTED"
+    },
+    {
+      "schema": "public",
+      "name": "has_technical_permission",
+      "identity_arg_types": "text,text,uuid",
+      "expected_return": "boolean",
+      "classification": "Technical module permission membership",
+      "subject_parameter": "subject_uuid",
+      "intended_consumers": "trusted module guard",
+      "observed_local_effective_exec": {
+        "anon": true,
+        "authenticated": true,
+        "service_role": true
+      },
+      "suggested_external_anonymous": "DENY_CROSS_SUBJECT_QUERY",
+      "suggested_external_authenticated": "SELF_ONLY_UNLESS_DELEGATED_AND_APPROVED",
+      "suggested_trusted_internal": "PRESERVE_AUTHORISED_SUBJECT_EVALUATION_AFTER_PARITY_TESTS",
+      "change_status": "NO_SQL_CHANGE_UNTIL_INDEPENDENT_G8",
+      "real_postgrest_test_status": "NOT_EXECUTED"
+    },
+    {
+      "schema": "public",
+      "name": "effective_technical_access_level",
+      "identity_arg_types": "text,uuid",
+      "expected_return": "text",
+      "classification": "Technical module access level/rank",
+      "subject_parameter": "subject_uuid",
+      "intended_consumers": "trusted module entitlement",
+      "observed_local_effective_exec": {
+        "anon": true,
+        "authenticated": true,
+        "service_role": true
+      },
+      "suggested_external_anonymous": "DENY_CROSS_SUBJECT_QUERY",
+      "suggested_external_authenticated": "SELF_ONLY_UNLESS_DELEGATED_AND_APPROVED",
+      "suggested_trusted_internal": "PRESERVE_AUTHORISED_SUBJECT_EVALUATION_AFTER_PARITY_TESTS",
+      "change_status": "NO_SQL_CHANGE_UNTIL_INDEPENDENT_G8",
+      "real_postgrest_test_status": "NOT_EXECUTED"
+    },
+    {
+      "schema": "public",
+      "name": "can_access_technical_console",
+      "identity_arg_types": "uuid",
+      "expected_return": "boolean",
+      "classification": "Technical console eligibility",
+      "subject_parameter": "subject_uuid",
+      "intended_consumers": "client default-self plus trusted calls",
+      "observed_local_effective_exec": {
+        "anon": true,
+        "authenticated": true,
+        "service_role": true
+      },
+      "suggested_external_anonymous": "DENY_CROSS_SUBJECT_QUERY",
+      "suggested_external_authenticated": "SELF_ONLY_UNLESS_DELEGATED_AND_APPROVED",
+      "suggested_trusted_internal": "PRESERVE_AUTHORISED_SUBJECT_EVALUATION_AFTER_PARITY_TESTS",
+      "change_status": "NO_SQL_CHANGE_UNTIL_INDEPENDENT_G8",
+      "real_postgrest_test_status": "NOT_EXECUTED"
+    },
+    {
+      "schema": "public",
+      "name": "can_manage_technical_module_access",
+      "identity_arg_types": "text,uuid",
+      "expected_return": "boolean",
+      "classification": "Technical module access management eligibility",
+      "subject_parameter": "subject_uuid",
+      "intended_consumers": "trusted module guard",
+      "observed_local_effective_exec": {
+        "anon": true,
+        "authenticated": true,
+        "service_role": true
+      },
+      "suggested_external_anonymous": "DENY_CROSS_SUBJECT_QUERY",
+      "suggested_external_authenticated": "SELF_ONLY_UNLESS_DELEGATED_AND_APPROVED",
+      "suggested_trusted_internal": "PRESERVE_AUTHORISED_SUBJECT_EVALUATION_AFTER_PARITY_TESTS",
+      "change_status": "NO_SQL_CHANGE_UNTIL_INDEPENDENT_G8",
+      "real_postgrest_test_status": "NOT_EXECUTED"
+    }
+  ],
+  "review_decisions": [
+    {
+      "id": "D1",
+      "question": "Are staff roles and Technical ranks protected personnel/security metadata?",
+      "required": "privacy, security, legal and Operations independent approvers",
+      "status": "NOT_SUPPLIED"
+    },
+    {
+      "id": "D2",
+      "question": "Which SQL helpers must stay available to RLS, nested definer functions, and Client default-self RPC?",
+      "required": "SQL AST + current function/RLS call graph + role/ACL parity + staged compatibility",
+      "status": "NOT_SUPPLIED"
+    },
+    {
+      "id": "D3",
+      "question": "What direct REST/GoTrue anonymous, self, unrelated-user and delegated responses are legal?",
+      "required": "G7 real-session witness cases G7-24, G7-27, G7-28 and policy signatures",
+      "status": "NOT_SUPPLIED"
+    },
+    {
+      "id": "D4",
+      "question": "Which minimal schema/grant/wrapper migration avoids recursion and leaks?",
+      "required": "approved change design, isolated regression, privacy projection, least privilege & rollback",
+      "status": "NOT_SUPPLIED"
+    },
+    {
+      "id": "D5",
+      "question": "When may a fix be applied to a persistent authorised stage or production?",
+      "required": "G1-G9 gates PASS, complete evidence, G10 signed final authorisation",
+      "status": "NOT_SUPPLIED"
+    }
+  ],
+  "open_security_findings": [
+    "E6O-01 internal audit and notification writer untrusted EXECUTE",
+    "E6O-02 Technical health writer EXECUTE under T2.4 pause",
+    "E6K public marketplace provider profile/location/metadata disclosure",
+    "E6R G8-04 cross-subject role helper metadata visibility"
+  ],
+  "g7_cases_required": [
+    "G7-24",
+    "G7-27",
+    "G7-28"
+  ],
+  "public_web_api_exposure_verified": false,
+  "real_gotrue_tests_witnessed": 0,
+  "disposable_source_sql_regression": "E6R baseline 286/286 isolated pgTAP, no persistent migrations",
+  "source_evidence": [
+    "docs/E6R_ROLE_METADATA_CALLGRAPH_AND_G8_DECISION_PACK_20261012.md",
+    "docs/E6G_FORMAL_ACCEPTANCE_RUNBOOK_20261011.md",
+    "docs/E6G_PARALLEL_ACCEPTANCE_REGISTER_20261012.md"
+  ]
+}

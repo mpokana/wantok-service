@@ -20,6 +20,10 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-12-14 — E6S proposed role API privacy contract and gated stage checklist
+
+**Safe P0 progress:** machine-readable proposed eight-role-helper privacy contract (anonymous other-person deny, self only, separately delegated/human approved) and read-only pg_catalog validator; distinct Operations/Technical/Taxi/RLS dependency impact matrix and S-01..S-09 preflight. No E6S SQL migration, no real GoTrue logins, no shared DB grant/RLS/identity changes. **All five G8 D1–D5 still NOT SUPPLIED; 28 G7 cases NOT EXECUTED; G1–G10 0/10 BLOCKED**. `docs/E6S_ROLE_HELPER_PRIVACY_AND_STAGING_READINESS_20261012.md`.
+
 ## FILLER-2026-10-12-13 — E6R role metadata public boundary and G8 decision pack
 
 **P0:** read-only pg_catalog confirms eight selected role helpers locally executable by anon/auth/service; source lexical map covers 77 migrations, 242 historical callsite refs, 19 variable-ID patterns, one named Dart RPC (not 242 live vulnerabilities). New `064` synthetic tests **18/18** reproduce other-subject role/Technical entitlement queries from anonymous SQL, without role assignment. First test expectation fixed for automatic customer base role. No migration or live account/security changes. Disconnected SQL now **286/286** across 14 files, shared DB untouched. G8 D1–D5 independent policy/compatibility/reviewer decision plan prepared; G7 **28 planned / 0 witnessed**, formal G1–G10 **0/10**. CX1 queued, T2.4 paused. See `docs/E6R_ROLE_METADATA_CALLGRAPH_AND_G8_DECISION_PACK_20261012.md`.
