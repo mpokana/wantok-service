@@ -20,6 +20,10 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-12-15 — E6T SQL-callability triage and anonymous synthetic audit-write reproduction
+
+**E-series P0 (no production change):** read-only inventory partitions 95 anonymised SQL EXECUTE grants on privileged public functions into 6 trigger-return and 89 non-trigger-return, with REST reachability untested. Disposable PREPATCH G8 test `065` verified anonymous SQL role can create a tagged fake audit entry through privileged `write_audit_event` before the prospective E6O correction; transaction ROLLBACK, then existing post-correction tests PASS. Seven pending migrations, **15 synthetic SQL files / 294 assertions PASS**, no persistent DB change. 29th G7 real-session post-mitigation denial witness added but NOT EXECUTED; all G1–G10 formal gates BLOCKED and privacy D1–D5 NOT SUPPLIED. Technical T2.4 paused, CX1 queued. `docs/E6T_PRIVILEGED_SQL_CALLABILITY_AND_PREPATCH_AUDIT_REPRO_20261012.md`.
+
 ## FILLER-2026-10-12-14 — E6S proposed role API privacy contract and gated stage checklist
 
 **Safe P0 progress:** machine-readable proposed eight-role-helper privacy contract (anonymous other-person deny, self only, separately delegated/human approved) and read-only pg_catalog validator; distinct Operations/Technical/Taxi/RLS dependency impact matrix and S-01..S-09 preflight. No E6S SQL migration, no real GoTrue logins, no shared DB grant/RLS/identity changes. **All five G8 D1–D5 still NOT SUPPLIED; 28 G7 cases NOT EXECUTED; G1–G10 0/10 BLOCKED**. `docs/E6S_ROLE_HELPER_PRIVACY_AND_STAGING_READINESS_20261012.md`.

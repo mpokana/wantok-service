@@ -2,6 +2,15 @@
 
 **Updated:** 2026-10-12
 
+## E6T — Trust-boundary positive SQL reproduction and expanded callability audit (12 October)
+
+- [x] Local pg_catalog `READ ONLY` classification shows **152** `public` SECURITY DEFINER functions, 95 anon SQL EXECUTE, including **6 trigger-return and 89 non-trigger-return**. SQL EXECUTE does not mean published PostgREST access; classify by real route and owner/role parity with independent G8.
+- [x] Isolated new rollback-only `065_prepatch_audit_writer_reproduction.test.sql` **8/8 PASS**: before proposed E6O grant fix, synthetic `anon` actually inserted an audit-event row via definer; rolled back, no source DB writes. After E6O stage migration, existing `061` **14/14** direct denials PASS. **E6O grant fix is still UNAPPLIED to shared database**.
+- [x] E6T focused QA: E6S draft contract and read-only metadata tests PASS; synthetic JWT HTTP **23/23**, E6 independence **106/106**, evidence **101/101**. Detached Flutter complete **7 clean analyses, 132 Client / 43 Operations / 38 Technical widget tests PASS**, exit 0 after supplying missing test-shell `ProgramFiles(x86)`; no app source changed.
+- [x] Disconnected E6T E6H/T2.4/E6N/E6O regression **7 source-only migrations / 15 suites / 294/294 pgTAP PASS**, fixtures rolled back, container removed and source DB intact. No new E6T migration or Technical implementation.
+- [ ] G8 independent security + staging proof to verify actual REST callable route, legitimate audit worker, role/owner/ACL parity, rollback, provider public privacy and approved role metadata D1–D5 before persistent change. New G7-29 planned real-session audit-write-denial witness **NOT EXECUTED**; G7 **29 total**, G1–G10 **0/10 approved**.
+- Evidence: `docs/E6T_PRIVILEGED_SQL_CALLABILITY_AND_PREPATCH_AUDIT_REPRO_20261012.md`. Programme P0 E ACTIVE, G PREP PARALLEL; CX1 queued, T2.4 paused, E7+ sealed.
+
 ## E6S — Role-helper proposed API contract, migration-impact and staged acceptance (12 October)
 
 - [x] Machine-readable **PROPOSED, not approved** `docs/E6S_ROLE_PRIVACY_CONTRACT_PROPOSAL_20261012.json` specifies exact eight currently callable role/Technical helpers, separate anonymous vs self/delegated vs trusted internal outcomes, five D1–D5 independent decisions, signed human approvals **0/10**.

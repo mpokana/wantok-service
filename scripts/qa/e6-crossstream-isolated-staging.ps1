@@ -120,6 +120,23 @@ try {
   RunDocker @('exec',$target,'psql','-X','-U','supabase_admin',
     '-d','e6i_stage','-v','ON_ERROR_STOP=1','-c',$caseTestAcl)
 
+  # E6T G8: first prove the unpatched local ACL problem causes an actual
+  # anonymous SQL-role write in this disposable stage; pgtap transaction ROLLBACK.
+  # Never run this prepatch positive reproduction on the persistent database.
+  $prePatchName = '065_prepatch_audit_writer_reproduction.test.sql'
+  $prePatchFile = Join-Path $root "supabase\tests\$prePatchName"
+  if (!(Test-Path $prePatchFile)) { throw "Missing prepatch test $prePatchName" }
+  RunDocker @('cp',$prePatchFile,"$($target):/tmp/$prePatchName")
+  $prePatchOutput = @(& docker exec $target psql -X -U supabase_admin -d e6i_stage -v ON_ERROR_STOP=1 -f "/tmp/$prePatchName")
+  if ($LASTEXITCODE -ne 0) { throw 'E6T isolated prepatch reproduction SQL failed' }
+  $prePatchOkay = @($prePatchOutput | Where-Object { $_ -match '^\s*ok \d+ - ' }).Count
+  $prePatchFailed = @($prePatchOutput | Where-Object { $_ -match '^\s*not ok \d+' -or $_ -match '^\s*# Failed' }).Count
+  if ($prePatchOkay -ne 8 -or $prePatchFailed -ne 0) {
+    $prePatchOutput | Where-Object { $_ -match '^\s*not ok|^\s*#' } | Select-Object -First 20 | Write-Output
+    throw "E6T prepatch stage assertion mismatch: passed $prePatchOkay, failed $prePatchFailed"
+  }
+  Write-Output 'E6T_DISPOSABLE_PREPATCH_ANON_AUDIT_WRITE_REPRODUCED=8/8 ROLLBACK'
+
   # Capture the selected function ownership/grants/SQL bodies immediately
   # before and after E6N ALTER FUNCTION; proconfig is the ONLY intended change.
   # This is same-disposable-stage preservation, NOT production owner/ACL parity.
@@ -198,7 +215,7 @@ try {
   if ($LASTEXITCODE -ne 0 -or ($shared -join '').Trim() -ne 't') {
     throw 'Shared Supabase database has unexpected T2.4 schema state.'
   }
-  Write-Output 'E6R_STAGING_PASS=7 migrations,286 assertions,fixtures rolled back'
+  Write-Output 'E6T_STAGING_PASS=7 migrations,294 assertions,15 suites,fixtures rolled back'
   Write-Output 'E6I_SHARED_DB_UNCHANGED=true'
   if ($KeepContainer) { Write-Output "E6I_DEBUG_CONTAINER=$target" }
 }

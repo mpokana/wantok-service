@@ -4,7 +4,17 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 12 October — E6S: proposed role-helper privacy contract + G7/G8 stage checklist (LATEST P0)
+## 12 October — E6T: SQL-callability audit + anonymous synthetic audit-write proof (LATEST P0)
+
+- **E6T read-only public definer classification:** among **152** `public` SECURITY DEFINER functions, `anon` has SQL EXECUTE on **95**, of which **6 return trigger** and **89 return non-trigger**. Trigger functions are not ordinary directly SQL-invokable RPCs; 89 does not prove PostgREST publication. Separate `npm.cmd run test:e6t:callability-local` inventory; no user rows or function bodies read.
+- **Stronger E6O-01 evidence:** new `065_prepatch_audit_writer_reproduction.test.sql` **8/8 PASS** *before* E6O correction inside disconnected SQL stage: synthetic `SET LOCAL ROLE anon` successfully called `write_audit_event`, produced exactly one tagged synthetic audit row with NULL actor, and **ROLLED BACK**. Existing post-E6O test `061` **14/14 PASS** proves anonymous/authenticated SQL invocation denied after unapplied source-only migration in same disposable stage. **No external HTTP, GoTrue or production abuse proved.**
+- **Combined E6T SQL:** **7 source-only migrations, 15 SQL test files, 294/294 pgTAP PASS**, rollback and container removal, shared DB untouched. E6K and E6R privacy policy decisions D1–D5 still NOT SUPPLIED. Added planned G7-29 post-mitigation real API audit-writer denial witness; G7 **29 cases all unexecuted**, G1–G10 **0/10 independently approved**.
+- **E6T full regressions:** unchanged main E6S source+read-only privacy contract PASS; local JWT HTTP negative **23/23**, case independence **106/106**, evidence scanner **101/101**. Fresh E6T detached Flutter **7/7 clean analyses + Client 132/132, Operations 43/43, Technical 38/38** widgets PASS (exit 0). First Flutter attempt failed only because shell `ProgramFiles(x86)` was absent; rerun with test-process environment fixed, no app code change.
+- Evidence `docs/E6T_PRIVILEGED_SQL_CALLABILITY_AND_PREPATCH_AUDIT_REPRO_20261012.md`; E-series active, G series parallel, CX1 queued, T2.4 paused, E7+/production blocked.
+
+---
+
+## 12 October — E6S: proposed role-helper privacy contract + G7/G8 stage checklist (PRIOR P0)
 
 - **Resumed after EAGLT02 reconnection:** preserved existing E6S source-only `docs/E6S_ROLE_PRIVACY_CONTRACT_PROPOSAL_20261012.json` and `scripts/qa/e6s-role-privacy-contract.mjs`; validated **eight exact public helper signatures and current local postgres ownership + anon/auth/service EXECUTE** in a PostgreSQL READ ONLY transaction. All five D1–D5 decisions **NOT SUPPLIED**; contract explicitly marks `production_approved:false`, `human_gates_approved:0`, and no GoTrue/PostgREST witness.
 - **Migration-impact and stage preflight:** `docs/E6S_ROLE_HELPER_PRIVACY_AND_STAGING_READINESS_20261012.md` evaluates RLS/Client/T2.4/Taxi/Operations impact and **S-01..S-09 NOT SUPPLIED/NOT EXECUTED/BLOCKED** stage proof; no E6S schema/grant migration. This is a proposed policy only, not a security acceptance.
