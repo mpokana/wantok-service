@@ -2,6 +2,14 @@
 
 **Updated:** 2026-10-12
 
+## E6Y — default privilege and intended API/RPC exposure inventory (12 October)
+
+- [x] Added `scripts/qa/e6y-default-acl-rpc-contract.mjs` for source config + READ ONLY local PostgreSQL `aclexplode(pg_default_acl)` and exact 14-function result/SQL EXECUTE survey; **12/12 synthetic classifier tests PASS**. No HTTP, GoTrue, user record or SQL modification.
+- [x] Checked-in API schemas `public`, `graphql_public`; `auto_expose_new_tables` unset with checked-in fallback comment, not confirmed runtime. 14 selected functions have SQL anon/auth EXECUTE; 13 **possible non-trigger candidates for independent RPC review**, not 13 published/exploitable RPCs.
+- [x] Observed 27 local default ACL records; for new `postgres`-created `public` objects, explicit client-role grants cover **2 future function EXECUTE**, **16 future table privilege** (including **2 TRUNCATE**) and **6 future sequence** entries. These defaults DO NOT change already-existing objects. Report `docs/E6Y_DEFAULT_PRIVILEGE_AND_RPC_EXPOSURE_CONTRACT_20261012.md`.
+- [x] Regressions: E6Y synthetic **12/12**, previous E6V/E6W source/metadata scans, disposable pending migration SQL **301/301** in 16 suites, synthetic HTTP **23/23**, independence **106/106**, evidence **101/101**, E6S privacy PASS; detached unchanged Flutter **7 analyses, Client 132 / Operations 43 / Technical 38 widgets PASS**, exit 0. No persistent SQL change or G7/G8 acceptance.
+- [ ] High-priority independent risk treatment: both **existing** E6O-01 writer grants remain OPEN; future-object defaults and exact production-equivalent PostgREST/RLS/worker security contract need separate approval. G7 31/31 pending, G1–G10 0/10, D1–D5 open; CX1 queued, T2.4 paused, E7+/production blocked.
+
 ## E6X — G8 catalogue parity fingerprint and fail-closed stage comparison (12 October)
 
 - [x] Added `scripts/qa/e6x-g8-parity-snapshot.mjs` for **one local PostgreSQL READ ONLY metadata transaction**: exact selected 14 definer functions, grants/owners/search path and function comparison digests; all public table/column ACL+RLS and 117 policy hashes; default ACLs, role memberships, extensions, PG version. Local PostgreSQL **17.11**, **93/93 RLS**, **0 FORCE RLS**, **27 default ACL entries**; no user rows/function source exports.

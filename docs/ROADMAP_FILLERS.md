@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-12-20 — E6Y future-object grants and candidate REST/RPC contract
+
+**P0 read-only security audit:** Compare installed SQL EXECUTE of selected 14 local functions with `pg_default_acl` future-object grants and checked-in `[api]` schemas. 13 non-trigger signatures are **potential** RPC review candidates under static config, with actual PostgREST route, genuine GoTrue actor and internal authorisation **not tested**. Local `postgres` default `public` grants: two future function EXECUTE client-role entries; 16 future-table privilege entries (including two TRUNCATE) and six sequence entries. Default rules apply on creation, not retroactively; separate review before any ACL migrations. Current E6O-01 writers still untrusted SQL EXECUTE; no DB changes. See `docs/E6Y_DEFAULT_PRIVILEGE_AND_RPC_EXPOSURE_CONTRACT_20261012.md`. E active, CX1 queued, T2.4 paused; G7 31/31 pending, G1–G10 0/10, D1–D5 open, production false.
+
+---
+
 ## FILLER-2026-10-12-19 — E6X portable G8 metadata-only comparison readiness
 
 **P0 safe engineering:** Capture restricted EAGLT02 `pg_catalog` metadata JSON without reading app/user rows or exporting SQL bodies; compare independently captured valid manifests only after explicit stage authority. Implement a fail-closed fingerprint+structural `--compare` with nonzero exit for any privilege drift, **13/13 synthetic comparator tests**. Local baseline: PG17.11, 14 selected definer functions, 93 RLS-enabled public tables/117 policies, 27 default ACLs and 10 selected role memberships. Full snapshot stays ignored locally; report `docs/E6X_G8_METADATA_PARITY_SNAPSHOT_AND_STAGE_READINESS_20261012.md`. No genuine stage identity/time attestation, no backup or independent reviewer yet, and self-comparison is NOT parity proof. **E6O-01 still OPEN**, G7 31/31 blocked, G1–G10 0/10, D1–D5 not supplied; E active, CX1 queued, T2.4 paused, production false.
