@@ -4,7 +4,17 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 12 October — E6Q: cross-principal RBAC helpers + parallel G7 privacy review (LATEST P0)
+## 12 October — E6R: role-metadata callsite map and G8 privacy decision pack (LATEST P0)
+
+- **E6R broader evidence:** local read-only PostgreSQL confirms **8/8** selected role/Technical helpers are EXECUTE-granted to `anon`, `authenticated`, `service_role` and owned by local postgres. Pure source-only script `scripts/qa/e6-role-helper-callsite-map.mjs` scanned **77 migration files**, found **242 lexical historical callsite references**, **19** subject-variable matches, **1** Dart repo named reference. These counts include superseded SQL and are **not a live call graph**. Specific delegated taxi admin check uses `v_user_id := auth.uid()`, a caller-bound reference, not obvious target impersonation.
+- **G8 privacy observation:** new `064_role_helper_anon_disclosure_reproduction.test.sql` **18/18 PASS** in rollback-only disconnected stage. Demonstrates anonymous SQL role can query other fake users' role/Technical-console flags with explicit subject UUID, but cannot gain admin; **this is an OPEN metadata disclosure decision, not a safety PASS or proven HTTP exploit**. First run failed one baseline assertion because ordinary user had automatic customer role; corrected test expected no privileged roles, then PASS.
+- **Isolated regression:** seven pending E6H/T2.4/E6N/E6O migrations, **14 SQL suites / 286/286 assertions PASS**, DB/container cleaned up, shared Supabase unchanged. **No E6R SQL migration, Technical source change or production deployment.** G8 decision pack D1–D5 requires independent privacy, RPC/RLS compatibility, signed-in API, owner/ACL parity and rollout approval. G7 workboard expanded **26 → 28** planned, none witnessed; **G1–G10 0/10 approved**.
+- **E6R full QA:** source call map PASS; network-disabled isolated SQL **286/286** across 14 suites (064 **18/18** visibility repro); main synthetic-JWT HTTP negatives **23/23**, E6 independence **106/106**, evidence scanner **101/101**, local 152-function catalogue read-only PASS. Detached Flutter exit **0**: seven clean analyses, **132 Client / 43 Operations / 38 Technical** widgets PASS. Shared SQL remains unapplied; no real GoTrue witness.
+- Detailed `docs/E6R_ROLE_METADATA_CALLGRAPH_AND_G8_DECISION_PACK_20261012.md`. E-series active, G preparation parallel; CX1 queued, T2.4 paused.
+
+---
+
+## 12 October — E6Q: cross-principal RBAC helpers + parallel G7 privacy review (PRIOR P0)
 
 - **E6Q synthetic cross-role test:** `supabase/tests/063_role_helper_cross_principal_boundary.test.sql` **25/25 PASS** using four fake users inside ROLLBACK: Operations and Technical role families remain separate, ordinary actor cannot grant/revoke either, each authorised synthetic admin can grant permitted support family, and no platform-admin escalation occurs. Anonymous/empty-session test evidence remains from E6P.
 - **G8-04 candidate data exposure:** read-only `has_role/is_admin/is_technical_platform_admin/can_access_technical_console` support explicit *other-user IDs*. Under synthetic ordinary `authenticated` caller, functions reveal other test users' role membership/Technical entitlement. That does **not** inherit their authority; whether role metadata is acceptable public/signed-in information is **G8 privacy contract OPEN**, not an established external exploit.

@@ -20,6 +20,10 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-12-13 — E6R role metadata public boundary and G8 decision pack
+
+**P0:** read-only pg_catalog confirms eight selected role helpers locally executable by anon/auth/service; source lexical map covers 77 migrations, 242 historical callsite refs, 19 variable-ID patterns, one named Dart RPC (not 242 live vulnerabilities). New `064` synthetic tests **18/18** reproduce other-subject role/Technical entitlement queries from anonymous SQL, without role assignment. First test expectation fixed for automatic customer base role. No migration or live account/security changes. Disconnected SQL now **286/286** across 14 files, shared DB untouched. G8 D1–D5 independent policy/compatibility/reviewer decision plan prepared; G7 **28 planned / 0 witnessed**, formal G1–G10 **0/10**. CX1 queued, T2.4 paused. See `docs/E6R_ROLE_METADATA_CALLGRAPH_AND_G8_DECISION_PACK_20261012.md`.
+
 ## FILLER-2026-10-12-12 — E6Q role-helper subject vs caller trust
 
 **P0:** New synthetic `063` pgTAP **25/25 PASS** uses separate rollback-only Operations, Technical and ordinary fake identities. Verified distinct role-family grants and refused cross-family privilege changes. Discovered potential staff-role metadata visibility: ordinary `authenticated` SQL actor can query `is_admin`, `is_technical_platform_admin` and `can_access_technical_console` on another test account via supplied user ID. This **is not impersonation** but requires independent G8 privacy decision and real G7 RPC verification. Disconnected seven-migration compatibility stage **268/268 PASS**, source DB unchanged. G7 matrix now 26 planned / zero witnessed. All G1–G10 BLOCKED; CX1 queued, T2.4 paused. `docs/E6Q_ROLE_HELPER_CROSS_PRINCIPAL_BOUNDARY_20261012.md`.

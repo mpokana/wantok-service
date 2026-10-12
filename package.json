@@ -26,6 +26,7 @@
     "test:e6:function-trust-local": "node ./scripts/qa/e6-function-trust.mjs --local",
     "test:e6:source-definers": "node ./scripts/qa/e6-source-definer-review.mjs",
     "test:e6:definer-surface-local": "node ./scripts/qa/e6-public-definer-surface.mjs --local",
+    "test:e6:role-call-map": "node ./scripts/qa/e6-role-helper-callsite-map.mjs",
     "db:stop": "node ./scripts/supabase-local.js stop"
   },
   "dependencies": {

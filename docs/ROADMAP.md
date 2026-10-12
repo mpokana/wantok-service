@@ -2,6 +2,17 @@
 
 **Updated:** 2026-10-12
 
+## E6R — Role metadata callsite inventory and G8 decision pack (12 October)
+
+- [x] Read-only local pg_catalog check confirmed **eight selected definer role helpers** have effective `anon`, `authenticated` and `service_role` EXECUTE with local postgres owner; never assume this proves HTTP exploit/actual production grants.
+- [x] Source-only lexical map `scripts/qa/e6-role-helper-callsite-map.mjs`: **77 checked-in migrations / 242 historic helper-call references / 19 variable-subject matches / 1 named Dart source call**. Explicitly excludes straightforward grant DDL but counts superseded SQL; not current executable call graph. Traced delegated taxi `is_admin(v_user_id)` to `v_user_id := auth.uid()` caller-bound identity.
+- [x] Added synthetic rollback-only `064_role_helper_anon_disclosure_reproduction.test.sql` **18/18**: `anon` direct SQL can see other fake users' admin/Technical entitlement through explicit UUID but cannot issue roles. **G8-04 role metadata exposure OPEN**, no source mitigation yet.
+- [x] E6R full regression: **286/286** isolated SQL, **23/23** signed-synthetic HTTP negatives, **106/106** independent case tests, **101/101** evidence tests; Flutter **7 clean analyses, 132 Client/43 Operations/38 Technical widgets PASS**. No shared DB writes or GoTrue G7 approvals.
+- [x] Disconnected seven-migration integration **14 SQL files / 286/286 assertions PASS**, fixtures rolled back/isolated container removed, shared persistent DB untouched.
+- [x] Prepared D1–D5 independent G8 privacy/compatibility/go-no-go decision pack and extended **G7 26 → 28 NOT EXECUTED/BLOCKED** cases, including anonymous direct REST and real user/cross-user helper comparison. G1–G10 **0/10 formal approvals**.
+- [ ] Dedicated stage and G8 reviewer to confirm direct PostgREST exposure, current function/RLS owner ACL, lawful field contract and least-privilege migration before promotion. E6O writer privileges and E6K marketplace disclosure still open.
+- Reference `docs/E6R_ROLE_METADATA_CALLGRAPH_AND_G8_DECISION_PACK_20261012.md`.
+
 ## E6Q — Role-helper cross-principal trust/metadata boundary (12 October)
 
 - [x] Source review: `has_role`, `is_admin`, `is_technical_platform_admin`, platform/module helpers accept subject IDs; **subject's** authority must not be mistaken for calling principal. RBAC `admin` remains distinct from `tech_platform_admin`.
