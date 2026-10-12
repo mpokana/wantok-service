@@ -2,6 +2,14 @@
 
 **Updated:** 2026-10-12
 
+## E6Z — security decision register and reversible-stage review gates (12 October)
+
+- [x] Added machine-readable `docs/E6Z_REMEDIATION_DECISION_REGISTER_20261012.json` with **6** separately classified findings and **8** unsigned/blocked prerequisites: E6O-01 existing internal writer ACLs, future table TRUNCATE, future function and sequence default grants, API candidate vs live RPC route, E6S privacy D1–D5.
+- [x] Added source-only `scripts/qa/e6z-decision-pack-check.mjs` and synthetic tests **12/12 PASS**. Fail-closed integrity check rejects invented G7/G8 approval or stage authority, missing blocker, modified E6O two-function source REVOKE, and false production approval. No privileged action.
+- [x] Documented independent stages, backup/restore, true owner/role/default ACL parity, separate real GoTrue/PostgREST and notification worker witnesses in `docs/E6Z_SECURITY_REMEDIATION_DECISION_AND_STAGE_READINESS_20261012.md`. Postgres semantics: defaults affect future objects; `TRUNCATE` is not covered by RLS; **no new migration created**.
+- [x] Full eligible QA: corrected E6Z validator **12/12**; disconnected seven-proposed-migration SQL **301/301** over **16** suites with rollback/container cleanup; E6 auth **23/23**, independence **106/106**, evidence **101/101**, privacy validators PASS; unchanged detached Flutter source **7 clean analyses**, **132 Client / 43 Operations / 38 Technical** widgets PASS. No shared combined db:test PASS asserted.
+- [ ] All external acceptance unresolved: G7 **31/31 NOT EXECUTED**, G1–G10 **0/10**, privacy D1–D5 unsupplied, shared local internal writer grants OPEN; CX1 queued, T2.4 paused, E7+/production sealed.
+
 ## E6Y — default privilege and intended API/RPC exposure inventory (12 October)
 
 - [x] Added `scripts/qa/e6y-default-acl-rpc-contract.mjs` for source config + READ ONLY local PostgreSQL `aclexplode(pg_default_acl)` and exact 14-function result/SQL EXECUTE survey; **12/12 synthetic classifier tests PASS**. No HTTP, GoTrue, user record or SQL modification.

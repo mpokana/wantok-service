@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-12-21 — E6Z blocked remediation decision pack
+
+**P0 safe evidence preparation:** Source-only JSON risk register, six distinct findings and eight independent stage requirements, with runnable fail-closed validator and **12/12 synthetic anti-signoff tests**. Separate existing audit/notification writer EXECUTE fix from *prospective* future function/table/sequence default-privilege changes. Explicitly flag future-table TRUNCATE as outside RLS; avoid any bulk ACL change without supported actual creator-role/global-vs-per-schema assessment. Organise G7-23/29/30/31, G8 role/REST/notification and privacy D1–D5 witnesses, backup and restore prerequisites. No shared DB/Technical changes or real GoTrue identities. `docs/E6Z_SECURITY_REMEDIATION_DECISION_AND_STAGE_READINESS_20261012.md` and `docs/E6Z_REMEDIATION_DECISION_REGISTER_20261012.json`. G7 31/31 blocked, G1–G10 0/10; E active, CX1 queued, T2.4 paused, production false.
+
+---
+
 ## FILLER-2026-10-12-20 — E6Y future-object grants and candidate REST/RPC contract
 
 **P0 read-only security audit:** Compare installed SQL EXECUTE of selected 14 local functions with `pg_default_acl` future-object grants and checked-in `[api]` schemas. 13 non-trigger signatures are **potential** RPC review candidates under static config, with actual PostgREST route, genuine GoTrue actor and internal authorisation **not tested**. Local `postgres` default `public` grants: two future function EXECUTE client-role entries; 16 future-table privilege entries (including two TRUNCATE) and six sequence entries. Default rules apply on creation, not retroactively; separate review before any ACL migrations. Current E6O-01 writers still untrusted SQL EXECUTE; no DB changes. See `docs/E6Y_DEFAULT_PRIVILEGE_AND_RPC_EXPOSURE_CONTRACT_20261012.md`. E active, CX1 queued, T2.4 paused; G7 31/31 pending, G1–G10 0/10, D1–D5 open, production false.

@@ -1,0 +1,185 @@
+{
+  "schema": "wantok-e6z-remediation-decisions-v1",
+  "checkpoint": "E6Z",
+  "baseline_commit": "538acc3371d933b609eebcb5f4971c6e71910cd6",
+  "environment": "EAGLT02 local only",
+  "decision_status": "NOT_AUTHORISED",
+  "productionApproved": false,
+  "human_gates_approved": 0,
+  "planned_g7_cases": 31,
+  "g7_executed": 0,
+  "privacy_decisions_supplied": 0,
+  "stage_authorised": false,
+  "independent_signoff": false,
+  "security_findings": [
+    {
+      "id": "E6O-01",
+      "class": "existing_object_acl",
+      "priority": "P0",
+      "state": "OPEN",
+      "evidence": "E6Y local catalog and E6O rollback-only correction",
+      "scope": "public.write_audit_event and public.enqueue_notification currently SQL EXECUTE-granted to anon/authenticated",
+      "proposed_action": "Review existing source-only REVOKE migration in parity staging; do not deploy yet",
+      "impact_risk": "Audit integrity, queue continuity, trusted nested caller rights",
+      "witness_ids": [
+        "G7-23",
+        "G7-29",
+        "G7-30",
+        "G7-31"
+      ],
+      "independent_decisions": [
+        "Security",
+        "Operations",
+        "DR"
+      ]
+    },
+    {
+      "id": "E6Z-F01",
+      "class": "future_default_function_acl",
+      "priority": "P1",
+      "state": "REVIEW_REQUIRED",
+      "evidence": "E6Y default privileges: two client-role EXECUTE grants for future postgres-created public functions",
+      "scope": "Future functions, not existing function grants",
+      "proposed_action": "Decide allowlisted explicit RPC grants and owner/schema-specific ALTER DEFAULT PRIVILEGES plan on separately approved stage",
+      "impact_risk": "Breaking valid public discovery/registration RPCs and exposing new internal functions",
+      "witness_ids": [
+        "G8-DEFAULT-FUNCTIONS"
+      ],
+      "independent_decisions": [
+        "Security",
+        "Operations",
+        "Architecture"
+      ]
+    },
+    {
+      "id": "E6Z-T01",
+      "class": "future_default_table_acl",
+      "priority": "P0",
+      "state": "REVIEW_REQUIRED",
+      "evidence": "E6Y default privileges: sixteen table privilege entries including TRUNCATE to anon and authenticated",
+      "scope": "Future postgres-created public tables; TRUNCATE is not subject to row-level security",
+      "proposed_action": "Assess necessary table grants including TRUNCATE separately; require allowlisted stage changes and rollback",
+      "impact_risk": "Future whole-table operations and privileged data pathways; RLS does not protect TRUNCATE",
+      "witness_ids": [
+        "G8-DEFAULT-TABLES"
+      ],
+      "independent_decisions": [
+        "Security",
+        "DBA",
+        "Operations"
+      ]
+    },
+    {
+      "id": "E6Z-S01",
+      "class": "future_default_sequence_acl",
+      "priority": "P1",
+      "state": "REVIEW_REQUIRED",
+      "evidence": "E6Y default privileges: six sequence privilege entries for anon/authenticated",
+      "scope": "Future postgres-created public sequences, not necessarily REST exposed",
+      "proposed_action": "Determine legitimate USAGE/SELECT/UPDATE requirements before proposing restricted default grant",
+      "impact_risk": "Generated IDs, insert workflow and sequence predictability/availability",
+      "witness_ids": [
+        "G8-DEFAULT-SEQUENCES"
+      ],
+      "independent_decisions": [
+        "Security",
+        "DBA",
+        "Operations"
+      ]
+    },
+    {
+      "id": "E6Z-R01",
+      "class": "api_route_contract",
+      "priority": "P0",
+      "state": "NOT_TESTED",
+      "evidence": "E6Y 13 non-trigger SQL EXECUTE candidates under checked-in public API schema",
+      "scope": "Potential review candidates, not demonstrated reachable routes or exploitation",
+      "proposed_action": "Independently inspect deployed PostgREST schema/config, exact arg/default mapping and authorised GoTrue calls",
+      "impact_risk": "Misclassification of direct RPC reachability, mistaken authentication/authorisation assumptions",
+      "witness_ids": [
+        "G7-29",
+        "G7-31",
+        "G8-RPC-PARITY"
+      ],
+      "independent_decisions": [
+        "Security",
+        "Privacy",
+        "Operations"
+      ]
+    },
+    {
+      "id": "E6S-D1-D5",
+      "class": "privacy_metadata_contract",
+      "priority": "P0",
+      "state": "NOT_SUPPLIED",
+      "evidence": "E6S privacy proposal and E6R role metadata callsites",
+      "scope": "Role/helper disclosure contract; provider-public columns and technical helper controls",
+      "proposed_action": "Obtain independently signed D1-D5 policy choices before proposing migration",
+      "impact_risk": "Cross-person role exposure and broken legitimate scoped workflows",
+      "witness_ids": [
+        "G8-PRIVACY"
+      ],
+      "independent_decisions": [
+        "Privacy",
+        "Legal",
+        "Security"
+      ]
+    }
+  ],
+  "prerequisites": [
+    {
+      "id": "AUTH-STAGE",
+      "status": "NOT_SUPPLIED",
+      "meaning": "Exact dedicated stage and test scope authorised by product owner"
+    },
+    {
+      "id": "BACKUP-DR",
+      "status": "NOT_SUPPLIED",
+      "meaning": "Verified restore, baseline checksum and isolated rollback plan"
+    },
+    {
+      "id": "OWNER-ACL",
+      "status": "NOT_VERIFIED",
+      "meaning": "Real owner/ACL/RLS/default privilege/schema parity and independent diff review"
+    },
+    {
+      "id": "GOTRUE-REST",
+      "status": "NOT_TESTED",
+      "meaning": "Independent actual identity negative/positive HTTP PostgREST traces"
+    },
+    {
+      "id": "TRUSTED-WORKER",
+      "status": "NOT_TESTED",
+      "meaning": "Authenticated service audit, notification enqueue, outbox delivery/cleanup"
+    },
+    {
+      "id": "PRIVACY-D1-D5",
+      "status": "NOT_SUPPLIED",
+      "meaning": "Human data minimisation and cross-person disclosure decisions"
+    },
+    {
+      "id": "DUAL-WITNESS",
+      "status": "NOT_ASSIGNED",
+      "meaning": "Independent Security and Operations plus DR/Privacy as required"
+    },
+    {
+      "id": "G1-G10",
+      "status": "BLOCKED",
+      "meaning": "Formal independent program gates remain unsigned"
+    }
+  ],
+  "constraints": [
+    "No shared database migrations or ACL changes",
+    "No auto sign-offs or enabling E7+",
+    "No changes to paused T2.4 code or services",
+    "No PostgREST production requests or real identities",
+    "No private catalogues, passwords or user data in GitHub",
+    "Scope applies only to Wantok Services, never GVE"
+  ],
+  "references": [
+    "docs/E6Y_DEFAULT_PRIVILEGE_AND_RPC_EXPOSURE_CONTRACT_20261012.md",
+    "docs/E6X_G8_METADATA_PARITY_SNAPSHOT_AND_STAGE_READINESS_20261012.md",
+    "docs/E6W_INSTALLED_CALLER_TRUST_AND_G8_PARITY_WORKSHEET_20261012.md",
+    "supabase/migrations/20261012152000_e6_shared_internal_rpc_execute_boundary.sql"
+  ]
+}
