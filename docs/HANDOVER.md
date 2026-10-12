@@ -4,7 +4,16 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 12 October — E6U: local G8 ACL/owner parity preflight + trusted audit continuity (LATEST P0)
+## 12 October — E6V: internal writer dependency review and dedicated-stage compatibility plan (LATEST P0)
+
+- **SOURCE-ONLY E6V scanner:** `scripts/qa/e6v-internal-writer-dependency-map.mjs` examined **77** historical SQL migrations plus app sources: `write_audit_event` has **16 historical candidate nested SQL calls** in 9 migration files; `enqueue_notification` has **0** direct source call candidates; no scanned app JS/TS/Dart named references. This is **lexical historical evidence**, not 16 live callers, API exposure, active worker absence or a permission review PASS.
+- **G8 compatibility risk mapped:** candidate audit invocations include `audit_status_change`, role grants/revokes, Technical state/access/configuration, service switching, branding and category editor. Post-E6O direct untrusted denial and correct authorised nested audit/notification continuity still require **real owner/ACL/RLS-equivalent stage** and independent witnesses. The E6O-01 shared-local grant exposure remains OPEN; **no migrations applied**, no T2.4 changes.
+- **E6V validation:** new source-only scanner PASS; E6U metadata-only local catalogue PASS, 16-suite disconnected SQL **301/301**, synthetic HTTP **23/23**, independence **106/106**, evidence **101/101**, E6S source/local privacy validators PASS; detached clean Flutter E6U app-source QA exit **0** (seven analyses, Client **132**, Operations **43**, Technical **38**). Main checkout Flutter runs were impacted by shell environment and locked build assets; no main build cleanup or Flutter source changes.
+- **Parallel G7/G8:** drafted G7-31 authorised nested-call audit witness, **31/31 cases NOT EXECUTED/BLOCKED**; G1–G10 **0/10**. Source `docs/E6V_INTERNAL_WRITER_DEPENDENCY_AND_STAGE_COMPATIBILITY_20261012.md`. E active, CX1 queued, T2.4 paused, E7+/production sealed.
+
+---
+
+## 12 October — E6U: local G8 ACL/owner parity preflight + trusted audit continuity (PRIOR P0)
 
 - **READ ONLY G8 catalogue:** exact 10-function (2 shared writers + 8 E6S role helpers) current local owner/ACL/search-path snapshot: all 10 `SECURITY DEFINER` with BYPASSRLS owner; both shared internal audit/notification writers still EXECUTE-granted to anon/authenticated on the persistent local DB. `public`: **93/93 base tables have RLS enabled, 0 FORCE RLS, 117 policies**. Roles `anon`/`authenticated` not BYPASSRLS; `service_role` and `postgres` BYPASSRLS. This is **not** real parity with `--no-owner --no-acl` synthetic staging.
 - **Isolated postpatch trusted path:** new `066_postpatch_trusted_audit_worker.test.sql` **7/7 PASS**: after unapplied E6O REVOKE in disconnected stage, synthetic `SET LOCAL ROLE service_role` still successfully inserts an audit record, while anonymous/authenticated EXECUTE denied; transaction ROLLBACK. Harness also confirms **both shared writer SQL bodies, owners, search settings unchanged** across E6O; no actual backend worker/API or notification delivery tested.

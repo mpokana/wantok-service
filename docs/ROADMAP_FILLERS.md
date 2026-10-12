@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-12-17 — E6V internal audit/notification dependency compatibility
+
+**E-Series P0 safe additive review:** Inventory *historic source* calls to the two shared privileged writers without writing to the shared database, calling live RPCs, changing Technical source or promoting migrations. Results: 77 migration files scanned; 16 audit-writer candidate calls, no notification source call candidates or app JS/TS/Dart references. Treat scan as lexical, including superseded definitions; real notification workers may be external. Prepare approved dedicated-stage positive authorised nested audit + notification queue/delivery test and negative ordinary-role direct RPC under G7-31, with exact owner/ACL parity and independent Security/Operations witnesses. G1–G10 0/10; all 31 planned G7 cases blocked, CX1 queued, T2.4 paused, production false. See `docs/E6V_INTERNAL_WRITER_DEPENDENCY_AND_STAGE_COMPATIBILITY_20261012.md`.
+
+---
+
 ## FILLER-2026-10-12-16 — E6U exact SQL helper trust continuity and G8 parity readiness
 
 **P0 safe work:** catalog-only local snapshot of ten exact trusted/role helpers, their postgres/BYPASSRLS ownership and anon/auth/service grants; 93 public RLS-enabled tables, 117 policies and no forced RLS. **NOT** parity of detached `--no-owner --no-acl` stage with shared DB. New synthetic `066` **7/7** proves trusted server-role audit write survives the proposed E6O service-only change in disposable stage; two shared helper owner/body/path invariance checked; **301/301** SQL stage tests PASS across 16 suites, rollback and container cleanup, source DB untouched. G7-30 future positive trusted worker/notification witness planned, **30/30 unexecuted**, G1–G10 0/10 and E6S D1–D5 decisions not supplied. T2.4 paused, CX1 queued. `docs/E6U_G8_PRIVILEGE_PARITY_AND_TRUSTED_WORKER_CONTINUITY_20261012.md`.

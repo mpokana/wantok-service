@@ -2,6 +2,13 @@
 
 **Updated:** 2026-10-12
 
+## E6V — internal writer dependency compatibility inventory (12 October)
+
+- [x] Added reproducible non-mutating `scripts/qa/e6v-internal-writer-dependency-map.mjs` across 77 SQL migrations and app JS/TS/Dart: 9 migrations match, **16 historical audit-writer candidate nested calls**, **0** notification writer SQL calls and **0** app named writer references. Lexical/historical only, not live call graph, route analysis or proof that a worker is unused.
+- [x] Mapped candidate audit dependencies: status-change trigger, role/Technical mutators, public service controls, branding and category updates. Checked presence of E6O corrective source, **not** deployed. Source evidence `docs/E6V_INTERNAL_WRITER_DEPENDENCY_AND_STAGE_COMPATIBILITY_20261012.md`.
+- [x] Revalidated disconnected 16-suite SQL **301/301**, local read-only E6U privilege catalogue, synthetic HTTP **23/23**, E6 independence **106/106**, E6S privacy-contract validators, evidence **101/101**, and *detached unchanged Flutter app source* **7 analyses + 132/43/38 widget tests** exit 0. Main working-copy Flutter attempts met a shell variable/locked build artefact; no existing directory deletion.
+- [ ] Independent approved dedicated stage must verify **actual** inner-call/definer-owner rights, PostgREST untrusted direct denials, authorised nested audit continuity and real notification worker enqueue/delivery after mitigation. Proposed **G7-31 NOT EXECUTED**; G7 **31 total**, G1–G10 **0/10 APPROVED**. E6O-01 open; CX1 queued, T2.4 paused, production blocked.
+
 ## E6U — G8 role/ACL preflight and trusted worker continuity (12 October)
 
 - [x] Read-only `npm.cmd run test:e6u:parity-preflight-local` inventories ten selected privileged functions (two internal writers + eight E6S role helpers): **10/10 BYPASSRLS owners**, **2/2 shared writers still untrusted SQL EXECUTE** in local DB; `public` **93 tables / 93 RLS enabled / 117 policies / 0 forced RLS**. **No user data**, no exact stage parity implied.
