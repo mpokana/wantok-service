@@ -2,6 +2,16 @@
 
 **Updated:** 2026-10-12
 
+## E6O — Complete public definer inventory + trusted internal RPC boundary (12 October)
+
+- [x] New read-only, reproducible public PostgreSQL `SECURITY DEFINER` inventory: **152 functions** (versus 19 earlier E6 selection), **95 anon EXECUTE**, **133 authenticated EXECUTE**, **152 BYPASSRLS-owned**; audited only catalog metadata, no private rows/secrets. All have configured search_path; shared local DB still has 0 explicit trailing `pg_temp` because previous source migration remains unapplied.
+- [x] Identified **E6O-01** potential privileged internal RPC ACL exposure: both `write_audit_event` and `enqueue_notification` have untrusted grants despite source intending service-role only. Proposed source-only `20261012152000_e6_shared_internal_rpc_execute_boundary.sql` revokes untrusted EXECUTE while preserving service-role; no live application/DB changes.
+- [x] Full E6O regression: **220/220 SQL**, `061` **14/14** direct role/ACL cases; local synthetic JWT negative HTTP **23/23**, E6 independence **106/106**, evidence scanner **101/101**, fresh **7 Flutter analyses + 132/43/38 widgets** all PASS. No live test identity, shared SQL migration or production write.
+- [x] Network-disconnected disposable tests now **7 source-only migrations / 11 suites / 220/220 assertions PASS**, including new `061` negative direct SQL calls under anon/authenticated, unchanged E6N 19-function fingerprint and shared DB untouched. Staging fixtures are *not production ACL/owner parity*.
+- [ ] **E6O-02** `record_technical_module_health_report_internal` is locally untrusted-callable: independent G8 owner/Technical owner to investigate. **T2.4 source/grants remain untouched** under programme pause.
+- [ ] Independent G8 reviewer must audit remainder of 152 privileged functions, nested call-graph, untrusted REST RPC exposure, service-role handling, exact staged owner/ACL and public provider-field contract before any live mitigation. **G1–G10 all BLOCKED, G7 18 planned cases NOT EXECUTED**, CX1 queued.
+- Source report: `docs/E6O_FULL_PUBLIC_DEFINER_SURFACE_AND_INTERNAL_RPC_GUARD_20261012.md`.
+
 ## E6N — Selected SECURITY DEFINER path hardening and G-series readiness (12 October)
 
 - [x] Added **source-only, unapplied** E6 migration `20261012140000_e6_operations_definer_search_path.sql` for **19** explicit function `pg_temp` last paths; no body, owner, grants, role or RLS changes and no shared DB migration.

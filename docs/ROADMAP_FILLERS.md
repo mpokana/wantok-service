@@ -20,6 +20,10 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-12-10 — E6O expanded public trust boundary and G8 finding
+
+**P0 security:** full read-only `public` SEC DEFINER catalogue found 152 functions (95 anon EXE, 133 authenticated EXE) rather than only 19 selected E6 routines. Identified untrusted grant disparity on privileged shared `write_audit_event` and `enqueue_notification`; unapplied E6O source migration proposes revoking both from anon/auth while leaving service-role and nested definer paths intact. Disconnected 7-migration E6H/T2.4/E6N/E6O stage **220/220 PASS** across 11 synthetic pgTAP suites with explicit denied-call cases and untouched shared Supabase. Separate Technical internal health-report function flagged for G8/T2.4 owner review, **not modified**. Human G1–G10 0/10, G7 cases unexecuted, CX1 queued, Technical paused, production restricted. `docs/E6O_FULL_PUBLIC_DEFINER_SURFACE_AND_INTERNAL_RPC_GUARD_20261012.md`.
+
 ## FILLER-2026-10-12-09 — E6N definer pg_temp last path with independent G gates
 
 **P0 source-only hardening** migration `20261012140000` applies 19 selected `ALTER FUNCTION ... SET search_path=public,auth,pg_temp` in transaction only when separately authorised; it is not applied to persistent DB. Disconnected test harness ran **206/206** across 10 pgTAP files after six prospective E6H/T2.4/E6N migrations; 19-function source-body/owner/grant fingerprint unchanged and temporary DB removed. Test-stage `--no-acl` restoration initially missed two ACL restrictions and was corrected *only* in disposable stage; not a real privilege escalation. Parallel G1–G10 register/evidence/reviewer matrix continues; **all formal gates BLOCKED**. CX1 queued, T2.4 paused. `docs/E6N_SEARCH_PATH_HARDENING_AND_GATE_READINESS_20261012.md`.

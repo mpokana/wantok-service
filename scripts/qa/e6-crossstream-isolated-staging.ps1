@@ -112,7 +112,11 @@ try {
     'TO service_role; ' +
     'REVOKE ALL ON FUNCTION public.decide_operations_duty_change(uuid,boolean,text) ' +
     'FROM PUBLIC,anon,authenticated; ' +
-    'GRANT EXECUTE ON FUNCTION public.decide_operations_duty_change(uuid,boolean,text) TO authenticated,service_role;'
+    'GRANT EXECUTE ON FUNCTION public.decide_operations_duty_change(uuid,boolean,text) TO authenticated,service_role; ' +
+    'GRANT EXECUTE ON FUNCTION public.write_audit_event(text,text,uuid,jsonb,uuid) ' +
+    'TO anon,authenticated,service_role; ' +
+    'GRANT EXECUTE ON FUNCTION public.enqueue_notification(uuid,text,text,text,jsonb,text,text,text) ' +
+    'TO anon,authenticated,service_role;'
   RunDocker @('exec',$target,'psql','-X','-U','supabase_admin',
     '-d','e6i_stage','-v','ON_ERROR_STOP=1','-c',$caseTestAcl)
 
@@ -127,11 +131,18 @@ try {
     '20261011241000_technical_messaging_queue_snapshot.sql',
     '20261011242000_technical_scoped_activity_audit.sql',
     '20261011243000_technical_central_log_source_contract.sql',
-    '20261012140000_e6_operations_definer_search_path.sql'
+    '20261012140000_e6_operations_definer_search_path.sql',
+    '20261012152000_e6_shared_internal_rpc_execute_boundary.sql'
   )
   foreach ($migration in $migrations) {
     $file = Join-Path $root "supabase\migrations\$migration"
     if (!(Test-Path $file)) { throw "Missing migration $migration" }
+    if ($migration -eq '20261012152000_e6_shared_internal_rpc_execute_boundary.sql') {
+      $unsafeAcl = "SELECT has_function_privilege('anon','public.write_audit_event(text,text,uuid,jsonb,uuid)','EXECUTE') AND has_function_privilege('authenticated','public.enqueue_notification(uuid,text,text,text,jsonb,text,text,text)','EXECUTE')"
+      $unsafeBaseline = (@(& docker exec $target psql -X -U supabase_admin -d e6i_stage -v ON_ERROR_STOP=1 -t -A -c $unsafeAcl) -join '').Trim()
+      if ($LASTEXITCODE -ne 0 -or $unsafeBaseline -ne 't') { throw 'Expected isolated fixture baseline RPC grants missing before E6O' }
+      Write-Output 'E6O_DISPOSABLE_PREPATCH_UNTRUSTED_GRANTS_REPRODUCED=true'
+    }
     if ($migration -eq '20261012140000_e6_operations_definer_search_path.sql') {
       $ownerAclBefore = (@(& docker exec $target psql -X -U supabase_admin -d e6i_stage -v ON_ERROR_STOP=1 -t -A -c $aclFingerprintSql) -join '').Trim()
       if ($LASTEXITCODE -ne 0 -or !$ownerAclBefore.StartsWith('19|')) { throw 'Unexpected E6 definer pre-hardening catalog or count' }
@@ -152,6 +163,7 @@ try {
     @{ name='057_operations_independent_case_review.test.sql'; count=19 },
     @{ name='058_public_marketplace_visibility_boundary.test.sql'; count=17 },
     @{ name='060_operations_definer_temp_path.test.sql'; count=25 },
+    @{ name='061_internal_rpc_execute_boundary.test.sql'; count=14 },
     @{ name='090_technical_scoped_health_log_adapter.test.sql'; count=12 },
     @{ name='091_technical_messaging_queue_snapshot.test.sql'; count=13 },
     @{ name='092_technical_scoped_activity_audit.test.sql'; count=14 },
@@ -178,12 +190,12 @@ try {
   if ($LASTEXITCODE -ne 0 -or ($check -join '').Trim() -ne 't') {
     throw 'Isolated migration or test rollback verification failed.'
   }
-  $sharedSql = "select (to_regprocedure('public.list_technical_module_log_events(text,integer)') is null) and (to_regprocedure('public.get_technical_messaging_queue_snapshot(text)') is null) and (to_regprocedure('public.list_technical_module_activity(text,integer)') is null) and (to_regprocedure('public.get_technical_central_log_readiness(text)') is null) and (not exists (select 1 from supabase_migrations.schema_migrations where version in ('20261011233000','20261011240000','20261011241000','20261011242000','20261011243000','20261012140000')))"
+  $sharedSql = "select (to_regprocedure('public.list_technical_module_log_events(text,integer)') is null) and (to_regprocedure('public.get_technical_messaging_queue_snapshot(text)') is null) and (to_regprocedure('public.list_technical_module_activity(text,integer)') is null) and (to_regprocedure('public.get_technical_central_log_readiness(text)') is null) and (not exists (select 1 from supabase_migrations.schema_migrations where version in ('20261011233000','20261011240000','20261011241000','20261011242000','20261011243000','20261012140000','20261012152000')))"
   $shared = @(& docker exec $source psql -X -U postgres -d postgres -t -A -c $sharedSql)
   if ($LASTEXITCODE -ne 0 -or ($shared -join '').Trim() -ne 't') {
     throw 'Shared Supabase database has unexpected T2.4 schema state.'
   }
-  Write-Output 'E6N_STAGING_PASS=6 migrations,206 assertions,fixtures rolled back'
+  Write-Output 'E6O_STAGING_PASS=7 migrations,220 assertions,fixtures rolled back'
   Write-Output 'E6I_SHARED_DB_UNCHANGED=true'
   if ($KeepContainer) { Write-Output "E6I_DEBUG_CONTAINER=$target" }
 }

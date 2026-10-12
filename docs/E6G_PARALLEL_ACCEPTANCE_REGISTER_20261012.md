@@ -55,6 +55,16 @@ Capture for each **only when actually witnessed**: case ID, test environment ID,
 - **Reviewer requirement:** independently verify all relevant function overloads/nested calls, exact real stage privilege/owner/RLS parity and G7 positive/negative GoTrue/PostgREST sessions. Until then G8 remains **BLOCKED**; no reviewer signature or evidence reference supplied.
 - **Source report:** `docs/E6N_SEARCH_PATH_HARDENING_AND_GATE_READINESS_20261012.md`.
 
+## E6O G8 finding register (12 October; no independent sign-off)
+
+| Finding | Source-engineering evidence | Remaining independent acceptance requirement | Status |
+| --- | --- | --- | --- |
+| **E6O-01 shared RPC grants** | Current local catalog: two owner-privileged audit and notification helpers have untrusted EXECUTE grants despite original intended service-role-only grants; proposed source-only corrective migration `20261012152000`; disconnected negative SQL checks PASS | Independently verify PostgREST attack surface, legitimate caller compatibility, exact owner/ACL parity, stage backup, rollback, and G7 witnessed login/direct RPC denial **before** applying to any persistent DB | **OPEN / G8 BLOCKED** |
+| **E6O-02 Technical health report** | Current local `record_technical_module_health_report_internal` untrusted EXECUTE with definer owner; no Technical changes made | Independent Technical and security owners to verify caller trust, role permissions and stage tests when T2.4 unpaused | **OPEN / G8 BLOCKED** |
+| **E6O-03 broad catalogue** | Read-only complete `public` definer inventory: **152**, **95 anonymous-callable**, **133 signed-in-callable**, no explicit trailing `pg_temp` in live local metadata | Independent review beyond selected 19 E6 functions: trigger functions vs public APIs, role guards, nested calls, SQL/operator/name resolution and public column privacy | **OPEN / G8 BLOCKED** |
+
+The independent security reviewer has not supplied any signed evidence; these are source/isolated engineering findings, **not** external approvals. G1–G10 acceptance remains **0/10 BLOCKED**, and all 18 planned real GoTrue G7 cases remain unexecuted.
+
 ## G8 — Independent review worklist
 
 - [ ] Review **all relevant overloads and nested routines**, not only the 19 selected E6 `SECURITY DEFINER` sources (E6M).

@@ -4,7 +4,17 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 12 October — E6N: isolated definer path hardening + parallel acceptance (LATEST P0)
+## 12 October — E6O: all-public definer surface + shared internal RPC grant boundary (LATEST P0)
+
+- **E6O read-only local all-public catalog:** **152 SECURITY DEFINER** functions in `public`, all owned locally by BYPASSRLS owner; **95 anonymous-callable**, **133 authenticated-callable**, 152 explicit search paths, 0 with trailing `pg_temp` in still-unmodified shared local DB. This greatly expands G8 review beyond 19 selected E6 functions. Metadata-only source test `npm.cmd run test:e6:definer-surface-local`.
+- **Privileged RPC ACL issue E6O-01:** local `write_audit_event` and `enqueue_notification` explicitly callable by `anon` and `authenticated`, inconsistent with intended checked-in service-only GRANTs. Both bodies write with owner privilege and lack independent caller checks; **potential log-integrity/notification-abuse risk**, not a proven external exploit or production defect. **Prospective unapplied migration** `20261012152000_e6_shared_internal_rpc_execute_boundary.sql` revokes those two helpers from untrusted roles but preserves service-role. E6O disconnected stage **7 migrations / 11 SQL test files / 220/220 assertions PASS**; before-state grant evidence reproduced in fixture, after-state direct denied SQL calls confirmed; no shared DB modification.
+- **E6O verified QA:** full public catalog inventory read-only; network-disabled seven-pending-migration staging **220/220 pgTAP PASS** across eleven SQL files including `061` 14/14, with synthetic forbidden-function calls and rollback. Unchanged main synthetic JWT HTTP negatives **23/23 PASS**, E6 independence **106/106 PASS**, evidence **101/101 PASS**, E6L catalog PASS. Fresh exact-source detached Flutter QA exit **0** (7 analyses clean, Client **132**, Operations **43**, Technical **38** PASS). Shared SQL suite **not green** due to unapplied source migrations; G1–G10 still blocked.
+- **G8-TECH finding E6O-02:** `record_technical_module_health_report_internal` has current untrusted EXECUTE privileges; **no Technical source code or grants changed** while T2.4 paused. Independent G8/Technical owner to review. G1–G10 0/10 approved and 18 G7 cases remain unexecuted. See `docs/E6O_FULL_PUBLIC_DEFINER_SURFACE_AND_INTERNAL_RPC_GUARD_20261012.md`.
+- **Priority:** E-series P0 ACTIVE, parallel G1–G10 evidence PREP ONLY, CX1 queued, T2.4 paused, production not authorised.
+
+---
+
+## 12 October — E6N: isolated definer path hardening + parallel acceptance (PRIOR P0)
 
 - **E6N prospective source-only migration** `20261012140000_e6_operations_definer_search_path.sql` sets `search_path=public,auth,pg_temp` for 19 selected E6 `SECURITY DEFINER` functions after the pending E6H body replacements. **Unapplied to shared local/prod DB**; function body/owner/ACL unchanged. New test 060 **25/25 PASS**. Source: `docs/E6N_SEARCH_PATH_HARDENING_AND_GATE_READINESS_20261012.md`.
 - **Six-migration disconnected SQL stage:** 10 pgTAP files **206/206 PASS** including E6 + T2.4 compatibility, all fixtures rollback, no source DB migration/records changed, container removed. Catalog fingerprint verifies 19 function body/owner/ACL invariants within disposable test stage; **not production parity**. Initial test-stage owner/ACL reconstruction omission found and corrected (two synthetic grant assertions).
