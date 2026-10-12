@@ -142,6 +142,11 @@ try {
   # This is same-disposable-stage preservation, NOT production owner/ACL parity.
   $aclFingerprintSql = "SELECT count(*)::text || '|' || md5(string_agg(p.oid::text || ':' || p.proowner::text || ':' || coalesce(p.proacl::text,'') || ':' || md5(p.prosrc), ';' ORDER BY p.oid)) FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='public' AND p.prosecdef AND (p.proname ~ '^(has_operations_|configure_operations_|request_operations_|decide_operations_|register_operations_|map_operations_|record_operations_|triage_vendor_|submit_vendor_intake_|list_vendor_clearance_|revoke_vendor_activation_|emergency_revoke_vendor_|pause_expired_vendor_)' OR p.proname IN ('admin_set_provider_service_status','review_provider_application'))"
   $ownerAclBefore = $null
+  # E6U: independent of 19 E6N paths, guard two infrastructure function
+  # owner/source/settings against unintended E6O migration changes.
+  # We expect ONLY proacl (function EXECUTE grants) to differ after E6O.
+  $internalTrustSql = "SELECT count(*)::text || '|' || md5(string_agg(p.oid::text || ':' || p.proowner::text || ':' || md5(p.prosrc) || ':' || coalesce(array_to_string(p.proconfig,','),''),';' ORDER BY p.oid)) FROM pg_proc p WHERE p.oid IN ('public.write_audit_event(text,text,uuid,jsonb,uuid)'::regprocedure,'public.enqueue_notification(uuid,text,text,text,jsonb,text,text,text)'::regprocedure)"
+  $internalTrustBefore = $null
   $migrations = @(
     '20261011233000_operations_independent_case_review.sql',
     '20261011240000_technical_scoped_health_log_adapter.sql',
@@ -155,6 +160,8 @@ try {
     $file = Join-Path $root "supabase\migrations\$migration"
     if (!(Test-Path $file)) { throw "Missing migration $migration" }
     if ($migration -eq '20261012152000_e6_shared_internal_rpc_execute_boundary.sql') {
+      $internalTrustBefore = (@(& docker exec $target psql -X -U supabase_admin -d e6i_stage -v ON_ERROR_STOP=1 -t -A -c $internalTrustSql) -join '').Trim()
+      if ($LASTEXITCODE -ne 0 -or !$internalTrustBefore.StartsWith('2|')) { throw 'Unexpected E6O two-function prepatch body/owner/settings snapshot' }
       $unsafeAcl = "SELECT has_function_privilege('anon','public.write_audit_event(text,text,uuid,jsonb,uuid)','EXECUTE') AND has_function_privilege('authenticated','public.enqueue_notification(uuid,text,text,text,jsonb,text,text,text)','EXECUTE')"
       $unsafeBaseline = (@(& docker exec $target psql -X -U supabase_admin -d e6i_stage -v ON_ERROR_STOP=1 -t -A -c $unsafeAcl) -join '').Trim()
       if ($LASTEXITCODE -ne 0 -or $unsafeBaseline -ne 't') { throw 'Expected isolated fixture baseline RPC grants missing before E6O' }
@@ -172,6 +179,11 @@ try {
   $ownerAclAfter = (@(& docker exec $target psql -X -U supabase_admin -d e6i_stage -v ON_ERROR_STOP=1 -t -A -c $aclFingerprintSql) -join '').Trim()
   if ($LASTEXITCODE -ne 0 -or $ownerAclBefore -ne $ownerAclAfter) { throw 'E6N changed SQL body, ownership or function grants in disposable staging' }
   Write-Output 'E6N_19_FUNCTION_BODY_OWNER_ACL_UNCHANGED=true'
+  $internalTrustAfter = (@(& docker exec $target psql -X -U supabase_admin -d e6i_stage -v ON_ERROR_STOP=1 -t -A -c $internalTrustSql) -join '').Trim()
+  if ($LASTEXITCODE -ne 0 -or $internalTrustBefore -ne $internalTrustAfter) {
+    throw 'E6O unexpectedly changed owner/body/settings of shared trusted helpers'
+  }
+  Write-Output 'E6U_TWO_WRITER_BODY_OWNER_SETTINGS_UNCHANGED=true'
 
   $tests = @(
     @{ name='051_operations_case_jurisdiction.test.sql'; count=35 },
@@ -184,6 +196,7 @@ try {
     @{ name='062_privileged_role_control_anon_denials.test.sql'; count=23 },
     @{ name='063_role_helper_cross_principal_boundary.test.sql'; count=25 },
     @{ name='064_role_helper_anon_disclosure_reproduction.test.sql'; count=18 },
+    @{ name='066_postpatch_trusted_audit_worker.test.sql'; count=7 },
     @{ name='090_technical_scoped_health_log_adapter.test.sql'; count=12 },
     @{ name='091_technical_messaging_queue_snapshot.test.sql'; count=13 },
     @{ name='092_technical_scoped_activity_audit.test.sql'; count=14 },
@@ -215,7 +228,7 @@ try {
   if ($LASTEXITCODE -ne 0 -or ($shared -join '').Trim() -ne 't') {
     throw 'Shared Supabase database has unexpected T2.4 schema state.'
   }
-  Write-Output 'E6T_STAGING_PASS=7 migrations,294 assertions,15 suites,fixtures rolled back'
+  Write-Output 'E6U_STAGING_PASS=7 migrations,301 assertions,16 suites,fixtures rolled back'
   Write-Output 'E6I_SHARED_DB_UNCHANGED=true'
   if ($KeepContainer) { Write-Output "E6I_DEBUG_CONTAINER=$target" }
 }

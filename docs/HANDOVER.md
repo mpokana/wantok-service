@@ -4,7 +4,17 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 12 October — E6T: SQL-callability audit + anonymous synthetic audit-write proof (LATEST P0)
+## 12 October — E6U: local G8 ACL/owner parity preflight + trusted audit continuity (LATEST P0)
+
+- **READ ONLY G8 catalogue:** exact 10-function (2 shared writers + 8 E6S role helpers) current local owner/ACL/search-path snapshot: all 10 `SECURITY DEFINER` with BYPASSRLS owner; both shared internal audit/notification writers still EXECUTE-granted to anon/authenticated on the persistent local DB. `public`: **93/93 base tables have RLS enabled, 0 FORCE RLS, 117 policies**. Roles `anon`/`authenticated` not BYPASSRLS; `service_role` and `postgres` BYPASSRLS. This is **not** real parity with `--no-owner --no-acl` synthetic staging.
+- **Isolated postpatch trusted path:** new `066_postpatch_trusted_audit_worker.test.sql` **7/7 PASS**: after unapplied E6O REVOKE in disconnected stage, synthetic `SET LOCAL ROLE service_role` still successfully inserts an audit record, while anonymous/authenticated EXECUTE denied; transaction ROLLBACK. Harness also confirms **both shared writer SQL bodies, owners, search settings unchanged** across E6O; no actual backend worker/API or notification delivery tested.
+- **Combined SQL:** seven unapplied E6H/T2.4/E6N/E6O migrations, 16 SQL suites, **301/301 PASS**, all synthetic fixtures rollback, container removed, shared DB unchanged. No E6U migration or Technical source change. Added planned G7-30 genuine dedicated-stage trusted worker + notification continuity, **NOT EXECUTED**; G7 30 cases all pending, G1–G10 **0/10 BLOCKED**.
+- **E6U regression verified:** exact-source Flutter QA **exit 0** with **7 clean analyses and 132 Client / 43 Operations / 38 Technical** widget tests PASS. Unchanged main E6S proposed privacy contract source/read-only local metadata PASS, local synthetic JWT HTTP negatives **23/23**, E6 independence **106/106**, evidence scanner **101/101** PASS. **Not** real GoTrue G7 acceptance.
+- **Next blocker:** dedicated staged owner/ACL/RLS/REST and test-identity authority, exact role/owner parity, signed independent Security/Operations/Privacy/DR witness; E6S D1–D5 not supplied. Report `docs/E6U_G8_PRIVILEGE_PARITY_AND_TRUSTED_WORKER_CONTINUITY_20261012.md`; E P0 active, G parallel, CX1 queued, T2.4 paused.
+
+---
+
+## 12 October — E6T: SQL-callability audit + anonymous synthetic audit-write proof (PRIOR P0)
 
 - **E6T read-only public definer classification:** among **152** `public` SECURITY DEFINER functions, `anon` has SQL EXECUTE on **95**, of which **6 return trigger** and **89 return non-trigger**. Trigger functions are not ordinary directly SQL-invokable RPCs; 89 does not prove PostgREST publication. Separate `npm.cmd run test:e6t:callability-local` inventory; no user rows or function bodies read.
 - **Stronger E6O-01 evidence:** new `065_prepatch_audit_writer_reproduction.test.sql` **8/8 PASS** *before* E6O correction inside disconnected SQL stage: synthetic `SET LOCAL ROLE anon` successfully called `write_audit_event`, produced exactly one tagged synthetic audit row with NULL actor, and **ROLLED BACK**. Existing post-E6O test `061` **14/14 PASS** proves anonymous/authenticated SQL invocation denied after unapplied source-only migration in same disposable stage. **No external HTTP, GoTrue or production abuse proved.**

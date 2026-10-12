@@ -27,6 +27,7 @@
     "test:e6:source-definers": "node ./scripts/qa/e6-source-definer-review.mjs",
     "test:e6:definer-surface-local": "node ./scripts/qa/e6-public-definer-surface.mjs --local",
     "test:e6t:callability-local": "node ./scripts/qa/e6-privileged-callability.mjs --local",
+    "test:e6u:parity-preflight-local": "node ./scripts/qa/e6u-privilege-parity-preflight.mjs --local",
     "test:e6:role-call-map": "node ./scripts/qa/e6-role-helper-callsite-map.mjs",
     "test:e6s:privacy-contract": "node ./scripts/qa/e6s-role-privacy-contract.mjs --source-only",
     "test:e6s:privacy-contract-local": "node ./scripts/qa/e6s-role-privacy-contract.mjs --local",

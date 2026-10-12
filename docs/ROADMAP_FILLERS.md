@@ -20,6 +20,10 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-12-16 — E6U exact SQL helper trust continuity and G8 parity readiness
+
+**P0 safe work:** catalog-only local snapshot of ten exact trusted/role helpers, their postgres/BYPASSRLS ownership and anon/auth/service grants; 93 public RLS-enabled tables, 117 policies and no forced RLS. **NOT** parity of detached `--no-owner --no-acl` stage with shared DB. New synthetic `066` **7/7** proves trusted server-role audit write survives the proposed E6O service-only change in disposable stage; two shared helper owner/body/path invariance checked; **301/301** SQL stage tests PASS across 16 suites, rollback and container cleanup, source DB untouched. G7-30 future positive trusted worker/notification witness planned, **30/30 unexecuted**, G1–G10 0/10 and E6S D1–D5 decisions not supplied. T2.4 paused, CX1 queued. `docs/E6U_G8_PRIVILEGE_PARITY_AND_TRUSTED_WORKER_CONTINUITY_20261012.md`.
+
 ## FILLER-2026-10-12-15 — E6T SQL-callability triage and anonymous synthetic audit-write reproduction
 
 **E-series P0 (no production change):** read-only inventory partitions 95 anonymised SQL EXECUTE grants on privileged public functions into 6 trigger-return and 89 non-trigger-return, with REST reachability untested. Disposable PREPATCH G8 test `065` verified anonymous SQL role can create a tagged fake audit entry through privileged `write_audit_event` before the prospective E6O correction; transaction ROLLBACK, then existing post-correction tests PASS. Seven pending migrations, **15 synthetic SQL files / 294 assertions PASS**, no persistent DB change. 29th G7 real-session post-mitigation denial witness added but NOT EXECUTED; all G1–G10 formal gates BLOCKED and privacy D1–D5 NOT SUPPLIED. Technical T2.4 paused, CX1 queued. `docs/E6T_PRIVILEGED_SQL_CALLABILITY_AND_PREPATCH_AUDIT_REPRO_20261012.md`.

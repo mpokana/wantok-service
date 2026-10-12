@@ -2,6 +2,15 @@
 
 **Updated:** 2026-10-12
 
+## E6U — G8 role/ACL preflight and trusted worker continuity (12 October)
+
+- [x] Read-only `npm.cmd run test:e6u:parity-preflight-local` inventories ten selected privileged functions (two internal writers + eight E6S role helpers): **10/10 BYPASSRLS owners**, **2/2 shared writers still untrusted SQL EXECUTE** in local DB; `public` **93 tables / 93 RLS enabled / 117 policies / 0 forced RLS**. **No user data**, no exact stage parity implied.
+- [x] New `066_postpatch_trusted_audit_worker.test.sql` **7/7** confirms `service_role` can still create a synthetic audit record after E6O restriction in disposable SQL, anon/auth denied; rollback. Separate pre/post exact two-function fingerprint proves owner/SQL body/search settings invariant during E6O GRANT change.
+- [x] E6U full regression: seven Flutter analyses + Client **132**, Operations **43**, Technical **38** widget cases PASS; E6S privacy-proposal and read-only catalogue checks PASS, local JWT HTTP negatives **23/23**, case independence **106/106**, evidence **101/101** PASS. No externally witnessed G7 sign-in.
+- [x] Network-disabled seven pending migration integration now **16 SQL suites / 301/301 assertions PASS**, all fixtures/container removed, shared DB unaffected; Technical T2.4 used for compatibility only, still PAUSED.
+- [ ] Stage parity: true backed-up production-equivalent owner/ACL/RLS/REST key and worker configuration, witnessed trusted notification/audit and G7 direct anonymous signed-in denials, privacy D1–D5 plus G1–G10 signatories. Added G7-30, **30/30 cases NOT EXECUTED/BLOCKED**; **G1–G10 0/10 approved**. No E6U SQL migration or production deployment.
+- Report `docs/E6U_G8_PRIVILEGE_PARITY_AND_TRUSTED_WORKER_CONTINUITY_20261012.md`.
+
 ## E6T — Trust-boundary positive SQL reproduction and expanded callability audit (12 October)
 
 - [x] Local pg_catalog `READ ONLY` classification shows **152** `public` SECURITY DEFINER functions, 95 anon SQL EXECUTE, including **6 trigger-return and 89 non-trigger-return**. SQL EXECUTE does not mean published PostgREST access; classify by real route and owner/role parity with independent G8.
