@@ -20,6 +20,10 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-12-12 — E6Q role-helper subject vs caller trust
+
+**P0:** New synthetic `063` pgTAP **25/25 PASS** uses separate rollback-only Operations, Technical and ordinary fake identities. Verified distinct role-family grants and refused cross-family privilege changes. Discovered potential staff-role metadata visibility: ordinary `authenticated` SQL actor can query `is_admin`, `is_technical_platform_admin` and `can_access_technical_console` on another test account via supplied user ID. This **is not impersonation** but requires independent G8 privacy decision and real G7 RPC verification. Disconnected seven-migration compatibility stage **268/268 PASS**, source DB unchanged. G7 matrix now 26 planned / zero witnessed. All G1–G10 BLOCKED; CX1 queued, T2.4 paused. `docs/E6Q_ROLE_HELPER_CROSS_PRINCIPAL_BOUNDARY_20261012.md`.
+
 ## FILLER-2026-10-12-11 — E6P role and publishing denial tests, parallel G7 witness workboard
 
 **P0 E-Series:** nine selected privileged mutating SQL routines for role changes, Technical module state, branding and category editing contain source `auth.uid()`/admin guards; new synthetic pgTAP `062` tests **23/23** denial/side-effect invariants without real user logins. Cross-stream seven source-only pending migrations run in network-disabled disposable PostgreSQL with **243/243** pgTAP assertions, rollback and shared DB unchanged. **No E6P schema or Technical source changes.** Parallel independent G7 matrix now has **23 NOT EXECUTED/BLOCKED** cases, adding ordinary signed-in role escalation and authorised positive paths. G1–G10 0/10 independently approved. E6O shared ACL exposure persists until authorised independent stage. CX1 queued, T2.4 paused. `docs/E6P_ROLE_ADMIN_CONTROL_NEGATIVES_AND_G7_WITNESS_PLAN_20261012.md`.

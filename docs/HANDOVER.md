@@ -4,7 +4,17 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 12 October — E6P: privileged control denials + independent G7 role-witness expansion (LATEST P0)
+## 12 October — E6Q: cross-principal RBAC helpers + parallel G7 privacy review (LATEST P0)
+
+- **E6Q synthetic cross-role test:** `supabase/tests/063_role_helper_cross_principal_boundary.test.sql` **25/25 PASS** using four fake users inside ROLLBACK: Operations and Technical role families remain separate, ordinary actor cannot grant/revoke either, each authorised synthetic admin can grant permitted support family, and no platform-admin escalation occurs. Anonymous/empty-session test evidence remains from E6P.
+- **G8-04 candidate data exposure:** read-only `has_role/is_admin/is_technical_platform_admin/can_access_technical_console` support explicit *other-user IDs*. Under synthetic ordinary `authenticated` caller, functions reveal other test users' role membership/Technical entitlement. That does **not** inherit their authority; whether role metadata is acceptable public/signed-in information is **G8 privacy contract OPEN**, not an established external exploit.
+- **Isolated integration:** seven unapplied source migrations, 13 SQL suites **268/268 PASS**, rollback and disconnected disposable PostgreSQL removed, shared DB unchanged; **no E6Q schema or Technical source migration**. G7 real-session witness register expanded from 23 to **26 NOT EXECUTED** cases, G1–G10 **0/10 approved**. See `docs/E6Q_ROLE_HELPER_CROSS_PRINCIPAL_BOUNDARY_20261012.md`.
+- **E6Q full QA:** disposable SQL **268/268** across 13 suites, main synthetic JWT HTTP negatives **23/23**, independent case **106/106**, evidence **101/101** and read-only definer catalog (152, 95 anon-callable) PASS within stated scopes. Detached Flutter `check.ps1` exit **0**: seven clean analyses, **132 Client / 43 Operations / 38 Technical** widget tests PASS.
+- **Priority:** E-series active; G1–G10 acceptance preparation parallel; CX1 queued, T2.4 paused, production not authorised.
+
+---
+
+## 12 October — E6P: privileged control denials + independent G7 role-witness expansion (PRIOR P0)
 
 - **E6P selected privileged-call guard QA:** new rollback-only synthetic test `supabase/tests/062_privileged_role_control_anon_denials.test.sql` **23/23 PASS**: four SECURITY DEFINER invariants; anonymous denial on nine role/Technical/branding/category mutators; five `authenticated` DB-role null-identity denials; no synthetic role/grant/branding/audit/notification rows persisted. **Not actual GoTrue login or authoritative role clearance**.
 - **Combined isolated QA:** unchanged seven pending source migrations (E6H 1, T2.4B–E 4 for compatibility, E6N 1, E6O 1), **12 SQL suites / 243/243 pgTAP PASS**, fixture rollback and disconnected DB removed, shared Supabase unchanged. No E6P schema migration or Technical source change. Original E6O writer grant risk remains open in shared DB.

@@ -50,6 +50,9 @@ Do not run until dedicated staging, role-parity and test identity approvals are 
 | G7-21 | Ordinary user attempts direct `grant_technical_module_access`, `revoke_technical_module_access` and module enable/maintenance RPCs | Denied, without technical grant, state or queued side effects | **NOT EXECUTED** |
 | G7-22 | Non-admin user attempts direct branding publish/restore and `manage_service_category` RPCs; different authorised editor performs a permitted, reversible stage operation | Non-admin denied; separately granted editor positive path and audit succeed only under approved test plan, reverted under witness | **NOT EXECUTED** |
 | G7-23 | Ordinary signed-in user and anonymous client call `write_audit_event` and `enqueue_notification` direct REST after separately approved E6O correction | Permission denied with no audit/outbox forging; approved server-only path retains function under least privilege | **BLOCKED** (E6O source fix not applied) |
+| G7-24 | Ordinary authorised GoTrue user calls `has_role`, `is_admin`, `is_technical_platform_admin` with another test account's UUID | Independently approved public role-disclosure contract: reject or minimise unrelated-user metadata; no authority inheritance | **NOT EXECUTED** (privacy contract open) |
+| G7-25 | Logged-in Operations admin and a separate Technical platform admin execute each other's role-grant/revoke actions | Deny cross-role mutations while permitting separately delegated role-family changes; no stale audit or privilege elevation | **NOT EXECUTED** |
+| G7-26 | Actor with expired, revoked, or legacy profile-flag-only privilege calls role helpers and directly mutating RPC | Old role flags cannot reactivate privileges; current RBAC grant/expiry and real session checks fail closed | **NOT EXECUTED** |
 
 Capture for each **only when actually witnessed**: case ID, test environment ID, commit and migration versions, separate principal roles, expected result, observed HTTP/browser result, pass/fail, timestamp, authorised witness IDs, redacted secure evidence pointer and cleanup attestation. Keep real tokens and private case data **outside GitHub**.
 
@@ -75,6 +78,12 @@ The independent security reviewer has not supplied any signed evidence; these ar
 The real-session acceptance matrix above now includes **G7-19 through G7-23** (23 planned cases total). The new E6P rollback-only `062` pgTAP **23/23** checks verify nine anonymously denied privileged mutations plus NULL session-identity denial and empty disposable test tables. The full disconnected integration run is **243/243 assertions PASS**. **These synthetic technical findings are not evidence from any actual GoTrue-authorised users, distinct witnesses or positive authorised control paths.** G7 remains **BLOCKED**, as do G1–G10; no human decision status was changed.
 
 Independent reviewers must confirm in a separately authorised backed-up stage that role-family restrictions distinguish Operations from Technical administrators, that unrelated authenticated users cannot grant themselves duties/roles, that separately delegated human actors can execute positive cases only within legal scope, and that the E6O writer function policy is closed before release. Detailed checkpoint: `docs/E6P_ROLE_ADMIN_CONTROL_NEGATIVES_AND_G7_WITNESS_PLAN_20261012.md`.
+
+## E6Q cross-principal helper information boundary (NOT G7 or G8 acceptance)
+
+- **E6Q G8-04 (OPEN):** selected definer helpers `has_role`, `is_admin`, `is_technical_platform_admin`, `can_access_technical_console` accept an explicit subject UUID. A synthetic ordinary actor can query other fake users' Operations/Technical role state without inheriting those permissions. Review possible signed-in role-directory information exposure via actual PostgREST; decide an approved role-metadata privacy policy before changing internal helper signatures or EXECUTE rights.
+- **Synthetic regression:** `063` tests **25/25 PASS**, four fake identities and rollback-only role assignments; Operations vs Technical grant/revoke separation confirmed under synthetic JWT context. Combined disposable SQL **268/268 PASS**, no source DB changes or real account creation.
+- **G7 parallel readiness:** 26 planned witness case IDs, **zero real signed-in GoTrue sessions tested**. G7-24/25/26 add cross-user helper privacy, independently delegated cross-role test and expired/legacy-role fail-closed checks. **All G1–G10 human approvals remain BLOCKED.** Evidence `docs/E6Q_ROLE_HELPER_CROSS_PRINCIPAL_BOUNDARY_20261012.md`.
 
 ## G8 — Independent review worklist
 

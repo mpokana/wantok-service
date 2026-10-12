@@ -2,6 +2,16 @@
 
 **Updated:** 2026-10-12
 
+## E6Q — Role-helper cross-principal trust/metadata boundary (12 October)
+
+- [x] Source review: `has_role`, `is_admin`, `is_technical_platform_admin`, platform/module helpers accept subject IDs; **subject's** authority must not be mistaken for calling principal. RBAC `admin` remains distinct from `tech_platform_admin`.
+- [x] Synthetic `063_role_helper_cross_principal_boundary.test.sql` **25/25 PASS** under four fake rollback-only user IDs: positive permitted family grants, denial of cross-family admin grants/revocations, ordinary actor cannot elevate privileges. **Other-user role metadata is visible through explicit helper subject IDs**: logged as E6Q-G8-04 **candidate information-disclosure/privacy decision**.
+- [x] Full E6Q regression: disconnected SQL **268/268** across 13 suites; synthetic HTTP negatives **23/23**; E6 independence **106/106**; evidence scanner **101/101**; Flutter `check.ps1` **7 clean analyses and 132/43/38 widgets** PASS. No shared DB, Technical source or production change.
+- [x] Cross-stream disconnected PostgreSQL **7 migrations, 13 SQL files, 268/268 tests PASS**, shared database untouched, disposable records fully rolled back. No new E6Q database migration, Technical control/source unaffected.
+- [x] Extended G7 parallel real GoTrue/REST witness matrix **23 → 26**, adding explicit other-user helper privacy, distinct cross-role delegated sign-in, expired/revoked/legacy role. All **NOT EXECUTED/BLOCKED**; formal G1–G10 remain 0/10 approved.
+- [ ] G8 independent role metadata/API exposure policy, exact stage privilege/owner/RLS parity, full 152 definer call graph and E6O writer mitigation. Separate genuine GoTrue-positive and negative G7 witness checks need authorised staging.
+- Report `docs/E6Q_ROLE_HELPER_CROSS_PRINCIPAL_BOUNDARY_20261012.md`.
+
 ## E6P — Privileged role control negative regression and real G7 witness readiness (12 October)
 
 - [x] Reviewed current checked-in source-level caller guards for nine sensitive role, Technical-module, branding and service-category mutators; explicit `auth.uid()` and relevant administrator/scoped permission checks present (not full authorisation proof).
