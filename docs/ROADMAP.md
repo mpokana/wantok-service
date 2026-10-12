@@ -2,6 +2,18 @@
 
 **Updated:** 2026-10-12
 
+## E6K — Public marketplace disclosure and RLS boundary (12 October; SOURCE QA)
+
+- [x] Read-only PostgreSQL policy and per-column anonymous exposure audit: verified active profiles and services remain RLS restricted, `anon` has no table mutation rights, but **18/18 provider-profile** and **23/23 provider-service** columns are SELECTable when a public row qualifies. Eight address/coordinate/metadata fields require privacy review. No real data rows read.
+- [x] New transaction-rollback `058` synthetic RLS matrix **17/17 PASS** (active/verified vs draft/inactive, own unpublished vs cross-provider, visible public metadata risk).
+- [x] E6H + four Technical migrations combined **181/181 pgTAP PASS** across nine suites in disposable disconnected staging; original shared DB unchanged. Test-only owner/grants are not production ACL parity.
+- [ ] Independently approve explicit public field/metadata privacy policy, migrate public Client/embedded REST reads to a safe projection, and **then** narrow `anon` SELECT privileges in dedicated approved, backed-up staging. Avoid breaking public discovery, provider ratings and structured filters.
+- [x] Full E6K clean detached Flutter `scripts/flutter/check.ps1` passed exit 0: 7 analyses, Client 132, Operations 43, Technical 38.
+- [x] Revalidated unchanged main code's local synthetic-JWT HTTP negatives **23/23 PASS**, E6 independence **106/106 PASS**, evidence scanner **101/101 PASS**. These are **not** witnessed real GoTrue identities.
+- [ ] Actual GoTrue/PostgREST privilege and signed-in browser witness, exact definer-owner/ACL parity, maintained legal/HR/COI approval and DR sign-off; E6-G1–G10 BLOCKED. Details: `docs/E6K_PUBLIC_MARKETPLACE_RLS_AND_PRIVACY_BOUNDARY_20261012.md`.
+
+---
+
 ## PROGRAM PRIORITY OVERRIDE — E-series → CX1 → T2.4 (12 October; SINGLE CHAT)
 
 **Owner decision:** continue all three workstreams here, **strictly prioritised**: **P0 E-series Enterprise/Operations security and governance**, followed by **P1 CX1 Client Experience completion**, then **P2 T2.4 Technical Control**. Previous T2.4 commits are preserved, but **further T2.4 implementation is PAUSED**. This header supersedes outdated historical text below that presented T2.4 as the active next task; historical milestones and test evidence remain factual.

@@ -69,8 +69,8 @@ try {
   RunDocker @('exec',$target,'pg_restore','-U','supabase_admin',
     '-d','e6i_stage','--no-owner','--no-acl','--exit-on-error',
     '/tmp/e6i-schema.dump')
-  $roleGrants = 'GRANT USAGE ON SCHEMA public,auth,extensions TO authenticated,service_role; ' +
-    'GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA extensions TO authenticated,service_role; ' +
+  $roleGrants = 'GRANT USAGE ON SCHEMA public,auth,extensions TO anon,authenticated,service_role; ' +
+    'GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA extensions TO anon,authenticated,service_role; ' +
     'ALTER DEFAULT PRIVILEGES IN SCHEMA extensions GRANT EXECUTE ON FUNCTIONS TO authenticated;'
   RunDocker @('exec',$target,'psql','-X','-U','supabase_admin',
     '-d','e6i_stage','-v','ON_ERROR_STOP=1','-c',$roleGrants)
@@ -85,6 +85,7 @@ try {
     'public.vendor_verification_checks, public.vendor_evidence_requests, ' +
     'public.staged_provider_applications, public.provider_services, ' +
     'public.vendor_clearance_revocation_events TO authenticated; ' +
+    'GRANT SELECT ON public.provider_profiles, public.provider_services TO anon, authenticated; ' +
     'REVOKE ALL ON FUNCTION public.register_operations_case_jurisdiction(uuid,text,uuid,text) ' +
     'FROM PUBLIC,anon,authenticated; ' +
     'REVOKE ALL ON FUNCTION public.map_operations_service_category(uuid,text,uuid,text) ' +
@@ -129,6 +130,7 @@ try {
     @{ name='052_operations_clearance_safety_scope.test.sql'; count=34 },
     @{ name='056_operations_case_recusals.test.sql'; count=18 },
     @{ name='057_operations_independent_case_review.test.sql'; count=19 },
+    @{ name='058_public_marketplace_visibility_boundary.test.sql'; count=17 },
     @{ name='090_technical_scoped_health_log_adapter.test.sql'; count=12 },
     @{ name='091_technical_messaging_queue_snapshot.test.sql'; count=13 },
     @{ name='092_technical_scoped_activity_audit.test.sql'; count=14 },
@@ -160,7 +162,7 @@ try {
   if ($LASTEXITCODE -ne 0 -or ($shared -join '').Trim() -ne 't') {
     throw 'Shared Supabase database has unexpected T2.4 schema state.'
   }
-  Write-Output 'E6J_STAGING_PASS=5 migrations,164 assertions,fixtures rolled back'
+  Write-Output 'E6K_STAGING_PASS=5 migrations,181 assertions,fixtures rolled back'
   Write-Output 'E6I_SHARED_DB_UNCHANGED=true'
   if ($KeepContainer) { Write-Output "E6I_DEBUG_CONTAINER=$target" }
 }

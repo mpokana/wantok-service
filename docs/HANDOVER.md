@@ -4,6 +4,16 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 12 October — E6K: actual public marketplace RLS/column disclosure (LATEST P0)
+
+- **Source/isolated QA PASS:** `058_public_marketplace_visibility_boundary.test.sql` adds **17/17** transaction-rollback synthetic assertions for anon versus signed-in visibility, verified+active provider/service requirements, no anonymous UPDATE and direct synthetic metadata exposure. Revised E6 cross-stream disposable staging tests E6H + four Technical source migrations with 051/052/056/057/**058**/090–093: **181/181 PASS** across 9 suites, original shared Supabase unchanged, fixture rollback and container removal confirmed.
+- **Read-only catalog PASS with privacy REVIEW OPEN:** `npm.cmd run test:e6:marketplace-local` inspects no actual business data; current table-level public grants mean **18/18 `provider_profiles` columns** and **23/23 `provider_services` columns** SELECTable to anon for rows passing RLS. The eight candidate address/coordinates/metadata columns require **separate privacy and API-contract sign-off**, not automatic revocation. RLS row restrictions and no anonymous writes remain intact.
+- **Additional regressions:** from the unchanged main-tree authentication/evidence code with installed Supabase CLI, signed synthetic-JWT HTTP negative tests **23/23 PASS**, E6 case independence **106/106 PASS**, and evidence scanner **101/101 PASS**. The isolated E6K source worktree itself has no node_modules CLI; the initial attempt there did not execute HTTP tests.
+- **Full fresh E6K Flutter regression:** `scripts/flutter/check.ps1` exit 0 from detached E6K source at baseline `66a908d`: **7 analyses clean; 132 Client, 43 Operations, 38 Technical widget cases PASS**; no Flutter source changes in E6K.
+- **No permission/schema change made:** Client/public repository queries and nested PostgREST selects may depend on the current tables. Public-safe projections and later privilege narrowing need full query inventory, negative direct-REST tests and backed-up staging, not a unilateral change now. E6-G8 and all G1–G10 remain BLOCKED. See `docs/E6K_PUBLIC_MARKETPLACE_RLS_AND_PRIVACY_BOUNDARY_20261012.md`. E-series remains ACTIVE, CX1 queued, T2.4 paused.
+
+---
+
 ## 12 October — Owner priority and single-chat consolidation (CURRENT INSTRUCTION)
 
 - **One coordinated conversation for all three workstreams**, in order **P0 E-series Operations/Enterprise → P1 CX1 Client Experience → P2 T2.4 Technical Control**. Stop parallel writers; prefer detached, isolated validation and serialise shared repository changes. See `docs/PROGRAM_EXECUTION_PLAN_20261012.md` (current execution authority).
@@ -13,7 +23,7 @@
 - **P0 next:** review existing public-marketplace RLS/column and owner/ACL scope, independently prepare GoTrue/PostgREST role matrix, backup/rollback and formal staged witnesses. **E6-G1–G10 remain BLOCKED** without independently authorised human/legal/COI/security/DR evidence; E7+ sealed.
 - **P1 QUEUED:** CX1 local Flutter/Android source QA achieved, but authenticated Web blank-search provider filters/detail/Saved, actual Saved/Inbox/Track Refresh button click/route safety, six inactive category photos/editor, physical HONOR and final owner acceptance remain open. Existing signed-in Android evidence does **not** close Web gates.
 - **P2 PAUSED:** T2.4 A–E source includes scoped diagnostics/logs, Messaging queue, action audit and central-log source-contract **not_connected** readiness. Latest source milestone `0250bf9` + coordination `53a75e2`. Four T2.4 migrations `20261011240000`–`243000` unapplied, no collector, heartbeat or job actions. Previous 58 SQL assertions and 7 Flutter analyses / Client 132 / Operations 43 / Technical 38 source checks PASS, **not deployed**.
-- **Critical:** main shared SQL 61-file suite is NOT GREEN because E6H/T2.4 migrations deliberately remain unapplied. Do not migrate local/live shared Supabase, reset, provision fake staff, activate providers, collect identity documents or move payments. `supabase/snippets/` is another untracked pre-existing path and must not be staged.
+- **Critical:** main shared SQL 62-file suite is NOT GREEN because E6H/T2.4 migrations deliberately remain unapplied. Do not migrate local/live shared Supabase, reset, provision fake staff, activate providers, collect identity documents or move payments. `supabase/snippets/` is another untracked pre-existing path and must not be staged.
 - Historical T2.4 / CX1 / E6 notes below remain archival evidence, not priority instructions. User-supplied T2.4 handover acknowledged and placed on hold.
 
 ---

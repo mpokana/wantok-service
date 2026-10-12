@@ -20,6 +20,10 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-12-06 — E6K public marketplace disclosure review
+
+**Status:** Source/isolated security baseline only; 17/17 synthetic pgTAP RLS checks (new test 058), **181/181 total E6H+T2.4 disposable integration**, shared database unchanged. PostgreSQL catalogue confirms anon can SELECT all **18 profile** and **23 service** columns for otherwise public eligible provider records, including metadata and address/coordinates. Current public-row filters are active+verified; this is a field-disclosure/privacy decision, not proof of actual customer-data leakage. **BLOCKED:** independent metadata/public-field sign-off, safe API projection, multi-platform query migration, exact ACL/GoTrue testing. No live permissions, roles or T2.4 functions changed. `docs/E6K_PUBLIC_MARKETPLACE_RLS_AND_PRIVACY_BOUNDARY_20261012.md`.
+
 ## FILLER-2026-10-12-05 — E6J local trust catalogue and five-migration integration
 
 **Status:** Read-only E6J catalogue scanned 19 selected `SECURITY DEFINER` functions, 20 selected Operations tables and all five pending migration version IDs. Existing anonymous SELECT on public marketplace `provider_profiles`/`provider_services` and definer `pg_temp` search-path ordering are **review items, not confirmed exploits**. Disposable PostgreSQL with E6H + four T2.4 SQL migrations passed **164/164 pgTAP assertions** across eight suites; all test data rolled back and shared DB unchanged. Independent exact owner/ACL/policy and GoTrue witness remain pending; E6-G1–G10 blocked. See `docs/E6J_TRUST_CATALOG_AND_CROSSSTREAM_QA_20261012.md`.
