@@ -48,6 +48,13 @@ Do not run until dedicated staging, role-parity and test identity approvals are 
 
 Capture for each **only when actually witnessed**: case ID, test environment ID, commit and migration versions, separate principal roles, expected result, observed HTTP/browser result, pass/fail, timestamp, authorised witness IDs, redacted secure evidence pointer and cleanup attestation. Keep real tokens and private case data **outside GitHub**.
 
+## E6N G8 engineering evidence update (NOT G8 sign-off)
+
+- **Prospective code:** E6N `20261012140000_e6_operations_definer_search_path.sql`, unapplied to persistent local/production DB, explicitly appends `pg_temp` last for 19 selected privileged functions.
+- **Disposable verification:** six migrations, ten pgTAP files **206/206 PASS** including new E6N 25/25, with 19-function SQL-body/owner/ACL fingerprint unchanged within the isolated test fixture; shared DB intact. Test-stage original ACLs are **NOT** owner/role parity because schema-only `--no-acl` restoration reconstructs select grants.
+- **Reviewer requirement:** independently verify all relevant function overloads/nested calls, exact real stage privilege/owner/RLS parity and G7 positive/negative GoTrue/PostgREST sessions. Until then G8 remains **BLOCKED**; no reviewer signature or evidence reference supplied.
+- **Source report:** `docs/E6N_SEARCH_PATH_HARDENING_AND_GATE_READINESS_20261012.md`.
+
 ## G8 — Independent review worklist
 
 - [ ] Review **all relevant overloads and nested routines**, not only the 19 selected E6 `SECURITY DEFINER` sources (E6M).

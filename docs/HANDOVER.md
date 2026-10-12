@@ -4,7 +4,17 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 12 October — E6M: source trust scan + operational G1–G10 register (LATEST P0)
+## 12 October — E6N: isolated definer path hardening + parallel acceptance (LATEST P0)
+
+- **E6N prospective source-only migration** `20261012140000_e6_operations_definer_search_path.sql` sets `search_path=public,auth,pg_temp` for 19 selected E6 `SECURITY DEFINER` functions after the pending E6H body replacements. **Unapplied to shared local/prod DB**; function body/owner/ACL unchanged. New test 060 **25/25 PASS**. Source: `docs/E6N_SEARCH_PATH_HARDENING_AND_GATE_READINESS_20261012.md`.
+- **Six-migration disconnected SQL stage:** 10 pgTAP files **206/206 PASS** including E6 + T2.4 compatibility, all fixtures rollback, no source DB migration/records changed, container removed. Catalog fingerprint verifies 19 function body/owner/ACL invariants within disposable test stage; **not production parity**. Initial test-stage owner/ACL reconstruction omission found and corrected (two synthetic grant assertions).
+- **E6N additional focused QA:** unchanged main's local synthetic-JWT HTTP negative **23/23 PASS**, E6 independence **106/106 PASS**, evidence scanner **101/101 PASS**, and E6L read-only function-trust metadata PASS; no real GoTrue witness/owner parity claims.
+- **E6N full Flutter regression:** fresh detached checkout `scripts/flutter/check.ps1` returned exit **0**: 7/7 analyses clean, **Client 132/132, Operations 43/43, Technical 38/38** widget tests PASS (no Flutter source changed).
+- **G1–G10 parallel:** G7 18-case positive/negative role matrix and G8 independent audit now reference E6N hardening evidence; 0/10 gates independently PASS. No GoTrue test identities, legal/HR signatories, keys, provider or payment changes. CX1 queued, T2.4 paused.
+
+---
+
+## 12 October — E6M: source trust scan + operational G1–G10 register (PRIOR P0)
 
 - **E6M scoped QA:** source-only 19 selected latest SQL function definitions baseline **PASS**; read-only E6L/E6K catalog checks **PASS** within scope; disconnected five-migration SQL integration **181/181 PASS** with source DB unchanged; main local synthetic-JWT HTTP **23/23 PASS**, E6 independence **106/106 PASS**, evidence **101/101 PASS**; fresh detached E6M Flutter check exit **0** (7 analyses; 132 Client / 43 Operations / 38 Technical widget tests). Shared combined SQL unrun due to five pending migrations; no staging human G7 or G8 approval.
 - **E6M selected source review (static, no database access):** `npm.cmd run test:e6:source-definers` checks latest checked-in SQL definitions of **19** selected E6 SECURITY DEFINER functions: all explicit `search_path=public,auth`, no obvious unqualified relation references or explicit dynamic `EXECUTE` after excluding `IS [NOT] DISTINCT FROM` and `ON CONFLICT DO UPDATE SET` parsing false positives. This is not an AST, nested-call proof or security certification; **two functions** are ahead of shared local DB in unapplied E6H. Missing explicit trailing `pg_temp`, BYPASSRLS owners, and independent code review remain open. Report: `docs/E6M_FUNCTION_SOURCE_REVIEW_20261012.md`.

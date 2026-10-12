@@ -20,6 +20,10 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-12-09 — E6N definer pg_temp last path with independent G gates
+
+**P0 source-only hardening** migration `20261012140000` applies 19 selected `ALTER FUNCTION ... SET search_path=public,auth,pg_temp` in transaction only when separately authorised; it is not applied to persistent DB. Disconnected test harness ran **206/206** across 10 pgTAP files after six prospective E6H/T2.4/E6N migrations; 19-function source-body/owner/grant fingerprint unchanged and temporary DB removed. Test-stage `--no-acl` restoration initially missed two ACL restrictions and was corrected *only* in disposable stage; not a real privilege escalation. Parallel G1–G10 register/evidence/reviewer matrix continues; **all formal gates BLOCKED**. CX1 queued, T2.4 paused. `docs/E6N_SEARCH_PATH_HARDENING_AND_GATE_READINESS_20261012.md`.
+
 ## FILLER-2026-10-12-08 — E6M source-only definer check + gate evidence register
 
 **Allowed safe advancement:** static checked-in SQL review, no DB access: 19 selected E6 latest SECURITY DEFINER function definitions scanned for explicit search_path, simple unqualified relation refs, dynamic EXECUTE, and pending-version divergence. Positive source baseline; manual call-graph and explicit pg_temp ordering remain **REVIEW OPEN**. New G1–G10 workboard requires distinct reviewers, independent evidence slots and 18 separately witnessed GoTrue/PostgREST cases. **0/10 gates approved; all BLOCKED**. Docs: `docs/E6M_FUNCTION_SOURCE_REVIEW_20261012.md` and `docs/E6G_PARALLEL_ACCEPTANCE_REGISTER_20261012.md`. No shared DB or T2.4 writes.

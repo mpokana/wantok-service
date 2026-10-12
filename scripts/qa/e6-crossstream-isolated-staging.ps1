@@ -105,25 +105,45 @@ try {
     'REVOKE ALL ON FUNCTION public.has_operations_clearance_scope(text,uuid) ' +
     'FROM PUBLIC,anon; ' +
     'GRANT EXECUTE ON FUNCTION public.has_operations_clearance_scope(text,uuid) ' +
-    'TO authenticated;'
+    'TO authenticated; ' +
+    'REVOKE ALL ON FUNCTION public.configure_operations_provisioner(uuid,text,text,uuid,text,boolean) ' +
+    'FROM PUBLIC,anon,authenticated; ' +
+    'GRANT EXECUTE ON FUNCTION public.configure_operations_provisioner(uuid,text,text,uuid,text,boolean) ' +
+    'TO service_role; ' +
+    'REVOKE ALL ON FUNCTION public.decide_operations_duty_change(uuid,boolean,text) ' +
+    'FROM PUBLIC,anon,authenticated; ' +
+    'GRANT EXECUTE ON FUNCTION public.decide_operations_duty_change(uuid,boolean,text) TO authenticated,service_role;'
   RunDocker @('exec',$target,'psql','-X','-U','supabase_admin',
     '-d','e6i_stage','-v','ON_ERROR_STOP=1','-c',$caseTestAcl)
 
+  # Capture the selected function ownership/grants/SQL bodies immediately
+  # before and after E6N ALTER FUNCTION; proconfig is the ONLY intended change.
+  # This is same-disposable-stage preservation, NOT production owner/ACL parity.
+  $aclFingerprintSql = "SELECT count(*)::text || '|' || md5(string_agg(p.oid::text || ':' || p.proowner::text || ':' || coalesce(p.proacl::text,'') || ':' || md5(p.prosrc), ';' ORDER BY p.oid)) FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='public' AND p.prosecdef AND (p.proname ~ '^(has_operations_|configure_operations_|request_operations_|decide_operations_|register_operations_|map_operations_|record_operations_|triage_vendor_|submit_vendor_intake_|list_vendor_clearance_|revoke_vendor_activation_|emergency_revoke_vendor_|pause_expired_vendor_)' OR p.proname IN ('admin_set_provider_service_status','review_provider_application'))"
+  $ownerAclBefore = $null
   $migrations = @(
     '20261011233000_operations_independent_case_review.sql',
     '20261011240000_technical_scoped_health_log_adapter.sql',
     '20261011241000_technical_messaging_queue_snapshot.sql',
     '20261011242000_technical_scoped_activity_audit.sql',
-    '20261011243000_technical_central_log_source_contract.sql'
+    '20261011243000_technical_central_log_source_contract.sql',
+    '20261012140000_e6_operations_definer_search_path.sql'
   )
   foreach ($migration in $migrations) {
     $file = Join-Path $root "supabase\migrations\$migration"
     if (!(Test-Path $file)) { throw "Missing migration $migration" }
+    if ($migration -eq '20261012140000_e6_operations_definer_search_path.sql') {
+      $ownerAclBefore = (@(& docker exec $target psql -X -U supabase_admin -d e6i_stage -v ON_ERROR_STOP=1 -t -A -c $aclFingerprintSql) -join '').Trim()
+      if ($LASTEXITCODE -ne 0 -or !$ownerAclBefore.StartsWith('19|')) { throw 'Unexpected E6 definer pre-hardening catalog or count' }
+    }
     RunDocker @('cp',$file,"$($target):/tmp/$migration")
     RunDocker @('exec',$target,'psql','-X','-U','supabase_admin',
       '-d','e6i_stage','-v','ON_ERROR_STOP=1','-f',"/tmp/$migration")
     Write-Output "E6I_STAGE_APPLIED=$migration"
   }
+  $ownerAclAfter = (@(& docker exec $target psql -X -U supabase_admin -d e6i_stage -v ON_ERROR_STOP=1 -t -A -c $aclFingerprintSql) -join '').Trim()
+  if ($LASTEXITCODE -ne 0 -or $ownerAclBefore -ne $ownerAclAfter) { throw 'E6N changed SQL body, ownership or function grants in disposable staging' }
+  Write-Output 'E6N_19_FUNCTION_BODY_OWNER_ACL_UNCHANGED=true'
 
   $tests = @(
     @{ name='051_operations_case_jurisdiction.test.sql'; count=35 },
@@ -131,6 +151,7 @@ try {
     @{ name='056_operations_case_recusals.test.sql'; count=18 },
     @{ name='057_operations_independent_case_review.test.sql'; count=19 },
     @{ name='058_public_marketplace_visibility_boundary.test.sql'; count=17 },
+    @{ name='060_operations_definer_temp_path.test.sql'; count=25 },
     @{ name='090_technical_scoped_health_log_adapter.test.sql'; count=12 },
     @{ name='091_technical_messaging_queue_snapshot.test.sql'; count=13 },
     @{ name='092_technical_scoped_activity_audit.test.sql'; count=14 },
@@ -157,12 +178,12 @@ try {
   if ($LASTEXITCODE -ne 0 -or ($check -join '').Trim() -ne 't') {
     throw 'Isolated migration or test rollback verification failed.'
   }
-  $sharedSql = "select (to_regprocedure('public.list_technical_module_log_events(text,integer)') is null) and (to_regprocedure('public.get_technical_messaging_queue_snapshot(text)') is null) and (to_regprocedure('public.list_technical_module_activity(text,integer)') is null) and (to_regprocedure('public.get_technical_central_log_readiness(text)') is null) and (not exists (select 1 from supabase_migrations.schema_migrations where version in ('20261011233000','20261011240000','20261011241000','20261011242000','20261011243000')))"
+  $sharedSql = "select (to_regprocedure('public.list_technical_module_log_events(text,integer)') is null) and (to_regprocedure('public.get_technical_messaging_queue_snapshot(text)') is null) and (to_regprocedure('public.list_technical_module_activity(text,integer)') is null) and (to_regprocedure('public.get_technical_central_log_readiness(text)') is null) and (not exists (select 1 from supabase_migrations.schema_migrations where version in ('20261011233000','20261011240000','20261011241000','20261011242000','20261011243000','20261012140000')))"
   $shared = @(& docker exec $source psql -X -U postgres -d postgres -t -A -c $sharedSql)
   if ($LASTEXITCODE -ne 0 -or ($shared -join '').Trim() -ne 't') {
     throw 'Shared Supabase database has unexpected T2.4 schema state.'
   }
-  Write-Output 'E6K_STAGING_PASS=5 migrations,181 assertions,fixtures rolled back'
+  Write-Output 'E6N_STAGING_PASS=6 migrations,206 assertions,fixtures rolled back'
   Write-Output 'E6I_SHARED_DB_UNCHANGED=true'
   if ($KeepContainer) { Write-Output "E6I_DEBUG_CONTAINER=$target" }
 }

@@ -2,6 +2,16 @@
 
 **Updated:** 2026-10-12
 
+## E6N — Selected SECURITY DEFINER path hardening and G-series readiness (12 October)
+
+- [x] Added **source-only, unapplied** E6 migration `20261012140000_e6_operations_definer_search_path.sql` for **19** explicit function `pg_temp` last paths; no body, owner, grants, role or RLS changes and no shared DB migration.
+- [x] Focused regression: local synthetic signed-JWT HTTP negatives **23/23**, E6 independence **106/106**, evidence scanner **101/101**, E6L read-only function catalogue baseline PASS; independent GoTrue and G1–G10 external gates remain blocked.
+- [x] Full detached E6N Flutter check exit **0**: 7 analyses clean and **132 Client, 43 Operations, 38 Technical** widget tests PASS. No deployment or witnessed browser sign-in.
+- [x] Added new pgTAP test `060_operations_definer_temp_path.test.sql` **25/25 PASS** and extended disconnected E6/T2.4 compatibility harness to **6 migrations, 10 test files, 206/206 assertions PASS**. The first run identified missing test-only ACL restoration; corrected fixture grants; verified staged function body/owner/ACL fingerprint unchanged and shared DB untouched.
+- [ ] Independent G8 security owner to audit **all** related privileged function call graphs, function-owner parity, temp/operator/type name resolution and public-field privacy restrictions; real G7 auth/bypass tests on separately approved staging.
+- [ ] Continue G1–G10 preparation **in parallel** with safe E engineering; 0/10 gates approved. G10 last, E7+/payments/provider activation/production blocked.
+- [ ] Dedicated backed-up staging approval before applying even E6N migration beyond disposable QA. Detailed `docs/E6N_SEARCH_PATH_HARDENING_AND_GATE_READINESS_20261012.md`.
+
 ## E6M — Source-defined trusted SQL and parallel G1–G10 acceptance (12 October)
 
 - [x] E6M regression: **19 selected latest definer source definitions PASS** under static lexical guards; **181/181 disconnected SQL** tests PASS, **23/23 synthetic HTTP negatives**, **106/106 E6 independence**, **101/101 evidence**, **7 clean Flutter analyses**, **132/43/38** app widget tests PASS. No GoTrue witnessed acceptance; shared DB remains unchanged.
