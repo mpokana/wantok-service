@@ -164,6 +164,7 @@ try {
     @{ name='058_public_marketplace_visibility_boundary.test.sql'; count=17 },
     @{ name='060_operations_definer_temp_path.test.sql'; count=25 },
     @{ name='061_internal_rpc_execute_boundary.test.sql'; count=14 },
+    @{ name='062_privileged_role_control_anon_denials.test.sql'; count=23 },
     @{ name='090_technical_scoped_health_log_adapter.test.sql'; count=12 },
     @{ name='091_technical_messaging_queue_snapshot.test.sql'; count=13 },
     @{ name='092_technical_scoped_activity_audit.test.sql'; count=14 },
@@ -195,7 +196,7 @@ try {
   if ($LASTEXITCODE -ne 0 -or ($shared -join '').Trim() -ne 't') {
     throw 'Shared Supabase database has unexpected T2.4 schema state.'
   }
-  Write-Output 'E6O_STAGING_PASS=7 migrations,220 assertions,fixtures rolled back'
+  Write-Output 'E6P_STAGING_PASS=7 migrations,243 assertions,fixtures rolled back'
   Write-Output 'E6I_SHARED_DB_UNCHANGED=true'
   if ($KeepContainer) { Write-Output "E6I_DEBUG_CONTAINER=$target" }
 }

@@ -20,6 +20,10 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-12-11 — E6P role and publishing denial tests, parallel G7 witness workboard
+
+**P0 E-Series:** nine selected privileged mutating SQL routines for role changes, Technical module state, branding and category editing contain source `auth.uid()`/admin guards; new synthetic pgTAP `062` tests **23/23** denial/side-effect invariants without real user logins. Cross-stream seven source-only pending migrations run in network-disabled disposable PostgreSQL with **243/243** pgTAP assertions, rollback and shared DB unchanged. **No E6P schema or Technical source changes.** Parallel independent G7 matrix now has **23 NOT EXECUTED/BLOCKED** cases, adding ordinary signed-in role escalation and authorised positive paths. G1–G10 0/10 independently approved. E6O shared ACL exposure persists until authorised independent stage. CX1 queued, T2.4 paused. `docs/E6P_ROLE_ADMIN_CONTROL_NEGATIVES_AND_G7_WITNESS_PLAN_20261012.md`.
+
 ## FILLER-2026-10-12-10 — E6O expanded public trust boundary and G8 finding
 
 **P0 security:** full read-only `public` SEC DEFINER catalogue found 152 functions (95 anon EXE, 133 authenticated EXE) rather than only 19 selected E6 routines. Identified untrusted grant disparity on privileged shared `write_audit_event` and `enqueue_notification`; unapplied E6O source migration proposes revoking both from anon/auth while leaving service-role and nested definer paths intact. Disconnected 7-migration E6H/T2.4/E6N/E6O stage **220/220 PASS** across 11 synthetic pgTAP suites with explicit denied-call cases and untouched shared Supabase. Separate Technical internal health-report function flagged for G8/T2.4 owner review, **not modified**. Human G1–G10 0/10, G7 cases unexecuted, CX1 queued, Technical paused, production restricted. `docs/E6O_FULL_PUBLIC_DEFINER_SURFACE_AND_INTERNAL_RPC_GUARD_20261012.md`.

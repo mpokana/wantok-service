@@ -2,6 +2,16 @@
 
 **Updated:** 2026-10-12
 
+## E6P — Privileged role control negative regression and real G7 witness readiness (12 October)
+
+- [x] Reviewed current checked-in source-level caller guards for nine sensitive role, Technical-module, branding and service-category mutators; explicit `auth.uid()` and relevant administrator/scoped permission checks present (not full authorisation proof).
+- [x] Added `062_privileged_role_control_anon_denials.test.sql` **23/23** synthetic pgTAP assertions: four definer invariants, nine anonymous direct denied calls, five authenticated-DB-role NULL-identity denials and five no-effect checks. **Not** a real GoTrue positive/negative acceptance test.
+- [x] Fresh E6P regressions: disconnected SQL **243/243**, main synthetic HTTP negative **23/23**, E6 case-independence **106/106**, evidence **101/101**; detached Flutter `check.ps1` exit **0**, **7 clean analyses + 132/43/38 widget tests** PASS. Shared/production DB untouched.
+- [x] Re-ran seven unapplied source migrations in disconnected disposable PostgreSQL: **12 pgTAP suites / 243/243 PASS**, fixtures rolled back, container removed and source DB untouched. No new E6P migration, Technical grants/source unaffected.
+- [x] Extended independent **G7 witness case plan from 18 to 23**, with G7-19–G7-23 testing actual unrelated logged-in actor denials, different role-family positive authorisations, Technical module RPCs, category/branding reviewer separation and the E6O shared writer mitigation. **All 23 NOT EXECUTED/BLOCKED**; G1–G10 **0/10 signed**.
+- [ ] Independently verify authenticated staff role scope, full 152-function definer call graph/owner ACL, E6O-01 untrusted writer grants, E6O-02 Technical health route and E6K public metadata in backed-up dedicated stage; G8 security review and owner signatures still pending.
+- Evidence `docs/E6P_ROLE_ADMIN_CONTROL_NEGATIVES_AND_G7_WITNESS_PLAN_20261012.md`.
+
 ## E6O — Complete public definer inventory + trusted internal RPC boundary (12 October)
 
 - [x] New read-only, reproducible public PostgreSQL `SECURITY DEFINER` inventory: **152 functions** (versus 19 earlier E6 selection), **95 anon EXECUTE**, **133 authenticated EXECUTE**, **152 BYPASSRLS-owned**; audited only catalog metadata, no private rows/secrets. All have configured search_path; shared local DB still has 0 explicit trailing `pg_temp` because previous source migration remains unapplied.

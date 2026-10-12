@@ -45,6 +45,11 @@ Do not run until dedicated staging, role-parity and test identity approvals are 
 | G7-16 | Legacy `review_provider_application` and service activation API | Denied under sealed E6/E7 release rules | **NOT EXECUTED** |
 | G7-17 | Fake service-role JWT, malformed auth header, token replay | Fail closed without secret or protected data | **NOT EXECUTED** |
 | G7-18 | Stage cleanup and post-run role/identity ledger | Test-only accounts removed/revoked under approved retention and witnessed checksum; audit preserved | **NOT EXECUTED** |
+| G7-19 | Ordinary authenticated user calls `grant_user_role` / `revoke_user_role` directly via PostgREST | Denied; no role grant, revocation, partial audit or actor spoofing | **NOT EXECUTED** |
+| G7-20 | Distinct authorised Operations admin and Technical platform admin perform separately delegated role changes | Only granted role families succeed; target/current-admin safeguards and real attributable audit evidence observed | **NOT EXECUTED** |
+| G7-21 | Ordinary user attempts direct `grant_technical_module_access`, `revoke_technical_module_access` and module enable/maintenance RPCs | Denied, without technical grant, state or queued side effects | **NOT EXECUTED** |
+| G7-22 | Non-admin user attempts direct branding publish/restore and `manage_service_category` RPCs; different authorised editor performs a permitted, reversible stage operation | Non-admin denied; separately granted editor positive path and audit succeed only under approved test plan, reverted under witness | **NOT EXECUTED** |
+| G7-23 | Ordinary signed-in user and anonymous client call `write_audit_event` and `enqueue_notification` direct REST after separately approved E6O correction | Permission denied with no audit/outbox forging; approved server-only path retains function under least privilege | **BLOCKED** (E6O source fix not applied) |
 
 Capture for each **only when actually witnessed**: case ID, test environment ID, commit and migration versions, separate principal roles, expected result, observed HTTP/browser result, pass/fail, timestamp, authorised witness IDs, redacted secure evidence pointer and cleanup attestation. Keep real tokens and private case data **outside GitHub**.
 
@@ -64,6 +69,12 @@ Capture for each **only when actually witnessed**: case ID, test environment ID,
 | **E6O-03 broad catalogue** | Read-only complete `public` definer inventory: **152**, **95 anonymous-callable**, **133 signed-in-callable**, no explicit trailing `pg_temp` in live local metadata | Independent review beyond selected 19 E6 functions: trigger functions vs public APIs, role guards, nested calls, SQL/operator/name resolution and public column privacy | **OPEN / G8 BLOCKED** |
 
 The independent security reviewer has not supplied any signed evidence; these are source/isolated engineering findings, **not** external approvals. G1–G10 acceptance remains **0/10 BLOCKED**, and all 18 planned real GoTrue G7 cases remain unexecuted.
+
+## E6P G7 role and platform-control witness update (not executed)
+
+The real-session acceptance matrix above now includes **G7-19 through G7-23** (23 planned cases total). The new E6P rollback-only `062` pgTAP **23/23** checks verify nine anonymously denied privileged mutations plus NULL session-identity denial and empty disposable test tables. The full disconnected integration run is **243/243 assertions PASS**. **These synthetic technical findings are not evidence from any actual GoTrue-authorised users, distinct witnesses or positive authorised control paths.** G7 remains **BLOCKED**, as do G1–G10; no human decision status was changed.
+
+Independent reviewers must confirm in a separately authorised backed-up stage that role-family restrictions distinguish Operations from Technical administrators, that unrelated authenticated users cannot grant themselves duties/roles, that separately delegated human actors can execute positive cases only within legal scope, and that the E6O writer function policy is closed before release. Detailed checkpoint: `docs/E6P_ROLE_ADMIN_CONTROL_NEGATIVES_AND_G7_WITNESS_PLAN_20261012.md`.
 
 ## G8 — Independent review worklist
 

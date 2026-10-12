@@ -4,7 +4,17 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 12 October — E6O: all-public definer surface + shared internal RPC grant boundary (LATEST P0)
+## 12 October — E6P: privileged control denials + independent G7 role-witness expansion (LATEST P0)
+
+- **E6P selected privileged-call guard QA:** new rollback-only synthetic test `supabase/tests/062_privileged_role_control_anon_denials.test.sql` **23/23 PASS**: four SECURITY DEFINER invariants; anonymous denial on nine role/Technical/branding/category mutators; five `authenticated` DB-role null-identity denials; no synthetic role/grant/branding/audit/notification rows persisted. **Not actual GoTrue login or authoritative role clearance**.
+- **Combined isolated QA:** unchanged seven pending source migrations (E6H 1, T2.4B–E 4 for compatibility, E6N 1, E6O 1), **12 SQL suites / 243/243 pgTAP PASS**, fixture rollback and disconnected DB removed, shared Supabase unchanged. No E6P schema migration or Technical source change. Original E6O writer grant risk remains open in shared DB.
+- **Parallel G preparation:** G7 witness plan extended **G7-19 through G7-23** to include real unauthorised/authorised role RPC, Technical state, branding/category and two trusted helper paths; now **23 PLANNED real-session cases, 0 witnessed**. G1–G10 formally **0/10 PASS**. See `docs/E6P_ROLE_ADMIN_CONTROL_NEGATIVES_AND_G7_WITNESS_PLAN_20261012.md`.
+- **E6P regression:** disconnected SQL **243/243**, main synthetic-JWT HTTP negative **23/23**, E6 independent-case SQL **106/106**, evidence scanner **101/101**, read-only 152-function local catalogue PASS; new E6P detached Flutter 7 analyses clean, **132 Client / 43 Operations / 38 Technical** widget tests PASS (exit 0). No shared or production writes.
+- **Priority:** E-series active, G-series preparation parallel, CX1 queued, T2.4 paused, E7+/production sealed.
+
+---
+
+## 12 October — E6O: all-public definer surface + shared internal RPC grant boundary (PRIOR P0)
 
 - **E6O read-only local all-public catalog:** **152 SECURITY DEFINER** functions in `public`, all owned locally by BYPASSRLS owner; **95 anonymous-callable**, **133 authenticated-callable**, 152 explicit search paths, 0 with trailing `pg_temp` in still-unmodified shared local DB. This greatly expands G8 review beyond 19 selected E6 functions. Metadata-only source test `npm.cmd run test:e6:definer-surface-local`.
 - **Privileged RPC ACL issue E6O-01:** local `write_audit_event` and `enqueue_notification` explicitly callable by `anon` and `authenticated`, inconsistent with intended checked-in service-only GRANTs. Both bodies write with owner privilege and lack independent caller checks; **potential log-integrity/notification-abuse risk**, not a proven external exploit or production defect. **Prospective unapplied migration** `20261012152000_e6_shared_internal_rpc_execute_boundary.sql` revokes those two helpers from untrusted roles but preserves service-role. E6O disconnected stage **7 migrations / 11 SQL test files / 220/220 assertions PASS**; before-state grant evidence reproduced in fixture, after-state direct denied SQL calls confirmed; no shared DB modification.
