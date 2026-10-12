@@ -20,6 +20,10 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-12-08 — E6M source-only definer check + gate evidence register
+
+**Allowed safe advancement:** static checked-in SQL review, no DB access: 19 selected E6 latest SECURITY DEFINER function definitions scanned for explicit search_path, simple unqualified relation refs, dynamic EXECUTE, and pending-version divergence. Positive source baseline; manual call-graph and explicit pg_temp ordering remain **REVIEW OPEN**. New G1–G10 workboard requires distinct reviewers, independent evidence slots and 18 separately witnessed GoTrue/PostgREST cases. **0/10 gates approved; all BLOCKED**. Docs: `docs/E6M_FUNCTION_SOURCE_REVIEW_20261012.md` and `docs/E6G_PARALLEL_ACCEPTANCE_REGISTER_20261012.md`. No shared DB or T2.4 writes.
+
 ## FILLER-2026-10-12-07 — E6L trust boundary and G1–G10 concurrent gate preparation
 
 **Priority:** E-series P0 with G1–G10 readiness prepared in parallel, serial shared writing, CX1 queued, T2.4 paused. **Technical baseline:** 19 selected SECURITY DEFINER functions owned by local postgres/BYPASSRLS; 0 anon EXECUTE; 0 of seven trusted-only routines signed-in EXECUTE; caller schema CREATE absent; database TEMP allowed and explicit trailing pg_temp missing, merits function-body review. A metadata-only source script and G1–G10 independent evidence/GoTrue testing plan were added. **All gates BLOCKED** pending authorised real staff/legal/ISO/COI/security/DR testimony; no accounts, migrations, service-role changes, shared DB or production modifications. `docs/E6L_PRIVILEGED_FUNCTION_OWNERSHIP_AND_GATES_20261012.md`.

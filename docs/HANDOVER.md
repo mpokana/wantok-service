@@ -4,7 +4,16 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 12 October — E6L: privileged-function audit + G1–G10 concurrent evidence preparation (LATEST P0)
+## 12 October — E6M: source trust scan + operational G1–G10 register (LATEST P0)
+
+- **E6M scoped QA:** source-only 19 selected latest SQL function definitions baseline **PASS**; read-only E6L/E6K catalog checks **PASS** within scope; disconnected five-migration SQL integration **181/181 PASS** with source DB unchanged; main local synthetic-JWT HTTP **23/23 PASS**, E6 independence **106/106 PASS**, evidence **101/101 PASS**; fresh detached E6M Flutter check exit **0** (7 analyses; 132 Client / 43 Operations / 38 Technical widget tests). Shared combined SQL unrun due to five pending migrations; no staging human G7 or G8 approval.
+- **E6M selected source review (static, no database access):** `npm.cmd run test:e6:source-definers` checks latest checked-in SQL definitions of **19** selected E6 SECURITY DEFINER functions: all explicit `search_path=public,auth`, no obvious unqualified relation references or explicit dynamic `EXECUTE` after excluding `IS [NOT] DISTINCT FROM` and `ON CONFLICT DO UPDATE SET` parsing false positives. This is not an AST, nested-call proof or security certification; **two functions** are ahead of shared local DB in unapplied E6H. Missing explicit trailing `pg_temp`, BYPASSRLS owners, and independent code review remain open. Report: `docs/E6M_FUNCTION_SOURCE_REVIEW_20261012.md`.
+- **Parallel G1–G10 evidence workboard:** `docs/E6G_PARALLEL_ACCEPTANCE_REGISTER_20261012.md` adds exact independent reviewer/dependency/evidence slots for every gate plus **18 planned GoTrue/PostgREST positive/negative cases** and G8 independent audit checklist. **0/10 gates signed, ALL BLOCKED**; no false evidence or role approvals.
+- E-series continues P0; CX1 queued; T2.4 paused. No shared Supabase, user/role, money, provider, production or Linux VM writes.
+
+---
+
+## 12 October — E6L: privileged-function audit + G1–G10 concurrent evidence preparation (PRIOR P0)
 
 - **E6L read-only local catalog technical baseline PASS:** `scripts/qa/e6-function-trust.mjs --local` inspected only owner, role, schema and effective EXECUTE metadata for **19 selected** E6 SECURITY DEFINER functions. All owned by local `postgres` (BYPASSRLS); `anon` EXECUTE on selected functions **0**; seven trusted-only routines allowed to `authenticated` **0**; all 19 explicitly set `search_path=public, auth`. Ordinary roles cannot CREATE in inspected `public/auth/extensions` schemas, but can CREATE TEMP; all 19 lack explicit trailing `pg_temp`. **Review required**, not an exploit demonstration or verified full function-body security. No real records, secrets, roles or data modified.
 - **E6L verification:** catalog read-only baseline PASS; five-migration disposable cross-stream **181/181 PASS** with shared DB unchanged, signed-synthetic-JWT HTTP negatives **23/23 PASS**, independence **106/106 PASS**, evidence **101/101 PASS**; fresh E6L detached Flutter check exit **0** (seven analyses clean; Client **132**, Operations **43**, Technical **38** PASS). This is not authenticated witness/production permission parity.

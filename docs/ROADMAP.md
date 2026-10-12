@@ -2,6 +2,15 @@
 
 **Updated:** 2026-10-12
 
+## E6M — Source-defined trusted SQL and parallel G1–G10 acceptance (12 October)
+
+- [x] E6M regression: **19 selected latest definer source definitions PASS** under static lexical guards; **181/181 disconnected SQL** tests PASS, **23/23 synthetic HTTP negatives**, **106/106 E6 independence**, **101/101 evidence**, **7 clean Flutter analyses**, **132/43/38** app widget tests PASS. No GoTrue witnessed acceptance; shared DB remains unchanged.
+- [x] Reproducible source-only latest-definition scan across 19 selected E6 SECURITY DEFINER functions: 19 explicit `search_path`, 0 simple unqualified relation refs and 0 explicit dynamic SQL EXECUTE. Corrected regex false positives for `IS [NOT] DISTINCT FROM` and `ON CONFLICT DO UPDATE SET`. Two latest E6H definitions not on shared local DB. **Static review only**: nested privilege, temporary schema, owner, real authenticated G7/G8 checks still OPEN.
+- [x] Separate G1–G10 independent acceptance workboard with required reviewer roles, dependencies, blank protected evidence refs, **18 NOT EXECUTED** real GoTrue/REST cases and precise G8 reviewer checklist. **G1–G10 all BLOCKED**; G10 remains last.
+- [ ] Independently check full function call graph + all related SECURITY DEFINER overloads, temp schema path hardening in disconnected owner-equivalent stage, exact ACL/RLS, trusted key custody, recorded privacy field-contract approval.
+- [ ] Gather real external staff, legal, geography, COI, security, signed-in witness and DR evidence into separately approved private records; no synthetic code test can sign them off.
+- Detailed `docs/E6M_FUNCTION_SOURCE_REVIEW_20261012.md` and `docs/E6G_PARALLEL_ACCEPTANCE_REGISTER_20261012.md`.
+
 ## E6L — Privileged function trust + G1–G10 concurrent evidence readiness (12 October)
 
 - [x] Read-only local `pg_catalog` audit of **19 selected SECURITY DEFINER** E6 functions: all `postgres` owned/BYPASSRLS, 0 anon EXECUTE, 0 authenticated EXECUTE on seven trusted-only routines, 19 explicit paths, 0 normal-schema CREATE rights for anon/auth; `pg_temp` suffix absent on all 19 and TEMP allowed — **needs function-body/temp-name audit**, not proven exploit.
