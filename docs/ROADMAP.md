@@ -2,6 +2,14 @@
 
 **Updated:** 2026-10-12
 
+## E6X — G8 catalogue parity fingerprint and fail-closed stage comparison (12 October)
+
+- [x] Added `scripts/qa/e6x-g8-parity-snapshot.mjs` for **one local PostgreSQL READ ONLY metadata transaction**: exact selected 14 definer functions, grants/owners/search path and function comparison digests; all public table/column ACL+RLS and 117 policy hashes; default ACLs, role memberships, extensions, PG version. Local PostgreSQL **17.11**, **93/93 RLS**, **0 FORCE RLS**, **27 default ACL entries**; no user rows/function source exports.
+- [x] Added `scripts/qa/e6x-g8-parity-snapshot.test.mjs`: **13 synthetic tests** PASS for equality-without-approval, owner/grant/policy/RLS-version/default-ACL drift, broken fingerprint, missing arrays, duplicate identities and nonzero CLI failure for detected drift. Stored baseline is local private `.wantok/` only. SHA-256 metadata digest `97f56f9cd16e8b7aa69b2aed90f9a0c3d019a77ad50ed68cad766791419da113` (not externally attested).
+- [x] Prepared source-controlled `docs/E6X_G8_METADATA_PARITY_SNAPSHOT_AND_STAGE_READINESS_20261012.md` with restricted-snapshot procedure and independently gated stage stop/go fields. Exact migration ledger, real PostgREST routes, authentic GoTrue sessions, worker notifications, backups and G8 independent sign-off **remain NOT SUPPLIED**.
+- [x] Regressions: `13/13` E6X comparator cases, `301/301` network-disabled SQL (16 suites, fixture rollback), `23/23` synthetic HTTP negatives, `106/106` E6 independence, `101/101` evidence, E6S privacy source/local validators, and fresh detached unmodified Flutter **7 analyses / Client 132 / Operations 43 / Technical 38** widget tests all PASS. Combined persistent shared `db:test` not green while proposed migrations unapplied.
+- [ ] E6O-01 local writer grants still OPEN; no persistent change, production approval or claim of production-equivalent parity. G7 **31/31 NOT EXECUTED**, G1–G10 **0/10**, D1–D5 unresolved. E P0 active, CX1 queued, T2.4 paused, E7+ sealed.
+
 ## E6W — latest declared privileged caller and installed local trust snapshot (12 October)
 
 - [x] Added `scripts/qa/e6w-installed-caller-trust.mjs` with source-only and **READ ONLY** local PostgreSQL catalog modes; scanned 77 migrations, parsed 227 dollar-quoted declarations, narrowed **16 historical** writer-calling definitions to **12 latest-by-name** audit-writer caller candidates. Regex matching and pending SQL are not a full installed call graph.

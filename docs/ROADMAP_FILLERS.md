@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-12-19 — E6X portable G8 metadata-only comparison readiness
+
+**P0 safe engineering:** Capture restricted EAGLT02 `pg_catalog` metadata JSON without reading app/user rows or exporting SQL bodies; compare independently captured valid manifests only after explicit stage authority. Implement a fail-closed fingerprint+structural `--compare` with nonzero exit for any privilege drift, **13/13 synthetic comparator tests**. Local baseline: PG17.11, 14 selected definer functions, 93 RLS-enabled public tables/117 policies, 27 default ACLs and 10 selected role memberships. Full snapshot stays ignored locally; report `docs/E6X_G8_METADATA_PARITY_SNAPSHOT_AND_STAGE_READINESS_20261012.md`. No genuine stage identity/time attestation, no backup or independent reviewer yet, and self-comparison is NOT parity proof. **E6O-01 still OPEN**, G7 31/31 blocked, G1–G10 0/10, D1–D5 not supplied; E active, CX1 queued, T2.4 paused, production false.
+
+---
+
 ## FILLER-2026-10-12-18 — E6W installed-local trust parity evidence without mutation
 
 **Active E P0 non-mutating continuation:** Separate E6V's 16 historic writer-call candidates from latest checked-in **12** by-name candidates, then cross-check **14** selected local signatures and owner/ACL/SQL-reference Boolean metadata inside a `READ ONLY` `pg_catalog` transaction. New reproducible script: `scripts/qa/e6w-installed-caller-trust.mjs`; report: `docs/E6W_INSTALLED_CALLER_TRUST_AND_G8_PARITY_WORKSHEET_20261012.md`. Note important limitation: SQL `EXECUTE` is not a live HTTP vulnerability proof, trigger-return functions are not normal RPC, and no real service worker/notification path was run. The two writer grants are still open in persistent local DB, no migration applied, stage parity not proved. Parallel G7-31 test/evidence prepared only; G7 31/31 blocked, G1–G10 0/10, CX1 queued, T2.4 paused, production false.
