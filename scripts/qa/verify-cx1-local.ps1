@@ -9,19 +9,27 @@
   Does not connect to authenticated APIs, inspect Chrome profiles, write data,
   change categories, install APKs or operate bookings, payments or messages.
   Live browser rendering and refresh-button interaction require separate QA.
+  Use -ClientOnly for isolated 127.0.0.1:3000/:3300 Web testing without
+  starting or verifying paused Technical/Operations services. The final
+  status says CX1_CLIENT_RELEASE_QA_PASS, not full-stack PASS.
 .EXAMPLE
   .\scripts\qa\verify-cx1-local.ps1 -CheckAndroid
+.EXAMPLE
+  .\scripts\qa\verify-cx1-local.ps1 -ClientOnly
 #>
 [CmdletBinding()]
 param(
   [string]$HostName = '127.0.0.1',
   [ValidateRange(1, 60)] [int]$TimeoutSeconds = 12,
   [switch]$CheckAndroid,
+  [switch]$ClientOnly,
   [ValidateRange(1, 999999)] [int]$MinAndroidBuild = 4009,
   [string]$EmulatorSerial = 'emulator-5554'
 )
 $ErrorActionPreference = 'Stop'
 $failures = New-Object System.Collections.Generic.List[string]
+$httpPorts = if ($ClientOnly) { @(3000,3300) } else { @(3000,3100,3200,3300,3400) }
+$jsPorts = if ($ClientOnly) { @(3000,3300) } else { @(3000,3100,3300,3400) }
 function Record([string]$kind,[string]$detail) {
   Write-Output ('{0} {1}' -f $kind,$detail)
   if ($kind -eq 'FAIL') { $script:failures.Add($detail) }
@@ -52,7 +60,7 @@ function Asset([int]$port, [string]$relative) {
 }
 $client = @{}
 $technical = @{}
-foreach ($port in @(3000, 3100, 3200, 3300, 3400)) {
+foreach ($port in $httpPorts) {
   try {
     $index = Invoke-WebRequest -Uri ("http://{0}:{1}/" -f $HostName,$port) -UseBasicParsing -TimeoutSec $TimeoutSeconds
     if ([int]$index.StatusCode -ne 200) { throw "HTTP $($index.StatusCode)" }
@@ -62,7 +70,7 @@ foreach ($port in @(3000, 3100, 3200, 3300, 3400)) {
   }
 }
 $js = @{}
-foreach ($port in @(3000,3100,3300,3400)) {
+foreach ($port in $jsPorts) {
   $item = Asset $port 'main.dart.js'
   if ($null -ne $item) {
     $js[$port] = $item
@@ -90,16 +98,17 @@ $images = @(
 )
 foreach ($image in $images) {
   $digests = @{}
-  foreach ($port in @(3000,3100,3300,3400)) {
+  foreach ($port in $jsPorts) {
     $asset = Asset $port $image
     if ($null -ne $asset) {
       $digests[$port] = $asset.Hash
       Record 'PASS' ("Category asset :$port /$($image.Split('/')[-1]) bytes=$($asset.Bytes)")
     }
   }
-  if ($digests.Count -eq 4) {
+  if ($digests.Count -eq $jsPorts.Count) {
     if (@($digests.Values | Select-Object -Unique).Count -eq 1) {
-      Record 'PASS' ("Shared category photo exact-byte parity: $($image.Split('/')[-1])")
+      $scope = if ($ClientOnly) { 'Client main/staging' } else { 'Shared' }
+      Record 'PASS' ("$scope category photo exact-byte parity: $($image.Split('/')[-1])")
     } else { Record 'FAIL' ("Category photo differs across main/staging apps: $image") }
   }
 }
@@ -126,10 +135,13 @@ if ($CheckAndroid) {
     }
   }
 }
+if ($ClientOnly) { Write-Output 'NOTE ClientOnly checks only 3000 and 3300; Technical and Operations are NOT verified.' }
 Write-Output 'NOTE Source/HTTP parity is not proof of what an individual Chrome tab has cached/rendered.'
 Write-Output 'NOTE Authenticated UI interactions and physical HONOR testing are separate CX1 gates.'
 if ($failures.Count -gt 0) {
-  Write-Output ("CX1_RELEASE_QA_FAIL count=$($failures.Count)")
+  $label = if ($ClientOnly) { 'CX1_CLIENT_RELEASE_QA_FAIL' } else { 'CX1_RELEASE_QA_FAIL' }
+  Write-Output ("$label count=$($failures.Count)")
   exit 1
 }
-Write-Output 'CX1_RELEASE_QA_PASS'
+if ($ClientOnly) { Write-Output 'CX1_CLIENT_RELEASE_QA_PASS' }
+else { Write-Output 'CX1_RELEASE_QA_PASS' }

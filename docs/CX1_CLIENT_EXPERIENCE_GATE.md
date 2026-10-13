@@ -5,7 +5,15 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
-## 13 October — CX1A preflight blocker and release-checker reliability (LATEST)
+## 13 October — CX1B two live *local static* Client endpoints (LATEST)
+
+**LOCAL STATIC WEB RELEASE-PARITY PASS, NOT SIGNED-IN USER ACCEPTANCE.** Restored archived unchanged labelled-Refresh Flutter Client pages on loopback-only `:3000` and separate `:3300`, two verified 11 October build copies with identical SHA-256 `2207D8BBCCC5BE261B7C7A77498F4E801829E0D7B13378F56B61A06F3E3B2E66` (`main.dart.js` 4,099,079 bytes), three compiled Refresh labels and shared two image bytes match. `verify-cx1-local.ps1 -ClientOnly` **CX1_CLIENT_RELEASE_QA_PASS**; scope excludes unstarted `:3100/:3200/:3400` Technical and Operations servers. Existing Supabase GoTrue **anonymous health GET 200**; no private auth/session data read. No deploy, build, source widgets, real data or Technical modules changed.
+
+**SOURCE REGRESSIONS PASS:** `cx1-release-guard-offline.test.mjs` **6/6** synthetic mock cases; unchanged app detached Flutter `91bd630` seven analyses, Client **132/132**, Operations **43/43**, Technical **38/38** PASS; disconnected SQL **301/301** with rollback/container cleanup and E6 auth/independence/privacy/evidence PASS.
+
+**LIVE SIGNED-IN CX1 GATE OPEN:** Actual Saved/Inbox/Track centre clicks, unchanged route and record count, unknown Vendor Onboarding misnavigation cause, Android/HONOR and six inactive-category photo approvals have **not** been independently witnessed. See `docs/CX1B_CLIENT_LOCAL_WEB_RESTORATION_AND_ACCEPTANCE_20261013.md`. E6 G1–G10 0/10, T2.4 PAUSED, production false.
+
+## 13 October — CX1A preflight blocker and release-checker reliability (PRIOR)
 
 **P1 NON-MUTATING PREPARATION ACTIVE, CX1 ACCEPTANCE OPEN:** EAGLT02 resumption at verified E6Z `5bb7c74`. Read-only `verify-cx1-local.ps1 -CheckAndroid` found Client :3000, Technical :3100, Operations :3200 and Client/Technical staging :3300/:3400 unavailable, with emulator `emulator-5554` disconnected. Repeat after guard repair (without Android) exits **`CX1_RELEASE_QA_FAIL count=17`** and produces **no false JS or parity PASS**. This is a host availability gate, not a new proof of application defect or production outage.
 

@@ -2,6 +2,14 @@
 
 **Updated:** 2026-10-12
 
+## CX1B — restored isolated Client Web and scoped readiness checks (13 October)
+
+- [x] Verified original and saved labelled-Refresh Client web bundles are **exact byte matches**, `main.dart.js` SHA-256 `2207D8BBCCC5BE261B7C7A77498F4E801829E0D7B13378F56B61A06F3E3B2E66` (4,099,079 bytes) plus equal Taxi/Public Services image hashes. Started read-only loopback static servers `:3000` and `:3300`, did not overwrite code or restart Operations/Technical services. Auth health anonymous GET on local `:54321/auth/v1/health` HTTP 200, no customer data accessed.
+- [x] Added `-ClientOnly` support to `scripts/qa/verify-cx1-local.ps1`; actual Client-only endpoint/Javascript/label/photo integrity **CX1_CLIENT_RELEASE_QA_PASS**, which does **not** attest full five-port staging, authenticated browser or actual route clicks. Extended synthetic offline guard to **6/6** PASS including Client-only positive and staging JS/photo negative cases.
+- [x] Cross-stream safeguards: fresh unchanged Flutter source at `91bd630`, **7 analyses**, Client **132/132**, Operations **43/43**, Technical **38/38** widgets PASS; disconnected SQL **301/301 in 16 suites** PASS with rollback and removed container; synthetic JWT 23/23, independence 106/106, evidence 101/101 and E6S privacy PASS.
+- [x] Documented operator-only signed-in Saved/Inbox/Track Refresh witness steps and private local static process boundaries in `docs/CX1B_CLIENT_LOCAL_WEB_RESTORATION_AND_ACCEPTANCE_20261013.md`.
+- [ ] Actual signed-in Chrome centre-click, routes/counts, previous Saved-to-Vendor-Onboarding mystery, Android/HONOR and six licensed category photos/editor **OPEN**. CX1 acceptance unsigned, E6 G1–G10 0/10, T2.4 paused, production blocked.
+
 ## CX1A — read-only client acceptance preflight + release-guard reliability (13 October)
 
 - [x] Resumed after E6Z at `5bb7c74` with programme sequencing intact. 11 October real signed-in Client Services → Specialist Services → Morobe → Lae QA provider/detail and limited Saved/Inbox/Wallet observations remain **historical**, not freshly reproduced; known wrong-route Saved-to-Vendor-Onboarding click cause is NOT established.

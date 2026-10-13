@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-13-02 — CX1B loopback Client main/staging restoration
+
+**P1 local testing only:** Two verified unchanged 11 Oct Client Flutter web releases now serve only `127.0.0.1:3000` main and `127.0.0.1:3300` independent saved candidate; exact labelled-Refresh JS SHA `2207D8BB...` and shared Taxi/Public Services photos match. Scoped `verify-cx1-local.ps1 -ClientOnly` returns `CX1_CLIENT_RELEASE_QA_PASS`; **6/6** synthetic guard tests PASS. The separately running local GoTrue `/auth/v1/health` responds HTTP 200 unauthenticated. This is static/backend readiness, NOT a signed-in user/session or Live Refresh acceptance. Existing vendor-onboarding misnavigation unresolved; no customer DB writes, Web deployment, Chrome-profile changes, Technical/Operations restart, Android/HONOR mutations or vendor approvals. Source report `docs/CX1B_CLIENT_LOCAL_WEB_RESTORATION_AND_ACCEPTANCE_20261013.md`. E6 0/10 signed, G7 31/31 unexecuted, CX1 gate OPEN, T2.4 paused, production false.
+
+---
+
 ## FILLER-2026-10-13-01 — CX1A live preflight gating and false-positive asset-parity repair
 
 **P1 non-mutating QA:** After E6Z source-only security preparations exhausted, CX1A resumes Client acceptance readiness without claiming E6 acceptance. Local Web :3000/:3100/:3200/:3300/:3400 and expected emulator offline/unavailable; new browser and Android signed-in acceptance BLOCKED. Correct `verify-cx1-local.ps1` failed-asset pipeline behaviour that previously allowed spurious `PASS JS bytes= sha256=` and false parity; catch missing ADB gracefully. Add three mocked no-network positive/negative tests and report correct 17-request FAIL. Retain 11 Oct genuine signed-in QA browse/Saved evidence only as historical, with Saved-to-Vendor-Onboarding misnavigation still of unknown cause. See `docs/CX1A_READONLY_ACCEPTANCE_PREFLIGHT_20261013.md`. E6 G1–G10 0/10; CX1 gate OPEN; T2.4 PAUSED; production false.
