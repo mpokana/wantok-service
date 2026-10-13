@@ -230,7 +230,7 @@ class _MessagesPageState extends State<MessagesPage> {
             children: [
               LayoutBuilder(
                 builder: (context, constraints) {
-                  final narrow = constraints.maxWidth < 600;
+                  final narrow = constraints.maxWidth < 1200;
                   final header = const KeyedSubtree(
                     key: ValueKey('cx1-inbox-hero'),
                     child: _InboxHeader(),
@@ -256,13 +256,7 @@ class _MessagesPageState extends State<MessagesPage> {
                   // At phone widths, an overlaid button covers the header
                   // eyebrow. Keep the action below the hero instead.
                   if (narrow) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        header,
-                        Align(alignment: Alignment.centerRight, child: refresh),
-                      ],
-                    );
+                    return header;
                   }
 
                   return Stack(

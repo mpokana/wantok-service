@@ -102,6 +102,7 @@ class _VendorJobsPageState extends State<VendorJobsPage> {
 
           if (snapshot.hasError) {
             return ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.all(20),
               children: [
                 Card(
@@ -125,6 +126,7 @@ class _VendorJobsPageState extends State<VendorJobsPage> {
           final rows = snapshot.data ?? const <Map<String, dynamic>>[];
           if (rows.isEmpty) {
             return ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.all(28),
               children: const [
                 SizedBox(height: 90),
@@ -146,6 +148,7 @@ class _VendorJobsPageState extends State<VendorJobsPage> {
           }
 
           return ListView.separated(
+            physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(18, 10, 18, 28),
             itemCount: rows.length,
             separatorBuilder: (_, _) => const SizedBox(height: 11),

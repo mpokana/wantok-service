@@ -157,6 +157,7 @@ class _ReservationBrowsePageState extends State<ReservationBrowsePage> {
 
             if (snapshot.hasError) {
               return ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.all(20),
                 children: [
                   _StateCard(
@@ -173,6 +174,7 @@ class _ReservationBrowsePageState extends State<ReservationBrowsePage> {
             final offers = snapshot.data ?? const <ReservableOffer>[];
             if (offers.isEmpty) {
               return ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.all(20),
                 children: [
                   _StateCard(
@@ -188,6 +190,7 @@ class _ReservationBrowsePageState extends State<ReservationBrowsePage> {
             }
 
             return ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(18, 8, 18, 28),
               children: [
                 _CategoryHero(category: widget.category),

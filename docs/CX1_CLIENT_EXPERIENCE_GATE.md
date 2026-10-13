@@ -5,6 +5,16 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## 13 October — CX1G owner-directed mobile/tablet pull-to-refresh UX (LATEST)
+
+**INTERACTION CHANGED, LIVE WITNESS REQUIRED:** Owner no longer wants a mobile/tablet Refresh button. Under **1200 logical px**, Inbox/Track/Saved and the other read-only Client/Vendor catalogues use pull-to-refresh; desktop at **1200+** retains manual controls. Agent capability metadata and owner-private Vendor evidence requirements now use safe pull refresh; short and empty data pages are always scrollable. No transactional endpoints triggered by gesture. **52/52** focused widget tests and seven clean full Flutter analyses plus Client/Operations/Technical suites PASS. Report `docs/CX1G_CLIENT_ADAPTIVE_PULL_REFRESH_POLICY_20261013.md`.
+
+**LOCAL SOURCE/BROWSER DELIVERY:** New local :3000 JS SHA-256 `40071C243E2F3E88A55F4A7611AA4C95EFC6AE95FE067C9455D932F1D13A6558` served over HTTP 200, with verified 96-file rollback and healthy Supabase Auth. **A browser-delivered build is not signed-in pull acceptance**.
+
+**HUMAN ACCEPTANCE:** Desktop Saved/Inbox/Track visual passes remain; Track Mobile originally visually passed the prior button-based design, now requires a new **pull** witness, and Inbox/Saved Mobile pull cases are pending. The 320px screenshot after CX1F showed good Inbox placement, **not pull-to-refresh**. Do not mark these new interactions passed without signed-in before/after browser evidence; CX1 formal approval open, E6 0/10, T2.4 paused, production blocked.
+
+---
+
 ## 13 October — CX1E owner-observed 320px Track overlap corrected and served (LATEST)
 
 **User visual bug confirmed:** Track Mobile Refresh remained tappable and Completed (1) persisted after click, but **button overlapped “Track your Wantok”** within 320px green hero. Mark original Mobile Track layout **FAIL, retest required**. Desktop Saved/Inbox/Track before/after user screenshots had passed (**3 of 6 visually**). Mobile Saved/Inbox remain pending.

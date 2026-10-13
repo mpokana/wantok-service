@@ -178,6 +178,7 @@ class _VendorListingsPageState extends State<VendorListingsPage> {
 
           if (snapshot.hasError) {
             return ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.all(20),
               children: [
                 Card(
@@ -200,6 +201,7 @@ class _VendorListingsPageState extends State<VendorListingsPage> {
 
           final data = snapshot.data!;
           return ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(18, 10, 18, 28),
             children: [
               Row(

@@ -140,6 +140,7 @@ class _EventBrowsePageState extends State<EventBrowsePage> {
             final events = snapshot.data ?? const <Map<String, dynamic>>[];
             if (events.isEmpty) {
               return ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
                 children: const [
                   SizedBox(height: 100),
                   Icon(
@@ -162,6 +163,7 @@ class _EventBrowsePageState extends State<EventBrowsePage> {
             }
 
             return ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
               children: [
                 const _EventsHero(),

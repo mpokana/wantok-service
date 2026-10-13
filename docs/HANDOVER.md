@@ -4,6 +4,16 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 13 October — CX1G owner rule: pull to refresh on mobile/tablet, desktop buttons retained (LATEST CX1)
+
+- **Owner direction supersedes mobile Refresh button placements of CX1E/F:** At Flutter widths **below 1200 logical pixels** (phones, tablets), omit regular Refresh buttons and pull down from the top of a scrollable, read-only data page. At desktop widths **1200+**, retain explicit Refresh buttons. Shared policy: `apps/wantok_app/lib/src/home/client_refresh_policy.dart`. Covers Inbox, Track, Saved, Services catalogue, Food/Shop browse, Wantok Agent status and Vendor evidence requirements, while other already swipe-capable Client/Vendor data screens receive `AlwaysScrollableScrollPhysics` for reliable short/empty lists.
+- **Read-only and error boundaries:** Existing `RefreshIndicator` callbacks reload data only; Agent capabilities and Vendor evidence metadata now gain pull support. Vendor evidence async `setState` regression detected by new tests and corrected; no real evidence uploads or approvals. Initial-load **Retry** remains where needed. Static Explore/Public Services/Wallet preview and submissions/forms do not manufacture a no-op or trigger a write from a swipe. Separate Operations/Technical apps untouched.
+- **QA PASS:** Focused **52/52** real widget drag/tap/read-count/navigation/viewport cases incl. 320, 390, 800, 1024, 1199, 1200, 1240 and 1440 logical px; full Flutter **7 clean analyses**, Client/Operations/Technical suites PASS. Report `docs/CX1G_CLIENT_ADAPTIVE_PULL_REFRESH_POLICY_20261013.md`.
+- **Local :3000 rebuilt/verified:** 96-file corrected Client Web release; HTML HTTP 200, served JS SHA-256 `40071C243E2F3E88A55F4A7611AA4C95EFC6AE95FE067C9455D932F1D13A6558`, Supabase Auth health HTTP 200, prior 96-file CX1F bundle backed up at `D:\Wantok_Project_Backups\wantok-client-3000-pre-cx1g-20261013`. Verified new loopback Client PID 36028, :3300 untouched. **User must hard reload** and witness all three mobile pull gestures before revised interaction passes.
+- **Local/acceptance state:** Previous screenshots visually passed three desktop pages and Track mobile under OLD button-driven interaction (historical **4/6**), but CX1G mobile swipe interactions **must be retested** in signed-in Chrome for **Inbox, Track and Saved**. Prior owner's post-CX1F Inbox screenshot proves button was positioned below hero, **not a swipe**. CX1 formal acceptance remains OPEN. Main Git worktree has unrelated ongoing commercial-document edits; CX1G uses an isolated branch/worktree. E6 G1–G10 0/10 and G7 cases unexecuted; T2.4 PAUSED, production false.
+
+---
+
 ## 13 October — CX1E Track mobile Refresh placement corrected on local :3000 (LATEST CX1)
 
 - **Owner screenshot diagnosis:** Signed-in Chrome Responsive **320×811** Track before/after Refresh maintained Completed (1), same QA specialist booking and route, but green Refresh action **covered the hero title**. Functional route/count observation is stable; **mobile visual acceptance FAIL pending corrected retest**. Desktop Saved, Inbox and Track were previously visually user-witnessed PASS (**3 of 6**), Saved/Inbox mobile still unexecuted.

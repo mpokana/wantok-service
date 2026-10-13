@@ -23,7 +23,7 @@ void main() {
     await tester.pumpAndSettle();
   }
 
-  for (final width in [320.0, 390.0, 1440.0]) {
+  for (final width in [320.0, 390.0, 800.0, 1024.0, 1440.0]) {
     testWidgets('CX1 Inbox toolbar reload is read-only at $width px', (
       tester,
     ) async {
@@ -43,7 +43,10 @@ void main() {
         ),
         width: width,
       );
-      expect(find.byTooltip('Refresh Inbox'), findsOneWidget);
+      expect(
+        find.byTooltip('Refresh Inbox'),
+        width < 1200 ? findsNothing : findsOneWidget,
+      );
       expect(find.text('No service conversations yet'), findsOneWidget);
       expect(threadReads, 1);
       expect(supportReads, 1);
@@ -51,46 +54,23 @@ void main() {
       final targetCx1InboxRefresh = find.byKey(
         const ValueKey('cx1-inbox-refresh'),
       );
-      expect(targetCx1InboxRefresh, findsOneWidget);
-      expect(
-        tester.getSize(targetCx1InboxRefresh).height,
-        greaterThanOrEqualTo(44),
-      );
       final hero = find.byKey(const ValueKey('cx1-inbox-hero'));
       expect(hero, findsOneWidget);
-      final button = tester.widget<TextButton>(targetCx1InboxRefresh);
-      final foreground = button.style!.foregroundColor!.resolve(
-        <WidgetState>{},
-      );
-      final background = button.style!.backgroundColor!.resolve(
-        <WidgetState>{},
-      );
-      expect(foreground, Colors.white);
-      if (width < 600) {
-        expect(background, const Color(0xFF096B4B));
-        expect(
-          tester.getTopLeft(targetCx1InboxRefresh).dy,
-          greaterThanOrEqualTo(tester.getBottomLeft(hero).dy),
-          reason: 'At phone widths, Inbox Refresh must be below the hero.',
-        );
-        expect(
-          tester.getTopRight(targetCx1InboxRefresh).dx,
-          lessThanOrEqualTo(width),
-          reason: 'Inbox Refresh must remain inside the phone viewport.',
-        );
-        expect(
-          1.05 / (background!.computeLuminance() + 0.05),
-          greaterThanOrEqualTo(4.5),
-          reason: 'White Refresh label requires readable mobile contrast.',
-        );
+      if (width < 1200) {
+        expect(targetCx1InboxRefresh, findsNothing);
+        await tester.drag(find.byType(Scrollable).first, const Offset(0, 440));
       } else {
-        // Keep the existing desktop right-aligned over-header action.
+        expect(targetCx1InboxRefresh, findsOneWidget);
+        expect(
+          tester.getSize(targetCx1InboxRefresh).height,
+          greaterThanOrEqualTo(44),
+        );
         expect(
           tester.getTopLeft(targetCx1InboxRefresh).dy,
           lessThan(tester.getBottomLeft(hero).dy),
         );
+        await tester.tapAt(tester.getCenter(targetCx1InboxRefresh));
       }
-      await tester.tapAt(tester.getCenter(targetCx1InboxRefresh));
       await tester.pumpAndSettle();
       expect(threadReads, 2);
       expect(supportReads, 2);
@@ -112,19 +92,27 @@ void main() {
         ),
         width: width,
       );
-      expect(find.byTooltip('Refresh activity'), findsOneWidget);
+      expect(
+        find.byTooltip('Refresh activity'),
+        width < 1200 ? findsNothing : findsOneWidget,
+      );
       expect(find.text('No requests or reservations yet'), findsOneWidget);
       expect(reads, 1);
 
       final targetCx1TrackRefresh = find.byKey(
         const ValueKey('cx1-track-refresh'),
       );
-      expect(targetCx1TrackRefresh, findsOneWidget);
-      expect(
-        tester.getSize(targetCx1TrackRefresh).height,
-        greaterThanOrEqualTo(44),
-      );
-      await tester.tapAt(tester.getCenter(targetCx1TrackRefresh));
+      if (width < 1200) {
+        expect(targetCx1TrackRefresh, findsNothing);
+        await tester.drag(find.byType(Scrollable).first, const Offset(0, 440));
+      } else {
+        expect(targetCx1TrackRefresh, findsOneWidget);
+        expect(
+          tester.getSize(targetCx1TrackRefresh).height,
+          greaterThanOrEqualTo(44),
+        );
+        await tester.tapAt(tester.getCenter(targetCx1TrackRefresh));
+      }
       await tester.pumpAndSettle();
       expect(reads, 2);
       expect(find.text('No requests or reservations yet'), findsOneWidget);

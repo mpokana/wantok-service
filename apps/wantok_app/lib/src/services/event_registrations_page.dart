@@ -72,6 +72,7 @@ class _EventRegistrationsPageState extends State<EventRegistrationsPage> {
             final rows = snapshot.data ?? const <Map<String, dynamic>>[];
             if (rows.isEmpty) {
               return ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
                 children: const [
                   SizedBox(height: 110),
                   Icon(

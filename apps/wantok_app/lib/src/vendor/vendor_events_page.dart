@@ -137,6 +137,7 @@ class _VendorEventsPageState extends State<VendorEventsPage> {
 
             if (snapshot.hasError) {
               return ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
                 children: [
                   const SizedBox(height: 100),
                   Padding(
@@ -152,6 +153,7 @@ class _VendorEventsPageState extends State<VendorEventsPage> {
 
             final data = snapshot.data!;
             return ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 30),
               children: [
                 _Hero(eventCount: data.events.length),
@@ -401,6 +403,7 @@ class _ManageEventPageState extends State<_ManageEventPage> {
                 );
 
             return ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
               children: [
                 Row(

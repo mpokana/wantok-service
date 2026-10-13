@@ -72,6 +72,7 @@ class _CommerceOrdersPageState extends State<CommerceOrdersPage> {
             final orders = snapshot.data ?? const <Map<String, dynamic>>[];
             if (orders.isEmpty) {
               return ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
                 children: const [
                   SizedBox(height: 110),
                   Icon(

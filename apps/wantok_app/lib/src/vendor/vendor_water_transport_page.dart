@@ -173,6 +173,7 @@ class _VendorWaterTransportPageState extends State<VendorWaterTransportPage> {
             }
             if (snapshot.hasError) {
               return ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
                 children: [
                   const SizedBox(height: 100),
                   Padding(
@@ -188,6 +189,7 @@ class _VendorWaterTransportPageState extends State<VendorWaterTransportPage> {
 
             final data = snapshot.data!;
             return ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 30),
               children: [
                 _Hero(
@@ -448,6 +450,7 @@ class _ManageDeparturePageState extends State<_ManageDeparturePage> {
                 );
 
             return ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
               children: [
                 Card(

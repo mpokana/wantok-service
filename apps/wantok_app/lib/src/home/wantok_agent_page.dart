@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import 'client_refresh_policy.dart';
+
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
@@ -85,209 +88,215 @@ class _WantokAgentPageState extends State<WantokAgentPage> {
           style: TextStyle(fontWeight: FontWeight.w900),
         ),
         actions: [
-          IconButton(
-            tooltip: 'Refresh',
-            onPressed: _refresh,
-            icon: const Icon(Icons.refresh_rounded),
-          ),
+          if (ClientRefreshPolicy.showDesktopButton(context))
+            IconButton(
+              tooltip: 'Refresh',
+              onPressed: _refresh,
+              icon: const Icon(Icons.refresh_rounded),
+            ),
         ],
       ),
-      body: FutureBuilder<WantokAiAgentCapabilities>(
-        future: _capabilities,
-        builder: (context, snapshot) {
-          final capabilities = snapshot.data;
+      body: RefreshIndicator(
+        onRefresh: _refresh,
+        child: FutureBuilder<WantokAiAgentCapabilities>(
+          future: _capabilities,
+          builder: (context, snapshot) {
+            final capabilities = snapshot.data;
 
-          return ListView(
-            padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
-            children: [
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [
-                      Color(0xFF5F2A7A),
-                      Color(0xFF0B79A8),
-                      Color(0xFF075C3A),
-                    ],
+            return ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [
+                        Color(0xFF5F2A7A),
+                        Color(0xFF0B79A8),
+                        Color(0xFF075C3A),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(26),
                   ),
-                  borderRadius: BorderRadius.circular(26),
-                ),
-                child: const Row(
-                  children: [
-                    Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Your Wantok guide',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 23,
-                              fontWeight: FontWeight.w900,
-                            ),
-                          ),
-                          SizedBox(height: 7),
-                          Text(
-                            'Find services, products and providers, or get help when you are not sure where to start.',
-                            style: TextStyle(
-                              color: Color(0xFFF0F6F4),
-                              height: 1.4,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(width: 12),
-                    CircleAvatar(
-                      radius: 29,
-                      backgroundColor: Color(0x33FFFFFF),
-                      child: Icon(
-                        Icons.auto_awesome_rounded,
-                        color: Colors.white,
-                        size: 33,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 16),
-              if (snapshot.connectionState != ConnectionState.done)
-                const Card(
-                  child: Padding(
-                    padding: EdgeInsets.all(22),
-                    child: Center(child: CircularProgressIndicator()),
-                  ),
-                )
-              else if (snapshot.hasError)
-                Card(
-                  child: ListTile(
-                    leading: const Icon(
-                      Icons.cloud_off_outlined,
-                      color: WantokColors.coral,
-                    ),
-                    title: const Text(
-                      'Agent status unavailable',
-                      style: TextStyle(fontWeight: FontWeight.w900),
-                    ),
-                    subtitle: const Text(
-                      'Provider search still works. AI chat remains disabled.',
-                    ),
-                    trailing: IconButton(
-                      onPressed: _refresh,
-                      icon: const Icon(Icons.refresh),
-                    ),
-                  ),
-                )
-              else
-                _AgentStatusCard(capabilities: capabilities!),
-              const SizedBox(height: 18),
-              const Text(
-                'Try one of these',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
-              ),
-              const SizedBox(height: 10),
-              _PromptTile(
-                icon: Icons.plumbing_rounded,
-                title: 'Find a plumber',
-                subtitle: 'Search approved plumbing providers.',
-                onTap: () => _openProviderSearch('plumber'),
-              ),
-              _PromptTile(
-                icon: Icons.directions_car_filled_rounded,
-                title: 'Show top-rated vehicle hire',
-                subtitle: 'Search providers offering vehicle-hire services.',
-                onTap: () => _openProviderSearch('vehicle hire'),
-              ),
-              _PromptTile(
-                icon: Icons.storefront_outlined,
-                title: 'Help me list a product',
-                subtitle: 'Marketplace listing assistance is prepared for the next commerce phase.',
-                onTap: _showListingHelpPreview,
-              ),
-              _PromptTile(
-                icon: Icons.search_off_rounded,
-                title: 'I cannot find the service I need',
-                subtitle:
-                    'Search providers first, or ask a real person for help.',
-                onTap: _openProviderSearch,
-              ),
-              const SizedBox(height: 18),
-              Card(
-                color: const Color(0xFFFFF7EE),
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: const Row(
                     children: [
-                      const Row(
-                        children: [
-                          CircleAvatar(
-                            backgroundColor: Color(0xFFFFE5DA),
-                            child: Icon(
-                              Icons.support_agent_rounded,
-                              color: WantokColors.clay,
-                            ),
-                          ),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              'Need a real person?',
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Your Wantok guide',
                               style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 23,
                                 fontWeight: FontWeight.w900,
-                                fontSize: 17,
                               ),
                             ),
-                          ),
-                        ],
+                            SizedBox(height: 7),
+                            Text(
+                              'Find services, products and providers, or get help when you are not sure where to start.',
+                              style: TextStyle(
+                                color: Color(0xFFF0F6F4),
+                                height: 1.4,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        'If normal search cannot solve the problem, send a short help request for human follow-up. Live human chat is not enabled yet.',
-                        style: TextStyle(height: 1.4),
-                      ),
-                      const SizedBox(height: 12),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: FilledButton.icon(
-                          onPressed: capabilities?.handoffCaptureEnabled == true
-                              ? _requestHumanHelp
-                              : null,
-                          icon: const Icon(Icons.support_agent_rounded),
-                          label: const Text('Talk to a person'),
+                      SizedBox(width: 12),
+                      CircleAvatar(
+                        radius: 29,
+                        backgroundColor: Color(0x33FFFFFF),
+                        child: Icon(
+                          Icons.auto_awesome_rounded,
+                          color: Colors.white,
+                          size: 33,
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 18),
-              TextField(
-                enabled: capabilities?.chatEnabled == true,
-                minLines: 2,
-                maxLines: 4,
-                decoration: InputDecoration(
-                  labelText: 'Ask Wantok Agent',
-                  hintText: capabilities?.chatEnabled == true
-                      ? 'What can I help you find?'
-                      : 'AI chat is not enabled yet.',
-                  prefixIcon: const Icon(Icons.auto_awesome_outlined),
-                  suffixIcon: const Icon(Icons.send_rounded),
-                  filled: true,
-                  fillColor: Colors.white,
+                const SizedBox(height: 16),
+                if (snapshot.connectionState != ConnectionState.done)
+                  const Card(
+                    child: Padding(
+                      padding: EdgeInsets.all(22),
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                  )
+                else if (snapshot.hasError)
+                  Card(
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.cloud_off_outlined,
+                        color: WantokColors.coral,
+                      ),
+                      title: const Text(
+                        'Agent status unavailable',
+                        style: TextStyle(fontWeight: FontWeight.w900),
+                      ),
+                      subtitle: const Text(
+                        'Provider search still works. AI chat remains disabled.',
+                      ),
+                      trailing: IconButton(
+                        onPressed: _refresh,
+                        icon: const Icon(Icons.refresh),
+                      ),
+                    ),
+                  )
+                else
+                  _AgentStatusCard(capabilities: capabilities!),
+                const SizedBox(height: 18),
+                const Text(
+                  'Try one of these',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
                 ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'Wantok Agent uses controlled Wantok APIs. It cannot approve providers, move money, grant privileged roles or bypass workflow approvals.',
-                style: TextStyle(
-                  color: WantokColors.muted,
-                  fontSize: 12,
-                  height: 1.4,
+                const SizedBox(height: 10),
+                _PromptTile(
+                  icon: Icons.plumbing_rounded,
+                  title: 'Find a plumber',
+                  subtitle: 'Search approved plumbing providers.',
+                  onTap: () => _openProviderSearch('plumber'),
                 ),
-              ),
-            ],
-          );
-        },
+                _PromptTile(
+                  icon: Icons.directions_car_filled_rounded,
+                  title: 'Show top-rated vehicle hire',
+                  subtitle: 'Search providers offering vehicle-hire services.',
+                  onTap: () => _openProviderSearch('vehicle hire'),
+                ),
+                _PromptTile(
+                  icon: Icons.storefront_outlined,
+                  title: 'Help me list a product',
+                  subtitle: 'Marketplace listing assistance is prepared for the next commerce phase.',
+                  onTap: _showListingHelpPreview,
+                ),
+                _PromptTile(
+                  icon: Icons.search_off_rounded,
+                  title: 'I cannot find the service I need',
+                  subtitle:
+                      'Search providers first, or ask a real person for help.',
+                  onTap: _openProviderSearch,
+                ),
+                const SizedBox(height: 18),
+                Card(
+                  color: const Color(0xFFFFF7EE),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Row(
+                          children: [
+                            CircleAvatar(
+                              backgroundColor: Color(0xFFFFE5DA),
+                              child: Icon(
+                                Icons.support_agent_rounded,
+                                color: WantokColors.clay,
+                              ),
+                            ),
+                            SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                'Need a real person?',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w900,
+                                  fontSize: 17,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        const Text(
+                          'If normal search cannot solve the problem, send a short help request for human follow-up. Live human chat is not enabled yet.',
+                          style: TextStyle(height: 1.4),
+                        ),
+                        const SizedBox(height: 12),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: FilledButton.icon(
+                            onPressed:
+                                capabilities?.handoffCaptureEnabled == true
+                                ? _requestHumanHelp
+                                : null,
+                            icon: const Icon(Icons.support_agent_rounded),
+                            label: const Text('Talk to a person'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 18),
+                TextField(
+                  enabled: capabilities?.chatEnabled == true,
+                  minLines: 2,
+                  maxLines: 4,
+                  decoration: InputDecoration(
+                    labelText: 'Ask Wantok Agent',
+                    hintText: capabilities?.chatEnabled == true
+                        ? 'What can I help you find?'
+                        : 'AI chat is not enabled yet.',
+                    prefixIcon: const Icon(Icons.auto_awesome_outlined),
+                    suffixIcon: const Icon(Icons.send_rounded),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Wantok Agent uses controlled Wantok APIs. It cannot approve providers, move money, grant privileged roles or bypass workflow approvals.',
+                  style: TextStyle(
+                    color: WantokColors.muted,
+                    fontSize: 12,
+                    height: 1.4,
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

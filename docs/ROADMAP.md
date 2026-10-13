@@ -2,6 +2,17 @@
 
 **Updated:** 2026-10-13
 
+## CX1G — mobile/tablet pull-to-refresh across read-only Client/Vendor data views (13 October)
+
+- [x] Owner UX direction: hide normal Refresh buttons **under 1200 logical px**, retain them for desktop widths **1200px and above**. No fake refresh spinners on static pages or swipe-triggered form, payment, booking or approval writes.
+- [x] Centralised `ClientRefreshPolicy`; Inbox/Track/Saved, Services, Food/Shop, Agent status, and Vendor evidence metadata updated. Remaining already swipe-capable data lists now support short/empty pull gestures via scroll physics (34 targeted additions across 16 files).
+- [x] `RefreshIndicator` wired on Agent capabilities and Vendor evidence read-only metadata. Error-specific Retry retained. Focused **52/52 widget tests PASS**, full Flutter **7 clean analyses and all widget suites PASS**.
+- [x] New local :3000 Web build verified: 96 files, HTML 200, served JS SHA-256 `40071C243E2F3E88A55F4A7611AA4C95EFC6AE95FE067C9455D932F1D13A6558`, Supabase Auth health 200, prior 96-file CX1F build backed up; :3300 unchanged.
+- [ ] Verify actual **mobile/tablet pull gestures on Inbox, Track, Saved** using signed-in `127.0.0.1:3000`, and reconcile old 6-case visual witness matrix. Human acceptance, E6 security gates, and production remain closed.
+- Source/exception matrix: `docs/CX1G_CLIENT_ADAPTIVE_PULL_REFRESH_POLICY_20261013.md`.
+
+---
+
 ## CX1E — fix 320px Track Refresh overlap and retest same-origin :3000 (13 October)
 
 - [x] Signed-in user mobile emulator at 320×811 showed the Track Refresh green pill overlapping the green hero title; before/after Completed 1 stable but mobile UX **not accepted**. Desktop Saved/Inbox/Track screenshot pairs previously user-visual PASS (3/6); mobile Saved and Inbox pending.

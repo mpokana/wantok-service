@@ -188,6 +188,7 @@ class _ActivityPageState extends State<ActivityPage> {
 
           if (snapshot.hasError) {
             return ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.all(20),
               children: [
                 _TrackRefreshHeader(
@@ -224,6 +225,7 @@ class _ActivityPageState extends State<ActivityPage> {
           final rows = snapshot.data ?? const <Map<String, dynamic>>[];
           if (rows.isEmpty) {
             return ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(14, 10, 14, 28),
               children: [
                 _TrackRefreshHeader(
@@ -277,6 +279,7 @@ class _ActivityPageState extends State<ActivityPage> {
           final entries = _buildTrackDisplayEntries(rows);
 
           return ListView.separated(
+            physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(18, 10, 18, 28),
             itemCount: entries.length + 2 + (WantokSmokeData.enabled ? 1 : 0),
             separatorBuilder: (_, _) => const SizedBox(height: 11),
@@ -998,19 +1001,10 @@ class _TrackRefreshHeader extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        // On phones the hero fills the entire available width. Overlaying
-        // Refresh on it obscures the heading; keep the action in its own row.
-        if (constraints.maxWidth < 600) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const _TrackHeader(),
-              Align(
-                alignment: Alignment.centerRight,
-                child: refreshButton,
-              ),
-            ],
-          );
+        // Phone and tablet clients use the existing pull-to-refresh gesture.
+        // The desktop action remains visible at wide web viewport widths.
+        if (constraints.maxWidth < 1200) {
+          return const _TrackHeader();
         }
 
         // Wide layouts retain the existing right-aligned desktop action.

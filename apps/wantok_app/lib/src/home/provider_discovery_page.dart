@@ -347,6 +347,7 @@ class _ProviderDiscoveryPageState extends State<ProviderDiscoveryPage> {
               ]);
             },
             child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(16, 14, 16, 28),
               children: [
                 Container(

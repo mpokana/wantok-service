@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../home/client_refresh_policy.dart';
+
 import '../home/smoke_data.dart';
 import '../home/wantok_category_ui.dart';
 
@@ -103,6 +105,7 @@ class _CommerceBrowsePageState extends State<CommerceBrowsePage> {
 
             if (snapshot.hasError) {
               return ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
                 children: [
                   const SizedBox(height: 120),
                   _MessageCard(
@@ -117,6 +120,7 @@ class _CommerceBrowsePageState extends State<CommerceBrowsePage> {
             final stores = snapshot.data ?? const <Map<String, dynamic>>[];
             if (stores.isEmpty) {
               return ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.fromLTRB(14, 8, 14, 28),
                 children: [
                   _CommerceFulfilmentBar(isFood: isFood),
@@ -177,6 +181,7 @@ class _CommerceBrowsePageState extends State<CommerceBrowsePage> {
               );
 
             return ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(14, 8, 14, 28),
               children: [
                 _CommerceFulfilmentBar(isFood: isFood),
@@ -202,11 +207,13 @@ class _CommerceBrowsePageState extends State<CommerceBrowsePage> {
                   subtitle: filtered.isEmpty
                       ? 'No vendors match your filters.'
                       : '${filtered.length} approved Wantok vendor${filtered.length == 1 ? '' : 's'} available.',
-                  trailing: IconButton(
-                    tooltip: 'Refresh',
-                    onPressed: _refresh,
-                    icon: const Icon(Icons.refresh_rounded),
-                  ),
+                  trailing: ClientRefreshPolicy.showDesktopButton(context)
+                      ? IconButton(
+                          tooltip: 'Refresh',
+                          onPressed: _refresh,
+                          icon: const Icon(Icons.refresh_rounded),
+                        )
+                      : null,
                 ),
                 const SizedBox(height: 12),
                 if (filtered.isEmpty)

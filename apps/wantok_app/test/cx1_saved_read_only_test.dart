@@ -52,9 +52,9 @@ void main() {
     );
   }
 
-  for (final width in [320.0, 390.0, 1240.0]) {
+  for (final width in [320.0, 390.0, 800.0, 1024.0, 1240.0]) {
     testWidgets(
-      'CX1 Saved toolbar refresh updates read-only results at $width',
+      'CX1 Saved adaptive refresh updates read-only results at $width',
       (tester) async {
         var reads = 0;
         await _show(tester, () async {
@@ -62,16 +62,25 @@ void main() {
           return reads == 1 ? [provider()] : <SavedClientItem>[];
         }, width: width);
         expect(find.text('Wantok QA Plumbing Services'), findsOneWidget);
-        expect(find.byTooltip('Refresh saved items'), findsOneWidget);
         final targetCx1SavedRefresh = find.byKey(
           const ValueKey('cx1-saved-refresh'),
         );
-        expect(targetCx1SavedRefresh, findsOneWidget);
-        expect(
-          tester.getSize(targetCx1SavedRefresh).height,
-          greaterThanOrEqualTo(44),
-        );
-        await tester.tapAt(tester.getCenter(targetCx1SavedRefresh));
+        if (width < 1200) {
+          expect(find.byTooltip('Refresh saved items'), findsNothing);
+          expect(targetCx1SavedRefresh, findsNothing);
+          await tester.drag(
+            find.byType(Scrollable).first,
+            const Offset(0, 440),
+          );
+        } else {
+          expect(find.byTooltip('Refresh saved items'), findsOneWidget);
+          expect(targetCx1SavedRefresh, findsOneWidget);
+          expect(
+            tester.getSize(targetCx1SavedRefresh).height,
+            greaterThanOrEqualTo(44),
+          );
+          await tester.tapAt(tester.getCenter(targetCx1SavedRefresh));
+        }
         await tester.pumpAndSettle();
         expect(reads, 2);
         expect(find.text('Nothing saved yet'), findsOneWidget);

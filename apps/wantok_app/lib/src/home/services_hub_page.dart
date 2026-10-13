@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'client_refresh_policy.dart';
+
 import 'smoke_data.dart';
 import 'offline_demo_navigation.dart';
 import 'reference_services_gallery.dart';
@@ -835,11 +837,12 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
                       onPressed: _openSaved,
                       icon: const Icon(Icons.bookmarks_outlined),
                     ),
-                    IconButton(
-                      tooltip: 'Refresh',
-                      onPressed: _reload,
-                      icon: const Icon(Icons.refresh_rounded),
-                    ),
+                    if (ClientRefreshPolicy.showDesktopButton(context))
+                      IconButton(
+                        tooltip: 'Refresh',
+                        onPressed: _reload,
+                        icon: const Icon(Icons.refresh_rounded),
+                      ),
                   ],
                 ),
               ),
@@ -862,8 +865,12 @@ class _ServicesHubPageState extends State<ServicesHubPage> {
                   icon: Icons.storefront_outlined,
                   title: 'No services available yet',
                   body: 'Please check back soon for local services.',
-                  actionLabel: 'Refresh',
-                  onAction: _reload,
+                  actionLabel: ClientRefreshPolicy.showDesktopButton(context)
+                      ? 'Refresh'
+                      : null,
+                  onAction: ClientRefreshPolicy.showDesktopButton(context)
+                      ? _reload
+                      : null,
                 )
               else if (filtered.isEmpty)
                 _StateCard(

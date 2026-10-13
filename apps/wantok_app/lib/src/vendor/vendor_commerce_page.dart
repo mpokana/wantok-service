@@ -166,6 +166,7 @@ class _VendorCommercePageState extends State<VendorCommercePage> {
 
             if (snapshot.hasError) {
               return ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
                 children: [
                   const SizedBox(height: 100),
                   Padding(
@@ -181,6 +182,7 @@ class _VendorCommercePageState extends State<VendorCommercePage> {
 
             final data = snapshot.data!;
             return ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 30),
               children: [
                 _VendorCommerceHero(

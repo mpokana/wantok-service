@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import 'client_refresh_policy.dart';
+
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
@@ -344,19 +347,20 @@ class _SavedItemsPageState extends State<SavedItemsPage> {
       appBar: AppBar(
         title: const Text('Saved'),
         actions: [
-          Tooltip(
-            message: 'Refresh saved items',
-            child: TextButton.icon(
-              key: const ValueKey('cx1-saved-refresh'),
-              onPressed: _refreshing || _busyId != null ? null : _refresh,
-              icon: const Icon(Icons.refresh_rounded, size: 19),
-              label: const Text('Refresh'),
-              style: TextButton.styleFrom(
-                minimumSize: const Size(96, 48),
-                padding: const EdgeInsets.symmetric(horizontal: 9),
+          if (ClientRefreshPolicy.showDesktopButton(context))
+            Tooltip(
+              message: 'Refresh saved items',
+              child: TextButton.icon(
+                key: const ValueKey('cx1-saved-refresh'),
+                onPressed: _refreshing || _busyId != null ? null : _refresh,
+                icon: const Icon(Icons.refresh_rounded, size: 19),
+                label: const Text('Refresh'),
+                style: TextButton.styleFrom(
+                  minimumSize: const Size(96, 48),
+                  padding: const EdgeInsets.symmetric(horizontal: 9),
+                ),
               ),
             ),
-          ),
         ],
       ),
       body: RefreshIndicator(
@@ -386,6 +390,7 @@ class _SavedItemsPageState extends State<SavedItemsPage> {
             }
 
             return ListView.separated(
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.all(16),
               itemCount: items.length,
               separatorBuilder: (_, _) => const SizedBox(height: 8),
@@ -567,6 +572,7 @@ class _TrustedPeoplePageState extends State<TrustedPeoplePage> {
           }
 
           return ListView.separated(
+            physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.all(16),
             itemCount: people.length,
             separatorBuilder: (_, _) => const SizedBox(height: 8),
@@ -672,6 +678,7 @@ class _MyReviewsPageState extends State<MyReviewsPage> {
             }
 
             return ListView.separated(
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.all(16),
               itemCount: reviews.length,
               separatorBuilder: (_, _) => const SizedBox(height: 8),
@@ -1037,6 +1044,7 @@ class _ListState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      physics: const AlwaysScrollableScrollPhysics(),
       padding: const EdgeInsets.all(24),
       children: [
         const SizedBox(height: 70),

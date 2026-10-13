@@ -18,6 +18,12 @@
 - **PRODUCTION AUTHORISED**: an entirely separate signed release determination; currently **NO**.
 - Existing smoke/demo assets are not commercial inventory, providers, payments or approvals. All sensitive evidence remains out of GitHub.
 
+**13 October CX1G UX directive:** Owner requires normal Refresh controls hidden on **mobile/tablet viewports <1200 logical px**, pull-to-refresh on read-only, scrollable Client/Vendor data pages, with desktop actions retained at >=1200. Shared policy source plus Agent capabilities/Vendor evidence metadata read-only loaders, 34 scrollability additions in 16 data page files. **52/52** focused widget checks, full **7 analyses** and all widget suites PASS in separate worktree. Existing main checkout has other-session commercial doc changes and untracked snippets; preserve entirely. No SQL, payment, provider permission or production mutation. Browser after-update pull for Inbox/Track/Saved required; E6 0/10, T2.4 PAUSED. `docs/CX1G_CLIENT_ADAPTIVE_PULL_REFRESH_POLICY_20261013.md`.
+
+---
+
+**CX1G local evidence:** 96-file Client :3000 Web release served SHA-256 `40071C243E2F3E88A55F4A7611AA4C95EFC6AE95FE067C9455D932F1D13A6558`, HTML/Auth healthy, prior 96-file build backed up and port 3300 unchanged. Actual mobile pull browser witness remains OPEN; production false.
+
 ## P0 — E-series Enterprise/Operations (ACTIVE)
 
 **Baseline:** E6A–I security foundations have source/isolated QA evidence: two-person duty grants, independent case/country-category scopes, applicant read denial, investigator/reviewer conflict and recusal, sealed identity evidence/activation paths. E6I tested E6H plus then-three T2.4 migrations in a disposable schema/role stage **145/145**; this is historical test evidence, not permission-owner parity or current complete suite. T2.4E subsequently added a fourth technical migration.

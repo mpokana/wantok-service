@@ -40,21 +40,30 @@ void main() {
 
     final before = observer.pushes;
     final refresh = find.byKey(ValueKey(actionKey));
-    expect(refresh, findsOneWidget);
-    expect(tester.getSize(refresh).height, greaterThanOrEqualTo(44));
-
-    await tester.tapAt(tester.getCenter(refresh));
+    if (width < 1200) {
+      expect(refresh, findsNothing);
+      // A real drag from the top of the content activates RefreshIndicator.
+      await tester.drag(find.byType(Scrollable).first, const Offset(0, 440));
+    } else {
+      expect(refresh, findsOneWidget);
+      expect(tester.getSize(refresh).height, greaterThanOrEqualTo(44));
+      await tester.tapAt(tester.getCenter(refresh));
+    }
     await tester.pumpAndSettle();
 
-    expect(observer.pushes, before,
-        reason: 'Refreshing must not push vendor onboarding or any other route');
-    expect(refresh, findsOneWidget);
+    expect(
+      observer.pushes,
+      before,
+      reason: 'Refreshing must not push vendor onboarding or any other route',
+    );
+    expect(refresh, width < 1200 ? findsNothing : findsOneWidget);
     expect(tester.takeException(), isNull);
   }
 
-  for (final width in [320.0, 1440.0]) {
-    testWidgets('CX1 Saved refresh does not navigate at $width px',
-        (tester) async {
+  for (final width in [320.0, 800.0, 1024.0, 1440.0]) {
+    testWidgets('CX1 Saved refresh does not navigate at $width px', (
+      tester,
+    ) async {
       var reads = 0;
       await assertReadOnlyRefreshKeepsCurrentRoute(
         tester,
@@ -71,8 +80,9 @@ void main() {
       expect(find.text('Nothing saved yet'), findsOneWidget);
     });
 
-    testWidgets('CX1 Inbox refresh does not navigate at $width px',
-        (tester) async {
+    testWidgets('CX1 Inbox refresh does not navigate at $width px', (
+      tester,
+    ) async {
       var reads = 0;
       await assertReadOnlyRefreshKeepsCurrentRoute(
         tester,
@@ -90,8 +100,9 @@ void main() {
       expect(find.text('No service conversations yet'), findsOneWidget);
     });
 
-    testWidgets('CX1 Track refresh does not navigate at $width px',
-        (tester) async {
+    testWidgets('CX1 Track refresh does not navigate at $width px', (
+      tester,
+    ) async {
       var reads = 0;
       await assertReadOnlyRefreshKeepsCurrentRoute(
         tester,

@@ -118,6 +118,7 @@ class _AccountPageState extends State<AccountPage> {
 
           if (snapshot.hasError) {
             return ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.all(20),
               children: [
                 Card(
@@ -145,6 +146,7 @@ class _AccountPageState extends State<AccountPage> {
           final provider = data.provider;
 
           return ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(18, 16, 18, 36),
             children: [
               Card(

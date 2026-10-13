@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import '../home/client_refresh_policy.dart';
+
 import 'package:wantok_api/wantok_api.dart';
 import 'package:wantok_ui/wantok_ui.dart';
 
@@ -35,7 +38,18 @@ class _VendorEvidenceInboxPageState extends State<VendorEvidenceInboxPage> {
         .toList();
   }
 
-  void _refresh() => setState(() => _future = _load());
+  Future<void> _refresh() async {
+    final next = _load();
+    setState(() {
+      _future = next;
+    });
+    try {
+      await next;
+    } catch (_) {
+      // The existing error state offers retry and remains owner-private.
+    }
+  }
+
   void _notice(String msg) =>
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
   Future<void> _respond(String id, String action) async {
@@ -134,159 +148,177 @@ class _VendorEvidenceInboxPageState extends State<VendorEvidenceInboxPage> {
     appBar: AppBar(
       title: const Text('My evidence requirements'),
       actions: [
-        IconButton(
-          onPressed: _refresh,
-          tooltip: 'Refresh requests',
-          icon: const Icon(Icons.refresh),
-        ),
+        if (ClientRefreshPolicy.showDesktopButton(context))
+          IconButton(
+            onPressed: _refresh,
+            tooltip: 'Refresh requests',
+            icon: const Icon(Icons.refresh),
+          ),
       ],
     ),
-    body: Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 840),
-        child: FutureBuilder<List<Map<String, dynamic>>>(
-          future: _future,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState != ConnectionState.done) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            if (snapshot.hasError) {
-              return Center(
-                child: TextButton.icon(
-                  onPressed: _refresh,
-                  icon: const Icon(Icons.refresh),
-                  label: const Text('Could not load evidence requests. Retry'),
-                ),
-              );
-            }
-            final rows = snapshot.data ?? [];
-            return ListView(
-              padding: const EdgeInsets.all(16),
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(19),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    color: WantokColors.primaryDark,
-                  ),
-                  child: const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'PRIVATE VENDOR CASE RECORD',
-                        style: TextStyle(
-                          fontSize: 11,
-                          color: WantokColors.gold,
-                          fontWeight: FontWeight.bold,
+    body: RefreshIndicator(
+      onRefresh: _refresh,
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 840),
+          child: FutureBuilder<List<Map<String, dynamic>>>(
+            future: _future,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState != ConnectionState.done) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                return ListView(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  children: [
+                    const SizedBox(height: 110),
+                    Center(
+                      child: TextButton.icon(
+                        onPressed: _refresh,
+                        icon: const Icon(Icons.refresh),
+                        label: const Text(
+                          'Could not load evidence requests. Retry',
                         ),
                       ),
-                      SizedBox(height: 6),
-                      Text(
-                        'Your verification requests',
-                        style: TextStyle(
-                          fontSize: 23,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+                    ),
+                  ],
+                );
+              }
+              final rows = snapshot.data ?? [];
+              return ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.all(16),
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(19),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      color: WantokColors.primaryDark,
+                    ),
+                    child: const Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'PRIVATE VENDOR CASE RECORD',
+                          style: TextStyle(
+                            fontSize: 11,
+                            color: WantokColors.gold,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 12),
-                const Card(
-                  child: ListTile(
-                    leading: Icon(Icons.shield_outlined, color: Colors.orange),
-                    title: Text('No document upload or identity approval yet'),
-                    subtitle: Text(
-                      'This is a requirement register only. '
-                      'The notice shown is a draft, not approved consent. '
-                      'Do not send NID, passports, licences, tax records or '
-                      'bank information by email or chat.',
+                        SizedBox(height: 6),
+                        Text(
+                          'Your verification requests',
+                          style: TextStyle(
+                            fontSize: 23,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
-                if (rows.isEmpty)
+                  const SizedBox(height: 12),
                   const Card(
                     child: ListTile(
-                      title: Text('No evidence requests'),
+                      leading: Icon(
+                        Icons.shield_outlined,
+                        color: Colors.orange,
+                      ),
+                      title: Text(
+                        'No document upload or identity approval yet',
+                      ),
                       subtitle: Text(
-                        'Staff requests will appear here after review.',
+                        'This is a requirement register only. '
+                        'The notice shown is a draft, not approved consent. '
+                        'Do not send NID, passports, licences, tax records or '
+                        'bank information by email or chat.',
                       ),
                     ),
                   ),
-                for (final req in rows)
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            req['requirement_note']?.toString() ??
-                                'Evidence requirement',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            'Status: ${req['status']} · Case: ${req['case_id']}',
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                          Text(
-                            'Expires: ${req['expires_at']}',
-                            style: const TextStyle(fontSize: 12),
-                          ),
-                          const SizedBox(height: 8),
-                          OutlinedButton.icon(
-                            key: ValueKey('evidence-preflight-${req['id']}'),
-                            onPressed: _busy == null
-                                ? () => _checkReadiness(req['id'].toString())
-                                : null,
-                            icon: const Icon(Icons.lock_outline),
-                            label: const Text('Check secure upload status'),
-                          ),
-                          const SizedBox(height: 8),
-                          if (DateTime.tryParse(
-                                req['expires_at']?.toString() ?? '',
-                              )?.isAfter(DateTime.now()) ??
-                              false)
-                            Wrap(
-                              spacing: 8,
-                              children: [
-                                if (req['status'] == 'requested')
-                                  OutlinedButton(
-                                    onPressed: _busy == null
-                                        ? () => _respond(
-                                            req['id'].toString(),
-                                            'acknowledged',
-                                          )
-                                        : null,
-                                    child: const Text('Acknowledge receipt'),
-                                  ),
-                                if (const {
-                                  'requested',
-                                  'acknowledged',
-                                }.contains(req['status']))
-                                  TextButton(
-                                    onPressed: _busy == null
-                                        ? () => _respond(
-                                            req['id'].toString(),
-                                            'withdrawn',
-                                          )
-                                        : null,
-                                    child: const Text('Withdraw request'),
-                                  ),
-                              ],
-                            ),
-                        ],
+                  if (rows.isEmpty)
+                    const Card(
+                      child: ListTile(
+                        title: Text('No evidence requests'),
+                        subtitle: Text(
+                          'Staff requests will appear here after review.',
+                        ),
                       ),
                     ),
-                  ),
-              ],
-            );
-          },
+                  for (final req in rows)
+                    Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(12),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              req['requirement_note']?.toString() ??
+                                  'Evidence requirement',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            Text(
+                              'Status: ${req['status']} · Case: ${req['case_id']}',
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                            Text(
+                              'Expires: ${req['expires_at']}',
+                              style: const TextStyle(fontSize: 12),
+                            ),
+                            const SizedBox(height: 8),
+                            OutlinedButton.icon(
+                              key: ValueKey('evidence-preflight-${req['id']}'),
+                              onPressed: _busy == null
+                                  ? () => _checkReadiness(req['id'].toString())
+                                  : null,
+                              icon: const Icon(Icons.lock_outline),
+                              label: const Text('Check secure upload status'),
+                            ),
+                            const SizedBox(height: 8),
+                            if (DateTime.tryParse(
+                                  req['expires_at']?.toString() ?? '',
+                                )?.isAfter(DateTime.now()) ??
+                                false)
+                              Wrap(
+                                spacing: 8,
+                                children: [
+                                  if (req['status'] == 'requested')
+                                    OutlinedButton(
+                                      onPressed: _busy == null
+                                          ? () => _respond(
+                                              req['id'].toString(),
+                                              'acknowledged',
+                                            )
+                                          : null,
+                                      child: const Text('Acknowledge receipt'),
+                                    ),
+                                  if (const {
+                                    'requested',
+                                    'acknowledged',
+                                  }.contains(req['status']))
+                                    TextButton(
+                                      onPressed: _busy == null
+                                          ? () => _respond(
+                                              req['id'].toString(),
+                                              'withdrawn',
+                                            )
+                                          : null,
+                                      child: const Text('Withdraw request'),
+                                    ),
+                                ],
+                              ),
+                          ],
+                        ),
+                      ),
+                    ),
+                ],
+              );
+            },
+          ),
         ),
       ),
     ),

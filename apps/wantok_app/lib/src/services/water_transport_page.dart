@@ -93,6 +93,7 @@ class _WaterTransportPageState extends State<WaterTransportPage> {
             final rows = snapshot.data ?? const <Map<String, dynamic>>[];
             if (rows.isEmpty) {
               return ListView(
+                physics: const AlwaysScrollableScrollPhysics(),
                 children: const [
                   SizedBox(height: 110),
                   Icon(
@@ -115,6 +116,7 @@ class _WaterTransportPageState extends State<WaterTransportPage> {
             }
 
             return ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
               children: [
                 const _Hero(),

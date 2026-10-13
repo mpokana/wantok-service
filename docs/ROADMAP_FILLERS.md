@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-13-09 — owner requests standard pull-to-refresh for mobile/tablet
+
+**CX1G Client/Vendor presentation rule:** No normal Refresh buttons on phone/tablet (`<1200` Flutter logical px); use pull-down on each genuinely refreshable, read-only scrollable page, including empty/short lists. Retain Refresh buttons on wide desktop Web (`>=1200`). Apply to Inbox, Track, Saved, Services, Food/Shop browse, Wantok Agent status, Vendor evidence requirements, and existing read-only data-backed Client/Vendor lists. Preserve error-state Retry, keyboard accessibility and route/state integrity; never make payment, write, provider activation or form submission happen on drag. Static reference-only pages have no misleading no-op refresh. Focused 52/52 QA, full Flutter 7 analyses + suites PASS. Actual user mobile pull gesture still pending. E6 and T2.4 unchanged. Detail `docs/CX1G_CLIENT_ADAPTIVE_PULL_REFRESH_POLICY_20261013.md`.
+
+---
+
 ## FILLER-2026-10-13-08 — CX1E mobile Track Refresh no-overlap and same-origin retest
 
 **Client-only P1 bug fix, locally served for acceptance:** At 320px the Track Refresh pill obscured the hero heading despite the previous green contrast fix. Responsive `_TrackRefreshHeader`: below 600px action aligns right **below** hero; desktop Stack unchanged. Focused Flutter 11/11 and full 7 analyses + 216 widgets PASS; backed up prior 96-file :3000 Web build, deployed corrected local-only JS SHA `E937F771...`, original :3300 and shared Supabase unchanged. User's original mobile before/after proved route/count stability (Completed 1) but **visual acceptance still open until fresh screenshot after Chrome hard reload**. Saved/Inbox mobile unexecuted; E6 G1–G10 0/10, T2.4 paused, production false. `docs/CX1E_TRACK_MOBILE_REFRESH_LAYOUT_20261013.md`.
