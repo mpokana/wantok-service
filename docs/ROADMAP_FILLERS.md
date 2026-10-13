@@ -20,7 +20,21 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-13-07 — owner approves fixed 3% commission across qualifying products and services
+
+**OWNER-APPROVED RATE (13 October 2026): 3% flat standard marketplace commission** for every qualifying, verified successfully fulfilled product transaction and service booking facilitated through Wantok Services. This **supersedes** the previously undecided 2–3% planning range recorded in FILLER-2026-10-13-06. The same 3% applies across eligible product and service categories; do not silently introduce category-specific percentages, negotiation discounts or extra customer-side platform commissions. This is a commercial rate decision, **not** permission to enable charging in the running application.
+
+- **Example only:** Eligible product order K100 -> vendor owes K3; eligible completed job K200 -> vendor owes K6. `commission = 0.03 * qualifying_commissionable_transaction_value`, with controlled currency rounding still to be specified.
+- **Collection and trigger unchanged:** Customer normally pays the vendor directly. On eligible accepted orders/bookings, reserve sufficient vendor prepaid commission balance; recognise/collect the 3% only after verified successful fulfilment. Insufficient **available** funds prevent further chargeable new bookings/orders until an independently verified top-up, without cancelling already accepted obligations. Cancellations, returns, disputes and partial fulfilment require commission adjustment/release/refund rules.
+- **Important unresolved scope:** Define precisely whether the base includes or excludes GST, discounts, delivery and shipping, how to allocate mixed-vendor baskets, price changes and staged/milestone services, and how to round small amounts. These decisions affect **commissionable value**, not the fixed **3% rate**. Legal/tax review and vendor agreement remain prerequisites.
+- **Excluded activities:** Free Public Services directory and public-interest information, non-booking community access, merely viewing/listing/enquiring, and cancelled or unfulfilled transactions. Paid sponsored listings, vendor marketing and agreed concierge/referral arrangements are **separately agreed services**, not substitutes for or automatic percentage exceptions to the standard marketplace commission. Wantok social-media/community feed remains deferred.
+- **System and programme boundary:** Documentary owner decision only; no schema, pricing configuration, merchant integration, vendor activation, code change, real debit, deployment or launch. E-series gates, CX1 and T2.4 restrictions remain as documented in the living roadmap and handover.
+
+---
+
 ## FILLER-2026-10-13-06 — one standard commission policy for products AND services
+
+**Historical checkpoint:** This section recorded the rate before final approval. **Its undecided 2–3% range and pending single-rate decision are superseded by FILLER-2026-10-13-07, which fixes the rate at 3%.** Other policy principles remain applicable pending detailed implementation design.
 
 **Owner decision (13 October 2026):** Use **ONE unified commission policy** for all qualifying fulfilled product sales and service transactions facilitated by Wantok Services. This **supersedes** the prior idea of separate rates by service/product category in FILLER-2026-10-13-05. The percentage is **not yet fixed**: 2–3% remains the discussed pricing range; **3% is an illustrative financial-planning assumption only**, not an approved production tariff. Do not silently create category-specific rate tables or commission exceptions.
 
