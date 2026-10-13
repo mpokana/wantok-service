@@ -20,6 +20,21 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-13-06 — one standard commission policy for products AND services
+
+**Owner decision (13 October 2026):** Use **ONE unified commission policy** for all qualifying fulfilled product sales and service transactions facilitated by Wantok Services. This **supersedes** the prior idea of separate rates by service/product category in FILLER-2026-10-13-05. The percentage is **not yet fixed**: 2–3% remains the discussed pricing range; **3% is an illustrative financial-planning assumption only**, not an approved production tariff. Do not silently create category-specific rate tables or commission exceptions.
+
+- **Commission trigger:** A real registered-vendor order/booking, accepted and **verified successfully fulfilled** (goods handed over/delivered, or service performed), with confirmed eligible transaction value. Mere views, posts, listings, enquiries, or unfulfilled/cancelled work do not create commission.
+- **One calculation:** `commission = approved_standard_rate * approved_commissionable_transaction_value`; implement one common policy and ledger calculation for goods and services, while supporting differing evidence of delivery, job completion or product returns. Apply approved discount, GST/tax, delivery/shipping, mixed-basket, partial fulfilment, returns, price changes and refund rules once defined. Avoid duplicate commission if a basket contains multiple vendor fulfilments or a courier separately fulfils a service.
+- **Cash/direct-payment realities:** Customers continue to pay vendors directly through mutually agreed means; Wantok does not collect the customer's invoice value by default. Booking records, vendor/customer completion confirmations, complaint/dispute handling, anti-collusion and reconciliation must be designed before real charging. Confirmation signals are not the same as evidence of cash receipt.
+- **Prepaid account:** Vendors maintain sufficient **available** non-transferable commission credits; reserve estimated amount atomically when an eligible priced booking is accepted, finalise after verification, release on qualifying cancellation, and adjust/refund commission on eligible returns or partial reversals. Insufficient funds disable **new** chargeable orders/bookings until a verified top-up; previously accepted obligations remain manageable.
+- **Explicitly unaffected:** Free Emergency & Safety, Health, Government and Community Public Services stay free. Paid vendor advertising remains a separately priced optional service. The Wantok social/community feed remains DEFERRED. Outside-network sourcing needs an agreed commercial arrangement before fees. No merchant API, voucher network, financial wallet or regulatory approval is implied.
+- **Decision still required before activation:** Approve a **single exact rate**, the eligible transaction base, tax/discount/return and cancellation treatments, thresholds/rounding, statement and unused-credit/refund terms, simultaneous-booking funding and dispute authority, vendor contract, payment reconciliation, and legal/tax review. No live account charging until gated approvals and real pilot evidence.
+
+**Engineering boundary:** Documentation and business policy clarification ONLY. E-series G1–G10 0/10 approved, CX1 live acceptance OPEN, T2.4 PAUSED, E7+/production/provider payments not activated; no app, database, customer records or infrastructure changed. Cross-reference the 13 October owner commercial section in `docs/ROADMAP.md` and `docs/HANDOVER.md`.
+
+---
+
 ## FILLER-2026-10-13-05 — vendor-funded business model; free public directory retained; social feed PARKED
 
 **Owner product decision (13 October 2026) — DOCUMENTATION/BACKLOG ONLY, NOT CODED OR RELEASED.** Wantok Services' primary payer is the vendor, not the browsing customer. This product-policy note does not supersede E-series P0 / CX1 acceptance / T2.4 pause or allow payment, production or account activation.
