@@ -10,6 +10,7 @@ import '../services/commerce_orders_page.dart';
 import '../services/event_registrations_page.dart';
 import '../services/taxi_ride_page.dart';
 import '../services/water_trip_bookings_page.dart';
+import 'adaptive_category_grid.dart';
 import 'messages_page.dart';
 
 class ActivityPage extends StatefulWidget {
@@ -1069,38 +1070,80 @@ class _TrackHeader extends StatelessWidget {
 class _TrackJourneyLinks extends StatelessWidget {
   const _TrackJourneyLinks();
 
+  static const _destinations = <(String, IconData, Widget)>[
+    ('Taxi rides', Icons.local_taxi_outlined, TaxiRidePage()),
+    ('Food & shop orders', Icons.shopping_bag_outlined, CommerceOrdersPage()),
+    ('Event registrations', Icons.event_outlined, EventRegistrationsPage()),
+    ('Water trips', Icons.sailing_outlined, WaterTripBookingsPage()),
+  ];
+
+  void _open(BuildContext context, Widget page) {
+    Navigator.of(context)
+        .push(MaterialPageRoute<void>(builder: (context) => page));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: [
-        for (final (label, icon, page) in <(String, IconData, Widget)>[
-          ('Taxi rides', Icons.local_taxi_outlined, const TaxiRidePage()),
-          (
-            'Food & shop orders',
-            Icons.shopping_bag_outlined,
-            const CommerceOrdersPage(),
+    // Desktop preserves the established compact action row. On phones and
+    // tablets, reuse Home's shared two/three-column pinch-aware density.
+    if (MediaQuery.sizeOf(context).width >= 1200) {
+      return Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          for (final (label, icon, page) in _destinations)
+            OutlinedButton.icon(
+              onPressed: () => _open(context, page),
+              icon: Icon(icon),
+              label: Text(label),
+            ),
+        ],
+      );
+    }
+
+    return AdaptiveCategoryGrid(
+      gridKey: const ValueKey('track-journey-shortcut-grid'),
+      itemCount: _destinations.length,
+      tileHeight: 94,
+      columnSpacing: 9,
+      rowSpacing: 9,
+      itemBuilder: (context, index) {
+        final (label, icon, page) = _destinations[index];
+        return Material(
+          color: const Color(0xFFF5FAF8),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15),
+            side: const BorderSide(color: Color(0xFFC7DDD2)),
           ),
-          (
-            'Event registrations',
-            Icons.event_outlined,
-            const EventRegistrationsPage(),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            key: ValueKey('track-journey-shortcut-$index'),
+            onTap: () => _open(context, page),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(icon, size: 24, color: const Color(0xFF006748)),
+                  const SizedBox(height: 5),
+                  Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF153E31),
+                      height: 1.1,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-          (
-            'Water trips',
-            Icons.sailing_outlined,
-            const WaterTripBookingsPage(),
-          ),
-        ])
-          OutlinedButton.icon(
-            onPressed: () =>
-                Navigator.of(context)
-                    .push(MaterialPageRoute<void>(builder: (context) => page)),
-            icon: Icon(icon),
-            label: Text(label),
-          ),
-      ],
+        );
+      },
     );
   }
 }

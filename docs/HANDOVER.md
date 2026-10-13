@@ -4,6 +4,17 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 13 October — CX1H owner-approved dynamic Track shortcut cards (LATEST CX1)
+
+- **Owner experience directive:** Track 320px screenshots showed unequal-width shortcuts in four stacked lines despite working pull-to-refresh and stable Completed (1). Owner approved equal-sized two-column Track cards and asked for three/two columns when pinching in/out, **matching Home**.
+- **Client source change:** Reused `AdaptiveCategoryGrid` and the existing HomeShell `AdaptiveGridDensityScope` (shared session preference) for four original Track routes, so two-finger **pinch inward -> three smaller cards; spread outward -> two larger cards**, without disrupting one-finger pull-to-refresh. Default 320/390px **two** columns; 540/800/1024px **three**. Retained original compact `OutlinedButton.icon` row at desktop viewport >=1200px. No API/booking/database, provider or Technical/Operations modifications. Report `docs/CX1H_TRACK_DYNAMIC_PINCH_SHORTCUTS_20261013.md`.
+- **Automated proof:** Dedicated 320/390/540/800/1024/1440 layout, actual synthetic two-pointer pinch in/out, destination, target geometry and desktop compatibility checks PASS; original Home pinch and Track refresh checks PASS. Full Flutter **7 clean analyses and all Client/Operations/Technical widget test suites PASS**. User's fresh Chrome Web/handset two-finger demonstration and screenshot still required for independent CX1 acceptance.
+ - **Local 3000 verified:** Focused **14/14**, full Flutter **7 analyses + 248 widget tests PASS**. New 96-file Web JS SHA-256 `F9BEB609B42A581437B19D20C3915CD42F3FCCEB665F79A4420BDBE34FA0F62F` served at :3000 HTML **200**, auth health **200**, PID 2484 at verification. Backed up previous 96-file CX1G binary SHA `40071C243E2F3E88A55F4A7611AA4C95EFC6AE95FE067C9455D932F1D13A6558` to `D:\Wantok_Project_Backups\wantok-client-3000-pre-cx1h-20261013`. Port 3300 and Supabase untouched. Owner must hard reload and test actual pinch/spread.
+- **Wallet overlay:** HomeShell bottom navigation draws equal-width five-item hit targets and no built-in floating assistant; multicolour bubble in Chrome screenshots appears injected externally. Did not weaken navigation or modify Wallet to compensate; provenance requires separate browser extension check.
+- **Program:** Work kept on an independent isolated CX1H branch because main feature checkout still has other-session staged/unstaged commercial drafts and untracked snippets. E6 human gates 0/10, G7 31/31 unexecuted; T2.4 paused; production not approved.
+
+---
+
 ## 13 October — CX1G owner rule: pull to refresh on mobile/tablet, desktop buttons retained (LATEST CX1)
 
 - **Owner direction supersedes mobile Refresh button placements of CX1E/F:** At Flutter widths **below 1200 logical pixels** (phones, tablets), omit regular Refresh buttons and pull down from the top of a scrollable, read-only data page. At desktop widths **1200+**, retain explicit Refresh buttons. Shared policy: `apps/wantok_app/lib/src/home/client_refresh_policy.dart`. Covers Inbox, Track, Saved, Services catalogue, Food/Shop browse, Wantok Agent status and Vendor evidence requirements, while other already swipe-capable Client/Vendor data screens receive `AlwaysScrollableScrollPhysics` for reliable short/empty lists.

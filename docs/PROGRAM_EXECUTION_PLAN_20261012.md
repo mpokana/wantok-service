@@ -24,6 +24,10 @@
 
 **CX1G local evidence:** 96-file Client :3000 Web release served SHA-256 `40071C243E2F3E88A55F4A7611AA4C95EFC6AE95FE067C9455D932F1D13A6558`, HTML/Auth healthy, prior 96-file build backed up and port 3300 unchanged. Actual mobile pull browser witness remains OPEN; production false.
 
+**13 October CX1H owner's dynamic Track grid:** Reuse Home's `AdaptiveCategoryGrid` with shared density; four Track shortcuts in two equal-height columns by default at 320/390px, three at wider phones/tablets or on pinch inward, two on spread outward. At desktop viewport >=1200px retain original button row. Phone's one-finger pull-to-refresh/booking data untouched; no database or other apps. Focused layout+pinch widget tests and full 7 Flutter analyses/test suites PASS. Actual signed-in browser pinch witness still due, Saved Mobile pending. E6 0/10, Technical paused, production false. `docs/CX1H_TRACK_DYNAMIC_PINCH_SHORTCUTS_20261013.md`.
+
+**CX1H delivery checkpoint:** Focused 14/14, full Flutter 7 analyses + Client167/Operations43/Technical38=248 widget tests PASS. Local Client :3000 compiled bundle SHA `F9BEB609B42A581437B19D20C3915CD42F3FCCEB665F79A4420BDBE34FA0F62F` served HTTP 200 with previous build backed up 96/96 and Supabase auth health 200. User Chrome pinch/Wallet overlay check remains outstanding, no production.
+
 ## P0 — E-series Enterprise/Operations (ACTIVE)
 
 **Baseline:** E6A–I security foundations have source/isolated QA evidence: two-person duty grants, independent case/country-category scopes, applicant read denial, investigator/reviewer conflict and recusal, sealed identity evidence/activation paths. E6I tested E6H plus then-three T2.4 migrations in a disposable schema/role stage **145/145**; this is historical test evidence, not permission-owner parity or current complete suite. T2.4E subsequently added a fourth technical migration.

@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-13-10 — adaptive Track shortcut grid with shared pinch density
+
+**CX1H implemented:** Equal-height, icon-and-label Track cards in two columns on 320/390px phones, three columns on wider phone/tablet widths. Pinch inward to show three smaller cards, spread outward to show two, using the *existing Home page's shared* `AdaptiveCategoryGrid` (no competing pinch recogniser, single-finger pull-to-refresh preserved). Desktop Web >=1200px keeps original shortcut pills. Original taxi, food/shop, event, water routes unchanged; no backend/security/payments. Widget tests (two-pointer pinch and responsive layouts) and full Flutter suites PASS; owner browser retest pending. Multicoloured Wallet-obscuring overlay appears external to Flutter nav and is not claimed fixed. `docs/CX1H_TRACK_DYNAMIC_PINCH_SHORTCUTS_20261013.md`.
+
+---
+
 ## FILLER-2026-10-13-09 — owner requests standard pull-to-refresh for mobile/tablet
 
 **CX1G Client/Vendor presentation rule:** No normal Refresh buttons on phone/tablet (`<1200` Flutter logical px); use pull-down on each genuinely refreshable, read-only scrollable page, including empty/short lists. Retain Refresh buttons on wide desktop Web (`>=1200`). Apply to Inbox, Track, Saved, Services, Food/Shop browse, Wantok Agent status, Vendor evidence requirements, and existing read-only data-backed Client/Vendor lists. Preserve error-state Retry, keyboard accessibility and route/state integrity; never make payment, write, provider activation or form submission happen on drag. Static reference-only pages have no misleading no-op refresh. Focused 52/52 QA, full Flutter 7 analyses + suites PASS. Actual user mobile pull gesture still pending. E6 and T2.4 unchanged. Detail `docs/CX1G_CLIENT_ADAPTIVE_PULL_REFRESH_POLICY_20261013.md`.

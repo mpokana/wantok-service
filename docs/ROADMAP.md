@@ -2,6 +2,15 @@
 
 **Updated:** 2026-10-13
 
+## CX1H — dynamic pinch-to-resize Track shortcut grid (13 October)
+
+- [x] Replace narrow Track's vertically stacked variable-width pills with four consistent, equal-height cards in a responsive **two/three-column** grid.
+- [x] Reuse Home's `AdaptiveCategoryGrid` gesture/state: pinch inward to three columns, spread outward to two, shared session density; automatically two columns at 320/390 logical px and three by 540px, while preserving desktop >=1200px compact action row.
+- [x] Preserve four original Track routes, read-only pull-refresh and safe booking state. Flutter focused grid tests + full 7 analyses and Client/Operations/Technical widget regression PASS.
+- [x] Focused **14/14** and full **7 analyses + 248 widgets** PASS. Controlled EAGLT02 :3000 new JS SHA `F9BEB609B42A581437B19D20C3915CD42F3FCCEB665F79A4420BDBE34FA0F62F` verified HTTP 200, old 96/96 files backed up, Supabase Auth healthy, port 3300 untouched.
+- [ ] Owner witness on updated EAGLT02 Chrome 320px; confirm two equal columns, pinch inward/outward and existing pull-to-refresh, then Saved Mobile. Do not infer physical two-finger support from mouse-only Chrome DevTools.
+- Note: the floating multicolour bubble obscuring Wallet appears external/browser-injected, not part of Flutter `HomeShell`; verify the Chrome extension before blaming or modifying app navigation. Source report: `docs/CX1H_TRACK_DYNAMIC_PINCH_SHORTCUTS_20261013.md`.
+
 ## CX1G — mobile/tablet pull-to-refresh across read-only Client/Vendor data views (13 October)
 
 - [x] Owner UX direction: hide normal Refresh buttons **under 1200 logical px**, retain them for desktop widths **1200px and above**. No fake refresh spinners on static pages or swipe-triggered form, payment, booking or approval writes.

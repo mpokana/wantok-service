@@ -5,6 +5,12 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## 13 October — CX1H 2/3-column pinch adaptive Track cards (LATEST)
+
+**OWNER PRODUCT APPROVAL:** Track mobile 320px screenshots showed four unequal-width shortcut buttons stacked vertically; owner requested equal-sized cards and an adjustable two/three-column grid with Home-like two-finger pinch. CX1H implements this by reusing the existing shared `AdaptiveCategoryGrid`. At phone 320/390px defaults to 2 columns, wider mobile/tablet defaults to 3, pinch in/out toggles 3/2; >=1200px desktop preserves established button row. Four routes and read-only pull remain unchanged. Full Flutter suites and focused two-pointer widget tests PASS; **actual user Chrome pinch and mobile appearance not yet witnessed**. Saved Mobile still pending. The multicolour assistant bubble may be a browser extension; no ungrounded app-level Wallet fix claimed. `docs/CX1H_TRACK_DYNAMIC_PINCH_SHORTCUTS_20261013.md`.
+
+**Local CX1H build delivery:** Corrected :3000 Web JS SHA-256 `F9BEB609B42A581437B19D20C3915CD42F3FCCEB665F79A4420BDBE34FA0F62F` verified HTTP 200, original build fully backed up, authenticated browser gesture **still not witnessed**. Track grid is 2/3 columns and original pull-to-refresh unchanged.
+
 ## 13 October — CX1G owner-directed mobile/tablet pull-to-refresh UX (LATEST)
 
 **INTERACTION CHANGED, LIVE WITNESS REQUIRED:** Owner no longer wants a mobile/tablet Refresh button. Under **1200 logical px**, Inbox/Track/Saved and the other read-only Client/Vendor catalogues use pull-to-refresh; desktop at **1200+** retains manual controls. Agent capability metadata and owner-private Vendor evidence requirements now use safe pull refresh; short and empty data pages are always scrollable. No transactional endpoints triggered by gesture. **52/52** focused widget tests and seven clean full Flutter analyses plus Client/Operations/Technical suites PASS. Report `docs/CX1G_CLIENT_ADAPTIVE_PULL_REFRESH_POLICY_20261013.md`.
