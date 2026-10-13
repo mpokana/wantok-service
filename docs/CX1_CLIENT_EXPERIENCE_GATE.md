@@ -5,7 +5,15 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
-## 13 October — CX1D same-origin :3000 local build corrected (LATEST; LIVE WITNESS PENDING)
+## 13 October — CX1E owner-observed 320px Track overlap corrected and served (LATEST)
+
+**User visual bug confirmed:** Track Mobile Refresh remained tappable and Completed (1) persisted after click, but **button overlapped “Track your Wantok”** within 320px green hero. Mark original Mobile Track layout **FAIL, retest required**. Desktop Saved/Inbox/Track before/after user screenshots had passed (**3 of 6 visually**). Mobile Saved/Inbox remain pending.
+
+**Source/QA:** LayoutBuilder at width under 600px puts solid green Refresh **below** the header, right-aligned. Wide viewport keeps prior desktop Stack. Targeted contrast+geometry+reload tests **11/11 PASS**, full Flutter **7 analyses**, **135 Client + 43 Operations + 38 Technical = 216 widgets PASS**. Report `docs/CX1E_TRACK_MOBILE_REFRESH_LAYOUT_20261013.md`.
+
+**LOCAL :3000 REFRESH BUILD SERVED, HUMAN RETEST OPEN:** 96-file new JS SHA `E937F771AF21E9A60109C02D129B93383496D99ED809263CBEE979B0DB94D63B`, backend loopback auth health HTTP 200, served Client HTML/JS verified HTTP 200. Prior build SHA `C7EA377A...` backed up 96/96; original staging :3300 untouched, no database or production. Owner must Chrome Ctrl+Shift+R and supply **fresh Mobile Track before/after screenshots**, then Saved and Inbox Mobile. CX1 still NOT FORMALLY ACCEPTED; E6 0/10, T2.4 paused.
+
+## 13 October — CX1D same-origin :3000 local build corrected (PRIOR; LIVE WITNESS PENDING)
 
 Owner saw the original :3000 Web Client still had invisible Track `Refresh`. Local backend URL embedded in prior config was unreachable, while `127.0.0.1:54321` Auth is healthy. Original 96-file :3000 static build backed up and the corrected, privately reconfigured local Flutter build swapped in after briefly stopping/restarting **only** the loopback Python static server. New :3000 `main.dart.js` served SHA-256 `C7EA377A8B5B540D18311B20F3D44B8645728DB3F1B314614DA5519A1D4B47B0`; Auth health/CORS checks HTTP 200, :3300 untouched. **Browser acceptance NOT YET REWITNESSED**: request owner hard reload at :3000 and Track Desktop before/after screenshot, then three mobile cases. This is not production deployment; no database, bookings, users or Technical changes. See `docs/HANDOVER.md` latest.
 

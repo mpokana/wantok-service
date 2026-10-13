@@ -46,6 +46,8 @@
 
 **13 October CX1A transition note:** E6Z source-only security preparation is complete, but P0 E6 **security acceptance remains EXTERNALLY BLOCKED**, not passed. In accordance with the P0 escalation rule, **non-mutating CX1 P1 readiness work has begun** while the formal CX1 signed-in browser/device gate remains OPEN. EAGLT02 local :3000/:3100/:3200/:3300/:3400 and expected emulator were unavailable during CX1A; no services, users, Technical code or database were changed. `docs/CX1A_READONLY_ACCEPTANCE_PREFLIGHT_20261013.md`. E6 G1–G10 **0/10** and G7 **31/31 unexecuted**, T2.4 PAUSED, E7+/production sealed.
 
+**13 October CX1E mobile Track regression:** Owner's Chrome 320×811 Track Refresh screenshot pair showed Completed (1) stable but button overlapped header title; UX still FAIL. Client responsive layout moves action below green hero on mobiles and retains desktop styling; isolated source Flutter tests 11 focused + 216 full widgets and 7 analyses PASS. EAGLT02 original :3000 build 96/96 backed up then safely replaced by verified 96-file new Web with unchanged loopback auth; no SQL, payments or production. Await owner's Chrome hard reload and **actual corrected Track Mobile screenshot pair**, then Saved/Inbox Mobile. E6 G1–G10 0/10 and G7 31/31 unexecuted, T2.4 paused, production blocked.
+
 ## P1 — CX1 Client Experience (NON-MUTATING PREPARATION ACTIVE; formal acceptance OPEN)
 
 Current official navigation: **Home · Services · Explore · Track · Wallet**, Inbox in top header beside Profile; Provider registration under Profile. Preserve Wantok branding, approved images and backend-driven service categories. CX1 source regression has already passed but **CX1 gate remains OPEN**.

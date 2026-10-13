@@ -2,6 +2,14 @@
 
 **Updated:** 2026-10-13
 
+## CX1E — fix 320px Track Refresh overlap and retest same-origin :3000 (13 October)
+
+- [x] Signed-in user mobile emulator at 320×811 showed the Track Refresh green pill overlapping the green hero title; before/after Completed 1 stable but mobile UX **not accepted**. Desktop Saved/Inbox/Track screenshot pairs previously user-visual PASS (3/6); mobile Saved and Inbox pending.
+- [x] Move action below Track hero and align right **only for widths under 600px**; retain desktop placement and existing reload semantics. New geometry checks at 320/390, original contrast and 1440 tests PASS (**focused 11/11**).
+- [x] Full Flutter QA **7 analyses clean; Client135/Operations43/Technical38 = 216/216 widget tests PASS**. Source report `docs/CX1E_TRACK_MOBILE_REFRESH_LAYOUT_20261013.md`.
+- [x] Built corrected loopback-auth Web artifact; backed up old 96/96 files and controlled-restarted **only** EAGLT02 loopback :3000 Client static server. New served JS SHA `E937F771AF21E9A60109C02D129B93383496D99ED809263CBEE979B0DB94D63B`; HTTP 200 and backend auth health 200. Port 3300 not modified.
+- [ ] Actual user-witnessed corrected **Track Mobile before/after** screenshots and Saved/Inbox Mobile cases remain; no formal CX1 acceptance, E6 G1–G10 0/10, T2.4 paused, production sealed.
+
 ## Owner commercial direction — vendor-funded marketplace; community/social DEFERRED (13 October 2026)
 
 **Decision status: OWNER PRODUCT DIRECTION RECORDED; DESIGN/BACKLOG ONLY. No new runtime capability, payment integration, acceptance or release is claimed.**

@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-13-08 — CX1E mobile Track Refresh no-overlap and same-origin retest
+
+**Client-only P1 bug fix, locally served for acceptance:** At 320px the Track Refresh pill obscured the hero heading despite the previous green contrast fix. Responsive `_TrackRefreshHeader`: below 600px action aligns right **below** hero; desktop Stack unchanged. Focused Flutter 11/11 and full 7 analyses + 216 widgets PASS; backed up prior 96-file :3000 Web build, deployed corrected local-only JS SHA `E937F771...`, original :3300 and shared Supabase unchanged. User's original mobile before/after proved route/count stability (Completed 1) but **visual acceptance still open until fresh screenshot after Chrome hard reload**. Saved/Inbox mobile unexecuted; E6 G1–G10 0/10, T2.4 paused, production false. `docs/CX1E_TRACK_MOBILE_REFRESH_LAYOUT_20261013.md`.
+
+---
+
 ## FILLER-2026-10-13-07 — owner approves fixed 3% commission across qualifying products and services
 
 **OWNER-APPROVED RATE (13 October 2026): 3% flat standard marketplace commission** for every qualifying, verified successfully fulfilled product transaction and service booking facilitated through Wantok Services. This **supersedes** the previously undecided 2–3% planning range recorded in FILLER-2026-10-13-06. The same 3% applies across eligible product and service categories; do not silently introduce category-specific percentages, negotiation discounts or extra customer-side platform commissions. This is a commercial rate decision, **not** permission to enable charging in the running application.
