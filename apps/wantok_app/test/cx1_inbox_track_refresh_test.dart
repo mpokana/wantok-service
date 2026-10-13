@@ -56,6 +56,40 @@ void main() {
         tester.getSize(targetCx1InboxRefresh).height,
         greaterThanOrEqualTo(44),
       );
+      final hero = find.byKey(const ValueKey('cx1-inbox-hero'));
+      expect(hero, findsOneWidget);
+      final button = tester.widget<TextButton>(targetCx1InboxRefresh);
+      final foreground = button.style!.foregroundColor!.resolve(
+        <WidgetState>{},
+      );
+      final background = button.style!.backgroundColor!.resolve(
+        <WidgetState>{},
+      );
+      expect(foreground, Colors.white);
+      if (width < 600) {
+        expect(background, const Color(0xFF096B4B));
+        expect(
+          tester.getTopLeft(targetCx1InboxRefresh).dy,
+          greaterThanOrEqualTo(tester.getBottomLeft(hero).dy),
+          reason: 'At phone widths, Inbox Refresh must be below the hero.',
+        );
+        expect(
+          tester.getTopRight(targetCx1InboxRefresh).dx,
+          lessThanOrEqualTo(width),
+          reason: 'Inbox Refresh must remain inside the phone viewport.',
+        );
+        expect(
+          1.05 / (background!.computeLuminance() + 0.05),
+          greaterThanOrEqualTo(4.5),
+          reason: 'White Refresh label requires readable mobile contrast.',
+        );
+      } else {
+        // Keep the existing desktop right-aligned over-header action.
+        expect(
+          tester.getTopLeft(targetCx1InboxRefresh).dy,
+          lessThan(tester.getBottomLeft(hero).dy),
+        );
+      }
       await tester.tapAt(tester.getCenter(targetCx1InboxRefresh));
       await tester.pumpAndSettle();
       expect(threadReads, 2);

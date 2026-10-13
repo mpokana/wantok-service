@@ -228,29 +228,50 @@ class _MessagesPageState extends State<MessagesPage> {
             physics: const AlwaysScrollableScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(14, 10, 14, 28),
             children: [
-              Stack(
-                children: [
-                  const _InboxHeader(),
-                  Positioned(
-                    top: 14,
-                    right: 14,
-                    child: Tooltip(
-                      message: 'Refresh Inbox',
-                      child: TextButton.icon(
-                        key: const ValueKey('cx1-inbox-refresh'),
-                        onPressed: _reloading ? null : _reload,
-                        icon: const Icon(Icons.refresh_rounded, size: 18),
-                        label: const Text('Refresh'),
-                        style: TextButton.styleFrom(
-                          foregroundColor: Colors.white,
-                          backgroundColor: Colors.white.withValues(alpha: .12),
-                          minimumSize: const Size(96, 48),
-                          padding: const EdgeInsets.symmetric(horizontal: 9),
-                        ),
+              LayoutBuilder(
+                builder: (context, constraints) {
+                  final narrow = constraints.maxWidth < 600;
+                  final header = const KeyedSubtree(
+                    key: ValueKey('cx1-inbox-hero'),
+                    child: _InboxHeader(),
+                  );
+                  final refresh = Tooltip(
+                    message: 'Refresh Inbox',
+                    child: TextButton.icon(
+                      key: const ValueKey('cx1-inbox-refresh'),
+                      onPressed: _reloading ? null : _reload,
+                      icon: const Icon(Icons.refresh_rounded, size: 18),
+                      label: const Text('Refresh'),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: narrow
+                            ? const Color(0xFF096B4B)
+                            : Colors.white.withValues(alpha: .12),
+                        minimumSize: const Size(96, 48),
+                        padding: const EdgeInsets.symmetric(horizontal: 9),
                       ),
                     ),
-                  ),
-                ],
+                  );
+
+                  // At phone widths, an overlaid button covers the header
+                  // eyebrow. Keep the action below the hero instead.
+                  if (narrow) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        header,
+                        Align(alignment: Alignment.centerRight, child: refresh),
+                      ],
+                    );
+                  }
+
+                  return Stack(
+                    children: [
+                      header,
+                      Positioned(top: 14, right: 14, child: refresh),
+                    ],
+                  );
+                },
               ),
               if (WantokSmokeData.enabled)
                 const SmokePreviewSection(
