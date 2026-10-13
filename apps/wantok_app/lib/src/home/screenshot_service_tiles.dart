@@ -175,24 +175,14 @@ class ScreenshotServicesCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Expanded(
-              flex: 7,
+              // Large accessibility text needs more vertical caption space.
+              flex: MediaQuery.textScalerOf(context).scale(1) > 1.25 ? 8 : 6,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(6, 7, 5, 5),
+                padding: const EdgeInsets.fromLTRB(9, 7, 7, 5),
                 child: Row(
                   children: [
-                    SizedBox(
-                      width: 46,
-                      height: 48,
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(11),
-                        child: ScreenshotServiceArt.visual(
-                          context,
-                          art,
-                          icon: true,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 7),
+                    // The large photograph below is the single category image.
+                    // Keep this caption text-only so it is not repeated.
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -222,6 +212,7 @@ class ScreenshotServicesCard extends StatelessWidget {
                         ],
                       ),
                     ),
+                    const SizedBox(width: 3),
                     const Icon(
                       Icons.chevron_right_rounded,
                       color: WantokColors.ink,
@@ -232,7 +223,7 @@ class ScreenshotServicesCard extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 5,
+              flex: MediaQuery.textScalerOf(context).scale(1) > 1.25 ? 4 : 6,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(5, 0, 5, 5),
                 child: ClipRRect(

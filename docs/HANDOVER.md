@@ -4,6 +4,17 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 13 October — CX1I single-photo Services category cards (LATEST CX1)
+
+- **Owner screenshot:** At signed-in Chrome Responsive **320×811** on `127.0.0.1:3000`, Services tab showed a duplicated category photograph: small **46×48** thumbnail beside the top caption and same category photo again below. Owner requested plain **title/description text at top and just one larger photograph beneath**, preserving navigation.
+- **Client-only fix:** Removed `ScreenshotServiceArt.visual(... icon:true)` from the header of `ScreenshotServicesCard` in `apps/wantok_app/lib/src/home/screenshot_service_tiles.dart`; retained a single `cardImage` photo, title/subtitle and disclosure chevron. Balanced normal header/photo 6:6; at >125% text scale, 8:4 ensures 150% accessibility avoids overflow. All eight photographed Services card types affected consistently, 320px landing still two columns. Home card graphics, backend, routes, Account, Track, pull-to-refresh untouched.
+- **QA:** New `apps/wantok_app/test/cx1i_services_single_photo_test.dart` covers eight photo-card types, 320/390/700px, 150% font 320/390px, actual landing and unchanged Home photo. Focused **24/24 PASS** including 150% font accessibility; full Flutter **seven clean analyses and Client174/Operations43/Technical38 = 255/255 widget tests PASS**. Initial full regression exposed an enlarged-text overflow, repaired with flex and new tests before final rerun. Report `docs/CX1I_SERVICES_SINGLE_PHOTO_CAPTIONS_20261013.md`.
+- **Environment and gates:** Source in isolated CX1I worktree derived from `3ea3549`; other session's main checkout business-plan/commission staged+unstaged edits and untracked `supabase/snippets/` preserved. Local :3000 visual retest remains due after verified build; production not approved, E6 0/10, G7 31 not executed, T2.4 PAUSED.
+
+---
+
+**Local CX1I Web delivery PASS:** EAGLT02 released 96-file Client Web, HTML HTTP 200, served `main.dart.js` SHA-256 `00105FA7B7002D48C7E2E2F729A47E49C123A1DD1D50C6EED184817543814BC2`, local Supabase Auth health HTTP 200, Python loopback :3000 PID **32132** at verification. Old working 96-file CX1H build SHA `F9BEB609B42A581437B19D20C3915CD42F3FCCEB665F79A4420BDBE34FA0F62F` fully backed up to `D:\Wantok_Project_Backups\wantok-client-3000-pre-cx1i-20261013` (96/96 verified, rollback retained); :3300 untouched. No DB write, Technical/Operations deployment or production approval. Chrome owner hard reload/new signed-in photo visual witness still OPEN.
+
 ## 13 October — CX1H owner-approved dynamic Track shortcut cards (LATEST CX1)
 
 - **Owner experience directive:** Track 320px screenshots showed unequal-width shortcuts in four stacked lines despite working pull-to-refresh and stable Completed (1). Owner approved equal-sized two-column Track cards and asked for three/two columns when pinching in/out, **matching Home**.

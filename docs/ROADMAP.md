@@ -2,6 +2,18 @@
 
 **Updated:** 2026-10-13
 
+## CX1I — remove repeated Services category thumbnails (13 October)
+
+- [x] User screenshot at 320px identified two same-category pictures per Services card. Implement text-only **title+subtitle** in upper caption, keep **one** full-width category photograph below. Do not remove icons from other screens or modify underlying category data.
+- [x] Preserve two-column phone catalogue, service routing, mobile pull-to-refresh and CX1H Track pinch. Increased accessibility caption flex at >125% text scale to prevent 150% overflow.
+- [x] Focused **24/24** widget checks across 320/390/700px, all eight photo-backed categories, 150% fonts, routing and Home unchanged; full Flutter **7 analyses clean, 255/255 widgets PASS**.
+- [ ] Rebuild/verify EAGLT02 :3000 Web, owner hard-refresh screenshot, formal CX1 witness and separate security gates remain open.
+- Documentation: `docs/CX1I_SERVICES_SINGLE_PHOTO_CAPTIONS_20261013.md`.
+
+---
+
+**Local CX1I Web delivery PASS:** EAGLT02 released 96-file Client Web, HTML HTTP 200, served `main.dart.js` SHA-256 `00105FA7B7002D48C7E2E2F729A47E49C123A1DD1D50C6EED184817543814BC2`, local Supabase Auth health HTTP 200, Python loopback :3000 PID **32132** at verification. Old working 96-file CX1H build SHA `F9BEB609B42A581437B19D20C3915CD42F3FCCEB665F79A4420BDBE34FA0F62F` fully backed up to `D:\Wantok_Project_Backups\wantok-client-3000-pre-cx1i-20261013` (96/96 verified, rollback retained); :3300 untouched. No DB write, Technical/Operations deployment or production approval. Chrome owner hard reload/new signed-in photo visual witness still OPEN.
+
 ## CX1H — dynamic pinch-to-resize Track shortcut grid (13 October)
 
 - [x] Replace narrow Track's vertically stacked variable-width pills with four consistent, equal-height cards in a responsive **two/three-column** grid.

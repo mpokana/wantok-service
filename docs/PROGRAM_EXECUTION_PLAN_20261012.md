@@ -28,6 +28,12 @@
 
 **CX1H delivery checkpoint:** Focused 14/14, full Flutter 7 analyses + Client167/Operations43/Technical38=248 widget tests PASS. Local Client :3000 compiled bundle SHA `F9BEB609B42A581437B19D20C3915CD42F3FCCEB665F79A4420BDBE34FA0F62F` served HTTP 200 with previous build backed up 96/96 and Supabase auth health 200. User Chrome pinch/Wallet overlay check remains outstanding, no production.
 
+**13 October CX1I Client Services visual correction:** User's 320px screenshot showed duplicate top and bottom category photographs. `ScreenshotServicesCard` now has text-only caption and one photograph, with responsive caption area for 150% fonts. Eight category variants and no source role/auth/payment changes. Focused 24/24 tests and full 7 clean Flutter analyses + 255/255 widget tests PASS. Worktree/GitHub/backup kept separate from concurrent main checkout's business documents and snippets. Owner retest and CX1 gates still open. `docs/CX1I_SERVICES_SINGLE_PHOTO_CAPTIONS_20261013.md`.
+
+---
+
+**Local CX1I Web delivery PASS:** EAGLT02 released 96-file Client Web, HTML HTTP 200, served `main.dart.js` SHA-256 `00105FA7B7002D48C7E2E2F729A47E49C123A1DD1D50C6EED184817543814BC2`, local Supabase Auth health HTTP 200, Python loopback :3000 PID **32132** at verification. Old working 96-file CX1H build SHA `F9BEB609B42A581437B19D20C3915CD42F3FCCEB665F79A4420BDBE34FA0F62F` fully backed up to `D:\Wantok_Project_Backups\wantok-client-3000-pre-cx1i-20261013` (96/96 verified, rollback retained); :3300 untouched. No DB write, Technical/Operations deployment or production approval. Chrome owner hard reload/new signed-in photo visual witness still OPEN.
+
 ## P0 — E-series Enterprise/Operations (ACTIVE)
 
 **Baseline:** E6A–I security foundations have source/isolated QA evidence: two-person duty grants, independent case/country-category scopes, applicant read denial, investigator/reviewer conflict and recusal, sealed identity evidence/activation paths. E6I tested E6H plus then-three T2.4 migrations in a disposable schema/role stage **145/145**; this is historical test evidence, not permission-owner parity or current complete suite. T2.4E subsequently added a fourth technical migration.

@@ -5,6 +5,14 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## 13 October — CX1I owner-directed Services photo deduplication (LATEST)
+
+At Chrome Responsive **320×811**, real Services screenshot showed every photo-backed card had one duplicate small image by the caption and the same category photograph below. Owner requested a *text-only caption plus one larger photograph*. CX1I implements the single-`cardImage` composition for eight image-backed Services cards and increased caption share at >125% text scale to prevent 150% accessibility overflow. Focused **24/24** widget checks and full **seven clean analyses / 255 widgets** PASS, with unchanged navigation and backend. Human reinspection on updated `127.0.0.1:3000` remains outstanding; automated widget assertions are not owner UI signoff. See `docs/CX1I_SERVICES_SINGLE_PHOTO_CAPTIONS_20261013.md`.
+
+---
+
+**Local CX1I Web delivery PASS:** EAGLT02 released 96-file Client Web, HTML HTTP 200, served `main.dart.js` SHA-256 `00105FA7B7002D48C7E2E2F729A47E49C123A1DD1D50C6EED184817543814BC2`, local Supabase Auth health HTTP 200, Python loopback :3000 PID **32132** at verification. Old working 96-file CX1H build SHA `F9BEB609B42A581437B19D20C3915CD42F3FCCEB665F79A4420BDBE34FA0F62F` fully backed up to `D:\Wantok_Project_Backups\wantok-client-3000-pre-cx1i-20261013` (96/96 verified, rollback retained); :3300 untouched. No DB write, Technical/Operations deployment or production approval. Chrome owner hard reload/new signed-in photo visual witness still OPEN.
+
 ## 13 October — CX1H 2/3-column pinch adaptive Track cards (LATEST)
 
 **OWNER PRODUCT APPROVAL:** Track mobile 320px screenshots showed four unequal-width shortcut buttons stacked vertically; owner requested equal-sized cards and an adjustable two/three-column grid with Home-like two-finger pinch. CX1H implements this by reusing the existing shared `AdaptiveCategoryGrid`. At phone 320/390px defaults to 2 columns, wider mobile/tablet defaults to 3, pinch in/out toggles 3/2; >=1200px desktop preserves established button row. Four routes and read-only pull remain unchanged. Full Flutter suites and focused two-pointer widget tests PASS; **actual user Chrome pinch and mobile appearance not yet witnessed**. Saved Mobile still pending. The multicolour assistant bubble may be a browser extension; no ungrounded app-level Wallet fix claimed. `docs/CX1H_TRACK_DYNAMIC_PINCH_SHORTCUTS_20261013.md`.

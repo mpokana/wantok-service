@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-13-11 — Services cards: no duplicate top thumbnail
+
+**Owner request, CX1I implemented:** Mobile Services screenshot 320×811 showed miniature duplicate of each category photo next to its caption and another same photo below. Remove the **small duplicate picture** only from `ScreenshotServicesCard`; show **plain title + short description text** with chevron in upper caption, and **one larger canonical category picture** below. Keep all original category mappings, provider availability gates and tap routes. Maintain 2-column phone layout, existing Home category visuals and Track pinch controls. At enlarged 150% font, allocate greater caption space to avoid overflow. Focused 24/24 Flutter widget checks and full 7 clean analyses + 255/255 Flutter widgets PASS. Main checkout parallel business-plan/commission edits and user snippets untouched. GitHub backup and local Git bundle/source archive to be verified; browser acceptance pending. `docs/CX1I_SERVICES_SINGLE_PHOTO_CAPTIONS_20261013.md`.
+
+---
+
 ## FILLER-2026-10-13-10 — adaptive Track shortcut grid with shared pinch density
 
 **CX1H implemented:** Equal-height, icon-and-label Track cards in two columns on 320/390px phones, three columns on wider phone/tablet widths. Pinch inward to show three smaller cards, spread outward to show two, using the *existing Home page's shared* `AdaptiveCategoryGrid` (no competing pinch recogniser, single-finger pull-to-refresh preserved). Desktop Web >=1200px keeps original shortcut pills. Original taxi, food/shop, event, water routes unchanged; no backend/security/payments. Widget tests (two-pointer pinch and responsive layouts) and full Flutter suites PASS; owner browser retest pending. Multicoloured Wallet-obscuring overlay appears external to Flutter nav and is not claimed fixed. `docs/CX1H_TRACK_DYNAMIC_PINCH_SHORTCUTS_20261013.md`.
