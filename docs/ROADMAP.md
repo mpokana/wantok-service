@@ -2,6 +2,12 @@
 
 **Updated:** 2026-10-14
 
+## CX1K — verify tailnet private HTTP surface and application route classes (14 October)
+
+- [x] Source-only read of current HTTPS Serve `--json` confirms **5** explicitly scoped routes over private 443/8443: Client static UI roots, Auth, published branding read and CX1J filtered service category read. **No new HTTP routes, DB changes, T2.4, Funnel or wide REST proxy introduced. Historic owner HONOR direct Supabase `100.127.124.75:54321` was reachable; local Windows inbound firewall enforcement and external denial are **not proven**.**
+- [x] Added executable `cx1k-tailnet-api-boundary.mjs` and **19/19 fail-closed synthetic tests** (extra TCP, Funnel, broad REST, owner-private bookings, message writes, auditable function writer, schema/source drift). Classified **11 gated private/unreviewed** client operations. Full API source report `docs/CX1K_TAILNET_MOBILE_API_ACCESS_AND_SECURITY_GATE_20261014.md`.
+- [ ] HONOR retest new CX1J Home active-categories route and banner-free header; Track/Inbox/Saved real actor-based requests require separate E6 real GoTrue/PostgREST/RLS/G7/G8 security witnesses. CX1 PARTIAL, G7 31/31 pending, G1–G10 0/10, D1–D5 open; T2.4 paused, production false.
+
 ## CX1J — HONOR tailnet-safe public category list and module API map (14 October)
 
 - [x] Owner-confirmed real HONOR HTTPS Tailnet sign-in and navigation; Home/Track/Inbox private data errors remain distinct from authentication success. Saved/Inbox/Track 320px Refresh *centre-click* acceptance and all G7/E6 gates remain open.

@@ -4,7 +4,16 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 14 October — CX1J HONOR Tailnet private-web public catalogue (LATEST CX1; HUMAN RETEST OPEN)
+## 14 October — CX1K audited mobile private REST boundary (LATEST CX1; HUMAN RETEST OPEN)
+
+- **Preserves CX1J:** The scoped anon-only `service_categories` gateway on :3304, public-branding gateway on :3303, main :443 and test :8443 routes remain unchanged. CX1J separately confirmed 20 active categories, 13/13 gateway source tests and 15/15 live allow/deny; owner HONOR UI category/banner retest remains open.
+- **CX1K read-only test guard:** Added `scripts/qa/cx1k-tailnet-api-boundary.mjs` with **19/19** synthetic tests, confirming exactly five loopback-backed HTTPS Serve handlers across ports 443/8443 and source markers for three allowed public/Auth operations versus 11 account-private/unreviewed operations. It rejects raw unexpected TCP, Funnel, broad REST, privileged audit writer, private bookings/messages, changed public adapters and unexpected source callsites. Local `--local` route/source preflight PASS; detached unchanged source `scripts/flutter/check.ps1` exited 0 with **7 analyses + 216/216 widgets** (Client 135 / Operations 43 / Technical 38). No account data, SQL, new permission or gateway write. **Warning:** historical owner HONOR direct `100.127.124.75:54321` health test succeeded; Serve-only allowlisting is not a host firewall and a separately approved inbound-port negative witness remains required.
+- **User evidence:** HONOR Tailscale mobile Web sign-in, Home/Services/Explore/Track/Inbox layout works, but prior screenshots show Home live-category, Track activity and Inbox conversations unavailable. Do not treat errors as empty data; user must retest after CX1J public category fix. No APK rebuild or human private-data witness. See `docs/CX1K_TAILNET_MOBILE_API_ACCESS_AND_SECURITY_GATE_20261014.md`.
+- **Boundaries unchanged:** E6O-01 internal writers OPEN; D1–D5 pending; G7 31/31 unexecuted, G1–G10 0/10; E externally blocked, CX1 human data gate OPEN, T2.4 PAUSED, production false. Owner's unrelated staged commercial documents and untracked snippets preserved.
+
+---
+
+## 14 October — CX1J HONOR Tailnet private-web public catalogue (PRIOR CX1; HUMAN RETEST OPEN)
 
 - **Owner evidence:** HONOR mobile data + Tailscale connected; screenshots show signed-in Wantok Services Client Home, Services, Explore, Track, Inbox and mobile navigation at `https://eaglt02.tailfb0609.ts.net:8443/`. Private Track/Inbox remain erroring from gateway restrictions; Home reported `Could not load services from the backend`. This is **owner-confirmed remote sign-in and navigation only**, not full live CX1 acceptance.
 - **Gateway-only safe change on EAGLT02:** Existing HTTPS main :443 serves auth + exact public branding RPC; new independently checked `GET /rest/v1/service_categories` route via loopback **127.0.0.1:3304** uses only *anonymous* Supabase publishable credentials, requires active filter/exact 12 public columns, denies other queries/methods/routes. Read-only local catalogue RLS and anon SELECT confirmed; HTTPS 200 **20 active categories**, OPTIONS 204; anonymous/private booking and conversation endpoints still denied. Unit **13/13**, live permission allow/deny **15/15 PASS**. `scripts/dev/cx1_public_category_gateway.py` and `scripts/qa/cx1_public_category_gateway_{unit,integration}_test.py` are source-only reproducible companions of current ignored local adapter.

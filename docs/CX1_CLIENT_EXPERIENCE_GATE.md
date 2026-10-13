@@ -5,7 +5,11 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
-## 13 October — CX1E owner-observed 320px Track overlap corrected and served (LATEST)
+## 14 October — CX1K safe tailnet routing contract; mobile private data NOT accepted
+
+The owner's six mobile Web screenshots from the private HTTPS 8443 preview show signed-in Home/Services/Explore/Track/Inbox UI, not successful account-private requests. After CX1J independently deployed/tested a filtered 20-category public route and removed the banner in isolated HTML, CX1K adds source+Serve metadata checking **19/19 synthetic fail-closed PASS**. Five exact Serve handlers are allowed, while 11 private/unreviewed booking, ride, commerce, event, conversation, saved, account and provider-discovery operations remain outside the routing contract. **No new Serve exposure**; earlier direct Supabase Tailscale-IP port exposure still needs a separately authorised host-firewall review. Detached unchanged app Flutter **7 clean analyses + 216/216 widget tests PASS**. Full report `docs/CX1K_TAILNET_MOBILE_API_ACCESS_AND_SECURITY_GATE_20261014.md`. Real HONOR retest of Home popular categories/banner-free header, Mobile Track and Inbox data, and Saved/Refresh witness STILL REQUIRED. G7 31/31 unexecuted, G1–G10 0/10, T2.4 paused, production false.
+
+## 13 October — CX1E owner-observed 320px Track overlap corrected and served (PRIOR)
 
 **User visual bug confirmed:** Track Mobile Refresh remained tappable and Completed (1) persisted after click, but **button overlapped “Track your Wantok”** within 320px green hero. Mark original Mobile Track layout **FAIL, retest required**. Desktop Saved/Inbox/Track before/after user screenshots had passed (**3 of 6 visually**). Mobile Saved/Inbox remain pending.
 

@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-14-02 — CX1K strict private route-surface guard
+
+**P1 additive safety audit after CX1J:** Preserve validated anonymous active-only category adapter and public branding gateway, actual owner HONOR HTTPS sign-in and visual navigation. CX1K confirms exactly five current tailnet-only HTTPS Serve handler paths and 11 separately source-marked account-private or unreviewed Client data operations; **19/19 tests PASS** including denial for extra raw TCP/Funnel, `/rest/v1` broad proxy, internal writer, user-private booking and conversation RPC exposure. Source and live Serve metadata audit only, no account/session/private records, migrations or gateway changes. Banner already removed from isolated :8443 by CX1J; do not overwrite concurrent preview. Owner still must retest Home active categories and successful data flow, while Track/Inbox/Saved RLS/GoTrue witnesses await separate security sign-off. `docs/CX1K_TAILNET_MOBILE_API_ACCESS_AND_SECURITY_GATE_20261014.md`. E6 G7 31/31 pending, G1–G10 0/10, T2.4 paused, production false.
+
+---
+
 ## FILLER-2026-10-14-01 — CX1J HONOR Tailnet public catalogue and blocked private APIs
 
 **Client P1 private-preview implementation:** HONOR user-signed-in browser confirms Home/Services/Explore/Track/Inbox shell on `:8443`; backend categories, bookings and conversations initially failed through intentionally narrow gateway. Classified actual source calls: public `get_published_wantok_branding` and active `service_categories` **safe limited reading**; roles, reservations, messages, support and private Saved **no broad gateway** without real identity/RLS/security approvals; unreviewed public provider discovery RPCs E6K **still blocked**. Loopback `:3304` strict anonymous active-only catalogue gateway with HTTPS path exact route, **13/13 source unit + 15/15 live denial checks PASS**, HTTPS GET200 20 rows and OPTIONS204; no user data/write/migration. Visual debug banner removed *only from isolated :8443* after owner proof; JS unchanged. Human HONOR refresh/retest pending. `docs/CX1J_HONOR_TAILNET_PUBLIC_CATALOGUE_AND_SECURITY_GATE_20261014.md`. E6 human gates, D1–D5, T2.4/production unchanged.
