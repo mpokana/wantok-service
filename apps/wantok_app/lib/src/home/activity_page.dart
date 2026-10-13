@@ -994,7 +994,7 @@ class _TrackRefreshHeader extends StatelessWidget {
             label: const Text('Refresh'),
             style: TextButton.styleFrom(
               foregroundColor: Colors.white,
-              backgroundColor: Colors.white.withValues(alpha: .12),
+              backgroundColor: const Color(0xFF096B4B),
               minimumSize: const Size(96, 48),
               padding: const EdgeInsets.symmetric(horizontal: 9),
             ),
