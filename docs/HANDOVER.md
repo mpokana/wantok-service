@@ -12,7 +12,16 @@
 
 ---
 
-## 13 October — CX1D: user-witnessed Track Refresh low-contrast defect and isolated Client fix (LATEST P1)
+## 13 October — CX1D local Client :3000 activation after user request (LATEST P1; ACCEPTANCE OPEN)
+
+- **User reported original :3000 still showed invisible Track Refresh. RESOLVED AT LOCAL STATIC-BUILD LEVEL:** Verified the original `:3000` server PID `35016` was serving old JS SHA-256 `2207D8BBCCC5BE261B7C7A77498F4E801829E0D7B13378F56B61A06F3E3B2E66`. Built corrected CX1D Flutter Web in isolated source worktree with same publishable local config except `SUPABASE_URL` changed from unreachable `10.186.22.64:54321` to verified healthy local `127.0.0.1:54321`. Original private config not changed.
+- **Controlled switch/backout:** Saved the complete 96-file original build at `D:\Wantok_Project_Backups\wantok-client-3000-pre-cx1d-20261013`, verified exact original bundle hash. First directory rename refused by Windows lock; no change occurred. Temporarily stopped **only** proven loopback static server PID `35016`, swapped directories with rollback retained under `apps/wantok_app/build/web-cx1d-old-active-20261013`, and restarted new loopback-only Python static server PID **19096** on `:3000`.
+- **New served-build verification PASS:** HTTP HTML 200, served `:3000/main.dart.js` SHA-256 `C7EA377A8B5B540D18311B20F3D44B8645728DB3F1B314614DA5519A1D4B47B0` equals on-disk new bundle, **Supabase Auth health HTTP 200 and password-token OPTIONS CORS HTTP 200, allow-origin `*`**; service on port `:3300` unchanged old bundle. No Supabase rows/config/schema/security ACL changes, no production deployment or exported credentials.
+- **IMPORTANT CX1 STATUS:** Owner must hard-reload Chrome tab at `http://127.0.0.1:3000/` (`Ctrl+Shift+R`), sign in again if required, then send Track Desktop before/after Refresh screenshots. The machine verifies asset delivery **only**; no live Track centre-click, browser authentication or human G8/CX1 approval has yet been witnessed. Saved and Inbox Desktop owner visuals previously passed (2/6); Track and all three mobile cases remain open. E6 human gates 0/10; T2.4 PAUSED; production false.
+
+---
+
+## 13 October — CX1D: user-witnessed Track Refresh low-contrast defect and isolated Client fix (PRIOR P1)
 
 - **Live signed-in owner screenshots:** Saved Desktop pre/post Refresh stayed on Saved with one QA provider. Inbox Desktop pre/post Refresh stayed on Inbox (service threads 0, Help/support 1). These are user-witnessed visual checks, not cryptographically authenticated machine evidence or formal CX1 sign-off. Track Desktop before screenshot showed nearly invisible white `Refresh` against light grey to the right of the small green hero. **Track Desktop NOT PASSED; mobile three cases NOT EXECUTED**. Previous Saved-to-Vendor-Onboarding cause still not independently resolved.
 - **Root cause / fix:** `apps/wantok_app/lib/src/home/activity_page.dart` `_TrackRefreshHeader` had white foreground with 12%-alpha white background positioned outside the compact green hero. Replaced button background with opaque `Color(0xFF096B4B)`, preserving white text, tooltip, key, callback and 48px tap target; no database, booking, Technical or Operations source changes. New `cx1_track_refresh_visibility_test.dart` tests 320/390/1440 contrast at least 4.5:1, centre-tap reload and touch size. Focused **11/11 PASS**, full detached **7 analyses; Client 135/135, Operations 43/43, Technical 38/38 widget tests PASS**.

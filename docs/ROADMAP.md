@@ -17,6 +17,13 @@
 
 **Programme sequencing unchanged:** P0 E-series security/Operations remains externally gated, CX1 real browser/mobile acceptance remains OPEN, T2.4 PAUSED, G1–G10 0/10 approved, production/E7+/provider payment activation blocked. No code, schema, entitlement, API, social UI, staging or deployment work is authorised by this documentation entry. Detailed clarification: `docs/ROADMAP_FILLERS.md` FILLER-2026-10-13-05.
 
+## CX1D local :3000 deployment for acceptance, with rollback (13 October)
+
+- [x] User identified port `:3000` still served the old invisible Track Refresh. Verified old JS SHA `2207D8BB...`, local Supabase auth at `127.0.0.1:54321` healthy, old configured `10.186.22.64:54321` unreachable.
+- [x] Backed up **96/96** currently served files with old hash at `D:\Wantok_Project_Backups\wantok-client-3000-pre-cx1d-20261013`. Rebuilt CX1D source with isolated private config changing only Supabase URL to local loopback. Existing Git config and credentials not modified/committed.
+- [x] Controlled local-only static server transition: locked directory refused initial swap without corruption; second attempt stopped only verified Client PID 35016, staged directory swap with old version retained, restarted port 3000 as PID 19096. HTTP HTML **200**, new JS SHA `C7EA377A8B5B540D18311B20F3D44B8645728DB3F1B314614DA5519A1D4B47B0` verified, Auth health and CORS OPTIONS **200**. Port 3300 unchanged.
+- [ ] Owner Chrome hard reload **required**. Capture actual corrected Track Desktop before/after Refresh and three 320px mobile cases; **do not count static delivery, CORS or compilation as authenticated browser acceptance**. CX1 2/6 visual checks to date, formal human acceptance OPEN, E6 security 0/10 approved, T2.4 PAUSED, production blocked.
+
 ## CX1D — Track Refresh visibility fix after owner browser walkthrough (13 October)
 
 - [x] Owner's signed-in screenshot pairs visually confirm Saved Desktop stable at one QA provider and Inbox Desktop stable at 0 service/1 help after Refresh; **two of six user-witnessed visual checks**, not full machine-certified acceptance.

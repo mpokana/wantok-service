@@ -5,7 +5,11 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
-## 13 October — CX1D Track Refresh visibility defect from live owner walkthrough (LATEST)
+## 13 October — CX1D same-origin :3000 local build corrected (LATEST; LIVE WITNESS PENDING)
+
+Owner saw the original :3000 Web Client still had invisible Track `Refresh`. Local backend URL embedded in prior config was unreachable, while `127.0.0.1:54321` Auth is healthy. Original 96-file :3000 static build backed up and the corrected, privately reconfigured local Flutter build swapped in after briefly stopping/restarting **only** the loopback Python static server. New :3000 `main.dart.js` served SHA-256 `C7EA377A8B5B540D18311B20F3D44B8645728DB3F1B314614DA5519A1D4B47B0`; Auth health/CORS checks HTTP 200, :3300 untouched. **Browser acceptance NOT YET REWITNESSED**: request owner hard reload at :3000 and Track Desktop before/after screenshot, then three mobile cases. This is not production deployment; no database, bookings, users or Technical changes. See `docs/HANDOVER.md` latest.
+
+## 13 October — CX1D Track Refresh visibility defect from live owner walkthrough (PRIOR)
 
 **USER SCREENSHOTS, 2/6 VISUALLY WITNESSED:** Saved Desktop before/after retained one QA provider and route, Inbox Desktop retained 0 service/1 help and route; no unexpected vendor navigation in those *two* visual checks. Track Desktop showed white `Refresh` effectively invisible over pale-grey background to right of green hero. User did not perform safe Track centre-click/after capture. **Track Desktop BLOCKED/NOT PASSED**; three mobile cases unexecuted.
 
