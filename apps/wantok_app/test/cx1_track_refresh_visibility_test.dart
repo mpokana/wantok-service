@@ -36,6 +36,22 @@ void main() {
       expect(contrastRatio, greaterThanOrEqualTo(4.5));
       expect(tester.getSize(findRefresh).height, greaterThanOrEqualTo(44));
 
+      final hero = find.byKey(const ValueKey('track-enterprise-header'));
+      expect(hero, findsOneWidget);
+      if (width < 600) {
+        // The mobile refresh action must never cover the green hero title.
+        expect(
+          tester.getTopLeft(findRefresh).dy,
+          greaterThanOrEqualTo(tester.getBottomLeft(hero).dy),
+          reason: 'Refresh must appear below the Track header on phones.',
+        );
+        expect(
+          tester.getTopRight(findRefresh).dx,
+          lessThanOrEqualTo(width),
+          reason: 'Refresh must stay inside the phone viewport.',
+        );
+      }
+
       expect(reloads, 1);
       await tester.tapAt(tester.getCenter(findRefresh));
       await tester.pumpAndSettle();

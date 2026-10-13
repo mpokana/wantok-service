@@ -979,30 +979,50 @@ class _TrackRefreshHeader extends StatelessWidget {
   final bool enabled;
 
   @override
-  Widget build(BuildContext context) => Stack(
-    children: [
-      const _TrackHeader(),
-      Positioned(
-        top: 14,
-        right: 14,
-        child: Tooltip(
-          message: 'Refresh activity',
-          child: TextButton.icon(
-            key: const ValueKey('cx1-track-refresh'),
-            onPressed: enabled ? onRefresh : null,
-            icon: const Icon(Icons.refresh_rounded, size: 18),
-            label: const Text('Refresh'),
-            style: TextButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: const Color(0xFF096B4B),
-              minimumSize: const Size(96, 48),
-              padding: const EdgeInsets.symmetric(horizontal: 9),
-            ),
-          ),
+  Widget build(BuildContext context) {
+    final refreshButton = Tooltip(
+      message: 'Refresh activity',
+      child: TextButton.icon(
+        key: const ValueKey('cx1-track-refresh'),
+        onPressed: enabled ? onRefresh : null,
+        icon: const Icon(Icons.refresh_rounded, size: 18),
+        label: const Text('Refresh'),
+        style: TextButton.styleFrom(
+          foregroundColor: Colors.white,
+          backgroundColor: const Color(0xFF096B4B),
+          minimumSize: const Size(96, 48),
+          padding: const EdgeInsets.symmetric(horizontal: 9),
         ),
       ),
-    ],
-  );
+    );
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        // On phones the hero fills the entire available width. Overlaying
+        // Refresh on it obscures the heading; keep the action in its own row.
+        if (constraints.maxWidth < 600) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const _TrackHeader(),
+              Align(
+                alignment: Alignment.centerRight,
+                child: refreshButton,
+              ),
+            ],
+          );
+        }
+
+        // Wide layouts retain the existing right-aligned desktop action.
+        return Stack(
+          children: [
+            const _TrackHeader(),
+            Positioned(top: 14, right: 14, child: refreshButton),
+          ],
+        );
+      },
+    );
+  }
 }
 
 class _TrackHeader extends StatelessWidget {
