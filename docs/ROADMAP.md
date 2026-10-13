@@ -1,6 +1,14 @@
 # Wantok Services — Living Roadmap
 
-**Updated:** 2026-10-12
+**Updated:** 2026-10-13
+
+## CX1C — six-case browser witness contract in independent parallel worktree (13 October)
+
+- [x] Worked independently of CX1B's two Client static servers and release-checker changes: detached QA at `D:\Wantok_CX1C_Parallel_Witness_QA_20261013`, four new disjoint source/doc files, integrated after verified CX1B `1f364f9` without overwriting main work.
+- [x] Added tracked `docs/CX1C_BROWSER_REFRESH_WITNESS_MATRIX_20261013.json`: six real signed-in Saved/Inbox/Track mobile 320px and desktop 1440px cases, all **NOT EXECUTED**. Known Saved-to-Vendor-Onboarding browser anomaly **UNRESOLVED**.
+- [x] Added source-only `scripts/qa/cx1-browser-witness-preflight.mjs` and synthetic tests **13/13 PASS**, requiring actual authorised window/session, labelled centre-click, before/after route and count, no unexpected vendor redirect, private evidence hash and independent reviewer identity before human review. Any fake approval/invalid evidence blocks; machine cannot sign off. Baseline CLI returns exit 2 **NOT READY**.
+- [x] Full untouched app Flutter source in detached worktree: seven clean analyses and **132 Client / 43 Operations / 38 Technical** widgets PASS (exit 0). No auth Chrome interactions or app/server changes.
+- [ ] Next: independent operator-assisted actual authorised Chrome browser centre-click witness at `:3000` on both viewports and full private evidence recording. **CX1 gate OPEN**, E6 G1–G10 0/10, T2.4 PAUSED, E7+/production blocked.
 
 ## CX1B — restored isolated Client Web and scoped readiness checks (13 October)
 

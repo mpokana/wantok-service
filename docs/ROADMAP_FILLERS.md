@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-13-03 — CX1C independent browser evidence checker
+
+**P1 parallel source QA, not live sign-off:** Dedicated detached CX1C worktree from `91bd630`, with no overlap in CX1B's static web servers or release-guard changes. Six current `NOT_EXECUTED` cases covering Saved/Inbox/Track at 320/1440px. Pure Node evidence validator and **13/13 synthetic tests** require actual signed-in Chrome window, labelled centre-click, route/count stability, explicit Vendor Onboarding check and restricted evidence hash before human review. Even complete structurally valid evidence is **not independently authenticated**. Full Flutter unchanged app source **7 clean analyses + 213 widgets PASS**. CX1B separately restored local :3000/:3300 static parity; neither track independently witnessed browser click. Runbook `docs/CX1C_PARALLEL_BROWSER_WITNESS_PREPARATION_20261013.md`. E6 human 0/10, CX1 OPEN, T2.4 PAUSED, production false.
+
+---
+
 ## FILLER-2026-10-13-02 — CX1B loopback Client main/staging restoration
 
 **P1 local testing only:** Two verified unchanged 11 Oct Client Flutter web releases now serve only `127.0.0.1:3000` main and `127.0.0.1:3300` independent saved candidate; exact labelled-Refresh JS SHA `2207D8BB...` and shared Taxi/Public Services photos match. Scoped `verify-cx1-local.ps1 -ClientOnly` returns `CX1_CLIENT_RELEASE_QA_PASS`; **6/6** synthetic guard tests PASS. The separately running local GoTrue `/auth/v1/health` responds HTTP 200 unauthenticated. This is static/backend readiness, NOT a signed-in user/session or Live Refresh acceptance. Existing vendor-onboarding misnavigation unresolved; no customer DB writes, Web deployment, Chrome-profile changes, Technical/Operations restart, Android/HONOR mutations or vendor approvals. Source report `docs/CX1B_CLIENT_LOCAL_WEB_RESTORATION_AND_ACCEPTANCE_20261013.md`. E6 0/10 signed, G7 31/31 unexecuted, CX1 gate OPEN, T2.4 paused, production false.

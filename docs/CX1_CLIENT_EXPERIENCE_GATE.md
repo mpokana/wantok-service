@@ -5,7 +5,11 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
-## 13 October — CX1B two live *local static* Client endpoints (LATEST)
+## 13 October — CX1C browser-witness evidence contract (LATEST P1 PREPARATION)
+
+**SOURCE/QA PASS, HUMAN BROWSER GATE STILL OPEN:** In a detached CX1C worktree parallel to CX1B, added six explicit Signed-in Chrome Refresh centre-click witness cases (Saved, Inbox, Track x mobile 320px and desktop 1440px). All **6 NOT_EXECUTED**, old Saved-to-Vendor-Onboarding misnavigation remains UNRESOLVED. Validator refuses synthetic widget evidence, missing page route/item counts or private proof, and never assigns approval. **13/13** synthetic Node tests PASS; baseline returns blocked exit 2. Independent untouched Flutter source **7/7 analyses**, Client **132/132**, Operations **43/43**, Technical **38/38** widgets PASS; no app source modification. CX1B's `:3000/:3300` static integrity still separate from real browser acceptance. Report `docs/CX1C_PARALLEL_BROWSER_WITNESS_PREPARATION_20261013.md` and tracked checklist JSON. E6 G1–G10 0/10, T2.4 PAUSED, production false.
+
+## 13 October — CX1B two live *local static* Client endpoints (PRIOR)
 
 **LOCAL STATIC WEB RELEASE-PARITY PASS, NOT SIGNED-IN USER ACCEPTANCE.** Restored archived unchanged labelled-Refresh Flutter Client pages on loopback-only `:3000` and separate `:3300`, two verified 11 October build copies with identical SHA-256 `2207D8BBCCC5BE261B7C7A77498F4E801829E0D7B13378F56B61A06F3E3B2E66` (`main.dart.js` 4,099,079 bytes), three compiled Refresh labels and shared two image bytes match. `verify-cx1-local.ps1 -ClientOnly` **CX1_CLIENT_RELEASE_QA_PASS**; scope excludes unstarted `:3100/:3200/:3400` Technical and Operations servers. Existing Supabase GoTrue **anonymous health GET 200**; no private auth/session data read. No deploy, build, source widgets, real data or Technical modules changed.
 

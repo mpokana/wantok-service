@@ -1,10 +1,19 @@
 # Wantok Services — Living Handover
 
-**Updated:** 2026-10-12
+**Updated:** 2026-10-13
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 13 October — CX1B: local-only Client web restoration and scoped parity validation (LATEST P1 PREPARATION)
+## 13 October — CX1C: parallel signed-in browser witness contract (LATEST P1 PREPARATION)
+
+- **Independent parallel implementation safely integrated:** CX1B committed `1f364f93c56edd0a8d4a787f59b5bb9d67e971b3` restoring loopback-only `:3000/:3300` Client static readiness. Separate CX1C detached worktree `D:\Wantok_CX1C_Parallel_Witness_QA_20261013` committed `6b8467f` with only four new owned paths; cherry-picked atop verified CX1B as `0dba0c7`. **No files, servers or releases owned by CX1B were overwritten.**
+- **CX1 browser evidence guard:** `docs/CX1C_BROWSER_REFRESH_WITNESS_MATRIX_20261013.json` tracks six real signed-in Saved, Inbox and Track Refresh centre-click cases at 320/1440px, currently **0 observed / 6 NOT_EXECUTED**; historical Saved → Vendor Onboarding route anomaly still UNRESOLVED. `scripts/qa/cx1-browser-witness-preflight.mjs` refuses widget/mock/static HTTP evidence as live Chrome evidence and rejects inconsistent route/count, fake sign-offs and missing private evidence; **13/13 synthetic tests PASS**. Baseline `--review` intentionally exits 2 (NOT READY); even structurally complete evidence is only **READY FOR INDEPENDENT HUMAN REVIEW**, never automatic approval.
+- **Parallel QA:** Independent exact earlier `91bd630` Flutter source in CX1C worktree **7 clean analyses; Client 132 / Operations 43 / Technical 38 widgets PASS** (exit 0); unchanged app source. CX1B Client main/staging `:3000/:3300` already parity PASS, not signed-in browser acceptance. **E6 G1–G10 0/10**, G7 31/31 NOT EXECUTED, CX1 live/Android/HONOR/photo gates OPEN, T2.4 PAUSED, E7+/production blocked.
+- **Runbook:** `docs/CX1C_PARALLEL_BROWSER_WITNESS_PREPARATION_20261013.md`; sensitive future screenshots/session evidence must be restricted under ignored `.wantok/`, not GitHub.
+
+---
+
+## 13 October — CX1B: local-only Client web restoration and scoped parity validation (PRIOR P1 PREPARATION)
 
 - **Environment restored without deployment:** From exact prior `91bd63074cb5ea43fc69944836d8d026a4a50306`, EAGLT02 Client main `http://127.0.0.1:3000` (original unchanged Flutter `apps/wantok_app/build/web`) and separate Client staging `http://127.0.0.1:3300` (11 Oct saved labelled-refresh candidate) are served by isolated `python -m http.server` bound **only to loopback**. SHA-256 for each JavaScript `2207D8BBCCC5BE261B7C7A77498F4E801829E0D7B13378F56B61A06F3E3B2E66`, **4,099,079 bytes**; visible compiled Saved/Inbox/Track Refresh captions and Taxi/Public Services image parity. No Flutter app/build modification, account action, Supabase write, Technical/Operations service start or production deployment. Existing `:3100/:3200/:3400` still outside test.
 - **QA enhancement:** `scripts/qa/verify-cx1-local.ps1 -ClientOnly` examines only `:3000/:3300`, labels any success `CX1_CLIENT_RELEASE_QA_PASS` (not full-stack), and checks exact Client JS/photo parity. Real local **PASS**. `scripts/qa/cx1-release-guard-offline.test.mjs` extended to **6/6** mocked/no-network tests including missing staged JS and photo byte drift, all PASS. EAGLT02 local Supabase anonymous auth health endpoint `/auth/v1/health` **HTTP 200**, not proof of logged-in access.
