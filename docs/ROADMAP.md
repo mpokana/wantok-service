@@ -2,6 +2,15 @@
 
 **Updated:** 2026-10-12
 
+## CX1A — read-only client acceptance preflight + release-guard reliability (13 October)
+
+- [x] Resumed after E6Z at `5bb7c74` with programme sequencing intact. 11 October real signed-in Client Services → Specialist Services → Morobe → Lae QA provider/detail and limited Saved/Inbox/Wallet observations remain **historical**, not freshly reproduced; known wrong-route Saved-to-Vendor-Onboarding click cause is NOT established.
+- [x] Found all five local Web shells `3000/3100/3200/3300/3400` unreachable from EAGLT02 and expected Android emulator absent. No service restarts, user session/Cookie reads, app deployments or data writes. New signed-in Web refresh and Android/HONOR acceptance **BLOCKED**.
+- [x] Fixed false-positive asset hash/parity `PASS` on failed HTTP requests in `scripts/qa/verify-cx1-local.ps1`; missing adb metadata now explicit FAIL. New **3/3** synthetic offline PowerShell-mocked tests PASS (all available, all missing, only Client main.js missing). Corrected actual read-only preflight now returns `CX1_RELEASE_QA_FAIL count=17` with no false JS/parity success lines.
+- [x] Added `docs/CX1A_READONLY_ACCEPTANCE_PREFLIGHT_20261013.md` distinguishing historic signed-in evidence, fresh source/host results, and pending real-browser/real-device witness.
+- [x] Full source-only cross-stream regressions: guard **3/3** mocked synthetic, clean detached Flutter **7 analyses/132 Client/43 Operations/38 Technical** widgets PASS; disposable SQL **301/301** across 16 suites, rolled back/removed; synthetic HTTP **23/23**, E6 independence **106/106**, evidence **101/101**, privacy source/local PASS. Persistent shared `db:test` not claimed green.
+- [ ] When existing authorised Client app/session is **actually available**, witness three labelled centre-click Refresh controls on desktop/mobile, unchanged route/count and no Vendor Onboarding; verify main/staging hashes, Android/HONOR and six licensed inactive-category photographs with separate authorised editorial steps. **CX1 not signed off**, E6 externally blocked, T2.4 paused, production sealed.
+
 ## E6Z — security decision register and reversible-stage review gates (12 October)
 
 - [x] Added machine-readable `docs/E6Z_REMEDIATION_DECISION_REGISTER_20261012.json` with **6** separately classified findings and **8** unsigned/blocked prerequisites: E6O-01 existing internal writer ACLs, future table TRUNCATE, future function and sequence default grants, API candidate vs live RPC route, E6S privacy D1–D5.

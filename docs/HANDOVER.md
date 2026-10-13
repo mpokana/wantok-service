@@ -4,7 +4,17 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 12 October — E6Z: independent remediation decisions and staging-readiness pack (LATEST P0)
+## 13 October — CX1A: read-only Client acceptance preflight and reliable release gate (LATEST P1 PREPARATION)
+
+- **Resumed from verified E6Z** local/GitHub `5bb7c7482ba56d08dc817ecc9c45347a8d410858`. All E6 safe audit preparation remains complete **as source evidence only**; E6 G1–G10 **0/10 formally approved**, G7 **31/31 unexecuted**, writer ACL exposure still OPEN, proposed migrations unapplied. T2.4 remains PAUSED; production/E7+ blocked.
+- **Actual CX1 preflight BLOCKED:** local EAGLT02 Web ports `:3000, :3100, :3200, :3300, :3400` did not respond; expected `emulator-5554` also absent. Actual signed-in Saved/Inbox/Track Refresh centre-click, wrong-route reproduction, cache visibility, Android/HONOR and six inactive category photo/editor acceptances **NOT newly witnessed**. Historical 11 October real QA provider browse, Saved/Wallet/Inbox and offline-demo device evidence is retained but **not reclassified** as a fresh successful run.
+- **CX1 release guard reliability fixed** in `scripts/qa/verify-cx1-local.ps1`: missing HTTP asset no longer returns a diagnostic string as fake hash result; no spurious JS/parity PASS on failures; missing ADB returns a recorded FAIL instead of an uncaught PowerShell exception. `scripts/qa/cx1-release-guard-offline.test.mjs` tests three **fully mocked/no-network** conditions (all present; all missing; missing Client JS) and passes **3/3**. Fresh corrected offline live preflight **CX1_RELEASE_QA_FAIL count=17** (environment unavailable), as expected. No server, Flutter app, account, SQL, emulator or deployment changes.
+- **Full regression after QA fix:** source-only mocked guard **3/3** PASS; fresh unchanged Flutter detached SHA `5bb7c74` **7 analyses, Client 132 / Operations 43 / Technical 38 widgets PASS**, exit 0; network-disabled SQL **301/301** across 16 suites with fixture ROLLBACK/container cleanup, synthetic HTTP **23/23**, E6 independence **106/106**, evidence **101/101**, E6S privacy validators PASS. No shared `db:test` PASS claimed while pending migrations remain unapplied.
+- **Report / next:** `docs/CX1A_READONLY_ACCEPTANCE_PREFLIGHT_20261013.md`. CX1 non-mutating P1 *preparation* is ACTIVE while signed-in browser/device **acceptance remains OPEN**; E6 security P0 is still externally blocked, T2.4 PAUSED.
+
+---
+
+## 12 October — E6Z: independent remediation decisions and staging-readiness pack (PRIOR P0)
 
 - **Source-only E6Z register and validator:** `docs/E6Z_REMEDIATION_DECISION_REGISTER_20261012.json` records **6** risks (existing audit/notification grants, future function/table/sequence defaults, RPC route candidates and D1–D5 privacy) and **8** independent stage prerequisites. All BLOCKED/REVIEW; no signature, stage authorisation or production approval. `scripts/qa/e6z-decision-pack-check.mjs` verifies the open-gate invariants and exactly two unapplied E6O writer REVOKE statements in source; **12/12 synthetic tests PASS**, including fabricated-approval and modified-source denial. Does not touch persistent shared DB or execute migrations.
 - **G8 decision sequence:** Independent owner/DBA/Security + Operations review of E6O-01 existing grants **P0**, future-table default TRUNCATE grants **P0** (RLS does not govern TRUNCATE), future function/sequence default privileges, real GoTrue/PostgREST actor/route matrix, and privacy D1–D5. Per-schema default privileges cannot undo global defaults: owner and inherited/default grant semantics require formal review. Source `docs/E6Z_SECURITY_REMEDIATION_DECISION_AND_STAGE_READINESS_20261012.md`.

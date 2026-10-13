@@ -5,6 +5,16 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## 13 October — CX1A preflight blocker and release-checker reliability (LATEST)
+
+**P1 NON-MUTATING PREPARATION ACTIVE, CX1 ACCEPTANCE OPEN:** EAGLT02 resumption at verified E6Z `5bb7c74`. Read-only `verify-cx1-local.ps1 -CheckAndroid` found Client :3000, Technical :3100, Operations :3200 and Client/Technical staging :3300/:3400 unavailable, with emulator `emulator-5554` disconnected. Repeat after guard repair (without Android) exits **`CX1_RELEASE_QA_FAIL count=17`** and produces **no false JS or parity PASS**. This is a host availability gate, not a new proof of application defect or production outage.
+
+**BUGFIX LIMITED TO QA SCRIPT:** `Asset()` failure diagnostic previously contaminated function return value, causing a non-null string to mimic a hash result and spurious release-parity passes. Error diagnostics are now output out-of-band and `$null` returned; missing ADB handled as a recorded failure. Fully synthetic/no-network **3/3** tests pass, including positive-all-mocked and missing-all/missing-Client-JS negative cases. No application source, data, accounts, Chrome session, ports, emulators, releases, category editorial state or Technical code was changed.
+
+**FULL ENGINEERING QA (not browser acceptance):** Fresh detached unchanged Flutter E6Z source at `5bb7c74` exited 0 with **7 clean analyses, Client 132 / Operations 43 / Technical 38 widget tests PASS**. Isolated cross-stream SQL **301/301**, rolled back and container removed, shared DB unchanged; synthetic HTTP **23/23**, independence **106/106**, evidence **101/101**, E6S privacy PASS. Corrected release guard synthetic tests **3/3 PASS**; actual local HTTP acceptance BLOCKED.
+
+**REAL CX1 GATES OPEN:** previously recorded 11 Oct signed-in provider browse, Saved, Wallet, Inbox observations are historic rather than newly verified. The live Saved/Inbox/Track labelled Refresh centre-click and earlier unexpected Saved-to-Vendor-Onboarding route cause remain **OPEN**. Signed-in Android/HONOR, six inactive-category images and authorisations remain separate open items. `docs/CX1A_READONLY_ACCEPTANCE_PREFLIGHT_20261013.md`. E6 G1–G10 remain 0/10 approved, T2.4 PAUSED, production blocked.
+
 ## 11 October — Technical category photo upload-on-save staging (SOURCE/QA PASS)
 
 **SOURCE BEHAVIOUR:** The category editor now retains a selected photo locally until **Save category**; Cancel has zero storage/database side effects. Existing authorised upload and server-guarded category write paths are used after Save. JPEG/PNG/WebP basic signatures and 3 MiB size limits are checked before staging. A failure *after* upload may still leave an unused object; no atomic rollback/garbage collector is claimed.

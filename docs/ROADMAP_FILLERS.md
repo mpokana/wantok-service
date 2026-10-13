@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-13-01 — CX1A live preflight gating and false-positive asset-parity repair
+
+**P1 non-mutating QA:** After E6Z source-only security preparations exhausted, CX1A resumes Client acceptance readiness without claiming E6 acceptance. Local Web :3000/:3100/:3200/:3300/:3400 and expected emulator offline/unavailable; new browser and Android signed-in acceptance BLOCKED. Correct `verify-cx1-local.ps1` failed-asset pipeline behaviour that previously allowed spurious `PASS JS bytes= sha256=` and false parity; catch missing ADB gracefully. Add three mocked no-network positive/negative tests and report correct 17-request FAIL. Retain 11 Oct genuine signed-in QA browse/Saved evidence only as historical, with Saved-to-Vendor-Onboarding misnavigation still of unknown cause. See `docs/CX1A_READONLY_ACCEPTANCE_PREFLIGHT_20261013.md`. E6 G1–G10 0/10; CX1 gate OPEN; T2.4 PAUSED; production false.
+
+---
+
 ## FILLER-2026-10-12-21 — E6Z blocked remediation decision pack
 
 **P0 safe evidence preparation:** Source-only JSON risk register, six distinct findings and eight independent stage requirements, with runnable fail-closed validator and **12/12 synthetic anti-signoff tests**. Separate existing audit/notification writer EXECUTE fix from *prospective* future function/table/sequence default-privilege changes. Explicitly flag future-table TRUNCATE as outside RLS; avoid any bulk ACL change without supported actual creator-role/global-vs-per-schema assessment. Organise G7-23/29/30/31, G8 role/REST/notification and privacy D1–D5 witnesses, backup and restore prerequisites. No shared DB/Technical changes or real GoTrue identities. `docs/E6Z_SECURITY_REMEDIATION_DECISION_AND_STAGE_READINESS_20261012.md` and `docs/E6Z_REMEDIATION_DECISION_REGISTER_20261012.json`. G7 31/31 blocked, G1–G10 0/10; E active, CX1 queued, T2.4 paused, production false.

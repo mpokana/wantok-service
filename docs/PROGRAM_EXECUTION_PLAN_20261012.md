@@ -36,7 +36,9 @@
 
 **E-series is NOT complete**, even if P0 engineering tasks pass. E7+ identity intake, approval, KYC, payments, activation, production VM or shared DB migration remain sealed. **Escalation rule:** after P0 safe tasks have been exhausted, create a compact externally-blocked acceptance register and *only proceed to non-mutating CX1 work* without implying E6 passed. Any E-series high-risk implementation stays blocked until owner authorises the specific dependency.
 
-## P1 — CX1 Client Experience (QUEUED; starts after P0 safe engineering checkpoint)
+**13 October CX1A transition note:** E6Z source-only security preparation is complete, but P0 E6 **security acceptance remains EXTERNALLY BLOCKED**, not passed. In accordance with the P0 escalation rule, **non-mutating CX1 P1 readiness work has begun** while the formal CX1 signed-in browser/device gate remains OPEN. EAGLT02 local :3000/:3100/:3200/:3300/:3400 and expected emulator were unavailable during CX1A; no services, users, Technical code or database were changed. `docs/CX1A_READONLY_ACCEPTANCE_PREFLIGHT_20261013.md`. E6 G1–G10 **0/10** and G7 **31/31 unexecuted**, T2.4 PAUSED, E7+/production sealed.
+
+## P1 — CX1 Client Experience (NON-MUTATING PREPARATION ACTIVE; formal acceptance OPEN)
 
 Current official navigation: **Home · Services · Explore · Track · Wallet**, Inbox in top header beside Profile; Provider registration under Profile. Preserve Wantok branding, approved images and backend-driven service categories. CX1 source regression has already passed but **CX1 gate remains OPEN**.
 
@@ -63,7 +65,7 @@ After explicit unpause:
 | Scope | Single-chat accountable coordinator | Source owner while active | State |
 | --- | --- | --- | --- |
 | E-series Operations/security | Current conversation | Current conversation | **ACTIVE P0** |
-| CX1 Client experience | Current conversation | Current conversation | **QUEUED P1** |
+| CX1 Client experience | Current conversation | Current conversation | **P1 NON-MUTATING PREPARATION ACTIVE; LIVE ACCEPTANCE OPEN** |
 | T2.4 Technical Control | Current conversation | No active code writer until unpaused | **PAUSED P2** |
 | Shared `docs/HANDOVER.md`, `docs/ROADMAP.md`, `docs/ROADMAP_FILLERS.md`, `AGENTS.md`, `package.json`, common DB | Current conversation, serial only | One explicit writer/checkpoint | **SERIALISED** |
 

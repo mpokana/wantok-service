@@ -44,7 +44,9 @@ function Asset([int]$port, [string]$relative) {
     finally { $hashing.Dispose() }
     return [pscustomobject]@{ Hash=$digest; Bytes=$bytes.Length; Response=$response }
   } catch {
-    Record 'FAIL' ("$port /$relative : $($_.Exception.Message)")
+    # Record writes a human-readable string; do not accidentally return it as
+    # an asset object (which would create false hash/parity PASS messages).
+    Record 'FAIL' ("$port /$relative : $($_.Exception.Message)") | Out-Host
     return $null
   }
 }
@@ -105,16 +107,22 @@ if ($CheckAndroid) {
   $adb = Join-Path $env:LOCALAPPDATA 'Android\Sdk\platform-tools\adb.exe'
   if (!(Test-Path -LiteralPath $adb)) { Record 'FAIL' 'ADB executable not found; no installation attempted' }
   else {
-    $package = & $adb -s $EmulatorSerial shell dumpsys package io.wantok.service 2>&1
-    if ($LASTEXITCODE -ne 0) { Record 'FAIL' "ADB metadata read failed: $EmulatorSerial" }
-    else {
-      $match = [regex]::Match(($package -join "`n"), 'versionCode=(\d+)')
-      if (!$match.Success) { Record 'FAIL' "Unable to parse Android app version: $EmulatorSerial" }
-      elseif ([int]$match.Groups[1].Value -lt $MinAndroidBuild) {
-        Record 'FAIL' ("Android app too old: $($match.Groups[1].Value) < $MinAndroidBuild")
-      } else {
-        Record 'PASS' ("Android existing package versionCode=$($match.Groups[1].Value) on $EmulatorSerial")
+    try {
+      # ADB can emit a native-command stderr exception if the emulator is
+      # missing. That is a legitimate BLOCK, not a crash or a positive PASS.
+      $package = & $adb -s $EmulatorSerial shell dumpsys package io.wantok.service 2>&1
+      if ($LASTEXITCODE -ne 0) { Record 'FAIL' "ADB metadata read failed: $EmulatorSerial" }
+      else {
+        $match = [regex]::Match(($package -join "`n"), 'versionCode=(\d+)')
+        if (!$match.Success) { Record 'FAIL' "Unable to parse Android app version: $EmulatorSerial" }
+        elseif ([int]$match.Groups[1].Value -lt $MinAndroidBuild) {
+          Record 'FAIL' ("Android app too old: $($match.Groups[1].Value) < $MinAndroidBuild")
+        } else {
+          Record 'PASS' ("Android existing package versionCode=$($match.Groups[1].Value) on $EmulatorSerial")
+        }
       }
+    } catch {
+      Record 'FAIL' ("ADB metadata unavailable for $EmulatorSerial : $($_.Exception.Message)")
     }
   }
 }
