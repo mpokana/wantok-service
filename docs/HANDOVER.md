@@ -4,7 +4,15 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 13 October — CX1C: parallel signed-in browser witness contract (LATEST P1 PREPARATION)
+## 13 October — CX1D: user-witnessed Track Refresh low-contrast defect and isolated Client fix (LATEST P1)
+
+- **Live signed-in owner screenshots:** Saved Desktop pre/post Refresh stayed on Saved with one QA provider. Inbox Desktop pre/post Refresh stayed on Inbox (service threads 0, Help/support 1). These are user-witnessed visual checks, not cryptographically authenticated machine evidence or formal CX1 sign-off. Track Desktop before screenshot showed nearly invisible white `Refresh` against light grey to the right of the small green hero. **Track Desktop NOT PASSED; mobile three cases NOT EXECUTED**. Previous Saved-to-Vendor-Onboarding cause still not independently resolved.
+- **Root cause / fix:** `apps/wantok_app/lib/src/home/activity_page.dart` `_TrackRefreshHeader` had white foreground with 12%-alpha white background positioned outside the compact green hero. Replaced button background with opaque `Color(0xFF096B4B)`, preserving white text, tooltip, key, callback and 48px tap target; no database, booking, Technical or Operations source changes. New `cx1_track_refresh_visibility_test.dart` tests 320/390/1440 contrast at least 4.5:1, centre-tap reload and touch size. Focused **11/11 PASS**, full detached **7 analyses; Client 135/135, Operations 43/43, Technical 38/38 widget tests PASS**.
+- **Isolated browser preview available:** Built release with existing local publishable config, served on EAGLT02 loopback `http://127.0.0.1:3301` from `D:\Wantok_CX1D_Track_Client_Preview_20261013`; HTML HTTP 200 and served main.js SHA-256 `219C9C2D5D81D8098230C95D6C94D4C45FE7CEE56F815451F2F7CA66BCC2FE4B` match on-disk. Original Client `:3000` and staged `:3300` static servers remain **unchanged prior binary**. Source fix alone does NOT close live Track browser acceptance. See `docs/CX1D_TRACK_REFRESH_VISIBILITY_FIX_20261013.md`; source-integrated fix `8ad14e1`. CX1 open, E6 G1-G10 0/10, G7 31/31 NOT EXECUTED, T2.4 PAUSED, production blocked.
+
+---
+
+## 13 October — CX1C: parallel signed-in browser witness contract (PRIOR P1)
 
 - **Independent parallel implementation safely integrated:** CX1B committed `1f364f93c56edd0a8d4a787f59b5bb9d67e971b3` restoring loopback-only `:3000/:3300` Client static readiness. Separate CX1C detached worktree `D:\Wantok_CX1C_Parallel_Witness_QA_20261013` committed `6b8467f` with only four new owned paths; cherry-picked atop verified CX1B as `0dba0c7`. **No files, servers or releases owned by CX1B were overwritten.**
 - **CX1 browser evidence guard:** `docs/CX1C_BROWSER_REFRESH_WITNESS_MATRIX_20261013.json` tracks six real signed-in Saved, Inbox and Track Refresh centre-click cases at 320/1440px, currently **0 observed / 6 NOT_EXECUTED**; historical Saved → Vendor Onboarding route anomaly still UNRESOLVED. `scripts/qa/cx1-browser-witness-preflight.mjs` refuses widget/mock/static HTTP evidence as live Chrome evidence and rejects inconsistent route/count, fake sign-offs and missing private evidence; **13/13 synthetic tests PASS**. Baseline `--review` intentionally exits 2 (NOT READY); even structurally complete evidence is only **READY FOR INDEPENDENT HUMAN REVIEW**, never automatic approval.

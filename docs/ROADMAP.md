@@ -2,6 +2,14 @@
 
 **Updated:** 2026-10-13
 
+## CX1D — Track Refresh visibility fix after owner browser walkthrough (13 October)
+
+- [x] Owner's signed-in screenshot pairs visually confirm Saved Desktop stable at one QA provider and Inbox Desktop stable at 0 service/1 help after Refresh; **two of six user-witnessed visual checks**, not full machine-certified acceptance.
+- [x] Track Desktop Refresh white-on-light-grey bug reproduced from user screenshot and source: `_TrackRefreshHeader` absolute button lay outside compact green hero but retained white translucent styling. Fix background solid `Color(0xFF096B4B)`, no route/booking mutation. New 320/390/1440px contrast+tap test, focused **11/11 PASS**.
+- [x] Full isolated source QA: **7 Flutter analyses clean; Client 135/135, Operations 43/43, Technical 38/38 widget tests PASS**. Report `docs/CX1D_TRACK_REFRESH_VISIBILITY_FIX_20261013.md`.
+- [x] Built and verified separate loopback-only corrected Web preview `127.0.0.1:3301`, JS served SHA-256 `219C9C2D5D81D8098230C95D6C94D4C45FE7CEE56F815451F2F7CA66BCC2FE4B`, original `:3000`/`:3300` unchanged. No credentials exported or real browser signoff claimed.
+- [ ] The Client browser static builds at `:3000`/`:3300` still serve the pre-fix bundle. **Track Desktop actual after-Refresh, all three mobile tests and independent human signoff remain OPEN** until authorised fresh preview/build and user test; no production deployment or T2.4 resume.
+
 ## CX1C — six-case browser witness contract in independent parallel worktree (13 October)
 
 - [x] Worked independently of CX1B's two Client static servers and release-checker changes: detached QA at `D:\Wantok_CX1C_Parallel_Witness_QA_20261013`, four new disjoint source/doc files, integrated after verified CX1B `1f364f9` without overwriting main work.

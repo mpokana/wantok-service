@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-13-04 — CX1D invisible Track Refresh visual defect
+
+**P1 Client UX source fix:** During owner-led browser testing, Saved Desktop and Inbox Desktop before/after Refresh remained stable (2 of 6 human-observed visual checks). On Track Desktop `Refresh` was nearly invisible because white-text/12%-translucent-white pill sat outside the green hero over the light-grey page. Replaced Track action background with opaque dark green `0xFF096B4B`; preserved reload, tooltip, 48px target and routes; new 320/390/1440 contrast+tap tests **3/3**, focused **11/11**, full Flutter **7 analyses + Client135/Operations43/Technical38 PASS**. Source report `docs/CX1D_TRACK_REFRESH_VISIBILITY_FIX_20261013.md`. **Static localhost :3000/:3300 builds not replaced**; new verified corrected :3301 preview available. Owner Track visual after-Refresh remains BLOCKED pending controlled local preview, three mobile cases pending. E6 0/10, T2.4 PAUSED, production false.
+
+---
+
 ## FILLER-2026-10-13-03 — CX1C independent browser evidence checker
 
 **P1 parallel source QA, not live sign-off:** Dedicated detached CX1C worktree from `91bd630`, with no overlap in CX1B's static web servers or release-guard changes. Six current `NOT_EXECUTED` cases covering Saved/Inbox/Track at 320/1440px. Pure Node evidence validator and **13/13 synthetic tests** require actual signed-in Chrome window, labelled centre-click, route/count stability, explicit Vendor Onboarding check and restricted evidence hash before human review. Even complete structurally valid evidence is **not independently authenticated**. Full Flutter unchanged app source **7 clean analyses + 213 widgets PASS**. CX1B separately restored local :3000/:3300 static parity; neither track independently witnessed browser click. Runbook `docs/CX1C_PARALLEL_BROWSER_WITNESS_PREPARATION_20261013.md`. E6 human 0/10, CX1 OPEN, T2.4 PAUSED, production false.

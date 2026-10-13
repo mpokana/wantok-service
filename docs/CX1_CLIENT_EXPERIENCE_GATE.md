@@ -5,7 +5,13 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
-## 13 October — CX1C browser-witness evidence contract (LATEST P1 PREPARATION)
+## 13 October — CX1D Track Refresh visibility defect from live owner walkthrough (LATEST)
+
+**USER SCREENSHOTS, 2/6 VISUALLY WITNESSED:** Saved Desktop before/after retained one QA provider and route, Inbox Desktop retained 0 service/1 help and route; no unexpected vendor navigation in those *two* visual checks. Track Desktop showed white `Refresh` effectively invisible over pale-grey background to right of green hero. User did not perform safe Track centre-click/after capture. **Track Desktop BLOCKED/NOT PASSED**; three mobile cases unexecuted.
+
+**SOURCE FIX TESTED, NOT YET SERVED:** `activity_page.dart` Track Refresh pill has opaque green `0xFF096B4B` behind white label to ensure contrast, preserves callback/size. New `cx1_track_refresh_visibility_test.dart` 320/390/1440px checks, **11/11** focused tests, full Flutter **7 analyses and Client135/Operations43/Technical38 widget tests PASS** in independent checkout. **Old `:3000` and `:3300` Client binaries left intact.** Separate EAGLT02-only corrected preview `http://127.0.0.1:3301` served and JS hash verified (`219C9C2D...`), but **no actual live corrected Track screen accepted yet**; no booking/admin/SQL/Technical changes. Report `docs/CX1D_TRACK_REFRESH_VISIBILITY_FIX_20261013.md`. E6 G1–G10 0/10, T2.4 PAUSED, production false.
+
+## 13 October — CX1C browser-witness evidence contract (PRIOR P1 PREPARATION)
 
 **SOURCE/QA PASS, HUMAN BROWSER GATE STILL OPEN:** In a detached CX1C worktree parallel to CX1B, added six explicit Signed-in Chrome Refresh centre-click witness cases (Saved, Inbox, Track x mobile 320px and desktop 1440px). All **6 NOT_EXECUTED**, old Saved-to-Vendor-Onboarding misnavigation remains UNRESOLVED. Validator refuses synthetic widget evidence, missing page route/item counts or private proof, and never assigns approval. **13/13** synthetic Node tests PASS; baseline returns blocked exit 2. Independent untouched Flutter source **7/7 analyses**, Client **132/132**, Operations **43/43**, Technical **38/38** widgets PASS; no app source modification. CX1B's `:3000/:3300` static integrity still separate from real browser acceptance. Report `docs/CX1C_PARALLEL_BROWSER_WITNESS_PREPARATION_20261013.md` and tracked checklist JSON. E6 G1–G10 0/10, T2.4 PAUSED, production false.
 
