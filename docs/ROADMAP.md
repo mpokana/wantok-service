@@ -1,6 +1,15 @@
 # Wantok Services — Living Roadmap
 
-**Updated:** 2026-10-13
+**Updated:** 2026-10-14
+
+## CX1J — HONOR tailnet-safe public category list and module API map (14 October)
+
+- [x] Owner-confirmed real HONOR HTTPS Tailnet sign-in and navigation; Home/Track/Inbox private data errors remain distinct from authentication success. Saved/Inbox/Track 320px Refresh *centre-click* acceptance and all G7/E6 gates remain open.
+- [x] Audited 20 active public `service_categories` returned via anonymous RLS-authorised local GET; added exact-select/active-only read proxy on loopback **:3304** and single route `/rest/v1/service_categories` on :443 Tailnet Serve. No generic REST forwarding. **13/13 unit and 15/15 real local safe-route denial probes PASS; HTTPS GET 200/OPTIONS 204.**
+- [x] Preserved existing `/auth/v1` and published-branding RPC; blocked `user_roles`, private `service_bookings`, `list_my_booking_conversations`, support request records, billing/writes and unknown provider public disclosure RPCs. Report `docs/CX1J_HONOR_TAILNET_PUBLIC_CATALOGUE_AND_SECURITY_GATE_20261014.md`.
+- [x] Removed temporary overlay acceptance banner from isolated :8443 HTML after owner green-banner proof, with backup and same Flutter JS hash. Normal web source, existing APK, SQL migration and local :443 build unchanged.
+- [x] Eligible regressions: 13/13 strict public policy source tests; 15/15 live allow/deny probes; crossstream disconnected SQL **301/301**, E6W synthetic security/privacy/evidence **PASS**, untouched Flutter **7 analyses + 216/216 widget tests PASS** (Client135/Operations43/Technical38). No user/account mutation or production acceptance.
+- [ ] Owner HONOR reload of Home categories and banner-free header, plus independently approved real private actor/RLS/REST witness for Track and Inbox. **G7 31/31 NOT EXECUTED; G1–G10 0/10; D1–D5 open; CX1 NOT formally signed; T2.4 paused; production false.**
 
 ## CX1E — fix 320px Track Refresh overlap and retest same-origin :3000 (13 October)
 

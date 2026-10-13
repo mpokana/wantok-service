@@ -1,10 +1,20 @@
 # Wantok Services — Living Handover
 
-**Updated:** 2026-10-13
+**Updated:** 2026-10-14
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 13 October — CX1E Track mobile Refresh placement corrected on local :3000 (LATEST CX1)
+## 14 October — CX1J HONOR Tailnet private-web public catalogue (LATEST CX1; HUMAN RETEST OPEN)
+
+- **Owner evidence:** HONOR mobile data + Tailscale connected; screenshots show signed-in Wantok Services Client Home, Services, Explore, Track, Inbox and mobile navigation at `https://eaglt02.tailfb0609.ts.net:8443/`. Private Track/Inbox remain erroring from gateway restrictions; Home reported `Could not load services from the backend`. This is **owner-confirmed remote sign-in and navigation only**, not full live CX1 acceptance.
+- **Gateway-only safe change on EAGLT02:** Existing HTTPS main :443 serves auth + exact public branding RPC; new independently checked `GET /rest/v1/service_categories` route via loopback **127.0.0.1:3304** uses only *anonymous* Supabase publishable credentials, requires active filter/exact 12 public columns, denies other queries/methods/routes. Read-only local catalogue RLS and anon SELECT confirmed; HTTPS 200 **20 active categories**, OPTIONS 204; anonymous/private booking and conversation endpoints still denied. Unit **13/13**, live permission allow/deny **15/15 PASS**. `scripts/dev/cx1_public_category_gateway.py` and `scripts/qa/cx1_public_category_gateway_{unit,integration}_test.py` are source-only reproducible companions of current ignored local adapter.
+- **Visual repair:** Owner-confirmed green test banner previously overlapped mobile header. Banner removed **only from isolated 8443 preview HTML**, with old HTML backed up and Flutter compiled JS unchanged (SHA `3BC70DDEF8FF87B0B8FE37386E81B6E5F43919987771A4C53BD6995EEA5B8026`). Ordinary :443 Web client retained; no new APK, user/account/SQL or production changes.
+- **Eligible regression PASS:** Public policy source unit **13/13**; running local public allow/deny **15/15**, HTTPS GET200 20 active entries and OPTIONS204; disconnected seven-pending-migration SQL **301/301 assertions/16 suites**, rolled back/disposable container removed, synthetic auth/independence/privacy/evidence E6W all PASS (exit 0). Fresh isolated unchanged Flutter source **7 clean analyses + Client 135/Operations 43/Technical 38 = 216/216 widgets PASS** (exit 0). No E6 stage or user-action sign-off inferred.
+- **Remaining:** Owner must reload HONOR to verify Home category UI and banner-free header; Track/Inbox require real actor-scoped GoTrue/PostgREST/RLS/role privacy witnesses and explicit separate staging authority. **No broad /rest/v1 proxy, audit-writer REVOKE migration or Technical T2.4 edits.** G7 31/31 unexecuted; G1–G10 0/10, D1–D5 unsupplied, production false. `docs/CX1J_HONOR_TAILNET_PUBLIC_CATALOGUE_AND_SECURITY_GATE_20261014.md`.
+
+---
+
+## 13 October — CX1E Track mobile Refresh placement corrected on local :3000 (PRIOR CX1)
 
 - **Owner screenshot diagnosis:** Signed-in Chrome Responsive **320×811** Track before/after Refresh maintained Completed (1), same QA specialist booking and route, but green Refresh action **covered the hero title**. Functional route/count observation is stable; **mobile visual acceptance FAIL pending corrected retest**. Desktop Saved, Inbox and Track were previously visually user-witnessed PASS (**3 of 6**), Saved/Inbox mobile still unexecuted.
 - **Client-only fix:** `_TrackRefreshHeader` in `apps/wantok_app/lib/src/home/activity_page.dart` uses a responsive LayoutBuilder. At available width under 600px, place Refresh right-aligned in its **own row below** the green Track hero; wide layouts retain original desktop Stack placement. Keep button contrast, tooltip, 48px tap target, same read-only callback and navigation. Source report `docs/CX1E_TRACK_MOBILE_REFRESH_LAYOUT_20261013.md`. Isolated source commit `501912c`, cherry-picked onto current feature branch as `1403216`.
