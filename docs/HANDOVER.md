@@ -4,6 +4,14 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
+## 13 October — owner commercial product decision (documentation only; no implementation)
+
+- **Revenue model agreed for future design:** Wantok Services is vendor-funded: customers pay vendors by cash or their choice, vendors prepay non-transferable Wantok commission balances, and Wantok earns 2–3% per verified successful service. Insufficient available funds prevent **new** chargeable bookings until verified top-up; already accepted jobs remain manageable. Explore approved CellMoni/BSP merchant or bank top-ups, advertising/featured placements, external social-media campaign services, and pre-agreed referrals outside the vendor network. Final fees, terms, ledger/security and provider partnerships require separate design/approval.
+- **Free Public Services retained; social feed muted:** Keep Emergency & Safety, Health, Government and Community directories free and under current admin activation. **Do not build** a mini-social feed, public hiring threads, user posts/comments or follower/video features in current phases. Reconsider only on explicit future owner approval and with moderation, commission-leakage and investor/pilot evidence. Vendor-paid marketing on external social media is still part of the proposed commercial services.
+- **Authority and release boundary:** Owner product direction is **not** a coded feature, active payment integration, commercial pilot, production authorisation or E6/CX1/T2.4 sign-off. Retain P0 E-series gates G1–G10 0/10, CX1 live acceptance OPEN, T2.4 PAUSED and E7+/production blocked. Details: `docs/ROADMAP.md` opening section and `docs/ROADMAP_FILLERS.md` FILLER-2026-10-13-05. No application/database/environment change from this documentation note.
+
+---
+
 ## 13 October — CX1D: user-witnessed Track Refresh low-contrast defect and isolated Client fix (LATEST P1)
 
 - **Live signed-in owner screenshots:** Saved Desktop pre/post Refresh stayed on Saved with one QA provider. Inbox Desktop pre/post Refresh stayed on Inbox (service threads 0, Help/support 1). These are user-witnessed visual checks, not cryptographically authenticated machine evidence or formal CX1 sign-off. Track Desktop before screenshot showed nearly invisible white `Refresh` against light grey to the right of the small green hero. **Track Desktop NOT PASSED; mobile three cases NOT EXECUTED**. Previous Saved-to-Vendor-Onboarding cause still not independently resolved.
