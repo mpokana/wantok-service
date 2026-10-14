@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-15-01 — CX1Q signed offline actor-test contract
+
+Built a standalone, no-network mock of an authenticated actor-scoped Track GET, using ephemeral Ed25519 signatures, fabricated A/B/provider/admin subjects and synthetic bookings. Focused negative tests 44/44 PASS. Strict 100-row four-column projection, identity from signed test subject, rejected query/write methods and malformed/expired/revoked test sessions. This is NOT real GoTrue/JWKS, private PostgREST, RLS or a working HONOR Track API; separate staging authority and G7/G8 witnesses remain pending. `docs/CX1Q_OFFLINE_JWT_TRACK_ACTOR_CONTRACT_AND_REAL_STAGE_MATRIX_20261015.md`.
+
+---
+
 ## FILLER-2026-10-14-07 — CX1P live-local metadata evidence, no private API
 
 EAGLT02 read-only catalogue audit verifies installed booking RLS and the customer/provider/admin plus qualified-provider policies. Seven sensitive booking fields are authenticated-selectable; a review of the SECURITY DEFINER admin helper is still required. Zero account rows or credentials were read. Dedicated checks 16/16 PASS. Real JWT, role-parity restoration and private API access are blocked pending separate authority. See `docs/CX1P_INSTALLED_TRACK_ACL_METADATA_AND_ROLE_STAGE_GAP_20261014.md`.

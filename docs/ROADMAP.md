@@ -1,6 +1,11 @@
 # Wantok Services — Living Roadmap
 
-**Updated:** 2026-10-14
+**Updated:** 2026-10-15
+
+## CX1Q — offline signed-JWT and account-scoped Track API contract (15 October)
+
+- [x] Built standalone test-only Ed25519 signed-claim simulator and 44 offline positive/negative tests, using ephemeral keys and invented identities/booking rows. Customer A/B isolated, owner-only response limited to 100 and 4 fields; role/time/session/method/origin/column negatives exercised. No live GoTrue, PostgREST, SQL, gateway or app integration. See `docs/CX1Q_OFFLINE_JWT_TRACK_ACTOR_CONTRACT_AND_REAL_STAGE_MATRIX_20261015.md`.
+- [ ] Obtain independent owner, Security, DBA and Privacy approvals for a role/ACL-equivalent isolated stage and two real GoTrue principals, JWT lifecycle, cross-account HTTP and private projection evidence, port 54321 controls and G7/G8 signatures. Existing HONOR Track remains backend-blocked; T2.4 paused, production not approved.
 
 ## CX1P — installed booking permission audit (14 October)
 

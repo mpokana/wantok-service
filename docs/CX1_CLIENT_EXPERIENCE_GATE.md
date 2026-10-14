@@ -5,6 +5,10 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## 15 October — CX1Q offline signed-token actor contract, not live Track acceptance
+
+Owner-directed continuation added a completely offline Ed25519 signed-token and account-scoped Track request simulator under `scripts/qa` and **44/44 synthetic positive/negative tests PASS**. Customer A/B isolated, privileged subjects do not read foreign booking history, malformed/expired/incorrect issuer/role/session cases denied, four-column 100-row response; no live GoTrue sessions, original RLS, HTTP handler, migration or deployment tested. Existing HONOR Track still honestly reports backend unavailable; real JWT/JWKS, customer privacy, G7/G8, port restriction and production remain externally blocked. `docs/CX1Q_OFFLINE_JWT_TRACK_ACTOR_CONTRACT_AND_REAL_STAGE_MATRIX_20261015.md`.
+
 ## 14 October — CX1P read-only permissions inspection
 
 Seven tables inspected using PostgreSQL metadata only. Existing booking RLS and wider read policies confirmed. Sixteen audit safety tests passed. No private Track API or live account test was enabled. See `docs/CX1P_INSTALLED_TRACK_ACL_METADATA_AND_ROLE_STAGE_GAP_20261014.md`.

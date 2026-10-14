@@ -4,7 +4,14 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 15 October — CX1P resumed verification (LATEST; NO PRIVATE API)
+## 15 October — CX1Q offline signed-JWT actor/Track request contract (LATEST; NO LIVE API)
+
+- In detached EAGLT02 worktree at CX1P `77738cd`, built **scripts/qa-only** in-memory Ed25519 signed-token mock with fabricated A/B/provider/admin bookings; **44/44 focused contract tests PASS, 70/70 existing source guards PASS and full Flutter 7 clean analyses + 216/216 widget tests PASS** including cross-customer, claim expiry/revocation, wrong issuer/audience/role, method/route restrictions, exact 4-column/100-row projection and generic private-data-safe failures. Keys and sessions are generated only in test memory; **not real GoTrue/JWKS**, PostgREST, database RLS or any published HTTP endpoint. No user credentials, tokens, accounts, SQL, Docker volumes, Tailscale or production configuration changed.
+- Real staging execution remains independently blocked by owner/DBA/Security/Privacy authority, restoration/ACL parity, actual GoTrue session and cross-user HTTP tests, sensitive fields, direct 54321 port negative and E6/G7/G8 acceptance. HONOR Track remains backend unavailable, T2.4 paused. See `docs/CX1Q_OFFLINE_JWT_TRACK_ACTOR_CONTRACT_AND_REAL_STAGE_MATRIX_20261015.md`.
+
+---
+
+## 15 October — CX1P resumed verification (PRIOR; NO PRIVATE API)
 
 - EAGLT02 reconnected. The isolated CX1P worktree and GitHub baseline are intact. Docker Desktop restarted without resetting Supabase volumes; Auth health returned HTTP 200. Repeated read-only installed booking catalogue audit, **70/70 security guard tests**, CX1K five-route scope check and the complete Flutter suite (**7/7 analyses clean, 216/216 widget tests PASS; exit 0**). No personal rows or private REST read, permissions, firewall, schema or production changes. The unrelated main-checkout drafts remain untouched. See `docs/CX1P_INSTALLED_TRACK_ACL_METADATA_AND_ROLE_STAGE_GAP_20261014.md`.
 - **Still blocked:** role-equivalent stage requires separate owner/Security/DBA/Privacy approvals, real GoTrue/JWT and cross-account HTTP witnesses, seven sensitive field review, direct port 54321 network denial tests, E6/G7/G8. Production remains not approved.
