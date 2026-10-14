@@ -6,10 +6,12 @@ host="http://127.0.0.1:3304"
 path="/rest/v1/service_categories"
 fields="id,slug,name,description,vertical,booking_mode,icon_key,is_active,sort_order,show_on_home,show_in_services,image_path"
 valid={"select":fields,"is_active":"eq.true","order":"sort_order.asc,name.asc"}
+flutter_sdk_valid={**valid,"order":"sort_order.asc.nullslast,name.asc.nullslast"}
 orig="https://eaglt02.tailfb0609.ts.net:8443"
 url=host+path+"?"+urlencode(valid)
 cases=[
  ("catalogue", "GET",url,None,orig,200),
+ ("flutter_sdk_nullslast_order","GET",host+path+"?"+urlencode(flutter_sdk_valid),None,orig,200),
  ("limited_catalogue","GET",url+"&limit=2",None,orig,200),
  ("allowed_options","OPTIONS",url,None,orig,204),
  ("denied_origin","OPTIONS",url,None,"https://attacker.example",403),
@@ -35,7 +37,7 @@ for name,verb,url,data,origin,expected in cases:
  except HTTPError as e:
   actual=e.code; body=e.read();cors=e.headers.get("Access-Control-Allow-Origin")
  assert actual==expected,(name,expected,actual,body[:100])
- if name in ("catalogue","limited_catalogue"):
+ if name in ("catalogue","flutter_sdk_nullslast_order","limited_catalogue"):
   rows=json.loads(body)
   assert isinstance(rows,list) and all(item.get("is_active") is True and set(item)<=set(fields.split(",")) for item in rows)
   assert cors==origin

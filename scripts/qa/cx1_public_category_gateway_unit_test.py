@@ -16,6 +16,10 @@ class PublicCataloguePolicyTests(unittest.TestCase):
 
     def test_exact_public_catalogue_allowed(self): self.assertTrue(m.is_valid_query(self.q()))
     def test_sorted_catalogue_allowed(self): self.assertTrue(m.is_valid_query(self.q(order="sort_order.asc,name.asc")))
+    def test_flutter_sdk_nullslast_order_allowed(self):
+        self.assertTrue(m.is_valid_query(self.q(order="sort_order.asc.nullslast,name.asc.nullslast")))
+    def test_flipped_sdk_sort_denied(self):
+        self.assertFalse(m.is_valid_query(self.q(order="sort_order.desc.nullslast,name.asc.nullslast")))
     def test_small_page_allowed(self): self.assertTrue(m.is_valid_query(self.q(limit="20",offset="0")))
     def test_wildcard_denied(self): self.assertFalse(m.is_valid_query(self.q(select="*")))
     def test_sensitive_extra_denied(self): self.assertFalse(m.is_valid_query(self.q(select=FIELDS+",updated_by")))

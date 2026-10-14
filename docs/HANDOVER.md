@@ -4,7 +4,14 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 14 October — CX1K audited mobile private REST boundary (LATEST CX1; HUMAN RETEST OPEN)
+## 14 October — CX1L Popular categories gateway order compatibility (LATEST CX1; HUMAN RETEST OPEN)
+
+- **Owner screenshot:** HONOR :8443 and reported desktop Web Home `Could not load services from the backend`, despite existing filtered 20-category HTTPS GET. The installed Dart `postgrest-2.9.1` emits `order=sort_order.asc.nullslast,name.asc.nullslast`; CX1J allowlist rejected this exact valid order HTTP 400. Source and backed-up ignored loopback :3304 adapter now accept only that additional order; same real HTTPS query HTTP **200 / 20 active rows**, with no changed schema, fields, methods or Tailscale routes. Source unit **15/15**, live allow/deny **16/16 PASS**; unchanged Web JS bundle. `docs/CX1L_PUBLIC_CATEGORY_SDK_ORDER_REPAIR_20261014.md`.
+- **Owner retest still required:** hard-refresh HONOR and desktop Home to witness actual category cards and banner-free header. Local API success does not close CX1. Existing E6 writer risk, direct 54321 host-port risk, G7 31/31 and G1–G10 0/10 remain blocked; Track/Inbox/Saved private APIs, T2.4 and production unchanged.
+
+---
+
+## 14 October — CX1K audited mobile private REST boundary (PRIOR CX1; HUMAN RETEST OPEN)
 
 - **Preserves CX1J:** The scoped anon-only `service_categories` gateway on :3304, public-branding gateway on :3303, main :443 and test :8443 routes remain unchanged. CX1J separately confirmed 20 active categories, 13/13 gateway source tests and 15/15 live allow/deny; owner HONOR UI category/banner retest remains open.
 - **CX1K read-only test guard:** Added `scripts/qa/cx1k-tailnet-api-boundary.mjs` with **19/19** synthetic tests, confirming exactly five loopback-backed HTTPS Serve handlers across ports 443/8443 and source markers for three allowed public/Auth operations versus 11 account-private/unreviewed operations. It rejects raw unexpected TCP, Funnel, broad REST, privileged audit writer, private bookings/messages, changed public adapters and unexpected source callsites. Local `--local` route/source preflight PASS; detached unchanged source `scripts/flutter/check.ps1` exited 0 with **7 analyses + 216/216 widgets** (Client 135 / Operations 43 / Technical 38). No account data, SQL, new permission or gateway write. **Warning:** historical owner HONOR direct `100.127.124.75:54321` health test succeeded; Serve-only allowlisting is not a host firewall and a separately approved inbound-port negative witness remains required.

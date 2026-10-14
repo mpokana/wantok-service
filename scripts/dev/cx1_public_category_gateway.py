@@ -22,6 +22,7 @@ FIELDS = ("id", "slug", "name", "description", "vertical", "booking_mode",
           "show_in_services", "image_path")
 SELECT = ",".join(FIELDS)
 ORDER = {"sort_order.asc,name.asc", "sort_order.asc,name.asc.nullslast",
+         "sort_order.asc.nullslast,name.asc.nullslast",
          "sort_order.asc", "name.asc", "sort_order.asc,name.asc.nullsfirst"}
 
 def is_valid_query(query):

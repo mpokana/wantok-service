@@ -2,6 +2,12 @@
 
 **Updated:** 2026-10-14
 
+## CX1L — restore public Popular categories via exact Flutter SDK order allowlist (14 October)
+
+- [x] Owner observed Home Popular categories backend error on HONOR and desktop. Source + Dart SDK verified ordered query `sort_order.asc.nullslast,name.asc.nullslast`; original public adapter HTTP 400 while existing simplified order HTTP 200. Added only this exact SDK sort to existing active-only 12-column, anon-read gateway on loopback :3304, with checksum-verified runtime backup.
+- [x] Retest exact HTTPS SDK query **HTTP 200 / 20 active rows**, source security tests **15/15**, local allow/deny checks **16/16**. Route, CORS, prohibited columns, private data, writer methods and five-route CX1K boundary unchanged. Report `docs/CX1L_PUBLIC_CATEGORY_SDK_ORDER_REPAIR_20261014.md`.
+- [ ] Real owner screenshot/refresh on HONOR and desktop proving categories visually populate; banner-free mobile header witness. Private Track/Inbox/Saved still gated on E6 G7/G8/GoTrue/RLS. Production not approved; T2.4 paused.
+
 ## CX1K — verify tailnet private HTTP surface and application route classes (14 October)
 
 - [x] Source-only read of current HTTPS Serve `--json` confirms **5** explicitly scoped routes over private 443/8443: Client static UI roots, Auth, published branding read and CX1J filtered service category read. **No new HTTP routes, DB changes, T2.4, Funnel or wide REST proxy introduced. Historic owner HONOR direct Supabase `100.127.124.75:54321` was reachable; local Windows inbound firewall enforcement and external denial are **not proven**.**

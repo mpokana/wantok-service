@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-14-03 — CX1L mobile/desktop Popular categories load repair
+
+**P1 reliability fix:** Owner's HONOR screenshot and desktop report show backend category error even though a manually simplified HTTPS GET retrieved 20 rows. Flutter Dart Postgrest SDK defaults to `.nullslast` on both sort columns, which the strict scoped public gateway had not allowed. Checksum-backed-up ignored EAGLT02 adapter and tracked source now add only this exact query form, with no broader REST or private access. Live HTTPS exact Flutter GET 200, 20 active public rows; 15/15 unit + 16/16 allow/deny tests PASS. Owner mobile/desktop visual retest pending; Track/Inbox private access and G7/G8 still blocked. `docs/CX1L_PUBLIC_CATEGORY_SDK_ORDER_REPAIR_20261014.md`.
+
+---
+
 ## FILLER-2026-10-14-02 — CX1K strict private route-surface guard
 
 **P1 additive safety audit after CX1J:** Preserve validated anonymous active-only category adapter and public branding gateway, actual owner HONOR HTTPS sign-in and visual navigation. CX1K confirms exactly five current tailnet-only HTTPS Serve handler paths and 11 separately source-marked account-private or unreviewed Client data operations; **19/19 tests PASS** including denial for extra raw TCP/Funnel, `/rest/v1` broad proxy, internal writer, user-private booking and conversation RPC exposure. Source and live Serve metadata audit only, no account/session/private records, migrations or gateway changes. Banner already removed from isolated :8443 by CX1J; do not overwrite concurrent preview. Owner still must retest Home active categories and successful data flow, while Track/Inbox/Saved RLS/GoTrue witnesses await separate security sign-off. `docs/CX1K_TAILNET_MOBILE_API_ACCESS_AND_SECURITY_GATE_20261014.md`. E6 G7 31/31 pending, G1–G10 0/10, T2.4 paused, production false.
