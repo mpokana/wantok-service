@@ -5,6 +5,10 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## 14 October — CX1O synthetic PostgreSQL Track actor-only contract; no live data acceptance
+
+Owner-directed continuation built a fresh isolated PostgreSQL 17 toy stage (network none, zero published ports/host mounts, tmpfs, 108 synthetic bookings, immediate container teardown), with broad representative provider/admin RLS plus a candidate `SECURITY INVOKER` function limited to the authenticated *simulated* customer and four display fields. **21/21 SQL assertions, 14/14 source safety/negative tests PASS**. This **does NOT** prove GoTrue JWT authenticity (local actor GUC is spoofable by direct SQL), current DB grants/RLS or actual account REST authorization. No app, private route, SQL migration, preview, or database altered. CX1N ten external authority gates, G7/G8 and production are still blocked; HONOR Track backend remains unavailable. See `docs/CX1O_DISPOSABLE_TRACK_SQL_SECURITY_EXPERIMENT_20261014.md`.
+
 ## 14 October — CX1N private Track secure-stage preparation; LIVE DATA UNAVAILABLE
 
 Source-only CX1N reviews the exact bounded client booking query with nested quotes/reviews and the historical booking RLS permitting customer, provider, admin and qualified-provider open-request reading. Current raw `service_bookings` SELECT plus frontend `customer_id` is not an independently approved Track API security boundary. A **10-gate NOT WITNESSED** human/staging register and fail-closed source checker pass **21/21 synthetic tests**. A candidate actor-derived, column-minimised contract is **DESIGN ONLY**; no GoTrue principals, SQL, private route, build, or host rule changed. Owner HONOR Track still honestly reports backend unavailable; G7/G8/Privacy/E6 and production acceptance remain open. Runbook: `docs/CX1N_SECURE_TRACK_PARITY_STAGE_PREPARATION_20261014.md`.

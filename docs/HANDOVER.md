@@ -4,7 +4,14 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 14 October — CX1N isolated Track staging *preparation* (LATEST CX1; NO PRIVATE API)
+## 14 October — CX1O disconnected PostgreSQL Track actor-projection experiment (LATEST CX1; NO LIVE API)
+
+- Owner directed continuation after CX1N. On EAGLT02, created a **fresh disposable, no-network, no-port, no-mount, tmpfs** PostgreSQL 17 stage using solely synthetic data and minimal source-inspired booking RLS (not installed role/ACL parity). Tested an **illustrative SECURITY INVOKER**, customer-only, bounded 4-column candidate with 108 fabricated records. **21/21 actual SQL assertions PASS**; **14/14 offline source-drift guards PASS**. Provider/admin/open-request synthetic base policies deliberately allow wider rows; candidate still returned only actual customer's rows under *simulated local role/claim settings*.
+- **Critical limitations:** No real GoTrue/JWT/HTTP or shared-schema privilege parity, privacy sign-off, source migration or installed endpoint; the local simulated `auth.uid()` GUC is spoofable by direct SQL and must not be exposed. The temporary container was removed. Detailed report: `docs/CX1O_DISPOSABLE_TRACK_SQL_SECURITY_EXPERIMENT_20261014.md`. CX1N ten gates NOT WITNESSED; G7 31/31, G1–G10 0/10, D1–D5, E6O-01, direct port 54321 all still OPEN; T2.4 PAUSED and production false.
+
+---
+
+## 14 October — CX1N isolated Track staging *preparation* (PRIOR CX1; NO PRIVATE API)
 
 - **Source/readiness-only:** Detached clean source checkpoint from CX1M `e51fdb9`. Audited `service_bookings` customer-filtered 100-row query with nested provider, quotes and reviews; original SQL has customer/provider/admin plus open-request-provider read policies and broad authenticated table SELECT. Track needs an **independently reviewed actor-only, column-minimised contract**, not an unrestricted raw REST proxy or the frontend's `customer_id` predicate.
 - Added strictly source-only `scripts/qa/cx1n-track-stage-readiness.mjs`, `docs/CX1N_TRACK_STAGE_DECISION_REGISTER_20261014.json` (10 NOT WITNESSED gates), synthetic negative tests **21/21 PASS**, and `docs/CX1N_SECURE_TRACK_PARITY_STAGE_PREPARATION_20261014.md`. No GoTrue principal created, authenticated HTTP read, SQL migration, secret, Tailscale/firewall or application change. **CX1N means design readiness, not stage authorisation.**

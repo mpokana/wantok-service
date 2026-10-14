@@ -2,6 +2,11 @@
 
 **Updated:** 2026-10-14
 
+## CX1O — no-network synthetic PostgreSQL test of candidate private Track projection (14 October)
+
+- [x] Disposable `postgres:17.11.0.002` image fixture: 108 **fabricated** booking records, synthetic source-inspired provider/admin/open-request RLS, candidate `SECURITY INVOKER` customer-only 4-field bounded function. Container configured with no network, no published port, no mount, temp tmpfs DB, and destroyed after tests. **21/21 executable PostgreSQL assertions PASS** plus **14/14 source-drift tests PASS**. `docs/CX1O_DISPOSABLE_TRACK_SQL_SECURITY_EXPERIMENT_20261014.md`.
+- [ ] This toy stage is **NOT** full schema/object owner/ACL parity; actor GUC is spoofable and is **NOT** a verified GoTrue JWT. Require independent isolated role-equivalent stage, real GoTrue/A-B/expiry/cross-user HTTP negatives, nested privacy/field sign-off and direct port 54321 controls. No approved private REST route, Flutter migration, production or G7/G8 closure; T2.4 remains paused.
+
 ## CX1N — private Track API secure staging preparation (14 October)
 
 - [x] Read-only source inspection of Client's 100-row account-filtered `service_bookings` and embedded quote/review/provider/resource joins; original booking RLS admits provider/admin and some open-request qualified-provider reads. The existing direct table SELECT and frontend customer filter are **not** an approved actor-only projection.

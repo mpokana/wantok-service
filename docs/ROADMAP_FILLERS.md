@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-14-06 — CX1O toy PostgreSQL actor-only read boundary
+
+**P1 synthetic-only security verification:** In a disconnected no-port/no-mount disposable PostgreSQL tmpfs container, tested 108 fabricated booking records and representative broader provider/admin/open-request RLS against a minimal `SECURITY INVOKER` customer-only candidate. **21/21 SQL assertions** and **14/14 fail-closed source guards PASS**. The simulated `auth.uid()` claim is directly spoofable and is NOT GoTrue JWT authentication; no private API, real account, shared Supabase data, schema migration or Tailnet/firewall change. The test is **not parity stage acceptance**; CX1N ten human gates stay unapproved. `docs/CX1O_DISPOSABLE_TRACK_SQL_SECURITY_EXPERIMENT_20261014.md`.
+
+---
+
 ## FILLER-2026-10-14-05 — CX1N Track actor-read staged design, no publish
 
 **P1 non-mutating continuation:** Reviewed direct `service_bookings` SELECT and its multiple booking/quote/review actor policies; mapped sensitive nested fields and direct Supabase port bypass. Built CX1N source-only fail-closed preparation contract with **21/21 synthetic negative tests**, machine-readable 10-gate unapproved register, and parity-stage runbook. Recommended an independently designed invoker/GoTrue actor-derived allowlisted projection, not generic raw table REST or service-role proxy. No shared SQL, real account, endpoint, app or Tailscale change; G7/G8 and production blocked. `docs/CX1N_SECURE_TRACK_PARITY_STAGE_PREPARATION_20261014.md`.
