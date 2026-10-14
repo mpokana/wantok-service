@@ -4,7 +4,14 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 15 October — CX1R ephemeral real HTTP / synthetic signed Track contract (LATEST; NOT GO TRUE)
+## 15 October — CX1S real GoTrue/installed booking RLS local witness (LATEST; NO PRIVATE TAILNET ROUTE)
+
+- Owner authorised temporary accounts and bookings in the current *development* Supabase, clarifying only one existing real administrator. Preserved both pre-existing accounts and the original booking. Full local-only database backup was verified before writes and excluded from Git. Used independently generated, uniquely tagged A/B test accounts; **both real GoTrue sign-ins, both owner inserts, both owner-only RLS reads, both foreign-user booking negatives, malformed/anonymous denials and the exact existing Flutter nested Track query (2/2) passed**, **13/13 recorded checks PASS**. Removed both new accounts and both new bookings; independent postflight confirmed baseline **2 accounts/1 booking**, **0 CX1S rows/accounts**. First attempt submitted disallowed explicit `status` on INSERT (403); that test set was cleaned up and a corrected default-status insert succeeded without changing grants.
+- No browser build, Tailnet route, firewall, schema, account rights or existing personal record changed. This proves **local** authenticated Track reads are functional, **not** private Tailnet exposure safe or independently approved G7/G8; the HONOR Track backend error remains until a secure approved route is delivered. Report: `docs/CX1S_REAL_LOCAL_GOTRUE_TRACK_WITNESS_20261015.md`.
+
+---
+
+## 15 October — CX1R ephemeral real HTTP / synthetic signed Track contract (PRIOR; NOT GO TRUE)
 
 - Detached EAGLT02 worktree at CX1Q `c4d8b16`; added scripts/qa-only HTTP listener/test harness bound **only** to `127.0.0.1:0`, excluded direct Supabase 54321 and closed the listener automatically. Reused temporary Ed25519-signed, fabricated A/B/provider/admin accounts. **36/36 actual loopback HTTP tests PASS** including owner-only rows, missing/expired/revoked mock JWT, direct private table and write denial, restrictive preflight and raw malformed request negatives. Existing CX1K–CX1Q **114/114 PASS** (**150/150 combined**); static Tailscale five-route guard unchanged. Full Flutter **7 clean analyses** and separately confirmed Client 135, Operations 43, Technical 38 widget tests (**216/216 PASS**); shared DB suite intentionally not run. No shared SQL, credentials, records, GoTrue accounts, browser builds, firewall or production touched. See `docs/CX1R_DISPOSABLE_LOOPBACK_HTTP_TRACK_WITNESS_20261015.md`.
 - **Blocking reality:** this is ephemeral synthetic HTTP, not signed real GoTrue/PostgREST/G7/G8 actor access. Browser Supabase client may send extra headers that the mock intentionally denies; the existing Flutter nested booking query cannot consume a four-field mock. Real role-equivalent isolated stage, privacy/backup/security approvals and direct 54321 port witness remain open. HONOR Track error remains expected; T2.4 paused and production false.

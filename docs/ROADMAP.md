@@ -2,6 +2,11 @@
 
 **Updated:** 2026-10-15
 
+## CX1S — installed local GoTrue plus real customer booking RLS witness (15 October)
+
+- [x] Owner-authorised dev-only sample account creation after verified backup: 2 new GoTrue accounts signed in, 2 authenticated customer-owned bookings, A/B owner-only and cross-account negative REST, invalid JWT/anonymous denied, actual Flutter nested Track select **2/2 pass**, **13/13 live checks PASS**. Cleaned up 2 temp accounts and 2 temp bookings; independently verified original counts **2 accounts, 1 booking** and no CX1S fixtures remain. First-run INSERT 403 traced to ungranted explicit `status`; corrected test relied on existing default without role/schema changes. `docs/CX1S_REAL_LOCAL_GOTRUE_TRACK_WITNESS_20261015.md`.
+- [ ] Private Track remains blocked through Tailnet; plan a narrow authenticated-only route with independent privacy/RLS/host port 54321 review. Existing public Home/Services preserved. G7/G8 and production NOT APPROVED; T2.4 paused.
+
 ## CX1R — disposable loopback HTTP actor contract witness (15 October)
 
 - [x] Created a temporary `127.0.0.1` only Node HTTP test server (kernel-allocated non-54321 port; automatically closed) reusing CX1Q synthetic signed Ed25519 actor checks. **36/36 real loopback HTTP transport tests PASS**: A/B row isolation, 4-field/100-row projection, revoked/expired mock session negatives, restricted CORS preflight, blocked foreign paths, methods, unexpected headers and malformed raw GETs. Existing CX1K–CX1Q 114/114 source tests PASS. Report: `docs/CX1R_DISPOSABLE_LOOPBACK_HTTP_TRACK_WITNESS_20261015.md`.

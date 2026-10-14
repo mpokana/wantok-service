@@ -134,8 +134,12 @@ test('09 deny request without authorization',async()=>{
   await expectDeny(401,'GET',route,{headers:{authorization:''}});
 });
 test('10 deny tampered signature over wire',async()=>{
-  let t=token(); t=t.slice(0,-1)+(t.endsWith('A')?'B':'A');
-  await expectDeny(401,'GET',route,{headers:{authorization:'Bearer '+t}});
+  const parts=token().split('.');
+  // The trailing Base64URL sextet has unused bits: changing it can be a no-op.
+  // Tamper with the first signature sextet, which always changes signed bytes.
+  const signature=parts[2];
+  parts[2]=(signature[0]==='A'?'B':'A')+signature.slice(1);
+  await expectDeny(401,'GET',route,{headers:{authorization:'Bearer '+parts.join('.')}});
 });
 test('11 deny wrong issuer over wire',async()=>{
   await expectDeny(401,'GET',route,{headers:{authorization:'Bearer '+token({iss:'untrusted'})}});

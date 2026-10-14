@@ -5,6 +5,10 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## 15 October — CX1S REAL installed local GoTrue and customer booking RLS tested; HONOR route still blocked
+
+Unlike prior synthetic-only CX1R, the owner-authorised CX1S test created two temporary customer GoTrue accounts and two temporary bookings in the existing local development database after a validated backup. Real GoTrue signed-in sessions successfully inserted bookings under native column grants, read the correct owner record, denied both cross-user booking IDs and invalid/anonymous credentials, and completed the **actual nested Flutter Track SELECT 2/2**: **13/13 checks PASS**. Both accounts/bookings were removed, preserving the prior 2 users/1 booking baseline. This is genuine *local* JWT/RLS evidence, **not** full role/provider/admin G7/G8 acceptance or an approved private HTTPS Serve gateway. HONOR Track remains unavailable through the existing narrow Tailnet route. `docs/CX1S_REAL_LOCAL_GOTRUE_TRACK_WITNESS_20261015.md`.
+
 ## 15 October — CX1R synthetic signed actor protocol over disposable loopback HTTP
 
 Source-only isolated test adapter bound `127.0.0.1` on ephemeral port for the duration of **36/36 passing real HTTP transport tests**, including A/B customer isolation, private field suppression, mock JWT expiry/revocation, raw body/encoding, denied methods, preflight CORS and unexpected headers. Listener was closed; no real GoTrue, installed RLS, private HTTPS path, user session or production deployment was tested. Real browser/PostgREST header parity is still open, and the current HONOR Track activity error is expected. `docs/CX1R_DISPOSABLE_LOOPBACK_HTTP_TRACK_WITNESS_20261015.md`.

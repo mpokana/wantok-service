@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-15-03 — CX1S real local GoTrue customer Track witness
+
+Owner authorised temporary development-only accounts and bookings. Following a verified local database backup, tested two independent new GoTrue accounts with genuine JWTs against installed PostgREST and customer RLS: **13/13 local assertions PASS**, including owner-only, cross-account negatives, and existing Flutter nested select for both owners. Tested accounts/bookings were deleted; original 2 accounts and 1 booking preserved and independently verified. Initial first-run 403 was corrected by removing disallowed explicit INSERT `status`. No private Tailnet route, real administrator changes or production approval. Report: `docs/CX1S_REAL_LOCAL_GOTRUE_TRACK_WITNESS_20261015.md`.
+
+---
+
 ## FILLER-2026-10-15-02 — CX1R ephemeral HTTP boundary regression
 
 Real network-stack tests over a temporary loopback-only, random-port Node HTTP listener exercised CX1Q synthetic signed actor isolation and browser preflight/malformed raw request handling. **36/36 pass**, automatic listener close; no persistent service, real user identity, Supabase record or Tailscale change. Actual `supabase_flutter` browser headers still require independently approved stage capture and review; real GoTrue/JWT/RLS/G7/G8 remain externally gated. `docs/CX1R_DISPOSABLE_LOOPBACK_HTTP_TRACK_WITNESS_20261015.md`.
