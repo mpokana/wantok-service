@@ -5,6 +5,10 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## 14 October — CX1P read-only permissions inspection
+
+Seven tables inspected using PostgreSQL metadata only. Existing booking RLS and wider read policies confirmed. Sixteen audit safety tests passed. No private Track API or live account test was enabled. See `docs/CX1P_INSTALLED_TRACK_ACL_METADATA_AND_ROLE_STAGE_GAP_20261014.md`.
+
 ## 14 October — CX1O synthetic PostgreSQL Track actor-only contract; no live data acceptance
 
 Owner-directed continuation built a fresh isolated PostgreSQL 17 toy stage (network none, zero published ports/host mounts, tmpfs, 108 synthetic bookings, immediate container teardown), with broad representative provider/admin RLS plus a candidate `SECURITY INVOKER` function limited to the authenticated *simulated* customer and four display fields. **21/21 SQL assertions, 14/14 source safety/negative tests PASS**. This **does NOT** prove GoTrue JWT authenticity (local actor GUC is spoofable by direct SQL), current DB grants/RLS or actual account REST authorization. No app, private route, SQL migration, preview, or database altered. CX1N ten external authority gates, G7/G8 and production are still blocked; HONOR Track backend remains unavailable. See `docs/CX1O_DISPOSABLE_TRACK_SQL_SECURITY_EXPERIMENT_20261014.md`.

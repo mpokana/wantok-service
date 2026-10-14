@@ -1,10 +1,24 @@
 # Wantok Services — Living Handover
 
-**Updated:** 2026-10-14
+**Updated:** 2026-10-15
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 14 October — CX1O disconnected PostgreSQL Track actor-projection experiment (LATEST CX1; NO LIVE API)
+## 15 October — CX1P resumed verification (LATEST; NO PRIVATE API)
+
+- EAGLT02 reconnected. The isolated CX1P worktree and GitHub baseline are intact. Docker Desktop restarted without resetting Supabase volumes; Auth health returned HTTP 200. Repeated read-only installed booking catalogue audit, **70/70 security guard tests**, CX1K five-route scope check and the complete Flutter suite (**7/7 analyses clean, 216/216 widget tests PASS; exit 0**). No personal rows or private REST read, permissions, firewall, schema or production changes. The unrelated main-checkout drafts remain untouched. See `docs/CX1P_INSTALLED_TRACK_ACL_METADATA_AND_ROLE_STAGE_GAP_20261014.md`.
+- **Still blocked:** role-equivalent stage requires separate owner/Security/DBA/Privacy approvals, real GoTrue/JWT and cross-account HTTP witnesses, seven sensitive field review, direct port 54321 network denial tests, E6/G7/G8. Production remains not approved.
+
+---
+
+## 14 October — CX1P installed-local Track ACL metadata audit (PRIOR; NO STAGE RESTORE)
+
+- Owner directed next stage. Read **only installed PostgreSQL catalogue metadata** in a single `READ ONLY` transaction on EAGLT02, not customer rows/tokens/schema exports. Seven target tables inspected; installed booking RLS enabled/not forced, `anon` SELECT denied, `authenticated` SELECT allowed, booking table has **32 columns** with **7 sensitive authenticated-selectable fields**. Both source-known booking read policies are installed (customer/provider/admin and qualified unassigned provider); `is_admin` is SECURITY DEFINER with bypass-RLS owner, requiring independent semantics audit (not by itself proof of exploit). Candidate CX1O function **NOT installed**.
+- Static/synthetic CX1P audit safety suite **16/16 PASS**; combined source checks **70/70 PASS**. Current host port 54321 listens on `::` and `::1`; Tailnet peer reachability/firewall denial remains unwitnessed. Details: `docs/CX1P_INSTALLED_TRACK_ACL_METADATA_AND_ROLE_STAGE_GAP_20261014.md`. The parity restore, JWT/GoTrue actors, source body/privacy/permission sign-offs remain **NOT AUTHORISED/NOT WITNESSED**; G7 31/31, G1–G10 0/10, E6O-01, D1–D5 and T2.4 unchanged, production false.
+
+---
+
+## 14 October — CX1O disconnected PostgreSQL Track actor-projection experiment (PRIOR CX1; NO LIVE API)
 
 - Owner directed continuation after CX1N. On EAGLT02, created a **fresh disposable, no-network, no-port, no-mount, tmpfs** PostgreSQL 17 stage using solely synthetic data and minimal source-inspired booking RLS (not installed role/ACL parity). Tested an **illustrative SECURITY INVOKER**, customer-only, bounded 4-column candidate with 108 fabricated records. **21/21 actual SQL assertions PASS**; **14/14 offline source-drift guards PASS**. Provider/admin/open-request synthetic base policies deliberately allow wider rows; candidate still returned only actual customer's rows under *simulated local role/claim settings*.
 - **Critical limitations:** No real GoTrue/JWT/HTTP or shared-schema privilege parity, privacy sign-off, source migration or installed endpoint; the local simulated `auth.uid()` GUC is spoofable by direct SQL and must not be exposed. The temporary container was removed. Detailed report: `docs/CX1O_DISPOSABLE_TRACK_SQL_SECURITY_EXPERIMENT_20261014.md`. CX1N ten gates NOT WITNESSED; G7 31/31, G1–G10 0/10, D1–D5, E6O-01, direct port 54321 all still OPEN; T2.4 PAUSED and production false.

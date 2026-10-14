@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-14-07 — CX1P live-local metadata evidence, no private API
+
+EAGLT02 read-only catalogue audit verifies installed booking RLS and the customer/provider/admin plus qualified-provider policies. Seven sensitive booking fields are authenticated-selectable; a review of the SECURITY DEFINER admin helper is still required. Zero account rows or credentials were read. Dedicated checks 16/16 PASS. Real JWT, role-parity restoration and private API access are blocked pending separate authority. See `docs/CX1P_INSTALLED_TRACK_ACL_METADATA_AND_ROLE_STAGE_GAP_20261014.md`.
+
+---
+
 ## FILLER-2026-10-14-06 — CX1O toy PostgreSQL actor-only read boundary
 
 **P1 synthetic-only security verification:** In a disconnected no-port/no-mount disposable PostgreSQL tmpfs container, tested 108 fabricated booking records and representative broader provider/admin/open-request RLS against a minimal `SECURITY INVOKER` customer-only candidate. **21/21 SQL assertions** and **14/14 fail-closed source guards PASS**. The simulated `auth.uid()` claim is directly spoofable and is NOT GoTrue JWT authentication; no private API, real account, shared Supabase data, schema migration or Tailnet/firewall change. The test is **not parity stage acceptance**; CX1N ten human gates stay unapproved. `docs/CX1O_DISPOSABLE_TRACK_SQL_SECURITY_EXPERIMENT_20261014.md`.

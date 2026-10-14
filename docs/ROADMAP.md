@@ -2,6 +2,11 @@
 
 **Updated:** 2026-10-14
 
+## CX1P — installed booking permission audit (14 October)
+
+- [x] EAGLT02 READ ONLY catalogue-only inspection of 7 tables. Booking RLS enabled; two wider SELECT policies installed; 7 sensitive authenticated-selectable fields identified; candidate Track function not installed. 16/16 dedicated checks PASS. Report: `docs/CX1P_INSTALLED_TRACK_ACL_METADATA_AND_ROLE_STAGE_GAP_20261014.md`.
+- [ ] Isolated role/owner parity restore, real GoTrue identities, JWT/HTTP cross-user negatives, privacy sign-off and port 54321 controls require separate authorisation. No private endpoint or production approval.
+
 ## CX1O — no-network synthetic PostgreSQL test of candidate private Track projection (14 October)
 
 - [x] Disposable `postgres:17.11.0.002` image fixture: 108 **fabricated** booking records, synthetic source-inspired provider/admin/open-request RLS, candidate `SECURITY INVOKER` customer-only 4-field bounded function. Container configured with no network, no published port, no mount, temp tmpfs DB, and destroyed after tests. **21/21 executable PostgreSQL assertions PASS** plus **14/14 source-drift tests PASS**. `docs/CX1O_DISPOSABLE_TRACK_SQL_SECURITY_EXPERIMENT_20261014.md`.
