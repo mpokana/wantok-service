@@ -5,6 +5,10 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## 15 October — CX1R synthetic signed actor protocol over disposable loopback HTTP
+
+Source-only isolated test adapter bound `127.0.0.1` on ephemeral port for the duration of **36/36 passing real HTTP transport tests**, including A/B customer isolation, private field suppression, mock JWT expiry/revocation, raw body/encoding, denied methods, preflight CORS and unexpected headers. Listener was closed; no real GoTrue, installed RLS, private HTTPS path, user session or production deployment was tested. Real browser/PostgREST header parity is still open, and the current HONOR Track activity error is expected. `docs/CX1R_DISPOSABLE_LOOPBACK_HTTP_TRACK_WITNESS_20261015.md`.
+
 ## 15 October — CX1Q offline signed-token actor contract, not live Track acceptance
 
 Owner-directed continuation added a completely offline Ed25519 signed-token and account-scoped Track request simulator under `scripts/qa` and **44/44 synthetic positive/negative tests PASS**. Customer A/B isolated, privileged subjects do not read foreign booking history, malformed/expired/incorrect issuer/role/session cases denied, four-column 100-row response; no live GoTrue sessions, original RLS, HTTP handler, migration or deployment tested. Existing HONOR Track still honestly reports backend unavailable; real JWT/JWKS, customer privacy, G7/G8, port restriction and production remain externally blocked. `docs/CX1Q_OFFLINE_JWT_TRACK_ACTOR_CONTRACT_AND_REAL_STAGE_MATRIX_20261015.md`.

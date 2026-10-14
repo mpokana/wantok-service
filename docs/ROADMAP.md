@@ -2,6 +2,11 @@
 
 **Updated:** 2026-10-15
 
+## CX1R — disposable loopback HTTP actor contract witness (15 October)
+
+- [x] Created a temporary `127.0.0.1` only Node HTTP test server (kernel-allocated non-54321 port; automatically closed) reusing CX1Q synthetic signed Ed25519 actor checks. **36/36 real loopback HTTP transport tests PASS**: A/B row isolation, 4-field/100-row projection, revoked/expired mock session negatives, restricted CORS preflight, blocked foreign paths, methods, unexpected headers and malformed raw GETs. Existing CX1K–CX1Q 114/114 source tests PASS. Report: `docs/CX1R_DISPOSABLE_LOOPBACK_HTTP_TRACK_WITNESS_20261015.md`.
+- [ ] No real GoTrue/JWKS/PostgREST, owner/ACL-equivalent stage, browser traffic parity or G7/G8 witness; mock cannot replace nested Flutter repository. Real stage/private API requires separate named owner/Security/DBA/Privacy approvals. HONOR Track still backend-blocked; T2.4 paused and production false.
+
 ## CX1Q — offline signed-JWT and account-scoped Track API contract (15 October)
 
 - [x] Built standalone test-only Ed25519 signed-claim simulator and 44 offline positive/negative tests, using ephemeral keys and invented identities/booking rows. Customer A/B isolated, owner-only response limited to 100 and 4 fields; role/time/session/method/origin/column negatives exercised. No live GoTrue, PostgREST, SQL, gateway or app integration. See `docs/CX1Q_OFFLINE_JWT_TRACK_ACTOR_CONTRACT_AND_REAL_STAGE_MATRIX_20261015.md`.

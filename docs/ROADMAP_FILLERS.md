@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-15-02 — CX1R ephemeral HTTP boundary regression
+
+Real network-stack tests over a temporary loopback-only, random-port Node HTTP listener exercised CX1Q synthetic signed actor isolation and browser preflight/malformed raw request handling. **36/36 pass**, automatic listener close; no persistent service, real user identity, Supabase record or Tailscale change. Actual `supabase_flutter` browser headers still require independently approved stage capture and review; real GoTrue/JWT/RLS/G7/G8 remain externally gated. `docs/CX1R_DISPOSABLE_LOOPBACK_HTTP_TRACK_WITNESS_20261015.md`.
+
+---
+
 ## FILLER-2026-10-15-01 — CX1Q signed offline actor-test contract
 
 Built a standalone, no-network mock of an authenticated actor-scoped Track GET, using ephemeral Ed25519 signatures, fabricated A/B/provider/admin subjects and synthetic bookings. Focused negative tests 44/44 PASS. Strict 100-row four-column projection, identity from signed test subject, rejected query/write methods and malformed/expired/revoked test sessions. This is NOT real GoTrue/JWKS, private PostgREST, RLS or a working HONOR Track API; separate staging authority and G7/G8 witnesses remain pending. `docs/CX1Q_OFFLINE_JWT_TRACK_ACTOR_CONTRACT_AND_REAL_STAGE_MATRIX_20261015.md`.
