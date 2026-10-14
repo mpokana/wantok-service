@@ -4,7 +4,15 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 14 October — CX1L Popular categories gateway order compatibility (LATEST CX1; HUMAN RETEST OPEN)
+## 14 October — CX1M HONOR Track retry: data-path BLOCKED, presentation PASS (LATEST CX1)
+
+- **Owner retry at 14:37 PGT:** HONOR :8443 still displays "Could not load your activity" after pressing green Refresh. Read-only source review traces Track to `ReservationRepository.loadMyReservations()` and an authenticated `service_bookings` read (nested related data). CX1K gateway intentionally routes **no** private bookings REST. Healthy Auth HTTP 200 does not grant private REST. **This is an unavailable backend, not evidence of zero or deleted bookings.**
+- **Focused QA:** Existing Flutter Client widget regression `cx1_inbox_track_refresh_test.dart` **8/8 PASS**, including mobile/desktop retry and injected failure recovery. UI layout still good; not a real user/JWT or RLS witness. Read-only details, staging prerequisites and security no-go list: `docs/CX1M_TRACK_PRIVATE_READ_DIAGNOSIS_20261014.md`.
+- **No new route or permission:** G7 31/31 unexecuted, G1–G10 0/10, D1–D5 pending, E6O-01 open and direct port 54321 review pending. Private Track/InBox/Saved require authorised staged identity, RLS/role/privacy and witness tests. T2.4 remains paused; production blocked.
+
+---
+
+## 14 October — CX1L Popular categories gateway order compatibility (PRIOR CX1; HUMAN RETEST OPEN)
 
 - **Owner screenshot:** HONOR :8443 and reported desktop Web Home `Could not load services from the backend`, despite existing filtered 20-category HTTPS GET. The installed Dart `postgrest-2.9.1` emits `order=sort_order.asc.nullslast,name.asc.nullslast`; CX1J allowlist rejected this exact valid order HTTP 400. Source and backed-up ignored loopback :3304 adapter now accept only that additional order; same real HTTPS query HTTP **200 / 20 active rows**, with no changed schema, fields, methods or Tailscale routes. Source unit **15/15**, live allow/deny **16/16 PASS**; unchanged Web JS bundle. `docs/CX1L_PUBLIC_CATEGORY_SDK_ORDER_REPAIR_20261014.md`.
 - **Owner HONOR visual witness PASS (14:24 PGT):** Fresh private HTTPS `:8443` Home screenshot now shows category cards/images for Ride, Hire car, Boat Hire, Boat / Ship Rides, Specialists and People / General Labour; no previous "Could not load services" error. Temporary green debug banner absent. The separate Track screenshot confirms mobile `Refresh` below green hero, without overlap; **layout-only PASS**, no centre-click/refresh callback witnessed. Track still displays **"Could not load your activity"** because account-private REST is not routed/accepted; this is **backend unavailable, not zero records**. No new personal booking or account-data request authorised.

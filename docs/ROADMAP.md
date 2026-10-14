@@ -2,6 +2,12 @@
 
 **Updated:** 2026-10-14
 
+## CX1M — HONOR Track retry confirms private data-path remains gated (14 October)
+
+- [x] Owner retried Track Refresh on HONOR :8443 at 14:37 PGT; same honest backend error persists. Layout/readability still PASS but live account history NOT loaded. Source: `loadMyReservations()` selects owner-filtered `service_bookings` with multiple embedded relations; current five-route HTTPS Serve has no private booking REST handler.
+- [x] Retested unchanged injected Flutter retry source: `cx1_inbox_track_refresh_test.dart` **8/8 PASS**, including 320/390/1440 px and failure-then-recovery, with no network/user data. Report `docs/CX1M_TRACK_PRIVATE_READ_DIAGNOSIS_20261014.md`.
+- [ ] Require independent authorisation, isolated parity staging, JWT/RLS/role cross-user negatives, safe embedded-field projection, direct 54321 port review, and G7/G8 privacy/security witnesses before any account-private Web read. No broad REST proxy or account changes. T2.4 paused; production blocked.
+
 ## CX1L — restore public Popular categories via exact Flutter SDK order allowlist (14 October)
 
 - [x] Owner observed Home Popular categories backend error on HONOR and desktop. Source + Dart SDK verified ordered query `sort_order.asc.nullslast,name.asc.nullslast`; original public adapter HTTP 400 while existing simplified order HTTP 200. Added only this exact SDK sort to existing active-only 12-column, anon-read gateway on loopback :3304, with checksum-verified runtime backup.

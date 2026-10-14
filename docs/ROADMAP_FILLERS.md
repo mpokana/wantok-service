@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-14-04 — CX1M Track retry and truthful blocked-data state
+
+**P1 continuation:** Owner tapped Track Refresh on HONOR; error remains. Flutter code and **8/8** independent injected widget tests confirm the retry action is connected and non-transactional; no private `service_bookings` route exists in the HTTPS allowlist. Do not treat blocked reads as zero bookings or bypass actor/RLS with broad REST. Require an approved parity stage and witnessed security matrix before enabling private activity. `docs/CX1M_TRACK_PRIVATE_READ_DIAGNOSIS_20261014.md`. No application/backend changes; G7/G8 and production closed.
+
+---
+
 ## FILLER-2026-10-14-03 — CX1L mobile/desktop Popular categories load repair
 
 **P1 reliability fix:** Owner's HONOR screenshot and desktop report show backend category error even though a manually simplified HTTPS GET retrieved 20 rows. Flutter Dart Postgrest SDK defaults to `.nullslast` on both sort columns, which the strict scoped public gateway had not allowed. Checksum-backed-up ignored EAGLT02 adapter and tracked source now add only this exact query form, with no broader REST or private access. Live HTTPS exact Flutter GET 200, 20 active public rows; 15/15 unit + 16/16 allow/deny tests PASS. Fresh owner HONOR :8443 screenshot now shows real category images/cards and no test banner (**mobile Home visual PASS**); separate Track screenshot confirms Refresh below hero (**visual-only PASS**) but activity remains unavailable. Desktop Home screenshot and Refresh-click behaviour still pending; Track/Inbox private access and G7/G8 remain blocked. `docs/CX1L_PUBLIC_CATEGORY_SDK_ORDER_REPAIR_20261014.md`.
