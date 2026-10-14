@@ -16,7 +16,9 @@ The ignored EAGLT02 runtime adapter was checksum-backed up unchanged at `D:\Proj
 
 - Old exact SDK query: **HTTP 400**; same query after scoped adapter restart: HTTPS **HTTP 200**, **20 active categories**, exact 12 public fields. No inactive record returned.
 - Source gateway synthetic checks: **15/15 passed**; live local public allow/deny cases: **16/16 passed**. Includes private table/writer, wildcard/sensitive column, unknown filter, inactive, duplicate parameter and writes denied. Existing CX1K five-route read-only source audit remains the security boundary.
-- **Still pending:** owner hard refresh on both desktop and HONOR (mobile data + Tailscale) to witness Popular categories rendering and banner removal. A working API endpoint is not the same as signed-in UI acceptance.
+- **Owner HONOR screenshot witness, 14:24 PGT:** Home at `:8443` now renders real public category photos/cards (Ride, Hire car, Boat Hire, Boat / Ship Rides, Specialists, People / General Labour); prior error is absent and test banner is no longer visible. **HONOR Home visual PASS**; desktop Home still needs a fresh screenshot.
+- **Owner Track screenshot:** mobile Refresh control is below green hero and no longer overlaps the title (**layout visual PASS**). The page still reports `Could not load your activity`; private API access is deliberately restricted, and the screenshot does not demonstrate refresh tap, populated activity, or a working data read. Do not reclassify backend errors as empty bookings.
+- **Still pending:** desktop Home screenshot, mobile Refresh tap plus before/after feedback, authorised private actor/RLS witnesses and independent acceptance. A working public endpoint is not full signed-in CX1 acceptance.
 - **Not touched:** shared Supabase SQL/roles/accounts, auth keys, Tailscale Serve/Funnel/ACL/firewall, E6O-01 audit writer risk, native APK, Track/Inbox/Saved private APIs, T2.4, production. G7 remains 31/31 unexecuted, G1–G10 0/10, production approval false. Existing open direct host-port `54321` risk still requires independent authorisation and negative testing.
 
 ## Recovery

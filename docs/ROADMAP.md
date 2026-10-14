@@ -6,7 +6,8 @@
 
 - [x] Owner observed Home Popular categories backend error on HONOR and desktop. Source + Dart SDK verified ordered query `sort_order.asc.nullslast,name.asc.nullslast`; original public adapter HTTP 400 while existing simplified order HTTP 200. Added only this exact SDK sort to existing active-only 12-column, anon-read gateway on loopback :3304, with checksum-verified runtime backup.
 - [x] Retest exact HTTPS SDK query **HTTP 200 / 20 active rows**, source security tests **15/15**, local allow/deny checks **16/16**. Route, CORS, prohibited columns, private data, writer methods and five-route CX1K boundary unchanged. Report `docs/CX1L_PUBLIC_CATEGORY_SDK_ORDER_REPAIR_20261014.md`.
-- [ ] Real owner screenshot/refresh on HONOR and desktop proving categories visually populate; banner-free mobile header witness. Private Track/Inbox/Saved still gated on E6 G7/G8/GoTrue/RLS. Production not approved; T2.4 paused.
+- [x] HONOR `:8443` screenshots (14:24 PGT): Home public category cards/images rendered (six visible), old error absent and green test banner removed; Track mobile Refresh placed below hero without heading overlap (**visual layout PASS only**).
+- [ ] Desktop screenshot verifying same Home public categories; click/tap Refresh and screenshot before/after for real control behaviour. Track still reports backend unavailable; private Track/Inbox/Saved require E6 G7/G8/GoTrue/RLS staging before data acceptance. Production not approved; T2.4 paused.
 
 ## CX1K — verify tailnet private HTTP surface and application route classes (14 October)
 
