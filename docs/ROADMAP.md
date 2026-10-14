@@ -2,6 +2,12 @@
 
 **Updated:** 2026-10-14
 
+## CX1N — private Track API secure staging preparation (14 October)
+
+- [x] Read-only source inspection of Client's 100-row account-filtered `service_bookings` and embedded quote/review/provider/resource joins; original booking RLS admits provider/admin and some open-request qualified-provider reads. The existing direct table SELECT and frontend customer filter are **not** an approved actor-only projection.
+- [x] Source-only hard-stop register and checks: `CX1N_TRACK_STAGE_DECISION_REGISTER_20261014.json` (10 unapproved human/security gates), `cx1n-track-stage-readiness.mjs` + negative tests **21/21 PASS**, zero network/data/access modifications. `docs/CX1N_SECURE_TRACK_PARITY_STAGE_PREPARATION_20261014.md` contains proposed minimised actor-only API and staging/backout matrix, **not a migration**.
+- [ ] Separate owner/Security/DBA/Privacy staging authorisation, isolated role-parity restore, real GoTrue sessions and JWT/revocation, nested-field privacy and cross-account/role negative tests, direct 54321 denial and G7/G8 witnesses before enabling any private API. CX1 private history still UNAVAILABLE, T2.4 PAUSED, production NOT APPROVED.
+
 ## CX1M — HONOR Track retry confirms private data-path remains gated (14 October)
 
 - [x] Owner retried Track Refresh on HONOR :8443 at 14:37 PGT; same honest backend error persists. Layout/readability still PASS but live account history NOT loaded. Source: `loadMyReservations()` selects owner-filtered `service_bookings` with multiple embedded relations; current five-route HTTPS Serve has no private booking REST handler.

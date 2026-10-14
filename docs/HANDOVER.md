@@ -4,7 +4,15 @@
 **Repository:** `D:\Project-M.2\wantok-service-recovery`
 **Branch:** `feature/flutter-platform-v1`
 
-## 14 October — CX1M HONOR Track retry: data-path BLOCKED, presentation PASS (LATEST CX1)
+## 14 October — CX1N isolated Track staging *preparation* (LATEST CX1; NO PRIVATE API)
+
+- **Source/readiness-only:** Detached clean source checkpoint from CX1M `e51fdb9`. Audited `service_bookings` customer-filtered 100-row query with nested provider, quotes and reviews; original SQL has customer/provider/admin plus open-request-provider read policies and broad authenticated table SELECT. Track needs an **independently reviewed actor-only, column-minimised contract**, not an unrestricted raw REST proxy or the frontend's `customer_id` predicate.
+- Added strictly source-only `scripts/qa/cx1n-track-stage-readiness.mjs`, `docs/CX1N_TRACK_STAGE_DECISION_REGISTER_20261014.json` (10 NOT WITNESSED gates), synthetic negative tests **21/21 PASS**, and `docs/CX1N_SECURE_TRACK_PARITY_STAGE_PREPARATION_20261014.md`. No GoTrue principal created, authenticated HTTP read, SQL migration, secret, Tailscale/firewall or application change. **CX1N means design readiness, not stage authorisation.**
+- E6O-01, D1–D5, G7 31/31, G1–G10 0/10, direct Supabase host port 54321 and private actor/RLS/role equivalence gates remain OPEN; T2.4 PAUSED, production false.
+
+---
+
+## 14 October — CX1M HONOR Track retry: data-path BLOCKED, presentation PASS (PRIOR CX1)
 
 - **Owner retry at 14:37 PGT:** HONOR :8443 still displays "Could not load your activity" after pressing green Refresh. Read-only source review traces Track to `ReservationRepository.loadMyReservations()` and an authenticated `service_bookings` read (nested related data). CX1K gateway intentionally routes **no** private bookings REST. Healthy Auth HTTP 200 does not grant private REST. **This is an unavailable backend, not evidence of zero or deleted bookings.**
 - **Focused QA:** Existing Flutter Client widget regression `cx1_inbox_track_refresh_test.dart` **8/8 PASS**, including mobile/desktop retry and injected failure recovery. UI layout still good; not a real user/JWT or RLS witness. Read-only details, staging prerequisites and security no-go list: `docs/CX1M_TRACK_PRIVATE_READ_DIAGNOSIS_20261014.md`.

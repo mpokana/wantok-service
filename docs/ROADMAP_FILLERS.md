@@ -20,6 +20,12 @@ Every ChatGPT, Codex, Desktop Commander or other AI coding session must read:
 
 ---
 
+## FILLER-2026-10-14-05 — CX1N Track actor-read staged design, no publish
+
+**P1 non-mutating continuation:** Reviewed direct `service_bookings` SELECT and its multiple booking/quote/review actor policies; mapped sensitive nested fields and direct Supabase port bypass. Built CX1N source-only fail-closed preparation contract with **21/21 synthetic negative tests**, machine-readable 10-gate unapproved register, and parity-stage runbook. Recommended an independently designed invoker/GoTrue actor-derived allowlisted projection, not generic raw table REST or service-role proxy. No shared SQL, real account, endpoint, app or Tailscale change; G7/G8 and production blocked. `docs/CX1N_SECURE_TRACK_PARITY_STAGE_PREPARATION_20261014.md`.
+
+---
+
 ## FILLER-2026-10-14-04 — CX1M Track retry and truthful blocked-data state
 
 **P1 continuation:** Owner tapped Track Refresh on HONOR; error remains. Flutter code and **8/8** independent injected widget tests confirm the retry action is connected and non-transactional; no private `service_bookings` route exists in the HTTPS allowlist. Do not treat blocked reads as zero bookings or bypass actor/RLS with broad REST. Require an approved parity stage and witnessed security matrix before enabling private activity. `docs/CX1M_TRACK_PRIVATE_READ_DIAGNOSIS_20261014.md`. No application/backend changes; G7/G8 and production closed.

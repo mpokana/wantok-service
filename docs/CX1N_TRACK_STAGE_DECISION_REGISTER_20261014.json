@@ -1,0 +1,58 @@
+{
+  "checkpoint": "CX1N",
+  "date": "2026-10-14",
+  "scope": "EAGLT02 source-only Track private API parity staging preparation",
+  "sourceOnly": true,
+  "stageApproved": false,
+  "privateTrackApiPublished": false,
+  "productionApproved": false,
+  "broadRestAllowed": false,
+  "serviceRoleProxyAllowed": false,
+  "sharedDatabaseMutationAllowed": false,
+  "tailnetAclMutationAllowed": false,
+  "observedCurrent": "Private service_bookings HTTP is not routed through tailnet Serve; owner HONOR Track retry reports backend unavailable",
+  "observedDataRead": "NONE",
+  "gates": {
+    "owner_stage_authority": {
+      "status": "NOT WITNESSED",
+      "approved": false
+    },
+    "isolated_role_equivalent_stage": {
+      "status": "NOT WITNESSED",
+      "approved": false
+    },
+    "verified_database_and_asset_backup": {
+      "status": "NOT WITNESSED",
+      "approved": false
+    },
+    "authentic_gotrue_test_principals": {
+      "status": "NOT WITNESSED",
+      "approved": false
+    },
+    "jwt_expiry_and_revocation": {
+      "status": "NOT WITNESSED",
+      "approved": false
+    },
+    "row_and_column_allowlist_privacy": {
+      "status": "NOT WITNESSED",
+      "approved": false
+    },
+    "same_user_and_cross_user_http_negatives": {
+      "status": "NOT WITNESSED",
+      "approved": false
+    },
+    "embedded_relation_negative_tests": {
+      "status": "NOT WITNESSED",
+      "approved": false
+    },
+    "direct_54321_host_port_denial": {
+      "status": "NOT WITNESSED",
+      "approved": false
+    },
+    "independent_e6_g7_g8_witnesses": {
+      "status": "NOT WITNESSED",
+      "approved": false
+    }
+  },
+  "note": "Do not change these gates without independent approval and recorded stage acceptance. Client customer_id filters are not authorization."
+}

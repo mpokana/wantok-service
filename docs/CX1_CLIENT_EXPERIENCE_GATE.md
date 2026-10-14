@@ -5,6 +5,10 @@
 **T2.3 checkpoint:** `46d6208`.
 **Prior CX1 reliability/discovery checkpoint:** `0c33a37`.
 
+## 14 October — CX1N private Track secure-stage preparation; LIVE DATA UNAVAILABLE
+
+Source-only CX1N reviews the exact bounded client booking query with nested quotes/reviews and the historical booking RLS permitting customer, provider, admin and qualified-provider open-request reading. Current raw `service_bookings` SELECT plus frontend `customer_id` is not an independently approved Track API security boundary. A **10-gate NOT WITNESSED** human/staging register and fail-closed source checker pass **21/21 synthetic tests**. A candidate actor-derived, column-minimised contract is **DESIGN ONLY**; no GoTrue principals, SQL, private route, build, or host rule changed. Owner HONOR Track still honestly reports backend unavailable; G7/G8/Privacy/E6 and production acceptance remain open. Runbook: `docs/CX1N_SECURE_TRACK_PARITY_STAGE_PREPARATION_20261014.md`.
+
 ## 14 October — CX1M HONOR Track retry failed at private-data boundary; source button tests PASS
 
 The owner provided a 14:37 PGT HONOR screenshot following Refresh on :8443. Track remains an honest **"Could not load your activity"** backend-unavailable state. Static/layout PASS (green Refresh below hero), no successful account-private history fetch; do not infer zero records or missing data. Read-only inspection confirms `ReservationRepository.loadMyReservations` calls account-specific `service_bookings` and the current exact HTTPS gateway has no private REST route. Focused injected widget test **8/8 PASS** including toolbar tap, retry after failure and 320/390/1440 px. These tests do not establish real JWT/RLS/HTTP acceptance. Hold private API changes pending E6/G7/G8 authorised staging; no wide REST, service-role bypass, account/SQL/firewall mutations. See `docs/CX1M_TRACK_PRIVATE_READ_DIAGNOSIS_20261014.md`.
